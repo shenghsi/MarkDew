@@ -42,6 +42,10 @@ The editor preserves indentation and fence characters. After closing, live previ
 When the cursor is in a code block in rendered mode and the code block contains no code, the Backspace command deletes the complete block.
 In source code mode, the command does not delete the code block and keeps standard text deletion.
 
+A horizontal rule line (`---`, `***`, or `___`) shows as a rule in live preview. The source
+shows when the cursor touches the line. An underline under a heading is not a rule.
+Insert > Horizontal Line writes `---`.
+
 Right click in the edit surface opens the editor menu, in the layout of Typora.
 A right click outside the selection first moves the caret there. The top row has
 Cut, Copy, Paste, and Delete; Cut, Copy, and Delete need a selection. Copy / Paste

@@ -26,6 +26,7 @@ interface Item { from: number; to: number; kind?: Kind; source?: string; block?:
   codeTab?: { language: string; fenceFrom: number; fenceTo: number; fence: string };
   codeClose?: boolean;
   mathTab?: boolean;
+  rule?: boolean;
   replaceFrom?: number;
   listMarkers?: Marker[];
   listDepth?: number;
@@ -168,6 +169,15 @@ export class MathTabWidget extends WidgetType {
     const tab = document.createElement('span'); tab.className = 'code-type-tab math-type-tab';
     const label = document.createElement('span'); label.className = 'math-type-label'; label.textContent = 'Equation';
     tab.append(label); return tab;
+  }
+}
+
+// A horizontal rule line shows as a rule until the cursor reaches its source.
+export class RuleWidget extends WidgetType {
+  eq(other: RuleWidget) { return other instanceof RuleWidget; }
+  toDOM(): HTMLElement {
+    const rule = document.createElement('span'); rule.className = 'preview-rule'; rule.setAttribute('role', 'separator');
+    return rule;
   }
 }
 
@@ -348,6 +358,10 @@ function analyzePreview(state: EditorState, tree: Tree, imageVersion: number,
       if (items.some(item => item.kind === 'math' && item.from <= from && item.to >= to)) return false;
       const image = readImage(read(from, to));
       if (image) items.push({ from, to, kind: 'image', image, imageVersion });
+      return false;
+    }
+    if (name === 'HorizontalRule') {
+      if (to > from) items.push({ from, to, rule: true });
       return false;
     }
     if (name === 'MathBlock') {
@@ -700,6 +714,8 @@ export function previewDecorations(state: EditorState, items: Item[], reuse = fa
       } else {
         ranges.push(Decoration.replace({ widget }).range(item.from, item.to));
       }
+    } else if (item.rule) {
+      if (!isSelected) ranges.push(Decoration.replace({ widget: new RuleWidget() }).range(item.from, item.to));
     } else if (item.mathTab) {
       ranges.push(Decoration.widget({ widget: new MathTabWidget(), side: 1 }).range(item.from));
     } else if (item.codeClose) {
@@ -733,7 +749,7 @@ export function previewDecorations(state: EditorState, items: Item[], reuse = fa
   };
   return Decoration.set(ranges.filter(range => {
     const containing = replacementAt(range.from);
-    if (range.value.spec.widget instanceof MathTabWidget) return !(containing && range.to <= containing.to);
+    if (range.value.spec.widget instanceof MathTabWidget || range.value.spec.widget instanceof RuleWidget) return !(containing && range.to <= containing.to);
     if (range.value.spec.widget) return !(range.value.spec.widget instanceof MarkerWidget &&
       containing?.listMarkers?.some(marker => marker.from === range.from && marker.to === range.to));
     if (containing && range.to <= containing.to) return false;
@@ -775,7 +791,7 @@ function selectionDecorations(plan: Pick<FullPlan, 'items' | 'decorations'>, bef
     for (let index = low; index < groups.length && groups[index].from <= range.to; index++) candidates.add(groups[index]);
   }
   const changed = [...candidates].filter(group => group.items.some(item => {
-    if (!item.marker && !item.kind && !item.hide?.length) return false;
+    if (!item.marker && !item.kind && !item.rule && !item.hide?.length) return false;
     const from = selectionFrom(item), to = selectionTo(item);
     return selected(before, from, to) !== selected(after, from, to);
   }));

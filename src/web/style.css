@@ -1463,3 +1463,6 @@ button[aria-pressed="true"], #outline .outline-content button:hover, #outline:no
 .editor-context-menu .menu-icons button:hover:not(:disabled), .editor-context-menu .menu-icons button.focus { background: var(--surface); }
 .editor-context-menu .menu-icons button:disabled { color: var(--muted); opacity: .45; }
 .editor-context-menu .menu-glyph { font: 12px ui-monospace, Menlo, Consolas, monospace; }
+
+.preview-rule { display: inline-block; vertical-align: top; width: 100%; height: 14px; background: linear-gradient(var(--border), var(--border)) center / 100% 2px no-repeat; cursor: text; }
+.cm-line:has(> .preview-rule) { font-size: 0; line-height: 0; }

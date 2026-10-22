@@ -101,7 +101,7 @@ function insertBlock(view: EditorView, text: string, cursor: number): string | n
   view.focus(); return null;
 }
 
-export const insertHorizontalLine = (view: EditorView) => insertBlock(view, '***', 3);
+export const insertHorizontalLine = (view: EditorView) => insertBlock(view, '---', 3);
 
 // A static list of links to the headings now in the document.
 export function insertTableOfContents(view: EditorView): string | null {

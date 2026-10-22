@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Horizontal rule spacing check</title>
+<link rel="stylesheet" href="/src/web/style.css">
+<div id="app"><div id="editor"></div></div>
+<pre id="result">running</pre>
+<script type="module">
+import {EditorState} from '@codemirror/state';
+import {EditorView} from '@codemirror/view';
+import {ensureSyntaxTree} from '@codemirror/language';
+import {documentLanguage} from '/src/web/document-language.ts';
+import {livePreview} from '/src/web/preview.ts';
+import {fromSource, normalize, sourceExtensions} from '/src/web/source.ts';
+
+const record = fromSource('Above\n\n---\n\nBelow\n\nLast');
+let state = EditorState.create({doc: normalize(record.raw), selection: {anchor: normalize(record.raw).length},
+  extensions: [sourceExtensions(record), documentLanguage(), livePreview]});
+ensureSyntaxTree(state, state.doc.length, 1000);
+state = state.update({}).state;
+const view = new EditorView({state, parent: document.querySelector('#editor')});
+const settle = () => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+await settle();
+const box = el => el.getBoundingClientRect();
+const lines = Array.from(view.contentDOM.querySelectorAll('.cm-line')).map(el => ({text: el.textContent, top: box(el).top, height: box(el).height}));
+const rule = view.contentDOM.querySelector('.preview-rule');
+const above = lines.find(l => l.text === 'Above'), below = lines.find(l => l.text === 'Below');
+const ruleLine = rule.closest('.cm-line');
+document.querySelector('#result').textContent = JSON.stringify({
+  ok: box(ruleLine).height === 14 && Math.abs(box(rule).top - above.top - above.height - 14) < 1 && Math.abs(below.top - box(rule).bottom - 14) < 1,
+  ruleY: box(rule).top, aboveBottom: above.top + above.height, belowTop: below.top,
+  gapAbove: box(rule).top - (above.top + above.height), gapBelow: below.top - box(rule).bottom,
+  paragraphGap: below.top - (above.top + above.height), lines}, null, 1);
+</script>
+</html>

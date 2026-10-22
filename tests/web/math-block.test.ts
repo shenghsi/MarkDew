@@ -88,3 +88,14 @@ it('adds a line below a final equation block on ArrowDown from the last formula 
   expect(editor.state.doc.toString()).toBe('$$\nx\n$$\n');
   expect(exitBlockDown(createEditor('$$\nx\ny\n$$', 1))).toBe(false);
 });
+
+it('renders a horizontal rule until the cursor reaches it', () => {
+  const editor = createEditor('text\n\n---\n\nmore', 0);
+  expect(editor.dom.querySelectorAll('.preview-rule')).toHaveLength(1);
+  editor.dispatch({ selection: { anchor: 7 } });
+  expect(editor.dom.querySelector('.preview-rule')).toBeNull();
+});
+
+it('keeps an underline heading marker out of the rule route', () => {
+  expect(createEditor('Title\n---\n\ntext', 12).dom.querySelector('.preview-rule')).toBeNull();
+});

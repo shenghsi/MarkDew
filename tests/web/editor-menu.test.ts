@@ -61,7 +61,7 @@ it('reports the current heading level', () => {
 it('inserts a horizontal line as its own block', () => {
   const v = editor('text\n\nmore', 2);
   expect(insertHorizontalLine(v)).toBeNull();
-  expect(text()).toBe('text\n\n***\n\nmore');
+  expect(text()).toBe('text\n\n---\n\nmore');
   expect(v.state.selection.main.head).toBe(9);
 });
 
