@@ -137,6 +137,11 @@ it('opens the menu on right click and runs an entry', () => {
     .toEqual(['Cut', 'Copy', 'Paste', 'Delete', 'Bold', 'Italic', 'Inline Code', 'Link', 'Quote', 'Ordered List', 'Bullet List', 'Task List']);
   expect(Array.from(menu.querySelectorAll(':scope > .menu-item > .menu-label')).map(label => label.textContent))
     .toEqual(['Copy / Paste As...', 'Paragraph', 'Insert']);
+  const insert = Array.from(menu.querySelectorAll<HTMLElement>(':scope > .menu-item')).find(item => item.textContent!.startsWith('Insert'))!;
+  insert.dispatchEvent(new MouseEvent('mouseenter'));
+  expect(insert.classList.contains('open')).toBe(true);
+  insert.dispatchEvent(new MouseEvent('mouseleave'));
+  expect(insert.classList.contains('open')).toBe(false);
   menu.querySelector<HTMLButtonElement>('button[aria-label="Bullet List"]')!.click();
   expect(text()).toBe('- one');
   expect(document.querySelector('.editor-context-menu')).toBeNull();

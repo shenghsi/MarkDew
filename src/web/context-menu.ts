@@ -63,6 +63,8 @@ export function showMenu(entries: MenuEntry[], x: number, y: number, onClose: ()
         item.setAttribute('aria-haspopup', 'menu');
         item.append(build(entry.submenu, true));
         item.addEventListener('mouseenter', () => { if (!entry.disabled) openSub(item); });
+        // The submenu lives inside its item, so leaving both closes it. A keyboard-marked entry keeps it open.
+        item.addEventListener('mouseleave', () => { if (!item.querySelector('.focus') && !item.classList.contains('focus')) item.classList.remove('open'); });
         item.addEventListener('click', event => { if (event.target === item || !(event.target as HTMLElement).closest('.editor-context-menu.submenu')) openSub(item); });
       } else {
         item.addEventListener('mouseenter', () => { for (const open of Array.from(panel.querySelectorAll(':scope > .menu-item.open'))) open.classList.remove('open'); });
