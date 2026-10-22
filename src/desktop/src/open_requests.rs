@@ -1,6 +1,7 @@
 use serde::Serialize;
 use std::{ffi::OsString, path::Path};
 
+#[cfg(target_os = "macos")]
 pub const EVENT: &str = "markdew-open-request";
 const LIMIT: usize = 16;
 
@@ -67,6 +68,7 @@ impl Queue {
         }
     }
 
+    #[cfg(target_os = "macos")]
     pub fn urls(&mut self, urls: &[tauri::Url]) {
         for url in urls.iter().take(LIMIT) {
             self.url(url);
