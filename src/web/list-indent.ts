@@ -107,3 +107,25 @@ export function indentList(view: EditorView, direction: 1 | -1): boolean {
     userEvent: 'input.indent', scrollIntoView: true });
   return true;
 }
+
+// Shift-Tab outside list items removes one indent level (a tab, or up to 4 spaces) from each selected line.
+function unindentLines(view: EditorView): void {
+  if (editGuard(view)) return;
+  const { state } = view, { doc } = state, selection = state.selection.main;
+  const first = doc.lineAt(selection.from);
+  const last = doc.lineAt(selection.to > selection.from && doc.lineAt(selection.to).from === selection.to ? selection.to - 1 : selection.to);
+  const changes: ChangeSpec[] = [];
+  for (let number = first.number; number <= last.number; number++) {
+    const line = doc.line(number), lead = /^(\t| {1,4})/.exec(line.text);
+    if (lead) changes.push({ from: line.from, to: line.from + lead[0].length });
+  }
+  if (changes.length) view.dispatch({ changes, userEvent: 'delete.dedent', scrollIntoView: true });
+}
+
+// Tab and Shift-Tab never leave the writing surface. Tab outside list items changes nothing.
+// Input composition keeps its own key handling.
+export function listTab(view: EditorView, direction: 1 | -1): boolean {
+  if (view.compositionStarted) return false;
+  if (!indentList(view, direction) && direction < 0) unindentLines(view);
+  return true;
+}

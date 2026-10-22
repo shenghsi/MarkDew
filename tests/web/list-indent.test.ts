@@ -4,7 +4,7 @@ import { EditorState } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
 import { markdown, markdownLanguage } from '@codemirror/lang-markdown';
 import { history, undo } from '@codemirror/commands';
-import { indentList } from '../../src/web/list-indent';
+import { indentList, listTab } from '../../src/web/list-indent';
 import { fromSource, normalize, sourceExtensions } from '../../src/web/source';
 
 let view: EditorView | undefined;
@@ -76,4 +76,28 @@ it('outdents to the parent level and never below zero', () => {
   expect(text()).toBe('- a\n  - b\n  - c');
   expect(indentList(editor('- a', 2), -1)).toBe(true);
   expect(text()).toBe('- a');
+});
+
+it('keeps Tab and Shift-Tab in the editor on lines without a list marker', () => {
+  expect(listTab(editor('plain text', 3), 1)).toBe(true);
+  expect(text()).toBe('plain text');
+  expect(listTab(editor('plain text', 3), -1)).toBe(true);
+  expect(text()).toBe('plain text');
+  expect(listTab(editor('```\ncode\n```', 5), -1)).toBe(true);
+  expect(listTab(editor('', 0), -1)).toBe(true);
+  expect(listTab(editor('- a\n- b', 7), 1)).toBe(true);
+  expect(text()).toBe('- a\n  - b');
+});
+
+it('unindents lines without a list marker with Shift-Tab', () => {
+  const v = editor('    text', 6);
+  listTab(v, -1);
+  expect(text()).toBe('text'); expect(v.state.selection.main.head).toBe(2);
+  listTab(editor('  two', 4), -1); expect(text()).toBe('two');
+  listTab(editor('      six', 8), -1); expect(text()).toBe('  six');
+  listTab(editor('\ttab', 3), -1); expect(text()).toBe('tab');
+  listTab(editor('```\n    code\n```', 10), -1); expect(text()).toBe('```\ncode\n```');
+  const many = editor('  a\n    b\nc', 0, 11);
+  listTab(many, -1); expect(text()).toBe('a\nb\nc');
+  undo(many); expect(text()).toBe('  a\n    b\nc');
 });

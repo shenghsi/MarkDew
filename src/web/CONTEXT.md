@@ -47,8 +47,9 @@ does the opposite: it moves the item out to its parent's level. Any list type ca
 other. The nested indent is the parent's content column, so it is 2 under a bullet and 3 under
 `1.`. Ordered numbers follow the new level, and a first nested item restarts at 1. A first item
 cannot nest, and an item at the left edge cannot move out; Tab and Shift-Tab keep the focus
-in the editor then. Table cells, code, equation, and other source blocks keep their own Tab.
-One Undo step reverses the move.
+in the editor then. On lines without a list marker, including code and equation blocks, Tab
+changes nothing, and Shift-Tab removes one indent level (a tab, or up to 4 spaces) from each
+selected line. Both keep the focus in the editor; only text composition keeps its own keys. Table cells keep their own Tab. One Undo step reverses a list move.
 
 In the desktop app, Insert Image (toolbar, Ctrl+Shift+I, or the Insert menu) with no image at the
 cursor opens the file picker and inserts the image at once. A saved document gets a copy beside
