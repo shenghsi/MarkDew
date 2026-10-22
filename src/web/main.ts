@@ -57,6 +57,26 @@ import { t, getCurrentLanguage, subscribeLanguageChange } from './i18n';
 import './style.css';
 
 document.querySelector('#app')!.innerHTML = `<header><strong>MarkDew</strong><button id="new">New</button><button id="open">Open</button><button id="save">Save</button><button id="save-as">Save As</button><button id="undo">Undo</button><button id="redo">Redo</button><button id="find">Find</button><button id="outline-toggle" aria-pressed="false">Outline</button><button id="source" aria-pressed="false">Source</button><button id="settings" hidden>Settings</button><button id="about" hidden>About</button><button id="check">Check Save</button><span id="status" role="status"></span></header><div class="workspace"><aside id="outline" aria-label="Outline" hidden></aside><main id="editor"></main></div>`;
+const emptyPanel = document.createElement('section'); emptyPanel.id = 'empty-document'; emptyPanel.hidden = true;
+emptyPanel.setAttribute('aria-label', 'No file open');
+{
+  const heading = document.createElement('h2'), hint = document.createElement('p'), actions = document.createElement('div');
+  const create = document.createElement('button'), choose = document.createElement('button');
+  create.type = choose.type = 'button'; create.id = 'empty-new'; choose.id = 'empty-open'; actions.className = 'empty-document-actions';
+  create.addEventListener('click', () => document.querySelector<HTMLButtonElement>('#new')?.click());
+  choose.addEventListener('click', () => document.querySelector<HTMLButtonElement>('#open')?.click());
+  actions.append(create, choose); emptyPanel.append(heading, hint, actions);
+  document.querySelector('.workspace')!.append(emptyPanel);
+}
+const emptyText = () => {
+  emptyPanel.querySelector('h2')!.textContent = t('empty.title'); emptyPanel.querySelector('p')!.textContent = t('empty.hint');
+  emptyPanel.querySelector('#empty-new')!.textContent = t('empty.new'); emptyPanel.querySelector('#empty-open')!.textContent = t('empty.open');
+};
+emptyText();
+// With no file open, the last tab is a blank placeholder. The editor hides and the empty state shows.
+// A path, an edit, or a second tab ends the state.
+const noDocument = () => tabs.all.length === 1 && !!tabs.active.placeholder && !tabs.active.path && !tabDirty(tabs.active);
+const emptyControls = ['save', 'save-as', 'undo', 'redo', 'find', 'source', 'check', 'print', 'close-document', 'tools-toggle'];
 const app = document.querySelector<HTMLElement>('#app')!;
 const documentBar = document.createElement('div'); documentBar.className = 'document-bar';
 documentBar.setAttribute('role', 'toolbar'); documentBar.setAttribute('aria-label', 'Document'); documentBar.setAttribute('data-tauri-drag-region', '');
@@ -375,9 +395,12 @@ const tabBar = documentTabBar(tabContainer, id => { switchTab(id); }, id => { vo
 });
 function renderTabs() {
   tabBar.render(tabs);
-  const multiple = tabs.all.length >= 2;
+  const multiple = tabs.all.length >= 2, empty = noDocument();
   tabContainer.hidden = !multiple;
-  title.hidden = multiple;
+  title.hidden = multiple || empty;
+  emptyPanel.hidden = !empty; document.body.classList.toggle('no-document', empty);
+  for (const id of emptyControls) { const button = document.getElementById(id) as HTMLButtonElement | null; if (button) button.disabled = empty; }
+  if (empty && !tools.hidden) toolsButton.click();
 }
 const disposeTools = toolsPanel(toolsButton, tools, () => {
   if (!composing()) return true;
@@ -488,7 +511,7 @@ function updateUILanguage() {
 
 updateUILanguage();
 subscribeLanguageChange(() => {
-  updateUILanguage();
+  updateUILanguage(); emptyText();
 });
 formatBar.querySelectorAll<HTMLButtonElement>('[data-format]').forEach(button => {
   button.addEventListener('mousedown', event => event.preventDefault());
@@ -625,7 +648,7 @@ async function loadIntoTab(tab: DocumentTab, file: string, preview = true): Prom
   } else {
     tab.path = file; tab.baseline = '';
   }
-  tab.preview = preview;
+  tab.preview = preview; tab.placeholder = false;
   tab.state = state(source, tab);
   if (tab === active()) {
     view.setState(tab.state);
@@ -644,6 +667,13 @@ async function loadIntoTab(tab: DocumentTab, file: string, preview = true): Prom
   return tab;
 }
 async function addDocument(source = '', file?: string, preview = false) {
+  // The empty state reuses its blank tab, so New and Open never leave a stray Untitled tab behind.
+  const blank = noDocument() ? active() : undefined;
+  if (blank && !source) {
+    blank.placeholder = false;
+    if (file) return loadIntoTab(blank, file, preview);
+    renderTabs(); view.focus(); return blank;
+  }
   checkpoint(); await flushRecovery();
   if (!pageActive) return;
   const tab = await createTab(source, file, preview);
@@ -654,7 +684,7 @@ async function closeTab(id: number, force = false) {
   const tab = tabs.get(id); if (!tab || !(force || await discard(tab))) return;
   checkpoint(tab); await flushRecovery(tab);
   let replacement: DocumentTab | undefined;
-  if (tabs.all.length === 1) { replacement = await createTab(); tabs.add(replacement); renderTabs(); }
+  if (tabs.all.length === 1) { replacement = await createTab(); replacement.placeholder = true; tabs.add(replacement); renderTabs(); }
   const previous = active().id;
   // Adopt a valid replacement while the old host document is still live. A
   // rejected activation must not leave an active view for a retired document.
@@ -1032,6 +1062,7 @@ if (isTauri()) {
   const dispose = nativeMenu(document, callback => getCurrentWindow().listen('markdew-document-command', callback),
     command => pageActive && !busy && !composing() && !document.querySelector('.print-dialog') &&
       (!isModalOpen() || command === 'settings' || command === 'about') &&
+      (!noDocument() || ['new', 'open', 'open-folder', 'toggle-sidebar', 'toggle-outline', 'settings', 'about'].includes(command) || command.startsWith('theme-')) &&
       (!['undo', 'redo'].includes(command) ||
       !(document.activeElement instanceof HTMLInputElement || document.activeElement instanceof HTMLTextAreaElement)),
     message => { status.textContent = message; }, menuDispatch);

@@ -146,6 +146,12 @@ export const translations = {
     'sidebar.title_files': 'FILES',
     'sidebar.title_outline': 'OUTLINE',
 
+    // Empty state
+    'empty.title': 'No file is open',
+    'empty.hint': 'Select a file in the sidebar, or start a new one.',
+    'empty.new': 'New File',
+    'empty.open': 'Open File…',
+
     // Editor Context Menu
     'menu.cut': 'Cut',
     'menu.copy': 'Copy',
@@ -326,6 +332,12 @@ export const translations = {
     'sidebar.confirm_delete_unsaved': '已打开标签页中未保存的更改将会丢失。',
     'sidebar.title_files': '文件',
     'sidebar.title_outline': '大纲',
+
+    // Empty state
+    'empty.title': '没有打开的文件',
+    'empty.hint': '在侧边栏中选择一个文件，或新建一个。',
+    'empty.new': '新建文件',
+    'empty.open': '打开文件…',
 
     // Editor Context Menu
     'menu.cut': '剪切',

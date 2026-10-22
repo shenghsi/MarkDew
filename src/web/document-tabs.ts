@@ -12,6 +12,8 @@ export interface DocumentTab {
   uncertain: boolean;
   sourceMode: boolean;
   preview?: boolean;
+  // A blank tab left after the last file closed. The app shows an empty state instead of the editor.
+  placeholder?: boolean;
   scroll?: ReturnType<EditorView['scrollSnapshot']>;
   recovery?: RecoveryQueue;
   recoverySession?: string;

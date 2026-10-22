@@ -297,3 +297,36 @@ it('prevents Quit when an inactive tab checkpoint fails and then confirms every 
   expect(records.get(10)!.copy).toEqual({ source: 'second draft', dirty: true });
   expect(app!.view.state.readOnly).toBe(true);
 });
+
+it('shows an empty state after the last tab closes and reuses its blank tab for New and Open', async () => {
+  await boot(); const empty = () => document.body.classList.contains('no-document');
+  const created = () => calls('create_document').length;
+  expect(empty()).toBe(false);
+  click('close-document');
+  await vi.waitFor(() => expect(empty()).toBe(true));
+  const placeholder = app!.tabs.active;
+  expect(app!.tabs.all).toHaveLength(1); expect(placeholder.placeholder).toBe(true);
+  expect(document.querySelector<HTMLElement>('#empty-document')!.hidden).toBe(false);
+  expect(document.querySelector('#empty-document h2')!.textContent).toBe('No file is open');
+  for (const id of ['save', 'save-as', 'find', 'undo', 'print', 'close-document', 'tools-toggle'])
+    expect(document.querySelector<HTMLButtonElement>(`#${id}`)!.disabled).toBe(true);
+  // Native menu commands for the hidden document are refused; New and Open still work.
+  const before = created(); await vi.waitFor(() => expect(mocks.menu).toBeDefined());
+  mocks.menu!({ payload: 'bold' }); mocks.menu!({ payload: 'save' });
+  expect(calls('save_document')).toHaveLength(0); expect(mocks.save).not.toHaveBeenCalled();
+  click('empty-new'); await settled();
+  expect(empty()).toBe(false); expect(document.querySelector<HTMLElement>('#empty-document')!.hidden).toBe(true);
+  expect(app!.tabs.active).toBe(placeholder); expect(placeholder.placeholder).toBe(false); expect(app!.tabs.all).toHaveLength(1);
+  expect(created()).toBe(before); expect(document.querySelector<HTMLButtonElement>('#save')!.disabled).toBe(false);
+  click('close-document'); await vi.waitFor(() => expect(empty()).toBe(true));
+  const blank = app!.tabs.active;
+  click('empty-open');
+  await vi.waitFor(() => expect(app!.tabs.active.path).toBe('/tmp/opened.md'));
+  expect(empty()).toBe(false); expect(app!.tabs.all).toHaveLength(1); expect(app!.tabs.active).toBe(blank);
+});
+
+it('keeps the editor when a file tab closes while another tab stays open', async () => {
+  await boot(true);
+  click('close-document'); await settled(); await settled();
+  expect(document.body.classList.contains('no-document')).toBe(false); expect(app!.tabs.all).toHaveLength(1);
+});

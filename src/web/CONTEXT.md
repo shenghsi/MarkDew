@@ -42,6 +42,15 @@ The editor preserves indentation and fence characters. After closing, live previ
 When the cursor is in a code block in rendered mode and the code block contains no code, the Backspace command deletes the complete block.
 In source code mode, the command does not delete the code block and keeps standard text deletion.
 
+Empty state: when the last tab closes (Close document, or Delete of its file), the editor hides and
+the panel "No file is open" shows, with New File and Open File buttons. The app still keeps one blank
+placeholder tab behind it, but the user sees no Untitled document. The state lasts while that tab has
+no path, no edits, and no sibling tab. New File reuses the blank tab and shows the editor. Opening a
+file from the sidebar, the picker, or a drop loads into it. Save, Save As, Undo, Redo, Find, Source,
+Check Save, Print, Close document, and Tools are disabled, and native menu commands other than New,
+Open, Open Folder, sidebar, outline, Settings, About, and theme are refused. At app start the first
+tab is still a normal Untitled document.
+
 Files sidebar, New File: the new file is created as Untitled.md and its name opens in an inline
 text box with the name before .md selected, so typing renames it. Enter or a click elsewhere keeps
 the name and opens the file; Escape keeps Untitled.md and opens it. Focus lost within 400 ms of the
