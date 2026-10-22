@@ -9,7 +9,7 @@ import { invoke, isTauri } from '@tauri-apps/api/core';
 import { open, save, ask } from '@tauri-apps/plugin-dialog';
 import { getCurrentWindow } from '@tauri-apps/api/window';
 import { fromSource, normalize, savedSource, sourceExtensions, sourceField } from './source';
-import { markdownReturn, markdownBackspace } from './commands';
+import { markdownReturn, markdownBackspace, exitCodeBlockDown } from './commands';
 import { canUseFiles } from './file-guard';
 import { livePreview, setEditorActive, editorActiveField, rerenderDiagrams } from './preview';
 import { endTableEdit, tableComposing, tableSaveCommand, tableFindCommand, tableHistoryCommand, tableInputView } from './table';
@@ -282,7 +282,7 @@ const state = (source: string, tab?: Pick<DocumentTab, 'id' | 'path' | 'sourceMo
   linkNavigation(message => { status.textContent = message; }, () => busy ? 'Wait for the file command, then follow the link.' :
     composing() ? 'Finish text input, then follow the link.' : null,
     url => webLinks.open(url), (destination, fragment) => { void operation(() => openDocumentLink(destination, fragment), true); }),
-  keymap.of([{ key: 'Mod-/', run: () => { sourceButton.click(); return true; } }, { mac: 'Ctrl-/', run: () => { sourceButton.click(); return true; } }, ...guardedSearchKeymap, ...formattingKeys, { key: 'Mod-k', run: () => openLinkControls() }, { key: 'Mod-Shift-i', run: () => openImageControls() }, { key: 'Enter', run: markdownReturn }, { key: 'Backspace', run: markdownBackspace }, { key: 'Mod-s', run: () => { void operation(saveFile); return true; } }, ...markdownKeymap.filter(binding => binding.key !== 'Enter'), ...defaultKeymap, ...historyKeymap]),
+  keymap.of([{ key: 'Mod-/', run: () => { sourceButton.click(); return true; } }, { mac: 'Ctrl-/', run: () => { sourceButton.click(); return true; } }, ...guardedSearchKeymap, ...formattingKeys, { key: 'Mod-k', run: () => openLinkControls() }, { key: 'Mod-Shift-i', run: () => openImageControls() }, { key: 'Enter', run: markdownReturn }, { key: 'Backspace', run: markdownBackspace }, { key: 'ArrowDown', run: exitCodeBlockDown }, { key: 'Mod-s', run: () => { void operation(saveFile); return true; } }, ...markdownKeymap.filter(binding => binding.key !== 'Enter'), ...defaultKeymap, ...historyKeymap]),
   EditorView.updateListener.of(update => {
     if (update.docChanged) { if (active().preview) active().preview = false; report(); checkpoint(); }
     if (update.startState.field(editorActiveField, false) !== update.state.field(editorActiveField, false)) {

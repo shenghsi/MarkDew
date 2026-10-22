@@ -116,6 +116,32 @@ export function markdownReturn(view: EditorView): boolean {
   return listReturn(view);
 }
 
+// A closed code block that ends the document hides its fences in live preview,
+// so no line exists below it. ArrowDown from its last line adds that line.
+export function exitCodeBlockDown(view: EditorView): boolean {
+  if (view.compositionStarted || tableComposing(view) || view.state.readOnly || view.state.selection.ranges.length !== 1) return false;
+  if (!view.state.field(previewField, false)) return false;
+  const { state } = view, selection = state.selection.main;
+  if (!selection.empty) return false;
+  const tree = ensureSyntaxTree(state, state.doc.length, 50);
+  if (!tree) return false;
+  let code: SyntaxNode | null = null;
+  for (let n: SyntaxNode | null = tree.resolveInner(selection.from, -1); n; n = n.parent) {
+    if (n.name === 'FencedCode') { code = n; break; }
+  }
+  if (!code || code.parent?.name !== 'Document' || code.to !== state.doc.length || code.getChildren('CodeMark').length !== 2) return false;
+  const closing = state.doc.lineAt(code.to), last = closing.number > 1 ? state.doc.line(closing.number - 1) : closing;
+  if (state.doc.lineAt(selection.from).number < last.number) return false;
+  view.dispatch({
+    changes: { from: state.doc.length, insert: '\n' },
+    selection: { anchor: state.doc.length + 1 },
+    scrollIntoView: true,
+    userEvent: 'input.code-block-exit',
+    annotations: isolateHistory.of('full')
+  });
+  return true;
+}
+
 export function markdownBackspace(view: EditorView): boolean {
   if (view.compositionStarted || tableComposing(view) || view.state.readOnly || view.state.selection.ranges.length !== 1) return false;
   if (!view.state.field(previewField, false)) return false;

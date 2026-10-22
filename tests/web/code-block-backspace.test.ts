@@ -5,7 +5,7 @@ import { EditorView } from '@codemirror/view';
 import { markdown, markdownLanguage } from '@codemirror/lang-markdown';
 import { history, undo, redo } from '@codemirror/commands';
 import { livePreview } from '../../src/web/preview';
-import { markdownBackspace, markdownReturn } from '../../src/web/commands';
+import { exitCodeBlockDown, markdownBackspace, markdownReturn } from '../../src/web/commands';
 import { fromSource, normalize, savedSource, sourceExtensions, sourceField } from '../../src/web/source';
 
 let view: EditorView | undefined;
@@ -169,4 +169,18 @@ it('allows undo and redo after deleting empty code block', () => {
   redo(editor);
   expect(editor.state.doc.toString()).toBe('');
   expect(savedSource(editor.state.field(sourceField))).toBe('');
+});
+
+it('adds a line below a code block at the end of the document on ArrowDown', () => {
+  const editor = createEditor('```js\ncode\n```', 10);
+  expect(exitCodeBlockDown(editor)).toBe(true);
+  expect(editor.state.doc.toString()).toBe('```js\ncode\n```\n');
+  expect(editor.state.selection.main.head).toBe(15);
+  undo(editor);
+  expect(editor.state.doc.toString()).toBe('```js\ncode\n```');
+});
+
+it('keeps ArrowDown for code blocks that are not last or not on the last line', () => {
+  expect(exitCodeBlockDown(createEditor('```js\na\nb\n```', 7))).toBe(false);
+  expect(exitCodeBlockDown(createEditor('```js\na\n```\ntext', 7))).toBe(false);
 });
