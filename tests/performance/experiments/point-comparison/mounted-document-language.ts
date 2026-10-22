@@ -1,5 +1,6 @@
 // Inactive public-tree adapter. No production installation; explicit browser fixture only.
 import { markdown, markdownLanguage } from '@codemirror/lang-markdown';
+import { mathBlockSyntax } from '../../../../src/web/math-block';
 import { yamlFrontmatter } from '@codemirror/lang-yaml';
 import { languages } from '@codemirror/language-data';
 import { Language, LanguageSupport } from '@codemirror/language';
@@ -64,7 +65,7 @@ export class MountedMarkdownParser extends Parser {
 }
 
 export function mountedDocumentLanguage() {
-  const content = markdown({ base: markdownLanguage, codeLanguages: languages, addKeymap: false });
+  const content = markdown({ base: markdownLanguage, codeLanguages: languages, addKeymap: false, extensions: [mathBlockSyntax] });
   const wrapper = yamlFrontmatter({ content });
   return new LanguageSupport(new Language(wrapper.language.data,
     new MountedMarkdownParser(content.language.parser, wrapper.language.parser)), wrapper.support);

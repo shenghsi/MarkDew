@@ -7,6 +7,7 @@ import { previewField } from './preview';
 import { tableComposing } from './table';
 import { sourceOffset, restoreSource, sourceField, viewOffset } from './source';
 import { definitionAt } from './footnotes';
+import { mathFence } from './math-block';
 
 type ListEdit = { from: number; to: number; text: string };
 
@@ -64,6 +65,20 @@ export function markdownReturn(view: EditorView): boolean {
   if (!tree) return plain();
 
   const line = state.doc.lineAt(selection.from);
+  // An unclosed `$$` fence gets its closing fence, as an unclosed code fence does.
+  if (selection.empty && selection.from === line.to && mathFence.test(line.text)) {
+    const indent = /^ */.exec(line.text)![0];
+    const node = tree.resolveInner(line.from + indent.length, 1);
+    if (node.name === 'Paragraph' && node.parent?.name === 'Document' && node.from === line.from + indent.length) {
+      view.dispatch({
+        changes: { from: line.to, insert: '\n' + indent + '\n' + indent + '$$' },
+        selection: { anchor: line.to + 1 + indent.length },
+        scrollIntoView: true,
+        userEvent: 'input'
+      });
+      return true;
+    }
+  }
   const fenceMatch = /^([ ]{0,3})(`{3,}|~{3,})(.*)$/.exec(line.text);
   if (fenceMatch) {
     const indent = fenceMatch[1];
@@ -118,7 +133,8 @@ export function markdownReturn(view: EditorView): boolean {
 
 // A closed code block that ends the document hides its fences in live preview,
 // so no line exists below it. ArrowDown from its last line adds that line.
-export function exitCodeBlockDown(view: EditorView): boolean {
+// An equation block hides its fences the same way.
+export function exitBlockDown(view: EditorView): boolean {
   if (view.compositionStarted || tableComposing(view) || view.state.readOnly || view.state.selection.ranges.length !== 1) return false;
   if (!view.state.field(previewField, false)) return false;
   const { state } = view, selection = state.selection.main;
@@ -127,14 +143,23 @@ export function exitCodeBlockDown(view: EditorView): boolean {
   if (!tree) return false;
   let code: SyntaxNode | null = null;
   for (let n: SyntaxNode | null = tree.resolveInner(selection.from, -1); n; n = n.parent) {
+    if (n.name === 'MathBlock') {
+      if (n.to !== state.doc.length || state.doc.lineAt(selection.from).number < state.doc.lines - 1) return false;
+      return appendLine(view);
+    }
     if (n.name === 'FencedCode') { code = n; break; }
   }
   if (!code || code.parent?.name !== 'Document' || code.to !== state.doc.length || code.getChildren('CodeMark').length !== 2) return false;
   const closing = state.doc.lineAt(code.to), last = closing.number > 1 ? state.doc.line(closing.number - 1) : closing;
   if (state.doc.lineAt(selection.from).number < last.number) return false;
+  return appendLine(view);
+}
+
+function appendLine(view: EditorView): boolean {
+  const length = view.state.doc.length;
   view.dispatch({
-    changes: { from: state.doc.length, insert: '\n' },
-    selection: { anchor: state.doc.length + 1 },
+    changes: { from: length, insert: '\n' },
+    selection: { anchor: length + 1 },
     scrollIntoView: true,
     userEvent: 'input.code-block-exit',
     annotations: isolateHistory.of('full')
@@ -150,6 +175,23 @@ export function markdownBackspace(view: EditorView): boolean {
 
   const tree = ensureSyntaxTree(state, state.doc.length, 50);
   if (!tree) return false;
+
+  const math = tree.resolveInner(selection.from, 0);
+  const mathBlock = math.name === 'MathBlock' ? math : math.parent?.name === 'MathBlock' ? math.parent : null;
+  if (mathBlock) {
+    const startLine = state.doc.lineAt(mathBlock.from), endLine = state.doc.lineAt(mathBlock.to);
+    const cursorLine = state.doc.lineAt(selection.from);
+    if (cursorLine.number !== startLine.number + 1 || cursorLine.number >= endLine.number ||
+      /\S/.test(state.doc.sliceString(startLine.to, endLine.from))) return false;
+    view.dispatch({
+      changes: { from: startLine.from, to: Math.min(endLine.to + 1, state.doc.length), insert: '' },
+      selection: { anchor: startLine.from },
+      scrollIntoView: true,
+      userEvent: 'delete.code-block',
+      annotations: isolateHistory.of('full')
+    });
+    return true;
+  }
 
   let fencedCodeNode: SyntaxNode | null = null;
   for (let n: SyntaxNode | null = tree.resolveInner(selection.from, -1); n; n = n.parent) {

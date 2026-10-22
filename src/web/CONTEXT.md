@@ -42,6 +42,15 @@ The editor preserves indentation and fence characters. After closing, live previ
 When the cursor is in a code block in rendered mode and the code block contains no code, the Backspace command deletes the complete block.
 In source code mode, the command does not delete the code block and keeps standard text deletion.
 
+An equation block is a top-level pair of lines that hold only `$$`. The parser
+extension MathBlock keeps blank lines inside it. A lone `$$` with no closing line
+stays a paragraph. Live preview shows a rendered equation, or Empty equation
+when it has no formula. When the cursor is inside, the formula lines show as
+code block lines with an Equation tab, and the `$$` lines collapse. Return on an unclosed `$$` line adds the closing
+line. Backspace on the empty line of an empty equation block deletes the block.
+ArrowDown on the last formula line at the end of the document adds a line below.
+Equations inside quotes or lists keep the paragraph route.
+
 Typing or pasting fence characters inside a closed code block in live preview
 extends the outer fences when needed. The outer fences stay longer than the
 matching character runs in the content. This prevents typed backticks from

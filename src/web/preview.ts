@@ -25,6 +25,7 @@ interface Item { from: number; to: number; kind?: Kind; source?: string; block?:
   revealTo?: number;
   codeTab?: { language: string; fenceFrom: number; fenceTo: number; fence: string };
   codeClose?: boolean;
+  mathTab?: boolean;
   replaceFrom?: number;
   listMarkers?: Marker[];
   listDepth?: number;
@@ -159,6 +160,17 @@ export class CodeTypeTabWidget extends WidgetType {
   }
 }
 
+// Names the equation block in revealed source, as the language tab names a code block.
+export class MathTabWidget extends WidgetType {
+  eq(other: MathTabWidget) { return other instanceof MathTabWidget; }
+  ignoreEvent(): boolean { return true; }
+  toDOM(): HTMLElement {
+    const tab = document.createElement('span'); tab.className = 'code-type-tab math-type-tab';
+    const label = document.createElement('span'); label.className = 'math-type-label'; label.textContent = 'Equation';
+    tab.append(label); return tab;
+  }
+}
+
 const replacementFrom = (item: Item) => item.replaceFrom ?? item.from;
 
 class PreviewWidget extends WidgetType {
@@ -277,7 +289,9 @@ class PreviewWidget extends WidgetType {
         path: state.field(imagePath, false) || '',
         document: state.facet(imageDocument) }, () => view.requestMeasure()));
     } else if (item.kind === 'table') new TableEditor(dom, view, item.from, item.to, item.source!);
-    else {
+    else if (item.kind === 'math' && item.block && !item.source!.trim()) {
+      dom.classList.add('preview-math-empty'); dom.textContent = 'Empty equation';
+    } else {
       dom.textContent = 'Rendering…';
       const promise = item.kind === 'math' ? import('./math-renderer').then(module => module.renderMath(item.source!, !!item.block))
         : renderDiagram(item.source!);
@@ -334,6 +348,28 @@ function analyzePreview(state: EditorState, tree: Tree, imageVersion: number,
       if (items.some(item => item.kind === 'math' && item.from <= from && item.to >= to)) return false;
       const image = readImage(read(from, to));
       if (image) items.push({ from, to, kind: 'image', image, imageVersion });
+      return false;
+    }
+    if (name === 'MathBlock') {
+      const startLine = state.doc.lineAt(from), endLine = state.doc.lineAt(to);
+      const inner: string[] = [];
+      for (let number = startLine.number + 1; number < endLine.number; number++) inner.push(state.doc.line(number).text);
+      items.push({ from: startLine.from, to: endLine.to, kind: 'math', source: inner.join('\n'), block: true });
+      // As in a code block, the fence lines collapse and the formula lines show.
+      const hasLines = endLine.number > startLine.number + 1;
+      const hidden = (line: { from: number; to: number }) =>
+        items.push({ from: line.from, to: line.to, className: 'md-code-fence-hidden', line: true });
+      items.push({ from: hasLines ? state.doc.line(startLine.number + 1).from : startLine.from,
+        to: hasLines ? state.doc.line(startLine.number + 1).from : startLine.from, mathTab: true });
+      if (hasLines) hidden(startLine);
+      else items.push({ from: startLine.from, to: startLine.to, className: 'md-code-line md-math-line md-code-first md-code-last', line: true });
+      for (let number = startLine.number + 1; number < endLine.number; number++) {
+        const line = state.doc.line(number), classes = ['md-code-line', 'md-math-line'];
+        if (number === startLine.number + 1) classes.push('md-code-first');
+        if (number === endLine.number - 1) classes.push('md-code-last');
+        items.push({ from: line.from, to: line.to, className: classes.join(' '), line: true });
+      }
+      hidden(endLine);
       return false;
     }
     if (name === 'FencedCode' || name === 'CodeBlock') {
@@ -664,6 +700,8 @@ export function previewDecorations(state: EditorState, items: Item[], reuse = fa
       } else {
         ranges.push(Decoration.replace({ widget }).range(item.from, item.to));
       }
+    } else if (item.mathTab) {
+      ranges.push(Decoration.widget({ widget: new MathTabWidget(), side: 1 }).range(item.from));
     } else if (item.codeClose) {
       if (item.to > item.from) {
         ranges.push(Decoration.replace({}).range(item.from, item.to));
@@ -695,6 +733,7 @@ export function previewDecorations(state: EditorState, items: Item[], reuse = fa
   };
   return Decoration.set(ranges.filter(range => {
     const containing = replacementAt(range.from);
+    if (range.value.spec.widget instanceof MathTabWidget) return !(containing && range.to <= containing.to);
     if (range.value.spec.widget) return !(range.value.spec.widget instanceof MarkerWidget &&
       containing?.listMarkers?.some(marker => marker.from === range.from && marker.to === range.to));
     if (containing && range.to <= containing.to) return false;
@@ -886,7 +925,7 @@ function computeBlankLines(state: EditorState): DecorationSet {
         }
         return false;
       }
-      if (node.name === 'CodeBlock') {
+      if (node.name === 'MathBlock' || node.name === 'CodeBlock') {
         codeRanges.push({ from: node.from, to: node.to });
         return false;
       }

@@ -337,6 +337,24 @@ button[aria-pressed="true"] { background: #dcecf3; border-color: #246b86; }
   pointer-events: auto;
   transform: translateY(0);
 }
+.math-type-label {
+  font: 500 11px ui-monospace, Menlo, Consolas, monospace;
+  color: var(--muted);
+  padding: 2px 6px;
+}
+div.preview-widget.preview-math { position: relative; background: var(--surface); }
+div.preview-widget.preview-math::before {
+  content: 'Equation';
+  position: absolute; top: 4px; right: 12px;
+  font: 500 11px ui-monospace, Menlo, Consolas, monospace;
+  color: var(--muted);
+  opacity: 0; transition: opacity 0.15s ease; pointer-events: none;
+}
+div.preview-widget.preview-math:hover::before { opacity: 1; }
+div.preview-widget.preview-math-empty {
+  color: var(--muted); font: italic 13px system-ui;
+  border: 1px dashed var(--border);
+}
 .code-type-input {
   border: 1px solid transparent;
   background: transparent;

@@ -2,6 +2,7 @@
 // at document boundaries. Do not install this in production or browser trials.
 // Production uses the YAML wrapper throughout.
 import { markdown, markdownLanguage } from '@codemirror/lang-markdown';
+import { mathBlockSyntax } from '../../../../src/web/math-block';
 import { yamlFrontmatter } from '@codemirror/lang-yaml';
 import { languages } from '@codemirror/language-data';
 import { Language, LanguageSupport, language, syntaxTree, indentNodeProp } from '@codemirror/language';
@@ -50,7 +51,7 @@ class BoundaryLanguage extends Language {
 }
 
 export function selectedDocumentLanguage() {
-  const content = markdown({ base: markdownLanguage, codeLanguages: languages, addKeymap: false });
+  const content = markdown({ base: markdownLanguage, codeLanguages: languages, addKeymap: false, extensions: [mathBlockSyntax] });
   const wrapper = yamlFrontmatter({ content });
   // The wrapper's outer root supplies zero indentation where the Markdown
   // root returns null. Keep that tested service behavior on the direct route.
