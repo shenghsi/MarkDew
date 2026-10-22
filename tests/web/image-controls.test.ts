@@ -77,20 +77,20 @@ it('uses form composition guards and cancellation without a source transaction',
   expect(form.hidden).toBe(true); expect(undoDepth(editor.state)).toBe(0);
 });
 it('fills picker paths only while the form capture and request remain current', async () => {
-  const { editor, source } = create('text', 0, 4), bar = document.createElement('div'); document.body.prepend(bar);
+  const { editor, source } = create('![t](x.png)', 2), bar = document.createElement('div'); document.body.prepend(bar);
   let finish!: (path: string | null) => void;
   const choose = vi.fn(() => new Promise<string | null>(resolve => { finish = resolve; }));
   const open = linkControls(editor, bar, () => {}, 'image', choose); open();
   const form = document.querySelector<HTMLFormElement>('.image-controls')!, destination = form.querySelector<HTMLInputElement>('[name="destination"]')!;
   const picker = form.querySelector<HTMLButtonElement>('[data-choose]')!;
   picker.click(); finish('/tmp/图 #100%.png'); await Promise.resolve(); await Promise.resolve();
-  expect(destination.value).toBe('/tmp/图%20%23100%25.png'); expect(source()).toBe('text'); expect(undoDepth(editor.state)).toBe(0);
+  expect(destination.value).toBe('/tmp/图%20%23100%25.png'); expect(source()).toBe('![t](x.png)'); expect(undoDepth(editor.state)).toBe(0);
   picker.click(); finish(null); await Promise.resolve(); await Promise.resolve(); expect(destination.value).toBe('/tmp/图%20%23100%25.png');
   picker.click(); destination.value = 'manual.png'; destination.dispatchEvent(new Event('input', { bubbles: true })); finish('late.png'); await Promise.resolve(); await Promise.resolve(); expect(destination.value).toBe('manual.png');
-  picker.click(); form.querySelector<HTMLButtonElement>('[data-cancel]')!.click(); open(); finish('closed.png'); await Promise.resolve(); await Promise.resolve(); expect(destination.value).toBe('');
-  picker.click(); editor.dispatch({ changes: { from: 4, insert: 'new' } }); finish('old-document.png'); await Promise.resolve(); await Promise.resolve(); expect(destination.value).toBe('');
-  open(); picker.click(); form.dispatchEvent(new CompositionEvent('compositionstart', { bubbles: true })); finish('during-ime.png'); await Promise.resolve(); await Promise.resolve(); expect(destination.value).toBe('');
-  expect(source()).toBe('textnew'); expect(undoDepth(editor.state)).toBe(1);
+  picker.click(); form.querySelector<HTMLButtonElement>('[data-cancel]')!.click(); open(); finish('closed.png'); await Promise.resolve(); await Promise.resolve(); expect(destination.value).toBe('x.png');
+  picker.click(); editor.dispatch({ changes: { from: 11, insert: 'new' } }); finish('old-document.png'); await Promise.resolve(); await Promise.resolve(); expect(destination.value).toBe('x.png');
+  open(); picker.click(); form.dispatchEvent(new CompositionEvent('compositionstart', { bubbles: true })); finish('during-ime.png'); await Promise.resolve(); await Promise.resolve(); expect(destination.value).toBe('x.png');
+  expect(source()).toBe('![t](x.png)new'); expect(undoDepth(editor.state)).toBe(1);
 });
 it('round trips picker punctuation Windows drives and UNC spelling through Markdown decoding', () => {
   for (const path of ['/tmp/图 #100% [a](b)?.png', 'C:\\images\\图 #100%.png', '\\\\server\\share\\a [b]%.png']) {

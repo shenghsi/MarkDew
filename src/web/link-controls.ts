@@ -72,9 +72,42 @@ export function linkControls(view: EditorView, parent: HTMLElement, report: (mes
     })().catch(error => { if (current() || error instanceof ImageCopyError) report(String(error)); })
       .finally(() => { if (copying === token) copying = 0; picker.disabled = !!copying || !!edit?.reference; });
   });
+  // With a file picker and no image at the cursor, Insert Image needs no form:
+  // choose a file, copy it beside a saved document, then write the Markdown.
+  const insertChosen = (captured: LinkEdit) => {
+    if (!choose) return;
+    const token = ++request;
+    const id = view.state.facet(imageDocument), base = view.state.field(imagePath, false);
+    const current = () => token === request && form.hidden && view.state.facet(imageDocument) === id &&
+      view.state.field(imagePath, false) === base && linkCaptureCurrent(view, captured) && !editGuard(view);
+    void (async () => {
+      const path = await choose();
+      if (!path || !current()) return;
+      let destination = path;
+      if (asset?.available()) {
+        copying = token;
+        const result = await asset.copy(path, current);
+        if (!result) return;
+        destination = result;
+        report(`Image copied to ${result}. Undo keeps the copy.`);
+      } else if (asset) report('The image stays where it is. Save the document first to copy images beside it.');
+      if (!current()) return;
+      const file = path.split(/[\\/]/).pop() || '';
+      const reason = applyLink(view, captured, { label: captured.label || file.replace(/\.[^.]*$/, ''),
+        destination: imageFileDestination(destination), title: captured.title });
+      if (reason) report(reason);
+    })().catch(error => { if (current() || error instanceof ImageCopyError) report(String(error)); })
+      .finally(() => { if (copying === token) copying = 0; });
+  };
   return () => {
     const result = openLink(view, kind);
     if (typeof result === 'string') { report(result); return true; }
+    if (kind === 'image' && choose && !result.existing && !result.reference) {
+      if (copying) report('Wait for the image copy, then insert another image.');
+      else if (composing) report('Finish text input, then insert the image.');
+      else insertChosen(result);
+      return true;
+    }
     request++; edit = result; composing = false;
     for (const name of ['label', 'destination', 'title'] as const) {
       field(name).value = edit[name]; field(name).disabled = edit.reference;

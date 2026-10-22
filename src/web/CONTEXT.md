@@ -42,6 +42,12 @@ The editor preserves indentation and fence characters. After closing, live previ
 When the cursor is in a code block in rendered mode and the code block contains no code, the Backspace command deletes the complete block.
 In source code mode, the command does not delete the code block and keeps standard text deletion.
 
+In the desktop app, Insert Image (toolbar, Ctrl+Shift+I, or the Insert menu) with no image at the
+cursor opens the file picker and inserts the image at once. A saved document gets a copy beside
+it. An unsaved document links the file where it is. The alt text is the selected text, or the file
+name. The form opens only for an existing image, a reference image, or in the browser.
+Undo removes the Markdown and keeps the copied file.
+
 A horizontal rule line (`---`, `***`, or `___`) shows as a rule in live preview. The source
 shows when the cursor touches the line. An underline under a heading is not a rule.
 Insert > Horizontal Line writes `---`.

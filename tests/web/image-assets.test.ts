@@ -15,9 +15,10 @@ const png = Uint8Array.from(atob('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAA
 let view: EditorView;
 afterEach(() => { view?.destroy(); document.body.replaceChildren(); });
 const settle = () => new Promise(resolve => setTimeout(resolve, 0));
+const existing = '![alt](old.png)';
 function setup(available = true, copy = vi.fn(async () => 'doc #%.assets/image.png')) {
-  view = new EditorView({ parent: document.body, state: EditorState.create({ doc: 'alt', selection: { anchor: 0, head: 3 },
-    extensions: [markdown(), history(), linkVersion, sourceExtensions(fromSource('alt')), imageBasePath.of('/tmp/doc #%.md'), imagePath, imageDocument.of(7)] }) });
+  view = new EditorView({ parent: document.body, state: EditorState.create({ doc: existing, selection: { anchor: 3 },
+    extensions: [markdown(), history(), linkVersion, sourceExtensions(fromSource(existing)), imageBasePath.of('/tmp/doc #%.md'), imagePath, imageDocument.of(7)] }) });
   const bar = document.createElement('div'); document.body.prepend(bar);
   const messages: string[] = [], choose = vi.fn(async () => '/tmp/photo.png');
   const open = linkControls(view, bar, message => messages.push(message), 'image', choose, { available: () => available, copy }); open();
@@ -30,10 +31,10 @@ function setup(available = true, copy = vi.fn(async () => 'doc #%.assets/image.p
 it('copies into a relative path and changes source only on Apply, with one Undo', async () => {
   const s = setup(); expect(s.check.checked).toBe(false); s.check.checked = true; s.pick(); await settle();
   expect(s.copy).toHaveBeenCalledOnce(); expect(s.destination.value).toBe('doc%20%23%25.assets/image.png');
-  expect(s.source()).toBe('alt'); expect(undoDepth(view.state)).toBe(0);
+  expect(s.source()).toBe(existing); expect(undoDepth(view.state)).toBe(0);
   s.form.dispatchEvent(new Event('submit', { cancelable: true }));
   expect(s.source()).toContain('![alt](<doc%20%23%25.assets/image.png>)'); expect(undoDepth(view.state)).toBe(1);
-  undo(view); expect(s.source()).toBe('alt'); expect(s.copy).toHaveBeenCalledOnce();
+  undo(view); expect(s.source()).toBe(existing); expect(s.copy).toHaveBeenCalledOnce();
 });
 it('keeps normal Choose behavior and disables copy until Save', async () => {
   const s = setup(false); expect(s.check.disabled).toBe(true); expect(s.form.textContent).toContain('Save the document');
@@ -45,7 +46,7 @@ it('reports a completed copy after Cancel without filling the new form', async (
   s.check.checked = true; s.pick(); await settle();
   s.form.querySelector<HTMLButtonElement>('[data-cancel]')!.click(); s.open();
   finish('doc.assets/retained.png'); await settle();
-  expect(s.destination.value).toBe(''); expect(s.messages.join()).toContain('Cancel and Undo keep the copy'); expect(s.source()).toBe('alt');
+  expect(s.destination.value).toBe('old.png'); expect(s.messages.join()).toContain('Cancel and Undo keep the copy'); expect(s.source()).toBe(existing);
 });
 it('reports dispatched copy failures after Cancel and rejects stale chooser results', async () => {
   let fail!: (reason: Error) => void;
@@ -53,7 +54,7 @@ it('reports dispatched copy failures after Cancel and rejects stale chooser resu
   s.check.checked = true; s.pick(); await settle();
   s.form.querySelector<HTMLButtonElement>('[data-cancel]')!.click();
   fail(new ImageCopyError('Published copy is retained')); await settle();
-  expect(s.messages.join()).toContain('Published copy is retained'); expect(s.source()).toBe('alt');
+  expect(s.messages.join()).toContain('Published copy is retained'); expect(s.source()).toBe(existing);
   s.open(); s.check.checked = true; s.pick();
   view.dispatch({ effects: setImagePath.of('/tmp/other.md') }); await settle(); expect(s.copy).toHaveBeenCalledTimes(1);
 });
@@ -67,7 +68,7 @@ it('keeps the second copy blocked when an older cancelled picker finishes', asyn
   finishFirst('/tmp/old.png'); await settle();
   expect(s.form.querySelector<HTMLButtonElement>('[data-choose]')!.disabled).toBe(true);
   s.form.dispatchEvent(new Event('submit', { cancelable: true }));
-  expect(s.messages.join()).toContain('Wait for the image copy'); expect(s.source()).toBe('alt');
+  expect(s.messages.join()).toContain('Wait for the image copy'); expect(s.source()).toBe(existing);
   finishCopy('doc.assets/new.png'); await settle();
   expect(s.destination.value).toBe('doc.assets/new.png');
   expect(s.form.querySelector<HTMLButtonElement>('[data-choose]')!.disabled).toBe(false);
@@ -98,4 +99,35 @@ it('does not publish after path changes, busy input, or invalid raster dimension
   const invalid = new Uint8Array(png); invalid.fill(255, 16, 20);
   const bad = vi.fn().mockResolvedValue(invalid.buffer);
   await expect(copyImageAsset(view, '/tmp/a.png', () => true, () => false, bad as typeof invoke)).rejects.toThrow(); expect(bad).toHaveBeenCalledOnce();
+});
+
+function fresh(available: boolean, choose = vi.fn(async (): Promise<string | null> => '/tmp/My Photo.png'), copy = vi.fn(async () => 'doc.assets/photo.png')) {
+  view?.destroy(); document.body.replaceChildren();
+  view = new EditorView({ parent: document.body, state: EditorState.create({ doc: 'text', selection: { anchor: 2 },
+    extensions: [markdown(), history(), linkVersion, sourceExtensions(fromSource('text')), imageBasePath.of('/tmp/doc.md'), imagePath, imageDocument.of(7)] }) });
+  const bar = document.createElement('div'); document.body.prepend(bar);
+  const messages: string[] = [];
+  return { messages, choose, copy, form: () => document.querySelector<HTMLFormElement>('.image-controls')!,
+    open: linkControls(view, bar, message => messages.push(message), 'image', choose, { available: () => available, copy }),
+    source: () => savedSource(view.state.field(sourceField)) };
+}
+it('inserts a chosen image at once: copies beside a saved document, one Undo, no form', async () => {
+  const s = fresh(true); s.open(); await settle();
+  expect(s.choose).toHaveBeenCalledOnce(); expect(s.copy).toHaveBeenCalledWith('/tmp/My Photo.png', expect.any(Function));
+  expect(s.source()).toBe('te![My Photo](<doc.assets/photo.png>)xt');
+  expect(s.form().hidden).toBe(true); expect(undoDepth(view.state)).toBe(1);
+  undo(view); expect(s.source()).toBe('text'); expect(s.copy).toHaveBeenCalledOnce();
+});
+it('links the chosen file in place when the document is unsaved', async () => {
+  const s = fresh(false); s.open(); await settle();
+  expect(s.copy).not.toHaveBeenCalled(); expect(s.source()).toContain('![My Photo](</tmp/My%20Photo.png>)');
+  expect(s.messages.join()).toContain('Save the document first');
+});
+it('inserts nothing when the picker is cancelled or the document changes first', async () => {
+  const cancelled = fresh(true, vi.fn(async () => null)); cancelled.open(); await settle();
+  expect(cancelled.source()).toBe('text'); expect(cancelled.copy).not.toHaveBeenCalled();
+  let finish!: (path: string) => void;
+  const late = fresh(true, vi.fn(() => new Promise<string | null>(resolve => { finish = resolve; })));
+  late.open(); view.dispatch({ changes: { from: 4, insert: '!' } }); finish('/tmp/a.png'); await settle();
+  expect(late.source()).toBe('text!'); expect(late.copy).not.toHaveBeenCalled();
 });
