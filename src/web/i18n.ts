@@ -142,6 +142,7 @@ export const translations = {
     'sidebar.confirm_delete': 'Are you sure you want to delete "{name}"?',
     'sidebar.confirm_delete_folder': 'Are you sure you want to delete the folder "{name}" and everything inside it?',
     'sidebar.cancel': 'Cancel',
+    'sidebar.confirm_delete_unsaved': 'Unsaved changes in its open tab will be lost.',
     'sidebar.title_files': 'FILES',
     'sidebar.title_outline': 'OUTLINE',
 
@@ -322,6 +323,7 @@ export const translations = {
     'sidebar.confirm_delete': '确定要删除 "{name}" 吗？',
     'sidebar.confirm_delete_folder': '确定要删除文件夹 "{name}" 及其中的所有内容吗？',
     'sidebar.cancel': '取消',
+    'sidebar.confirm_delete_unsaved': '已打开标签页中未保存的更改将会丢失。',
     'sidebar.title_files': '文件',
     'sidebar.title_outline': '大纲',
 

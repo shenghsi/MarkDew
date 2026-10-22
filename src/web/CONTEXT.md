@@ -51,9 +51,12 @@ folder). The sidebar finds the new row by its name among the direct rows of the 
 renames through the listing's path.
 Files sidebar, Delete: the system dialog asks first (a folder says it removes everything inside),
 and Cancel deletes nothing. After Delete the file is removed from disk whether a tab shows it or
-not. A clean tab for it closes. A tab with unsaved edits stays as an untitled document with those
-edits, and a later Save asks for a new path. The desktop host clears the path of each open document
-inside the deleted path. Deleted files are not added to the closed files list.
+not. Its tab closes without the discard question, including a tab with unsaved edits;
+the dialog warns that those edits will be lost. If the tab cannot close, it stays open as an untitled
+document and the status line says so.
+Tabs keep the host's canonical path while the Files list keeps the path it was opened with, so
+Delete asks the host for the canonical spelling (canonical_path) and matches tabs against both.
+The desktop host clears the path of each open document inside the deleted path. Deleted files are not added to the closed files list.
 
 Tab on a list item line nests the item under its previous item, with its nested lines. Shift-Tab
 does the opposite: it moves the item out to its parent's level. Any list type can nest in any

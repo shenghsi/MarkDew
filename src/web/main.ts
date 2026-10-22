@@ -265,6 +265,9 @@ const report = () => { active().state = view.state; status.textContent = `${tabN
   title.textContent = `${tabName(active())}${dirty() ? ' •' : ''}`; title.title = active().path || 'Untitled';
   title.classList.toggle('document-title-preview', !!active().preview);
   renderTabs(); sidebar?.select(active().path); syncMenuChecks(); };
+const insideDeleted = (path: string, deleted: string[]) => deleted.some(target => path === target || path.startsWith(target + '/') || path.startsWith(target + '\\'));
+// Tabs keep the host's canonical path; the Files list keeps the path it was opened with. Match both spellings.
+const deletionPaths = async (path: string) => [path, await invoke<string>('canonical_path', { path }).catch(() => path)];
 function applyFormat(kind: Format) { const reason = format(view, kind); if (reason) status.textContent = reason; return true; }
 function footnoteCommand(command: typeof insertFootnote) { const reason = command(view); if (reason) status.textContent = reason; return true; }
 function blockCommand(command: (view: EditorView) => string | null) { const reason = command(view); if (reason) status.textContent = reason; return true; }
@@ -647,8 +650,8 @@ async function addDocument(source = '', file?: string, preview = false) {
   if (!pageActive) return;
   tabs.add(tab); switchTab(tab.id, true); return tab;
 }
-async function closeTab(id: number) {
-  const tab = tabs.get(id); if (!tab || !await discard(tab)) return;
+async function closeTab(id: number, force = false) {
+  const tab = tabs.get(id); if (!tab || !(force || await discard(tab))) return;
   checkpoint(tab); await flushRecovery(tab);
   let replacement: DocumentTab | undefined;
   if (tabs.all.length === 1) { replacement = await createTab(); tabs.add(replacement); renderTabs(); }
@@ -853,21 +856,27 @@ function initSidebar(initialRoot: string, deferRead: boolean) {
       }
     },
     // The system dialog asks first. window.confirm cannot be relied on here: the dialog plugin replaces it with an async function.
-    confirmDelete: (name: string, isDirectory: boolean) => ask(
-      t(isDirectory ? 'sidebar.confirm_delete_folder' : 'sidebar.confirm_delete', { name }),
-      { title: 'MarkDew', kind: 'warning', okLabel: t('sidebar.delete'), cancelLabel: t('sidebar.cancel') }),
+    confirmDelete: async (name: string, isDirectory: boolean, path?: string) => {
+      active().state = view.state;
+      const paths = path ? await deletionPaths(path) : [];
+      const unsaved = tabs.all.some(tab => tab.path && insideDeleted(tab.path, paths) && tabDirty(tab));
+      return ask(t(isDirectory ? 'sidebar.confirm_delete_folder' : 'sidebar.confirm_delete', { name }) + (unsaved ? `\n\n${t('sidebar.confirm_delete_unsaved')}` : ''),
+        { title: 'MarkDew', kind: 'warning', okLabel: t('sidebar.delete'), cancelLabel: t('sidebar.cancel') });
+    },
     deletePath: async (targetPath: string) => {
       if (composing()) throw new Error('Finish text input, then delete the file.');
+      const paths = await deletionPaths(targetPath);
+      let failure = '';
       await invoke('delete_path', { path: targetPath });
       active().state = view.state;
-      const inside = (path: string) => path === targetPath || path.startsWith(targetPath + '/') || path.startsWith(targetPath + '\\');
-      for (const tab of tabs.all.filter(other => other.path && inside(other.path))) {
-        // The file is gone, so the tab stops pointing at it and never records it as a closed file.
+      for (const tab of tabs.all.filter(other => other.path && insideDeleted(other.path, paths))) {
+        // The file is gone and the user confirmed. Close its tab without the discard question,
+        // and never record the file as a closed file.
         tab.path = ''; tab.uncertain = false; tab.preview = false;
-        // A tab with unsaved edits stays open as an untitled document, so no edit is lost.
-        if (!tabDirty(tab)) await closeTab(tab.id).catch(() => {});
+        await closeTab(tab.id, true).catch(error => { failure = `The file is deleted, but its tab stays open. ${String(error)}`; });
       }
       fileTransition(); report();
+      if (failure) status.textContent = failure;
       for (const tab of tabs.all) checkpoint(tab);
     },
   }, { root: initialRoot, deferRead, rootChanged: root => {

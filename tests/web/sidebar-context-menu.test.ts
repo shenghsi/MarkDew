@@ -223,7 +223,7 @@ it('shows Delete option on right clicking a file and executes deletePath upon co
   const deleteBtn = Array.from(menu.querySelectorAll('button')).find(b => b.textContent === 'Delete')!;
   deleteBtn.click();
 
-  await vi.waitFor(() => expect(confirmDelete).toHaveBeenCalledWith('sample.md', false));
+  await vi.waitFor(() => expect(confirmDelete).toHaveBeenCalledWith('sample.md', false, '/root/sample.md'));
   expect(deletePath).toHaveBeenCalledWith('/root/sample.md');
 
   sidebar.dispose();
@@ -267,7 +267,7 @@ it('shows Delete option on right clicking a folder and executes deletePath upon 
   const deleteBtn = Array.from(menu.querySelectorAll('button')).find(b => b.textContent === 'Delete')!;
   deleteBtn.click();
 
-  await vi.waitFor(() => expect(confirmDelete).toHaveBeenCalledWith('my-folder', true));
+  await vi.waitFor(() => expect(confirmDelete).toHaveBeenCalledWith('my-folder', true, '/root/my-folder'));
   expect(deletePath).toHaveBeenCalledWith('/root/my-folder');
 
   sidebar.dispose();
@@ -333,7 +333,7 @@ it('deletes only after the confirmation dialog says yes', async () => {
   const confirmDelete = vi.fn().mockResolvedValueOnce(false).mockResolvedValueOnce(true);
   const { pane, services, sidebar } = mount({ confirmDelete });
   await rightClickFile(pane); menuItem('Delete').click();
-  await vi.waitFor(() => expect(confirmDelete).toHaveBeenCalledWith('a.md', false));
+  await vi.waitFor(() => expect(confirmDelete).toHaveBeenCalledWith('a.md', false, '/root/a.md'));
   await new Promise(resolve => setTimeout(resolve, 20));
   expect(services.deletePath).not.toHaveBeenCalled();
   await rightClickFile(pane); menuItem('Delete').click();

@@ -42,7 +42,7 @@ export interface SidebarServices {
   createFile?: (parent: string, name?: string) => Promise<string>;
   renameFile?: (oldPath: string, newPath: string) => Promise<void>;
   deletePath?: (path: string) => Promise<void>;
-  confirmDelete?: (name: string, isDirectory: boolean) => Promise<boolean> | boolean;
+  confirmDelete?: (name: string, isDirectory: boolean, path?: string) => Promise<boolean> | boolean;
 }
 
 // Each mounted folder owns its request token. A root refresh removes all older
@@ -465,7 +465,7 @@ export function fileSidebar(pane: HTMLElement, services: SidebarServices,
         const name = getFileName(targetPath!);
         let confirmed = true;
         if (services.confirmDelete) {
-          confirmed = await services.confirmDelete(name, isDirectory);
+          confirmed = await services.confirmDelete(name, isDirectory, targetPath!);
         } else if (typeof window.confirm === 'function') {
           confirmed = window.confirm(t('sidebar.confirm_delete', { name }));
         }

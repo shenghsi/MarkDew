@@ -681,6 +681,17 @@ fn detach_deleted_documents(host: &Mutex<Documents>, deleted: &Path) -> Result<(
     Ok(())
 }
 
+// Open documents keep canonical paths, while the Files list keeps the path as the folder was
+// opened. The renderer asks for the canonical spelling to match one to the other.
+#[tauri::command]
+fn canonical_path(path: String) -> Result<String, String> {
+    fs::canonicalize(PathBuf::from(&path))
+        .map_err(|e| e.to_string())?
+        .to_str()
+        .map(str::to_string)
+        .ok_or_else(|| "Invalid UTF-8 path.".to_string())
+}
+
 #[tauri::command]
 async fn delete_path(
     app: tauri::AppHandle,
@@ -1312,6 +1323,7 @@ fn main() {
             create_file,
             rename_file,
             delete_path,
+            canonical_path,
             update_menu_state,
             record_closed_file,
             add_recent_file,
@@ -1908,6 +1920,22 @@ mod tests {
         // Document in host updated
         let updated_path = doc_slot.lock().unwrap().path.clone().unwrap();
         assert_eq!(updated_path, fs::canonicalize(PathBuf::from(&new_path)).unwrap());
+    }
+
+    #[test]
+    fn canonical_path_resolves_links_and_rejects_missing_paths() {
+        let dir = tempfile::tempdir().unwrap();
+        let real = fs::canonicalize(dir.path()).unwrap().join("real");
+        fs::create_dir(&real).unwrap();
+        fs::write(real.join("a.md"), b"x").unwrap();
+        #[cfg(unix)]
+        {
+            let link = real.parent().unwrap().join("link");
+            std::os::unix::fs::symlink(&real, &link).unwrap();
+            let got = canonical_path(link.join("a.md").to_str().unwrap().to_string()).unwrap();
+            assert_eq!(got, real.join("a.md").to_str().unwrap());
+        }
+        assert!(canonical_path(real.join("missing.md").to_str().unwrap().to_string()).is_err());
     }
 
     #[test]
