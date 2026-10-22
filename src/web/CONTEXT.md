@@ -42,6 +42,14 @@ The editor preserves indentation and fence characters. After closing, live previ
 When the cursor is in a code block in rendered mode and the code block contains no code, the Backspace command deletes the complete block.
 In source code mode, the command does not delete the code block and keeps standard text deletion.
 
+Tab on a list item line nests the item under its previous item, with its nested lines. Shift-Tab
+does the opposite: it moves the item out to its parent's level. Any list type can nest in any
+other. The nested indent is the parent's content column, so it is 2 under a bullet and 3 under
+`1.`. Ordered numbers follow the new level, and a first nested item restarts at 1. A first item
+cannot nest, and an item at the left edge cannot move out; Tab and Shift-Tab keep the focus
+in the editor then. Table cells, code, equation, and other source blocks keep their own Tab.
+One Undo step reverses the move.
+
 In the desktop app, Insert Image (toolbar, Ctrl+Shift+I, or the Insert menu) with no image at the
 cursor opens the file picker and inserts the image at once. A saved document gets a copy beside
 it. An unsaved document links the file where it is. The alt text is the selected text, or the file

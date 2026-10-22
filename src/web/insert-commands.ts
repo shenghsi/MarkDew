@@ -61,7 +61,9 @@ export function toggleLines(view: EditorView, kind: LineKind): string | null {
     }
   }
   if (!changes.length) return null;
-  view.dispatch(state.update({ changes, userEvent: 'input.format', scrollIntoView: true }));
+  // A caret at the insert point moves after the new marker, so typing can start.
+  const selectionAfter = selection.empty ? EditorSelection.cursor(state.changes(changes).mapPos(selection.head, 1)) : undefined;
+  view.dispatch(state.update({ changes, selection: selectionAfter, userEvent: 'input.format', scrollIntoView: true }));
   view.focus(); return null;
 }
 

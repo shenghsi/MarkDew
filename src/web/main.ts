@@ -18,6 +18,7 @@ import { format, Format } from './formatting';
 import { insertTable } from './table-insert';
 import { codeBlock } from './code-block-command';
 import { editorMenu } from './editor-menu';
+import { indentList } from './list-indent';
 import { linkControls } from './link-controls';
 import { linkVersion } from './links';
 import { headingTarget, linkNavigation } from './link-navigation';
@@ -286,7 +287,7 @@ const state = (source: string, tab?: Pick<DocumentTab, 'id' | 'path' | 'sourceMo
   linkNavigation(message => { status.textContent = message; }, () => busy ? 'Wait for the file command, then follow the link.' :
     composing() ? 'Finish text input, then follow the link.' : null,
     url => webLinks.open(url), (destination, fragment) => { void operation(() => openDocumentLink(destination, fragment), true); }),
-  keymap.of([{ key: 'Mod-/', run: () => { sourceButton.click(); return true; } }, { mac: 'Ctrl-/', run: () => { sourceButton.click(); return true; } }, ...guardedSearchKeymap, ...formattingKeys, { key: 'Mod-k', run: () => openLinkControls() }, { key: 'Mod-Shift-i', run: () => openImageControls() }, { key: 'Enter', run: markdownReturn }, { key: 'Backspace', run: markdownBackspace }, { key: 'ArrowDown', run: exitBlockDown }, { key: 'Mod-s', run: () => { void operation(saveFile); return true; } }, ...markdownKeymap.filter(binding => binding.key !== 'Enter'), ...defaultKeymap, ...historyKeymap]),
+  keymap.of([{ key: 'Mod-/', run: () => { sourceButton.click(); return true; } }, { mac: 'Ctrl-/', run: () => { sourceButton.click(); return true; } }, ...guardedSearchKeymap, ...formattingKeys, { key: 'Mod-k', run: () => openLinkControls() }, { key: 'Mod-Shift-i', run: () => openImageControls() }, { key: 'Enter', run: markdownReturn }, { key: 'Backspace', run: markdownBackspace }, { key: 'Tab', run: target => indentList(target, 1) }, { key: 'Shift-Tab', run: target => indentList(target, -1) }, { key: 'ArrowDown', run: exitBlockDown }, { key: 'Mod-s', run: () => { void operation(saveFile); return true; } }, ...markdownKeymap.filter(binding => binding.key !== 'Enter'), ...defaultKeymap, ...historyKeymap]),
   EditorView.updateListener.of(update => {
     if (update.docChanged) { if (active().preview) active().preview = false; report(); checkpoint(); }
     if (update.startState.field(editorActiveField, false) !== update.state.field(editorActiveField, false)) {

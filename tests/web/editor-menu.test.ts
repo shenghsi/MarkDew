@@ -49,6 +49,16 @@ it('toggles quote and list markers on every selected line', () => {
 it('marks a blank line and refuses code blocks', () => {
   expect(toggleLines(editor('', 0), 'bullet')).toBeNull();
   expect(text()).toBe('- ');
+  expect(view!.state.selection.main.head).toBe(2);
+  toggleLines(view!, 'ordered');
+  expect(text()).toBe('1. ');
+  expect(view!.state.selection.main.head).toBe(3);
+  const quoted = editor('', 0); toggleLines(quoted, 'quote');
+  expect(text()).toBe('> '); expect(quoted.state.selection.main.head).toBe(2);
+  const mid = editor('one', 0); toggleLines(mid, 'task');
+  expect(text()).toBe('- [ ] one'); expect(mid.state.selection.main.head).toBe(6);
+  expect(toggleLines(mid, 'task')).toBeNull();
+  expect(text()).toBe('one'); expect(mid.state.selection.main.head).toBe(0);
   expect(toggleLines(editor('```\ncode\n```', 6), 'quote')).toBe('Edit this block as source.');
   expect(text()).toBe('```\ncode\n```');
 });
