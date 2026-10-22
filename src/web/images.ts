@@ -92,6 +92,11 @@ function dataBytes(destination: string): Uint8Array {
   return bytes;
 }
 
+// An embedded image has a very long data URI. Name its type and size, not its data, in messages.
+export function shortDestination(destination: string): string {
+  const match = /^(data:[^,;]*(?:;[^,;]*)*,)(.*)$/s.exec(destination);
+  return match && destination.length > 120 ? `${match[1]}… (${destination.length - match[1].length} characters)` : destination;
+}
 export function mountImage(dom: HTMLElement, image: ImageInfo, measure: () => void,
   read: (destination: string, path: string) => Promise<ArrayBuffer> = async (destination, path) => {
     if (!isTauri()) throw new Error('Local images need the desktop app.');
@@ -104,7 +109,7 @@ export function mountImage(dom: HTMLElement, image: ImageInfo, measure: () => vo
   dom.textContent = `Loading image: ${image.alt || image.destination}`;
   const fail = (error: unknown) => {
     if (!current()) return;
-    release(); dom.classList.add('preview-error'); dom.textContent = `Cannot load image: ${image.alt || image.destination}. ${String(error)} Select to edit the source.`;
+    release(); dom.classList.add('preview-error'); dom.textContent = `Cannot load image: ${image.alt || shortDestination(image.destination)}. ${String(error)} Select to edit the source.`;
     dom.dataset.ready = 'error'; measure();
   };
   void (async () => {

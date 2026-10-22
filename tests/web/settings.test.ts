@@ -13,6 +13,7 @@ import {
   showAboutDialog,
   isModalOpen,
 } from '../../src/web/settings';
+import { writingSizeControls } from '../../src/web/writing-size';
 
 describe('Settings and Line Width', () => {
   let mockStorage: Record<string, string>;
@@ -303,3 +304,22 @@ describe('Settings and Line Width', () => {
   });
 });
 
+
+it('applies a Writing Size change through the writing surface control, not the page root', () => {
+  document.body.innerHTML = '<div id="editor"></div>';
+  const surface = document.querySelector<HTMLElement>('#editor')!, parent = document.createElement('div'); document.body.append(parent);
+  const allowed = vi.fn(() => true), measure = vi.fn();
+  writingSizeControls(parent, surface, allowed, measure);
+  const data: Record<string, string> = {};
+  const storage = { getItem: (key: string) => data[key] ?? null, setItem: (key: string, value: string) => { data[key] = value; } } as Storage;
+  showSettingsDialog({ storage, onMeasure: measure });
+  document.querySelector<HTMLButtonElement>('#tab-appearance')!.click();
+  const select = document.querySelector<HTMLSelectElement>('select[data-key="markdew.writing-size"]')!;
+  select.value = '150'; select.dispatchEvent(new Event('change'));
+  expect(surface.style.getPropertyValue('--writing-scale')).toBe('1.5');
+  expect(document.querySelector<HTMLSelectElement>('.writing-size-control select')!.value).toBe('150'); expect(measure).toHaveBeenCalled();
+  allowed.mockReturnValue(false);
+  select.value = '90'; select.dispatchEvent(new Event('change'));
+  expect(surface.style.getPropertyValue('--writing-scale')).toBe('1.5'); expect(select.value).toBe('150');
+  expect(storage.getItem('markdew.writing-size')).toBe('150');
+});

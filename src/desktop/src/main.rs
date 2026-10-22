@@ -432,6 +432,59 @@ fn next_generation(doc: &Document) -> Result<u64, String> {
         .checked_add(1)
         .ok_or("Document generation limit.".into())
 }
+// The family names of the fonts installed in the system, sorted and without repeats. The page cannot list
+// them itself, and the Settings font choices need them.
+fn installed_font_families() -> Vec<String> {
+    let mut database = fontdb::Database::new();
+    database.load_system_fonts();
+    let mut names = std::collections::BTreeSet::new();
+    for face in database.faces() {
+        for (family, _) in &face.families {
+            let name = family.trim();
+            if !name.is_empty() && !name.starts_with('.') {
+                names.insert(name.to_string());
+            }
+        }
+    }
+    names.into_iter().collect()
+}
+
+#[tauri::command]
+async fn list_fonts() -> Result<Vec<String>, String> {
+    tauri::async_runtime::spawn_blocking(installed_font_families)
+        .await
+        .map_err(|error| error.to_string())
+}
+
+// WebKitGTK sends an image-only paste to the page with empty clipboard data, so the page cannot read a
+// copied image. On Linux the host reads the clipboard image and returns it as PNG bytes (empty when the
+// clipboard holds no image). The other web views give the page the image in the paste event.
+#[cfg(target_os = "linux")]
+fn clipboard_png() -> Option<Vec<u8>> {
+    let clipboard = gtk::Clipboard::get(&gtk::gdk::SELECTION_CLIPBOARD);
+    let pixbuf = clipboard.wait_for_image()?;
+    pixbuf.save_to_bufferv("png", &[]).ok()
+}
+
+#[tauri::command]
+async fn read_clipboard_image(app: tauri::AppHandle) -> Result<tauri::ipc::Response, String> {
+    #[cfg(target_os = "linux")]
+    {
+        let (sender, receiver) = std::sync::mpsc::channel();
+        app.run_on_main_thread(move || { let _ = sender.send(clipboard_png()); })
+            .map_err(|error| error.to_string())?;
+        let png = tauri::async_runtime::spawn_blocking(move || receiver.recv().ok().flatten())
+            .await
+            .map_err(|error| error.to_string())?;
+        return Ok(tauri::ipc::Response::new(png.unwrap_or_default()));
+    }
+    #[cfg(not(target_os = "linux"))]
+    {
+        let _ = app;
+        Ok(tauri::ipc::Response::new(Vec::<u8>::new()))
+    }
+}
+
 #[tauri::command]
 async fn read_image(
     destination: String,
@@ -1324,6 +1377,8 @@ fn main() {
             rename_file,
             delete_path,
             canonical_path,
+            read_clipboard_image,
+            list_fonts,
             update_menu_state,
             record_closed_file,
             add_recent_file,
@@ -1920,6 +1975,13 @@ mod tests {
         // Document in host updated
         let updated_path = doc_slot.lock().unwrap().path.clone().unwrap();
         assert_eq!(updated_path, fs::canonicalize(PathBuf::from(&new_path)).unwrap());
+    }
+
+    #[test]
+    fn installed_fonts_are_sorted_unique_and_named() {
+        let names = installed_font_families();
+        assert!(names.windows(2).all(|pair| pair[0] < pair[1]));
+        assert!(names.iter().all(|name| !name.trim().is_empty() && name == name.trim() && !name.starts_with('.')));
     }
 
     #[test]

@@ -19,17 +19,23 @@ interface ControlOptions {
   storage?: Pick<Storage, 'getItem' | 'setItem'>;
 }
 export function clipboardImageControls(parent: HTMLElement, options: ControlOptions) {
-  return imageTransferControls(parent, options, 'Pasted images', 'markdew-pasted-images', 'embed', 'Embed in Markdown');
+  return imageTransferControls(parent, options, 'Pasted images', 'markdew-pasted-images', 'embed', 'Embed in Markdown', 'copy');
 }
 export function droppedImageControls(parent: HTMLElement, options: ControlOptions) {
   return imageTransferControls(parent, options, 'Dropped images', 'markdew-dropped-images', 'link', 'Link original');
 }
 function imageTransferControls<Mode extends 'embed' | 'link'>(parent: HTMLElement, options: ControlOptions,
-  name: string, key: string, original: Mode, originalLabel: string) {
+  name: string, key: string, original: Mode, originalLabel: string, defaultMode: Mode | 'copy' = original) {
   let storage = options.storage;
   if (!storage) { try { storage = localStorage; } catch { /* The preference still works without storage. */ } }
-  let mode: Mode | 'copy' = original, generation = 0;
-  try { if (options.native && storage?.getItem(key) === 'copy') mode = 'copy'; } catch { /* Use the original mode. */ }
+  // No stored choice means the default mode. Copy needs the desktop host, so elsewhere the original mode applies.
+  const resolve = (): { mode: Mode | 'copy'; implicit: boolean } => {
+    let value: string | null = null;
+    try { value = storage?.getItem(key) ?? null; } catch { /* Use the default mode. */ }
+    const copy = options.native && (value === 'copy' || value === null && defaultMode === 'copy');
+    return { mode: copy ? 'copy' : original, implicit: value === null };
+  };
+  let { mode } = resolve(), generation = 0;
   const label = document.createElement('label'); label.textContent = name + ' ';
   const select = document.createElement('select'); select.setAttribute('aria-label', name);
   select.add(new Option(originalLabel, original)); select.add(new Option('Copy beside document', 'copy'));
@@ -46,10 +52,20 @@ function imageTransferControls<Mode extends 'embed' | 'link'>(parent: HTMLElemen
     hint.hidden = mode !== 'copy';
     try { storage?.setItem(key, mode); } catch { /* Keep the session preference. */ }
   });
+  // The Settings dialog writes the same stored preference. Read it when an image arrives, so a change
+  // there applies at once without a restart.
+  const syncStored = () => {
+    const stored = resolve().mode;
+    if (stored === mode) return;
+    mode = stored; select.value = mode; hint.hidden = mode !== 'copy'; generation++;
+  };
   const capture = (view: EditorView): CopyTarget | { kind: Mode; current: () => boolean } | string => {
+    syncStored();
     const captured = generation, selected = mode, id = view.state.facet(imageDocument), path = view.state.field(imagePath, false);
     const current = () => generation === captured && mode === selected && view.state.facet(imageDocument) === id && view.state.field(imagePath, false) === path;
     if (selected !== 'copy') return { kind: original, current };
+    // A copy that nobody chose (the default) must not block a paste: embed when the document cannot take a copy.
+    if (resolve().implicit && (options.available(view) || id === undefined || !path)) return { kind: original, current };
     const reason = options.available(view); if (reason) return reason;
     if (!options.native || id === undefined || !path) return 'Save the document before copying images.';
     return { kind: 'copy', current, placeholder: clipboardPlaceholder(path),

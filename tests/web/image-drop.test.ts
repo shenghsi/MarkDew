@@ -37,7 +37,7 @@ function setup(source = '\uFEFF图😀\r\nTail\rEnd\n', at = 3, preview = false)
   let uncertain=false;
   const copy=vi.fn().mockResolvedValue('doc.assets/image-drop.png');
   const controls=droppedImageControls(document.body,{native:true,call:copy,available:()=>uncertain?'Check Save before copying.':null,
-    storage:{getItem:()=>null,setItem:()=>{}}});
+    storage:(()=>{const kept=new Map<string,string>();return {getItem:(key:string)=>kept.get(key)??null,setItem:(key:string,value:string)=>{kept.set(key,value);}};})()});
   const mode=(value:string)=>{controls.select.value=value;controls.select.dispatchEvent(new Event('change'));};
   const drops = imageDrops(editor, { read, scale, policy:controls.capture, report: message => messages.push(message), blocked: () => busy ? 'Busy' : null });
   return { editor, drops, read, scale, messages, coords, rect, hit, lock, state, copy, controls, mode, uncertain:(value:boolean)=>{uncertain=value;}, busy: (value: boolean) => { busy = value; },
@@ -380,4 +380,16 @@ it('isolates a copied body drop from adjacent typing and rejects invalid copy pa
   redo(f.editor);redo(f.editor);redo(f.editor);expect(f.source()).toBe(after);expect(f.copy).toHaveBeenCalledOnce();
   undo(f.editor);undo(f.editor);undo(f.editor);f.coords.mockReturnValue(2);f.copy.mockResolvedValue('../wrong/image-a.png');await f.drop();
   expect(f.source()).toBe(original);expect(f.controls.notice.textContent).toContain('invalid relative path');
+});
+
+it('drops in the margin, between lines and below the text at the nearest position', async () => {
+  for (const place of ['margin', 'below']) {
+    const f = setup('One\n\nTwo', 3);
+    f.hit.mockReturnValue(place === 'margin' ? f.editor.scrollDOM : f.editor.contentDOM);
+    // Precise lookup finds no text there; the nearest position is the end of the first line.
+    f.coords.mockImplementation(((_point: unknown, precise?: boolean) => precise === false ? 3 : null) as never);
+    await f.drop('/images/a.png');
+    expect(f.source()).toContain('One![](</images/a.png>)'); expect(f.read).toHaveBeenCalledOnce();
+    f.editor.destroy(); view = undefined; document.body.replaceChildren(); vi.restoreAllMocks(); vi.unstubAllGlobals();
+  }
 });

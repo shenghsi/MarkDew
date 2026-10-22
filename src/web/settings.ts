@@ -7,6 +7,7 @@ import {
   DIAGRAM_MAX_HEIGHTS, DEFAULT_DIAGRAM_SETTINGS, getDiagramSettings, applyDiagramStyle,
 } from './diagram-settings';
 import { layoutPreferences, SidebarChoice } from './layout-preferences';
+import { applyFonts, FONT_KEYS, installedFonts } from './font-settings';
 import {
   t,
   getCurrentLanguage,
@@ -114,6 +115,7 @@ export function initSettings(options?: {
   const storage = options?.storage ?? localStorage;
   const current = getSavedLineWidth(storage);
   applyLineWidth(current);
+  applyFonts(storage);
   applyDiagramStyle(getDiagramSettings(storage));
 
   const onStorage = (event: StorageEvent) => {
@@ -437,7 +439,7 @@ export function showSettingsDialog(options?: {
         { label: t('image.embed', storage), value: 'embed' },
         { label: t('image.copy', storage), value: 'copy' },
       ],
-      'embed',
+      isTauri() ? 'copy' : 'embed',
     );
 
     const droppedH = document.createElement('h3');
@@ -636,12 +638,60 @@ export function showSettingsDialog(options?: {
       ],
       '100',
       (val) => {
-        const scale = Number(val) / 100;
-        document.documentElement.style.setProperty('--writing-scale', String(scale));
-        options?.onMeasure?.();
+        // The writing surface owns its scale, so use its control. Setting the page root would be
+        // hidden by the value the control keeps on the surface. The control refuses a change while a
+        // file command or text input is busy; then the setting returns to the size in use.
+        const control = document.querySelector<HTMLSelectElement>('.writing-size-control select');
+        if (!control) {
+          document.documentElement.style.setProperty('--writing-scale', String(Number(val) / 100));
+          options?.onMeasure?.();
+          return;
+        }
+        control.value = val; control.dispatchEvent(new Event('change'));
+        if (control.value !== val) {
+          wsSelect.value = control.value;
+          try { storage.setItem('markdew.writing-size', control.value); } catch { /* The size in use stays. */ }
+        }
       },
     );
     writingSizeSec.append(wsHeading, wsDesc, wsSelect);
+
+    // Section: fonts. The choices are the families installed on this computer.
+    const fontSection = (title: string, key: string) => {
+      const section = document.createElement('section');
+      section.className = 'settings-section';
+      const heading = document.createElement('h3');
+      heading.className = 'settings-section-title';
+      heading.textContent = title;
+      const desc = document.createElement('p');
+      desc.className = 'settings-desc';
+      desc.textContent = t('appearance.font_desc', storage);
+      const select = document.createElement('select');
+      select.className = 'settings-select';
+      select.dataset.key = key;
+      let chosen = '';
+      try { chosen = storage.getItem(key) || ''; } catch { /* Show the default. */ }
+      const fill = (families: string[]) => {
+        select.replaceChildren(new Option(t('appearance.font_default', storage), ''));
+        // A saved font that is no longer installed stays visible, so the choice is not lost.
+        for (const family of chosen && !families.includes(chosen) ? [chosen, ...families] : families) {
+          const option = new Option(family, family);
+          option.style.fontFamily = `"${family.replace(/["\\]/g, '')}"`;
+          select.add(option);
+        }
+        select.value = chosen;
+      };
+      fill([]);
+      void installedFonts().then(families => { if (families.length) fill(families); });
+      select.addEventListener('change', () => {
+        chosen = select.value;
+        try { if (chosen) storage.setItem(key, chosen); else storage.removeItem(key); } catch { /* This launch keeps the choice. */ }
+        applyFonts(storage);
+        options?.onMeasure?.();
+      });
+      section.append(heading, desc, select);
+      return section;
+    };
 
     // Group: Editor (line width, writing size)
     const editorGroup = document.createElement('div');
@@ -649,7 +699,8 @@ export function showSettingsDialog(options?: {
     const editorGroupTitle = document.createElement('h2');
     editorGroupTitle.className = 'settings-group-title';
     editorGroupTitle.textContent = t('appearance.group_editor', storage);
-    editorGroup.append(editorGroupTitle, lineWidthSection, writingSizeSec);
+    editorGroup.append(editorGroupTitle, lineWidthSection, writingSizeSec,
+      fontSection(t('appearance.font_text', storage), FONT_KEYS.TEXT), fontSection(t('appearance.font_code', storage), FONT_KEYS.CODE));
 
     // Group: Mermaid Diagram, in three sections
     const diagramGroup = document.createElement('div');

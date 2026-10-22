@@ -19,6 +19,7 @@ import { insertTable } from './table-insert';
 import { codeBlock } from './code-block-command';
 import { editorMenu } from './editor-menu';
 import { listTab } from './list-indent';
+import { collapseDataUris } from './data-uri-collapse';
 import { linkControls } from './link-controls';
 import { linkVersion } from './links';
 import { headingTarget, linkNavigation } from './link-navigation';
@@ -236,6 +237,15 @@ document.querySelector('header')!.after(formatBar);
 const linkButton = document.createElement('button'); linkButton.textContent = 'Link'; linkButton.id = 'link';
 formatBar.append(linkButton);
 const status = document.querySelector<HTMLElement>('#status')!;
+// The status line is hidden from view, so a message the user must see (for example why an image was not
+// inserted) also shows as a short notice. Screen readers keep reading the status line.
+const toast = document.createElement('div'); toast.className = 'toast-notice'; toast.hidden = true; toast.setAttribute('aria-hidden', 'true'); document.querySelector('#app')!.append(toast);
+let toastTimer: ReturnType<typeof setTimeout> | undefined;
+function notify(message: string) {
+  status.textContent = message; toast.textContent = message; toast.hidden = !message;
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => { toast.hidden = true; }, 6000);
+}
+window.addEventListener('pagehide', () => clearTimeout(toastTimer), { once: true });
 export let tabs: DocumentTabs;
 let busy = isTauri(), terminating = false, lockActive = false;
 let pageActive = true;
@@ -324,8 +334,10 @@ const state = (source: string, tab?: Pick<DocumentTab, 'id' | 'path' | 'sourceMo
   documentLanguage(), syntaxHighlighting(classHighlighter), EditorView.lineWrapping,
   EditorView.contentAttributes.of({ 'aria-label': 'Markdown document', 'aria-describedby': 'document-title' }),
   EditorView.editorAttributes.of(v => ({ class: v.state.field(editorActiveField, false) ? 'editor-active' : '' })),
-  imagePaste(message => { status.textContent = message; }, () => busy ? 'Wait for the file command, then paste the image.' : composing() ? 'Finish text input, then paste the image.' : null, pastedImages.capture),
+  imagePaste(notify, () => busy ? 'Wait for the file command, then paste the image.' : composing() ? 'Finish text input, then paste the image.' : null, pastedImages.capture,
+    isTauri() && /Linux/.test(navigator.platform) ? () => invoke<ArrayBuffer>('read_clipboard_image').then(bytes => new Uint8Array(bytes)) : undefined),
   display.of(tab?.sourceMode ? [lineNumbers()] : livePreview),
+  collapseDataUris,
   tableSaveCommand.of(() => { void operation(saveFile); }),
   tableFindCommand.of(() => { find(view); }), searchSupport(() => view), outline(outlineContent),
   linkNavigation(message => { status.textContent = message; }, () => busy ? 'Wait for the file command, then follow the link.' :
@@ -993,7 +1005,7 @@ if (isTauri()) {
   document.querySelector('.workspace')!.append(hint);
   const images = imageDrops(view, { scale: () => getCurrentWindow().scaleFactor(),
     policy: droppedImages.capture,
-    report: message => { status.textContent = message; },
+    report: notify,
     blocked: () => busy ? 'Wait for the file command, then drop the image.' : composing() ? 'Finish text input, then drop the image.' : null });
   const dispose = fileDrops(handler => getCurrentWindow().onDragDropEvent(handler),
     selected => { void operation(() => loadFile(selected), true); },

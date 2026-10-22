@@ -51,6 +51,27 @@ with the canonical spelling of every open tab (canonical_path), and ignores case
 A link in a parent folder, or a different case, so no longer makes a second tab. The sidebar, Open File,
 links, drops, and menu requests all use this check. Rename finds its tab the same way, before the rename.
 
+Pasted images default to Copy beside document in the desktop app; the browser can only embed. Copy that
+nobody chose falls back to embedding when the document has no saved path or its save is uncertain,
+so a paste never fails for that reason. An explicit Copy choice still reports it. Dropped images keep
+Link original as their default. An embedded image is a base64 data URI on one long line. The editor
+shows its data as a small label ("image data - 22 KB") in Live and Source mode and the cursor skips
+over it. The document text, source record, and history do not change, and copying a selection copies
+the real text. Image error messages and print warnings name the type and size of long data URIs.
+
+Settings that apply at once: Writing Size goes through the header's writing-size control, because that
+control keeps the scale on the writing surface and a value on the page root is hidden by it. Text font
+and Code font list the families installed on the computer (the desktop host command list_fonts, using
+fontdb) and apply through the CSS variables --writing-font and --code-font; a chosen font goes first and
+the default stack stays behind it for missing characters. The Pasted images and Dropped images choices
+are read from storage when an image arrives, so they apply without a restart.
+WebKitGTK (Linux) sends a paste with no data at all when the clipboard holds only an image. For such an
+empty paste the editor asks the host (read_clipboard_image, GTK clipboard, PNG bytes) and then continues
+with the normal image paste. A dropped image works at any point on the writing surface; away from text
+it uses the nearest text position. Image messages also show as a short notice at the bottom of the
+window, because the status line is hidden from view. tests/browser/settings-font.html and
+image-paste-check.html check size, font, and paste in Chrome.
+
 Open File and Open Folder, from the toolbar, the menu bar, or the sidebar, start their dialog in the
 folder of the current file. With no current file, they start in the
 open project folder. With neither, the system chooses the folder.

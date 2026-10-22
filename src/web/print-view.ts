@@ -15,7 +15,7 @@ import type { Root, RootContent } from 'mdast';
 import type { Element } from 'hast';
 import { renderDiagram } from './renderers';
 import { mountHTMLFrame } from './html-frame';
-import { mountImage } from './images';
+import { mountImage, shortDestination } from './images';
 import './print.css';
 import { exportPNG } from './png-export';
 import { isTauri } from '@tauri-apps/api/core';
@@ -156,7 +156,7 @@ export function printView(snapshot: PrintSnapshot, renderers: Renderers = defaul
       let finish: () => void;
       const loaded = new Promise<void>(resolve => { finish = resolve; });
       const disposeImage = mountImage(dom, { destination: entry.source, alt: entry.alt || '', title: entry.title || '', path: captured.path, document: captured.id }, () => {
-        if (dom.dataset.ready === 'error') warnings.push(`Cannot load image: ${entry.alt || entry.source}`);
+        if (dom.dataset.ready === 'error') warnings.push(`Cannot load image: ${entry.alt || shortDestination(entry.source)}`);
         finish();
       });
       disposers.push(disposeImage);

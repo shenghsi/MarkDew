@@ -4,6 +4,8 @@ import { imageLimit, validateRaster } from './images';
 import { sourceField } from './source';
 
 export const imagePasteMessage = Facet.define<(message: string) => void, ((message: string) => void) | undefined>({ combine: callbacks => callbacks[0] });
+// Reads the clipboard image in the host, for web views that give the page no image data on paste. Empty bytes mean no image.
+export const imageNativeClipboard = Facet.define<() => Promise<Uint8Array>, (() => Promise<Uint8Array>) | undefined>({ combine: callbacks => callbacks[0] });
 export const imagePasteGuard = Facet.define<() => string | null, () => string | null>({ combine: callbacks => callbacks[0] || (() => null) });
 export type ClipboardTarget = { current: () => boolean } & ({ kind: 'embed' } | {
   kind: 'copy'; placeholder: string;

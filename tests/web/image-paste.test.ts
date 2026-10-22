@@ -6,6 +6,7 @@ import { forceParsing } from '@codemirror/language';
 import { history, redo, undo, undoDepth } from '@codemirror/commands';
 import { documentLanguage } from '../../src/web/document-language';
 import { imagePaste } from '../../src/web/image-paste';
+import { imageNativeClipboard } from '../../src/web/clipboard';
 import { imageBasePath, imageDocument, imagePath, setImagePath } from '../../src/web/images';
 import { linkVersion } from '../../src/web/links';
 import { fromSource, normalize, savedSource, sourceExtensions, sourceField } from '../../src/web/source';
@@ -239,4 +240,35 @@ it('includes omitted-cell padding in the encoded source limit before reading', a
   const table = tableEditor(document.querySelector<HTMLElement>('.preview-table')!)!; table.begin(1, 2);
   const read = vi.spyOn(FileReader.prototype, 'readAsArrayBuffer'); paste([file()], '', '', table.child!.contentDOM);
   expect(read).not.toHaveBeenCalled(); expect(source()).toBe(original); expect(messages.at(-1)).toContain('8 MiB document limit');
+});
+
+// WebKitGTK sends an image-only paste with no clipboard data. The host reads the image instead.
+function emptyPaste() {
+  const event = new Event('paste', { bubbles: true, cancelable: true });
+  Object.defineProperty(event, 'clipboardData', { value: { types: [], files: [], items: [], getData: () => '', setData: vi.fn() } });
+  view!.contentDOM.dispatchEvent(event); return event;
+}
+it('pastes the host clipboard image when the web view sends an empty paste event', async () => {
+  const native = vi.fn(async () => png);
+  const { editor, source, messages } = create('Text\n\nEnd', 4, imageNativeClipboard.of(native));
+  const event = emptyPaste();
+  expect(event.defaultPrevented).toBe(true); expect(native).toHaveBeenCalledOnce();
+  await vi.waitFor(() => expect(source()).toContain('![](<data:image/png;base64,'));
+  expect(undoDepth(editor.state)).toBe(1); expect(messages.at(-1)).toBe('Image pasted.');
+  undo(editor); expect(source()).toBe('Text\n\nEnd');
+});
+it('ignores an empty paste when the host has no clipboard image or the document changed first', async () => {
+  const none = create('Text', 4, imageNativeClipboard.of(async () => new Uint8Array()));
+  emptyPaste(); await new Promise(resolve => setTimeout(resolve, 20));
+  expect(none.source()).toBe('Text');
+  let finish!: (bytes: Uint8Array) => void;
+  const late = create('Text', 4, imageNativeClipboard.of(() => new Promise<Uint8Array>(resolve => { finish = resolve; })));
+  emptyPaste(); late.editor.dispatch({ changes: { from: 0, insert: 'X' } }); finish(png); await new Promise(resolve => setTimeout(resolve, 20));
+  expect(late.source()).toBe('XText');
+});
+it('leaves empty pastes alone when no host reader exists, and text pastes alone when one does', async () => {
+  const plain = create('Text', 4); emptyPaste(); await new Promise(resolve => setTimeout(resolve, 20)); expect(plain.source()).toBe('Text');
+  const native = vi.fn(async () => png);
+  create('Text', 4, imageNativeClipboard.of(native)); paste([], 'plain text');
+  expect(native).not.toHaveBeenCalled();
 });

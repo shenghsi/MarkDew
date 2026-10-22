@@ -90,11 +90,13 @@ export function imageDrops(view: EditorView, options: Options) {
           return;
         }
         const outerReason = editGuard(view); if (outerReason) { reject(outerReason); return; }
-        if (!target || !view.contentDOM.contains(target) || target.closest('.cm-content') !== view.contentDOM
+        // Any point on the writing surface works: its margins, the space between lines, and the space
+        // below the last line use the nearest text position. Rendered widgets and cells keep their own rules.
+        if (!target || !view.scrollDOM.contains(target) || (target.closest('.cm-content') ?? view.contentDOM) !== view.contentDOM
           || target.closest('.cm-widgetBlock, .preview-widget, .preview-table, iframe')) {
           reject('Drop the image into document text.'); return;
         }
-        const at = view.posAtCoords(point);
+        const at = view.posAtCoords(point) ?? view.posAtCoords(point, false);
         if (at === null) { reject('Drop the image into visible document text.'); return; }
         const tree = ensureSyntaxTree(state, at, 50);
         if (!tree) { reject('Wait for Markdown parsing, then drop the image.'); return; }

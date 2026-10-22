@@ -363,3 +363,14 @@ it('opens each file in one tab, matching a linked spelling of the same path', as
   await vi.waitFor(() => expect(app!.tabs.all).toHaveLength(2));
   expect(app!.tabs.active.path).toBe('/tmp/other.md');
 });
+
+it('shows image messages as a visible notice, not only in the hidden status line', async () => {
+  await boot(); const { view } = app!;
+  const files = [new File([new Uint8Array([1])], 'a.png', { type: 'image/png' }), new File([new Uint8Array([2])], 'b.png', { type: 'image/png' })];
+  const event = new Event('paste', { bubbles: true, cancelable: true });
+  Object.defineProperty(event, 'clipboardData', { value: { types: ['Files'], files, getData: () => '', items: files.map(file => ({ kind: 'file', type: file.type, getAsFile: () => file })) } });
+  view.contentDOM.dispatchEvent(event);
+  const toast = document.querySelector<HTMLElement>('.toast-notice')!;
+  expect(toast.hidden).toBe(false); expect(toast.textContent).toBe('Paste one PNG, JPEG, GIF, or WebP image.');
+  expect(document.querySelector('#status')!.textContent).toBe(toast.textContent);
+});

@@ -5,7 +5,7 @@ import { EditorView } from '@codemirror/view';
 import { forceParsing } from '@codemirror/language';
 import { history, redo, undo, undoDepth } from '@codemirror/commands';
 import { documentLanguage } from '../../src/web/document-language';
-import { clipboardImageControls, clipboardPlaceholder } from '../../src/web/clipboard-assets';
+import { clipboardImageControls, clipboardPlaceholder, droppedImageControls } from '../../src/web/clipboard-assets';
 import { imagePaste } from '../../src/web/image-paste';
 import { imageBasePath, imageDocument, imageFileDestination, imagePath, setImagePath } from '../../src/web/images';
 import { linkVersion } from '../../src/web/links';
@@ -23,7 +23,8 @@ function setup(source = '\uFEFF图😀\r\nEnd\n', preview = false, path = '/note
   const parent = document.createElement('div'); document.body.append(parent);
   const call = vi.fn().mockResolvedValue('doc #%.assets/image-test.png'), messages: string[] = [];
   let uncertain = false, busy = false;
-  const storage = { getItem: vi.fn(() => null as string | null), setItem: vi.fn() };
+  const kept = new Map<string, string>();
+  const storage = { getItem: vi.fn((key: string) => kept.get(key) ?? null), setItem: vi.fn((key: string, value: string) => { kept.set(key, value); }) };
   const policy = clipboardImageControls(parent, { native: true, call, storage,
     available: () => uncertain ? 'Check Save before copying.' : null });
   const lock = new Compartment();
@@ -46,13 +47,25 @@ function delayedRead() {
   vi.spyOn(FileReader.prototype, 'readAsArrayBuffer').mockImplementation(function(this:FileReader) { readers.push(this); });
   return (index = 0) => { Object.defineProperty(readers[index], 'result', { value: png.buffer }); readers[index].dispatchEvent(new Event('load')); };
 }
-it('keeps Embed as default and changes the saved preference without source or history edits', () => {
+it('defaults to Copy beside document, keeps an explicit Embed choice, and changes the saved preference without source or history edits', () => {
   const f = setup(), source = f.source(), state = f.editor.state;
-  expect(f.policy.select.value).toBe('embed'); f.mode('copy');
-  expect(f.storage.setItem).toHaveBeenCalledWith('markdew-pasted-images','copy');
+  expect(f.policy.select.value).toBe('copy'); f.mode('embed');
+  expect(f.storage.setItem).toHaveBeenCalledWith('markdew-pasted-images','embed'); expect(f.policy.select.value).toBe('embed');
   expect(f.editor.state).toBe(state); expect(f.source()).toBe(source); expect(undoDepth(f.editor.state)).toBe(0);
   const controls = clipboardImageControls(document.body, { native:false,available:()=>null,storage:{getItem:()=> 'copy',setItem:()=>{}} });
   expect(controls.select.value).toBe('embed'); expect(controls.select.options[1].disabled).toBe(true);
+});
+it('embeds when Copy is only the default and the document cannot take a copy, but reports when Copy was chosen', () => {
+  const parent = document.createElement('div'); document.body.append(parent);
+  let stored: string | null = null, unavailable: string | null = 'Save the document before copying pasted images.';
+  const storage = { getItem: () => stored, setItem: () => {} };
+  const controls = clipboardImageControls(parent, { native: true, storage, available: () => unavailable });
+  view = new EditorView({ parent: document.body, state: EditorState.create({ doc: 'x', extensions: [imagePath, imageDocument.of(1)] }) });
+  expect(controls.capture(view)).toMatchObject({ kind: 'embed' });
+  stored = 'copy'; expect(controls.capture(view)).toBe('Save the document before copying pasted images.');
+  unavailable = null; expect(controls.capture(view)).toBe('Save the document before copying images.'); unavailable = 'Save the document before copying pasted images.';
+  stored = 'embed'; expect(controls.capture(view)).toMatchObject({ kind: 'embed' });
+  stored = null; unavailable = null; expect(controls.capture(view)).toMatchObject({ kind: 'embed' }); // no saved path yet
 });
 it('copies the exact raster bytes, inserts an encoded relative path, and keeps one exact Undo/Redo', async () => {
   const f = setup(), original = f.source(); f.mode('copy');
@@ -169,4 +182,19 @@ it('cancels pending Embed when the image preference changes', async () => {
   const f=setup('Text'),finish=delayedRead();f.paste();f.mode('copy');finish();
   await Promise.resolve();await Promise.resolve();expect(f.source()).toBe('Text');expect(f.call).not.toHaveBeenCalled();
   expect(undoDepth(f.editor.state)).toBe(0);
+});
+
+it('reads the stored mode when an image arrives, so a Settings change applies without a restart', () => {
+  const parent = document.createElement('div'); document.body.append(parent);
+  let stored: string | null = null;
+  const storage = { getItem: vi.fn(() => stored), setItem: vi.fn() };
+  const pasted = clipboardImageControls(parent, { native: true, storage, available: () => null });
+  const dropped = droppedImageControls(parent, { native: true, storage, available: () => null });
+  view = new EditorView({ parent: document.body, state: EditorState.create({ doc: 'x', extensions: [imagePath, imageDocument.of(1)] }) });
+  expect(pasted.capture(view)).toMatchObject({ kind: 'embed' }); expect(dropped.capture(view)).toMatchObject({ kind: 'link' });
+  stored = 'copy';
+  expect(pasted.capture(view)).toBe('Save the document before copying images.');
+  expect(pasted.select.value).toBe('copy');
+  stored = 'embed';
+  expect(pasted.capture(view)).toMatchObject({ kind: 'embed' }); expect(pasted.select.value).toBe('embed');
 });

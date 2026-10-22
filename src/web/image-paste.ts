@@ -4,7 +4,7 @@ import { imageDocument, imagePath } from './images';
 import { planLink, linkCaptureCurrent, LinkEdit, openLink } from './links';
 import { editGuard } from './edit-guard';
 import { sourceOffset, savedSource, sourceField } from './source';
-import { clipboardImageFiles, imagePasteMessage, imagePasteGuard, imagePastePolicy, ClipboardPolicy, clipboardVersion, clipboardRequest, clipboardRaster, readClipboardRaster, readClipboardBytes, clipboardSourceLimit } from './clipboard';
+import { clipboardImageFiles, imageNativeClipboard, imagePasteMessage, imagePasteGuard, imagePastePolicy, ClipboardPolicy, clipboardVersion, clipboardRequest, clipboardRaster, readClipboardRaster, readClipboardBytes, clipboardSourceLimit } from './clipboard';
 
 const sourceLimit = clipboardSourceLimit;
 const size = (text: string) => new TextEncoder().encode(text).length;
@@ -18,8 +18,9 @@ function fits(view: EditorView, edit: LinkEdit, destination: string, extra: numb
 }
 // Paste owns one source/history edit. Optional asset copy is a separate file
 // effect; neither mode changes the document baseline.
-export function imagePaste(report: (message: string) => void, blocked: () => string | null = () => null, policy?: ClipboardPolicy) {
-  return [imagePasteMessage.of(report), imagePasteGuard.of(blocked), ...(policy ? [imagePastePolicy.of(policy)] : []), clipboardVersion, ViewPlugin.fromClass(class {
+export function imagePaste(report: (message: string) => void, blocked: () => string | null = () => null, policy?: ClipboardPolicy,
+  native?: () => Promise<Uint8Array>) {
+  return [imagePasteMessage.of(report), imagePasteGuard.of(blocked), ...(native ? [imageNativeClipboard.of(native)] : []), ...(policy ? [imagePastePolicy.of(policy)] : []), clipboardVersion, ViewPlugin.fromClass(class {
     private generation = 0;
     private alive = true;
     constructor(readonly view: EditorView) {}
@@ -30,13 +31,27 @@ export function imagePaste(report: (message: string) => void, blocked: () => str
     destroy() { this.alive = false; this.generation++; }
     paste(event: ClipboardEvent) {
       const files = clipboardImageFiles(event.clipboardData);
-      if (!files) return false;
-      const requestCurrent = clipboardRequest(this.view);
+      if (files) return this.handle(event, files, clipboardRequest(this.view), false);
+      // WebKitGTK sends an image-only paste with no data at all. Ask the host for the image. An empty
+      // paste has nothing else to insert, so consuming it loses no text.
+      const native = this.view.state.facet(imageNativeClipboard);
+      if (!native || !event.clipboardData || event.clipboardData.types.length || !(event.target instanceof Element)
+        || event.target.closest('.cm-content') !== this.view.contentDOM) return false;
+      event.preventDefault();
+      const requestCurrent = clipboardRequest(this.view), generation = ++this.generation;
+      void native().then(bytes => {
+        if (!bytes.length || !this.alive || !requestCurrent() || generation !== this.generation) return;
+        this.handle(event, [new File([new Uint8Array(bytes)], 'clipboard.png', { type: 'image/png' })], requestCurrent, true);
+      }).catch(error => { if (this.alive && requestCurrent()) report(`Cannot read the clipboard image: ${String(error)}`); });
+      return true;
+    }
+    // late: the host read the image after the paste event ended, so the event is already consumed.
+    handle(event: ClipboardEvent, files: (File | null)[], requestCurrent: () => boolean, late: boolean) {
       this.generation++;
       if (!(event.target instanceof Element) || event.target.closest('.cm-content') !== this.view.contentDOM) return false;
       // Empty CodeMirror text paste would delete selected text. Consume rejected
       // image-only pastes too, while preserving the ordinary text route above.
-      const reject = (reason: string) => { event.preventDefault(); report(reason); return true; };
+      const reject = (reason: string) => { if (!late) event.preventDefault(); report(reason); return true; };
       const reason = blocked() || editGuard(this.view);
       if (reason) return reject(reason);
       const file = clipboardRaster(files);
@@ -64,7 +79,7 @@ export function imagePaste(report: (message: string) => void, blocked: () => str
       }
       const generation = ++this.generation;
       const document = this.view.state.facet(imageDocument), path = this.view.state.field(imagePath, false);
-      event.preventDefault();
+      if (!late) event.preventDefault();
       report('Reading clipboard image…');
       const current = () => this.alive && requestCurrent() && generation === this.generation && linkCaptureCurrent(this.view, edit)
         && this.view.state.facet(imageDocument) === document && this.view.state.field(imagePath, false) === path && (!target || target.current());
