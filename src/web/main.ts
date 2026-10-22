@@ -285,6 +285,8 @@ const report = () => { active().state = view.state; status.textContent = `${tabN
   title.textContent = `${tabName(active())}${dirty() ? ' •' : ''}`; title.title = active().path || 'Untitled';
   title.classList.toggle('document-title-preview', !!active().preview);
   renderTabs(); sidebar?.select(active().path); syncMenuChecks(); };
+// File dialogs start in the folder of the current file, or else in the open project folder.
+const startFolder = () => active().path ? getParentDir(active().path) : layout.folder || undefined;
 const insideDeleted = (path: string, deleted: string[]) => deleted.some(target => path === target || path.startsWith(target + '/') || path.startsWith(target + '\\'));
 // Tabs keep the host's canonical path; the Files list keeps the path it was opened with. Match both spellings.
 const deletionPaths = async (path: string) => [path, await invoke<string>('canonical_path', { path }).catch(() => path)];
@@ -708,7 +710,7 @@ async function closeTab(id: number, force = false) {
 document.querySelector('#new')!.addEventListener('click', () => void operation(() => addDocument(), true));
 document.querySelector('#open')!.addEventListener('click', () => void operation(async () => {
   if (!isTauri()) throw new Error('Open the desktop app to use file commands.');
-  const selected = await open({ multiple: false, filters: [{ name: 'Markdown', extensions: ['md', 'markdown', 'txt'] }] });
+  const selected = await open({ multiple: false, defaultPath: startFolder(), filters: [{ name: 'Markdown', extensions: ['md', 'markdown', 'txt'] }] });
   if (typeof selected !== 'string') return;
   await handleOpenFile(selected);
 }, true));
@@ -838,7 +840,7 @@ function initSidebar(initialRoot: string, deferRead: boolean) {
       let selected: string | null = null;
       await operation(async () => {
         if (!isTauri()) throw new Error('Open the desktop app to choose a folder.');
-        const path = await open({ directory: true, multiple: false });
+        const path = await open({ directory: true, multiple: false, defaultPath: startFolder() });
         if (typeof path === 'string') {
           selected = path;
           await invoke('open_folder_window', { path }).catch(() => {});
@@ -1032,7 +1034,7 @@ if (isTauri()) {
     if (command === 'open-folder') {
       void operation(async () => {
         if (!isTauri()) throw new Error('Open the desktop app to choose a folder.');
-        const path = await open({ directory: true, multiple: false });
+        const path = await open({ directory: true, multiple: false, defaultPath: startFolder() });
         if (typeof path === 'string') {
           await invoke('open_folder_window', { path });
         }

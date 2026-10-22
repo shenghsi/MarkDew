@@ -74,7 +74,7 @@ it('hides .files-actions in style.css and opens folder in a new window via open_
     mocks.menuCallback!('open-folder');
 
     await vi.waitFor(() => {
-      expect(mocks.open).toHaveBeenCalledWith({ directory: true, multiple: false });
+      expect(mocks.open).toHaveBeenCalledWith({ directory: true, multiple: false, defaultPath: '/initial/project' });
       expect(mocks.invoke).toHaveBeenCalledWith('open_folder_window', { path: '/new/folder' });
     });
 

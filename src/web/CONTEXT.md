@@ -42,6 +42,10 @@ The editor preserves indentation and fence characters. After closing, live previ
 When the cursor is in a code block in rendered mode and the code block contains no code, the Backspace command deletes the complete block.
 In source code mode, the command does not delete the code block and keeps standard text deletion.
 
+Open File and Open Folder, from the toolbar, the menu bar, or the sidebar, start their dialog in the
+folder of the current file. With no current file, they start in the
+open project folder. With neither, the system chooses the folder.
+
 Empty state: when the last tab closes (Close document, or Delete of its file), the editor hides and
 the panel "No file is open" shows, with New File and Open File buttons. The app still keeps one blank
 placeholder tab behind it, but the user sees no Untitled document. The state lasts while that tab has

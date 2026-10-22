@@ -330,3 +330,19 @@ it('keeps the editor when a file tab closes while another tab stays open', async
   click('close-document'); await settled(); await settled();
   expect(document.body.classList.contains('no-document')).toBe(false); expect(app!.tabs.all).toHaveLength(1);
 });
+
+it('starts the Open File dialog in the folder of the current file', async () => {
+  await boot();
+  click('open'); await vi.waitFor(() => expect(mocks.open).toHaveBeenCalledTimes(1));
+  expect(mocks.open.mock.calls[0][0]).toMatchObject({ multiple: false, defaultPath: '/tmp' });
+});
+
+it('starts the Open Folder dialog from the menu in the folder of the current file', async () => {
+  await boot(); await vi.waitFor(() => expect(mocks.menu).toBeDefined());
+  mocks.open.mockResolvedValueOnce(null);
+  mocks.menu!({ payload: 'open-folder' }); await vi.waitFor(() => expect(mocks.open).toHaveBeenCalledTimes(1));
+  expect(mocks.open.mock.calls[0][0]).toMatchObject({ directory: true, defaultPath: '/tmp' });
+  mocks.open.mockClear(); await settled();
+  mocks.menu!({ payload: 'open' }); await vi.waitFor(() => expect(mocks.open).toHaveBeenCalledTimes(1));
+  expect(mocks.open.mock.calls[0][0]).toMatchObject({ defaultPath: '/tmp' });
+});
