@@ -278,6 +278,7 @@ export function fileSidebar(pane: HTMLElement, services: SidebarServices,
       if (disposed) return;
 
       const folderBtn = targetFolderBtn || (targetDir !== root ? Array.from(pane.querySelectorAll<HTMLButtonElement>('button.files-folder')).find(b => b.title === targetDir) : undefined);
+      let container: HTMLElement = body;
       if (folderBtn) {
         expandedPaths.add(targetDir);
         const children = folderChildren.get(folderBtn);
@@ -285,6 +286,7 @@ export function fileSidebar(pane: HTMLElement, services: SidebarServices,
           children.hidden = false;
           folderBtn.setAttribute('aria-expanded', 'true');
           await load(targetDir, children, () => !disposed && expandedPaths.has(targetDir), folderBtn);
+          container = children;
         } else {
           render();
         }
@@ -293,11 +295,14 @@ export function fileSidebar(pane: HTMLElement, services: SidebarServices,
         await load(root, body, () => !disposed && generation === req);
       }
 
-      const newBtn = Array.from(pane.querySelectorAll<HTMLButtonElement>('button[data-file-path]'))
-        .find(b => b.dataset.filePath === createdPath || b.title === createdPath);
+      // The host can spell the created path differently from the listing (a link in a
+      // parent folder, for example). Names are unique in a folder, so match by name there.
+      const rows = Array.from(container.querySelectorAll<HTMLButtonElement>(':scope > ul > li > button[data-file-path]'));
+      const newBtn = rows.find(b => b.dataset.filePath === createdPath || b.title === createdPath)
+        || rows.find(b => getFileName(b.dataset.filePath || '') === getFileName(createdPath));
 
       if (newBtn) {
-        startInlineRename(newBtn, createdPath, true);
+        startInlineRename(newBtn, newBtn.dataset.filePath || createdPath, true);
       } else {
         services.open(createdPath);
       }
@@ -320,7 +325,12 @@ export function fileSidebar(pane: HTMLElement, services: SidebarServices,
 
     fileBtn.style.display = 'none';
     fileBtn.after(input);
+    // A new file starts in editing. Focus can move away just after the context menu closes
+    // or the list updates; take it back until the user does something.
+    const born = Date.now();
+    const focusInput = () => { if (input.isConnected && !finished) input.focus(); };
     input.focus();
+    requestAnimationFrame(focusInput);
 
     const dot = initialName.lastIndexOf('.');
     if (dot > 0) {
@@ -382,7 +392,11 @@ export function fileSidebar(pane: HTMLElement, services: SidebarServices,
       }
     });
 
+    let touched = false;
+    input.addEventListener('input', () => { touched = true; });
+    input.addEventListener('pointerdown', () => { touched = true; });
     input.addEventListener('blur', () => {
+      if (isNew && !touched && !finished && Date.now() - born < 400 && input.isConnected) { setTimeout(focusInput, 0); return; }
       void commit();
     });
   }

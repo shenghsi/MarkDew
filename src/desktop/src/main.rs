@@ -665,16 +665,36 @@ fn delete_path_on_disk(p: &Path) -> Result<(), String> {
     Ok(())
 }
 
+// An open document keeps working after its file is deleted. It loses the path,
+// so a later save asks for a new one. The generation change retires stale checks.
+fn detach_deleted_documents(host: &Mutex<Documents>, deleted: &Path) -> Result<(), String> {
+    let registry = host.lock().map_err(|e| e.to_string())?;
+    for id in registry.ids() {
+        let Ok(slot) = registry.get(Some(id)) else { continue };
+        let Ok(mut doc) = slot.lock() else { continue };
+        if doc.path.as_ref().is_some_and(|open| open.starts_with(deleted)) {
+            doc.path = None;
+            doc.uncertain = false;
+            doc.generation = next_generation(&doc)?;
+        }
+    }
+    Ok(())
+}
+
 #[tauri::command]
 async fn delete_path(
     app: tauri::AppHandle,
     recent: State<'_, recent::RecentStore>,
+    host: State<'_, Mutex<Documents>>,
     path: String,
 ) -> Result<(), String> {
     let p = PathBuf::from(&path);
+    // Resolve the path first: open documents keep canonical paths.
+    let canonical = fs::canonicalize(&p).unwrap_or_else(|_| p.clone());
     tauri::async_runtime::spawn_blocking(move || delete_path_on_disk(&p))
         .await
         .map_err(|e| e.to_string())??;
+    detach_deleted_documents(&host, &canonical)?;
 
     if let Ok(mut guard) = recent.state.lock() {
         guard.remove_path(&path);
@@ -1888,6 +1908,37 @@ mod tests {
         // Document in host updated
         let updated_path = doc_slot.lock().unwrap().path.clone().unwrap();
         assert_eq!(updated_path, fs::canonicalize(PathBuf::from(&new_path)).unwrap());
+    }
+
+    #[test]
+    fn deleting_a_file_or_folder_detaches_open_documents() {
+        let dir = tempfile::tempdir().unwrap();
+        let folder = fs::canonicalize(dir.path()).unwrap().join("notes");
+        fs::create_dir(&folder).unwrap();
+        let inside = folder.join("a.md");
+        let outside = folder.parent().unwrap().join("b.md");
+        let host = Mutex::new(Documents::default());
+        let ids: Vec<u64> = [&inside, &outside, &inside]
+            .iter()
+            .map(|path| {
+                let id = host.lock().unwrap().create().unwrap();
+                with_document(&host, Some(id), |doc| {
+                    doc.path = Some((*path).clone());
+                    doc.uncertain = true;
+                    Ok(())
+                })
+                .unwrap();
+                id
+            })
+            .collect();
+        detach_deleted_documents(&host, &inside).unwrap();
+        let state = |id| with_document(&host, Some(id), |doc| Ok((doc.path.clone(), doc.uncertain, doc.generation))).unwrap();
+        assert_eq!(state(ids[0]).0, None);
+        assert!(!state(ids[0]).1 && state(ids[0]).2 == 1);
+        assert_eq!(state(ids[1]), (Some(outside.clone()), true, 0));
+        assert_eq!(state(ids[2]).0, None);
+        detach_deleted_documents(&host, &folder.parent().unwrap().join("notes")).unwrap();
+        assert_eq!(state(ids[1]).0, Some(outside));
     }
 
     #[test]

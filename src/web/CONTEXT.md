@@ -42,6 +42,19 @@ The editor preserves indentation and fence characters. After closing, live previ
 When the cursor is in a code block in rendered mode and the code block contains no code, the Backspace command deletes the complete block.
 In source code mode, the command does not delete the code block and keeps standard text deletion.
 
+Files sidebar, New File: the new file is created as Untitled.md and its name opens in an inline
+text box with the name before .md selected, so typing renames it. Enter or a click elsewhere keeps
+the name and opens the file; Escape keeps Untitled.md and opens it. Focus lost within 400 ms of the
+box opening, before the user types or clicks in it, returns to the box. The host returns a canonical
+path for the new file, which can differ from the listing path (for example, a link in a parent
+folder). The sidebar finds the new row by its name among the direct rows of the target folder, and
+renames through the listing's path.
+Files sidebar, Delete: the system dialog asks first (a folder says it removes everything inside),
+and Cancel deletes nothing. After Delete the file is removed from disk whether a tab shows it or
+not. A clean tab for it closes. A tab with unsaved edits stays as an untitled document with those
+edits, and a later Save asks for a new path. The desktop host clears the path of each open document
+inside the deleted path. Deleted files are not added to the closed files list.
+
 Tab on a list item line nests the item under its previous item, with its nested lines. Shift-Tab
 does the opposite: it moves the item out to its parent's level. Any list type can nest in any
 other. The nested indent is the parent's content column, so it is 2 under a bullet and 3 under

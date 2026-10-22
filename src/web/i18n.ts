@@ -140,6 +140,8 @@ export const translations = {
     'sidebar.rename': 'Rename',
     'sidebar.delete': 'Delete',
     'sidebar.confirm_delete': 'Are you sure you want to delete "{name}"?',
+    'sidebar.confirm_delete_folder': 'Are you sure you want to delete the folder "{name}" and everything inside it?',
+    'sidebar.cancel': 'Cancel',
     'sidebar.title_files': 'FILES',
     'sidebar.title_outline': 'OUTLINE',
 
@@ -318,6 +320,8 @@ export const translations = {
     'sidebar.rename': '重命名',
     'sidebar.delete': '删除',
     'sidebar.confirm_delete': '确定要删除 "{name}" 吗？',
+    'sidebar.confirm_delete_folder': '确定要删除文件夹 "{name}" 及其中的所有内容吗？',
+    'sidebar.cancel': '取消',
     'sidebar.title_files': '文件',
     'sidebar.title_outline': '大纲',
 

@@ -852,18 +852,23 @@ function initSidebar(initialRoot: string, deferRead: boolean) {
         checkpoint(openTab);
       }
     },
+    // The system dialog asks first. window.confirm cannot be relied on here: the dialog plugin replaces it with an async function.
+    confirmDelete: (name: string, isDirectory: boolean) => ask(
+      t(isDirectory ? 'sidebar.confirm_delete_folder' : 'sidebar.confirm_delete', { name }),
+      { title: 'MarkDew', kind: 'warning', okLabel: t('sidebar.delete'), cancelLabel: t('sidebar.cancel') }),
     deletePath: async (targetPath: string) => {
+      if (composing()) throw new Error('Finish text input, then delete the file.');
       await invoke('delete_path', { path: targetPath });
-      const matchingTabs = tabs.all.filter(t => t.path === targetPath || (t.path && (t.path.startsWith(targetPath + '/') || t.path.startsWith(targetPath + '\\'))));
-      for (const t of matchingTabs) {
-        if (tabs.all.length > 1) {
-          await closeTab(t.id);
-        } else {
-          t.path = '';
-          t.preview = false;
-          report();
-        }
+      active().state = view.state;
+      const inside = (path: string) => path === targetPath || path.startsWith(targetPath + '/') || path.startsWith(targetPath + '\\');
+      for (const tab of tabs.all.filter(other => other.path && inside(other.path))) {
+        // The file is gone, so the tab stops pointing at it and never records it as a closed file.
+        tab.path = ''; tab.uncertain = false; tab.preview = false;
+        // A tab with unsaved edits stays open as an untitled document, so no edit is lost.
+        if (!tabDirty(tab)) await closeTab(tab.id).catch(() => {});
       }
+      fileTransition(); report();
+      for (const tab of tabs.all) checkpoint(tab);
     },
   }, { root: initialRoot, deferRead, rootChanged: root => {
     layout.folderChanged(root);

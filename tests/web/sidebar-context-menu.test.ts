@@ -309,3 +309,77 @@ it('repositions context menu upward when right clicked near the bottom of the wi
     sidebar.dispose();
   }
 });
+
+function mount(extra: Partial<Parameters<typeof fileSidebar>[1]> = {}) {
+  const pane = document.createElement('aside');
+  document.body.append(pane);
+  const entries = [{ name: 'a.md', path: '/root/a.md', directory: false }];
+  const services = {
+    read: vi.fn(async (): Promise<FolderListing> => ({ entries: [...entries], warnings: [] })),
+    open: vi.fn(), choose: vi.fn(), allowed: () => true,
+    createFile: vi.fn(async (parent: string) => { entries.push({ name: 'Untitled.md', path: `${parent}/Untitled.md`, directory: false }); return `${parent}/Untitled.md`; }),
+    renameFile: vi.fn(async () => {}), deletePath: vi.fn(async () => {}), ...extra,
+  };
+  const sidebar = fileSidebar(pane, services, { root: '/root' });
+  return { pane, services, sidebar };
+}
+const menuItem = (label: string) => Array.from(document.body.querySelectorAll<HTMLButtonElement>('.sidebar-context-item')).find(item => item.textContent === label)!;
+async function rightClickFile(pane: HTMLElement) {
+  await vi.waitFor(() => expect(pane.querySelector('button[data-file-path]')).not.toBeNull());
+  pane.querySelector('button[data-file-path]')!.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true }));
+}
+
+it('deletes only after the confirmation dialog says yes', async () => {
+  const confirmDelete = vi.fn().mockResolvedValueOnce(false).mockResolvedValueOnce(true);
+  const { pane, services, sidebar } = mount({ confirmDelete });
+  await rightClickFile(pane); menuItem('Delete').click();
+  await vi.waitFor(() => expect(confirmDelete).toHaveBeenCalledWith('a.md', false));
+  await new Promise(resolve => setTimeout(resolve, 20));
+  expect(services.deletePath).not.toHaveBeenCalled();
+  await rightClickFile(pane); menuItem('Delete').click();
+  await vi.waitFor(() => expect(services.deletePath).toHaveBeenCalledWith('/root/a.md'));
+  sidebar.dispose();
+});
+
+it('takes focus back when it moves away right after a new file starts editing', async () => {
+  const { pane, services, sidebar } = mount();
+  pane.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true }));
+  menuItem('New File').click();
+  await vi.waitFor(() => expect(pane.querySelector('.files-rename-input')).not.toBeNull());
+  const input = pane.querySelector<HTMLInputElement>('.files-rename-input')!;
+  input.blur();
+  await vi.waitFor(() => expect(document.activeElement).toBe(input));
+  expect(services.open).not.toHaveBeenCalled();
+  input.value = 'Typed'; input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  await vi.waitFor(() => expect(services.renameFile).toHaveBeenCalledWith('/root/Untitled.md', '/root/Typed.md'));
+  sidebar.dispose();
+});
+
+it('keeps a real blur after the user typed as a commit', async () => {
+  const { pane, services, sidebar } = mount();
+  pane.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true }));
+  menuItem('New File').click();
+  await vi.waitFor(() => expect(pane.querySelector('.files-rename-input')).not.toBeNull());
+  const input = pane.querySelector<HTMLInputElement>('.files-rename-input')!;
+  input.value = 'Named'; input.dispatchEvent(new Event('input', { bubbles: true })); input.blur();
+  await vi.waitFor(() => expect(services.renameFile).toHaveBeenCalledWith('/root/Untitled.md', '/root/Named.md'));
+  sidebar.dispose();
+});
+
+it('starts editing the name when the host spells the created path differently from the listing', async () => {
+  const { pane, services, sidebar } = mount({
+    createFile: vi.fn(async () => '/real/root/Untitled.md'),
+    read: vi.fn(async (): Promise<FolderListing> => ({ warnings: [], entries: [
+      { name: 'a.md', path: '/root/a.md', directory: false }, { name: 'Untitled.md', path: '/root/Untitled.md', directory: false }] })),
+  });
+  pane.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true }));
+  menuItem('New File').click();
+  await vi.waitFor(() => expect(pane.querySelector('.files-rename-input')).not.toBeNull());
+  const input = pane.querySelector<HTMLInputElement>('.files-rename-input')!;
+  expect(document.activeElement).toBe(input);
+  expect([input.selectionStart, input.selectionEnd]).toEqual([0, 8]);
+  expect(services.open).not.toHaveBeenCalled();
+  input.value = 'Typed'; input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  await vi.waitFor(() => expect(services.renameFile).toHaveBeenCalledWith('/root/Untitled.md', '/root/Typed.md'));
+  sidebar.dispose();
+});

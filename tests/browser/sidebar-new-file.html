@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Sidebar new file focus check</title>
+<link rel="stylesheet" href="/src/web/style.css">
+<aside id="files" style="width:260px;height:300px"></aside>
+<input id="other" aria-label="Other focus target">
+<pre id="result">running</pre>
+<script type="module">
+import {fileSidebar} from '/src/web/file-sidebar.ts';
+const entries = [{name: 'README.md', path: '/root/README.md', directory: false}];
+const opened = [], renamed = [];
+const pane = document.querySelector('#files');
+const sidebar = fileSidebar(pane, {
+  read: async () => ({entries: [...entries], warnings: []}), choose: async () => null,
+  open: path => opened.push(path), allowed: () => true,
+  createFile: async parent => { const path = `${parent}/Untitled.md`; entries.push({name: 'Untitled.md', path, directory: false}); return path; },
+  renameFile: async (from, to) => { renamed.push([from, to]); },
+}, {root: '/root'});
+const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+await wait(200);
+pane.dispatchEvent(new MouseEvent('contextmenu', {bubbles: true, cancelable: true, clientX: 40, clientY: 60}));
+const item = Array.from(document.querySelectorAll('.sidebar-context-item')).find(b => b.textContent === 'New File');
+item.focus(); item.click();
+await wait(300);
+const input = pane.querySelector('.files-rename-input');
+const report = {inputPresent: !!input, focused: !!input && document.activeElement === input, opened: [...opened], hasFocusDoc: document.hasFocus()};
+if (input) { input.value = 'Typed'; input.dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter', bubbles: true})); await wait(200); }
+report.renamed = renamed; report.openedAfter = [...opened];
+document.querySelector('#result').textContent = JSON.stringify(report);
+</script>
+</html>
