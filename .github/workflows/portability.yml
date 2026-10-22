@@ -1,0 +1,136 @@
+name: portability
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_call:
+    inputs:
+      sign_updates:
+        type: boolean
+        default: false
+      build_packages:
+        type: boolean
+        default: false
+    secrets:
+      TAURI_SIGNING_PRIVATE_KEY:
+        required: false
+      TAURI_SIGNING_PRIVATE_KEY_PASSWORD:
+        required: false
+  workflow_dispatch:
+    inputs:
+      build_packages:
+        description: Build native test packages without publisher certificates
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      - run: node src/web/ci-assets.mjs record
+        env:
+          CI_CHECKOUT_SHA: ${{ github.sha }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: frontend-${{ github.sha }}
+          path: |
+            dist
+            frontend-manifest.json
+          if-no-files-found: error
+          retention-days: 7
+
+  desktop:
+    needs: frontend
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-15
+            binary: markdew-desktop
+            bundle: dmg
+            update_bundles: app,dmg
+          - os: macos-15-intel
+            binary: markdew-desktop
+            bundle: dmg
+            update_bundles: app,dmg
+          - os: ubuntu-22.04
+            binary: markdew-desktop
+            bundle: deb
+            update_bundles: deb
+          - os: windows-latest
+            binary: markdew-desktop.exe
+            bundle: nsis
+            update_bundles: nsis
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Linux WebView tools
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev build-essential libssl-dev libayatana-appindicator3-dev librsvg2-dev patchelf
+      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with:
+          name: frontend-${{ github.sha }}
+          path: .
+      - name: Windows Open With hook compile check
+        if: runner.os == 'Windows'
+        run: |
+          choco install nsis --yes --no-progress
+          node --test tests/node/open-with.test.mjs
+      - run: node src/web/ci-assets.mjs verify
+        env:
+          CI_CHECKOUT_SHA: ${{ github.sha }}
+      - run: cargo test --manifest-path src/desktop/Cargo.toml --locked
+      - name: Build debug executable
+        if: ${{ !inputs.build_packages }}
+        run: npm run desktop:build -- --debug --no-bundle --ci --config tauri.ci.conf.json -- --locked
+      - name: Build native test package
+        if: ${{ inputs.build_packages && !inputs.sign_updates }}
+        run: npm run desktop:build -- --ci --config tauri.ci.conf.json --bundles ${{ matrix.bundle }} -- --locked
+      - name: Build signed update package
+        if: ${{ inputs.build_packages && inputs.sign_updates }}
+        run: npm run desktop:build -- --ci --config tauri.ci.conf.json --config tauri.updater.conf.json --bundles ${{ matrix.update_bundles }} -- --locked
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+      - name: Record package identity and hashes
+        if: ${{ inputs.build_packages }}
+        run: node src/web/package-artifact.mjs ${{ matrix.bundle }}
+        env:
+          CI_CHECKOUT_SHA: ${{ github.sha }}
+          MARKDEW_SIGNED_UPDATES: ${{ inputs.sign_updates && '1' || '0' }}
+      - uses: actions/upload-artifact@v4
+        if: ${{ !inputs.build_packages }}
+        with:
+          name: desktop-${{ matrix.os }}-${{ github.sha }}
+          path: src/desktop/target/debug/${{ matrix.binary }}
+          if-no-files-found: error
+          retention-days: 7
+      - uses: actions/upload-artifact@v4
+        if: ${{ inputs.build_packages }}
+        with:
+          name: unsigned-package-${{ matrix.os }}-${{ runner.arch }}-${{ github.sha }}
+          path: desktop-package
+          if-no-files-found: error
+          retention-days: 7

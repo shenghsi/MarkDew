@@ -1,0 +1,470 @@
+{
+  "baselineComplete": true,
+  "batchResults": [],
+  "checking": false,
+  "complete": true,
+  "control": false,
+  "editResults": [],
+  "exactOriginal": true,
+  "head": 1048555,
+  "history": 0,
+  "indexed": true,
+  "lastCheck": {
+    "actionStart": {
+      "action": "jump",
+      "baseline": {
+        "clientHeight": 478,
+        "contentHeight": 1864837.046875,
+        "head": 0,
+        "relativeTop": 27,
+        "scrollHeight": 1864837,
+        "scrollTop": 0,
+        "visible": true
+      },
+      "candidate": {
+        "clientHeight": 478,
+        "contentHeight": 1864837.046875,
+        "head": 0,
+        "relativeTop": 27,
+        "scrollHeight": 1864837,
+        "scrollTop": 0,
+        "visible": true
+      }
+    },
+    "attribution": {
+      "baseline": {
+        "height": 1865375.171875,
+        "map": {
+          "block": 1,
+          "classes": {
+            "HeightMapBlock": 1,
+            "HeightMapBranch": 66574,
+            "_HeightMapGap": 33257,
+            "_HeightMapText": 33317
+          },
+          "collapsed": 116511,
+          "gap": 33257,
+          "gapLength": 0,
+          "nodes": 133149,
+          "text": 33317
+        },
+        "oracle": {
+          "charWidth": 7.475694444444445,
+          "lineHeight": 28,
+          "lineLength": 29.83000464468184,
+          "lineWrapping": true,
+          "textHeight": 20
+        },
+        "version": "6.43.13"
+      },
+      "candidate": {
+        "height": 1865375.171875,
+        "map": {
+          "block": 1,
+          "classes": {
+            "HeightMapBlock": 1,
+            "HeightMapBranch": 66574,
+            "_HeightMapGap": 33257,
+            "_HeightMapText": 33317
+          },
+          "collapsed": 116511,
+          "gap": 33257,
+          "gapLength": 0,
+          "nodes": 133149,
+          "text": 33317
+        },
+        "oracle": {
+          "charWidth": 7.475694444444445,
+          "lineHeight": 28,
+          "lineLength": 29.83000464468184,
+          "lineWrapping": true,
+          "textHeight": 20
+        },
+        "version": "6.43.13"
+      }
+    },
+    "baselineComplete": true,
+    "baselineEstimatedHeight": 1865459.171875,
+    "baselineHead": {
+      "clientHeight": 478,
+      "contentHeight": 1865459.171875,
+      "head": 1048555,
+      "relativeTop": 453.234375,
+      "scrollHeight": 1865483,
+      "scrollTop": 1864946,
+      "visible": true
+    },
+    "boxes": [
+      {
+        "baseline": 84.328125,
+        "candidate": 84.328125,
+        "delta": 0,
+        "from": 1048202,
+        "textEqual": true
+      },
+      {
+        "baseline": 28.046875,
+        "candidate": 28.046875,
+        "delta": 0,
+        "from": 1048253,
+        "textEqual": true
+      },
+      {
+        "baseline": 47.59375,
+        "candidate": 47.59375,
+        "delta": 0,
+        "from": 1048254,
+        "textEqual": true
+      },
+      {
+        "baseline": 28.046875,
+        "candidate": 28.046875,
+        "delta": 0,
+        "from": 1048264,
+        "textEqual": true
+      },
+      {
+        "baseline": 84.328125,
+        "candidate": 84.328125,
+        "delta": 0,
+        "from": 1048265,
+        "textEqual": true
+      },
+      {
+        "baseline": 28.046875,
+        "candidate": 28.046875,
+        "delta": 0,
+        "from": 1048316,
+        "textEqual": true
+      },
+      {
+        "baseline": 47.59375,
+        "candidate": 47.59375,
+        "delta": 0,
+        "from": 1048317,
+        "textEqual": true
+      },
+      {
+        "baseline": 28.046875,
+        "candidate": 28.046875,
+        "delta": 0,
+        "from": 1048327,
+        "textEqual": true
+      },
+      {
+        "baseline": 84.328125,
+        "candidate": 84.328125,
+        "delta": 0,
+        "from": 1048328,
+        "textEqual": true
+      },
+      {
+        "baseline": 28.046875,
+        "candidate": 28.046875,
+        "delta": 0,
+        "from": 1048379,
+        "textEqual": true
+      },
+      {
+        "baseline": 47.59375,
+        "candidate": 47.59375,
+        "delta": 0,
+        "from": 1048380,
+        "textEqual": true
+      },
+      {
+        "baseline": 28.046875,
+        "candidate": 28.046875,
+        "delta": 0,
+        "from": 1048390,
+        "textEqual": true
+      },
+      {
+        "baseline": 84.328125,
+        "candidate": 84.328125,
+        "delta": 0,
+        "from": 1048391,
+        "textEqual": true
+      },
+      {
+        "baseline": 28.046875,
+        "candidate": 28.046875,
+        "delta": 0,
+        "from": 1048442,
+        "textEqual": true
+      },
+      {
+        "baseline": 47.59375,
+        "candidate": 47.59375,
+        "delta": 0,
+        "from": 1048443,
+        "textEqual": true
+      },
+      {
+        "baseline": 28.046875,
+        "candidate": 28.046875,
+        "delta": 0,
+        "from": 1048453,
+        "textEqual": true
+      },
+      {
+        "baseline": 84.328125,
+        "candidate": 84.328125,
+        "delta": 0,
+        "from": 1048454,
+        "textEqual": true
+      },
+      {
+        "baseline": 28.046875,
+        "candidate": 28.046875,
+        "delta": 0,
+        "from": 1048505,
+        "textEqual": true
+      },
+      {
+        "baseline": 84.140625,
+        "candidate": 84.140625,
+        "delta": 0,
+        "from": 1048506,
+        "textEqual": true
+      },
+      {
+        "baseline": 28.046875,
+        "candidate": 28.046875,
+        "delta": 0,
+        "from": 1048555,
+        "textEqual": true
+      }
+    ],
+    "candidateEstimatedHeight": 1865459.171875,
+    "candidateHead": {
+      "clientHeight": 478,
+      "contentHeight": 1865459.171875,
+      "head": 1048555,
+      "relativeTop": 453.234375,
+      "scrollHeight": 1865483,
+      "scrollTop": 1864946,
+      "visible": true
+    },
+    "complete": true,
+    "differences": [],
+    "exactExpected": true,
+    "exactOriginal": true,
+    "fonts": [
+      {
+        "fontFamily": "system-ui, sans-serif",
+        "fontSize": "17px",
+        "lineHeight": "28.05px",
+        "width": 223
+      },
+      {
+        "fontFamily": "system-ui, sans-serif",
+        "fontSize": "17px",
+        "lineHeight": "28.05px",
+        "width": 223
+      }
+    ],
+    "history": 0,
+    "historyUnchangedByCheck": true,
+    "historyUnchangedDuringSettle": true,
+    "maxHeightDelta": 0,
+    "readiness": {
+      "after": "full",
+      "before": "full",
+      "scope": "complete tree publication outside geometry samples"
+    },
+    "selectionEqual": true,
+    "settling": {
+      "deadlineMs": 1200,
+      "minimumFrames": 8,
+      "requiredEqualTransitions": 4,
+      "samples": [
+        {
+          "baseline": {
+            "clientHeight": 478,
+            "contentHeight": 1865459.171875,
+            "head": 1048555,
+            "relativeTop": 453.234375,
+            "scrollHeight": 1865483,
+            "scrollTop": 1864946,
+            "visible": true
+          },
+          "candidate": {
+            "clientHeight": 478,
+            "contentHeight": 1865459.171875,
+            "head": 1048555,
+            "relativeTop": 453.234375,
+            "scrollHeight": 1865483,
+            "scrollTop": 1864946,
+            "visible": true
+          },
+          "elapsed": 2.200000047683716
+        },
+        {
+          "baseline": {
+            "clientHeight": 478,
+            "contentHeight": 1865459.171875,
+            "head": 1048555,
+            "relativeTop": 453.234375,
+            "scrollHeight": 1865483,
+            "scrollTop": 1864946,
+            "visible": true
+          },
+          "candidate": {
+            "clientHeight": 478,
+            "contentHeight": 1865459.171875,
+            "head": 1048555,
+            "relativeTop": 453.234375,
+            "scrollHeight": 1865483,
+            "scrollTop": 1864946,
+            "visible": true
+          },
+          "elapsed": 3.0999999046325684
+        },
+        {
+          "baseline": {
+            "clientHeight": 478,
+            "contentHeight": 1865459.171875,
+            "head": 1048555,
+            "relativeTop": 453.234375,
+            "scrollHeight": 1865483,
+            "scrollTop": 1864946,
+            "visible": true
+          },
+          "candidate": {
+            "clientHeight": 478,
+            "contentHeight": 1865459.171875,
+            "head": 1048555,
+            "relativeTop": 453.234375,
+            "scrollHeight": 1865483,
+            "scrollTop": 1864946,
+            "visible": true
+          },
+          "elapsed": 21.200000047683716
+        },
+        {
+          "baseline": {
+            "clientHeight": 478,
+            "contentHeight": 1865459.171875,
+            "head": 1048555,
+            "relativeTop": 453.234375,
+            "scrollHeight": 1865483,
+            "scrollTop": 1864946,
+            "visible": true
+          },
+          "candidate": {
+            "clientHeight": 478,
+            "contentHeight": 1865459.171875,
+            "head": 1048555,
+            "relativeTop": 453.234375,
+            "scrollHeight": 1865483,
+            "scrollTop": 1864946,
+            "visible": true
+          },
+          "elapsed": 38.20000004768371
+        },
+        {
+          "baseline": {
+            "clientHeight": 478,
+            "contentHeight": 1865459.171875,
+            "head": 1048555,
+            "relativeTop": 453.234375,
+            "scrollHeight": 1865483,
+            "scrollTop": 1864946,
+            "visible": true
+          },
+          "candidate": {
+            "clientHeight": 478,
+            "contentHeight": 1865459.171875,
+            "head": 1048555,
+            "relativeTop": 453.234375,
+            "scrollHeight": 1865483,
+            "scrollTop": 1864946,
+            "visible": true
+          },
+          "elapsed": 54.89999985694885
+        },
+        {
+          "baseline": {
+            "clientHeight": 478,
+            "contentHeight": 1865459.171875,
+            "head": 1048555,
+            "relativeTop": 453.234375,
+            "scrollHeight": 1865483,
+            "scrollTop": 1864946,
+            "visible": true
+          },
+          "candidate": {
+            "clientHeight": 478,
+            "contentHeight": 1865459.171875,
+            "head": 1048555,
+            "relativeTop": 453.234375,
+            "scrollHeight": 1865483,
+            "scrollTop": 1864946,
+            "visible": true
+          },
+          "elapsed": 70.29999995231628
+        },
+        {
+          "baseline": {
+            "clientHeight": 478,
+            "contentHeight": 1865459.171875,
+            "head": 1048555,
+            "relativeTop": 453.234375,
+            "scrollHeight": 1865483,
+            "scrollTop": 1864946,
+            "visible": true
+          },
+          "candidate": {
+            "clientHeight": 478,
+            "contentHeight": 1865459.171875,
+            "head": 1048555,
+            "relativeTop": 453.234375,
+            "scrollHeight": 1865483,
+            "scrollTop": 1864946,
+            "visible": true
+          },
+          "elapsed": 88.89999985694885
+        },
+        {
+          "baseline": {
+            "clientHeight": 478,
+            "contentHeight": 1865459.171875,
+            "head": 1048555,
+            "relativeTop": 453.234375,
+            "scrollHeight": 1865483,
+            "scrollTop": 1864946,
+            "visible": true
+          },
+          "candidate": {
+            "clientHeight": 478,
+            "contentHeight": 1865459.171875,
+            "head": 1048555,
+            "relativeTop": 453.234375,
+            "scrollHeight": 1865483,
+            "scrollTop": 1864946,
+            "visible": true
+          },
+          "elapsed": 103.39999985694884
+        }
+      ],
+      "status": "stable",
+      "tolerancePixels": 0.05
+    },
+    "sourceEqual": true,
+    "sourceUnchangedByCheck": true,
+    "sourceUnchangedDuringSettle": true
+  },
+  "narrow": true,
+  "pointRanges": 99861,
+  "ready": true,
+  "reverse": false,
+  "sourceEqual": true,
+  "sourceMode": false,
+  "visibleRanges": [
+    {
+      "from": 1048202,
+      "to": 1048555
+    }
+  ]
+}

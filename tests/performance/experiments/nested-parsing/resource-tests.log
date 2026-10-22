@@ -1,0 +1,181 @@
+
+> markdew-desktop@0.1.0 test
+> node --test tests/node/ci-assets.test.mjs tests/node/startup-assets.test.mjs && npm run prepare:bend && vitest run
+
+TAP version 13
+# Subtest: frontend artifact verification rejects changed, extra, and wrong-checkout files
+ok 1 - frontend artifact verification rejects changed, extra, and wrong-checkout files
+  ---
+  duration_ms: 300.419292
+  type: 'test'
+  ...
+# Subtest: frontend recording rejects a missing entry point
+ok 2 - frontend recording rejects a missing entry point
+  ---
+  duration_ms: 51.208083
+  type: 'test'
+  ...
+# Subtest: frontend recording rejects symlinks
+ok 3 - frontend recording rejects symlinks
+  ---
+  duration_ms: 49.108125
+  type: 'test'
+  ...
+# Subtest: startup check walks emitted static dependencies and permits shared Markdown code
+ok 4 - startup check walks emitted static dependencies and permits shared Markdown code
+  ---
+  duration_ms: 1.479209
+  type: 'test'
+  ...
+# Subtest: startup check rejects eager print packages even when output names do not identify them
+ok 5 - startup check rejects eager print packages even when output names do not identify them
+  ---
+  duration_ms: 0.159583
+  type: 'test'
+  ...
+# Subtest: startup check requires reachable print tools and complete emitted edges
+ok 6 - startup check requires reachable print tools and complete emitted edges
+  ---
+  duration_ms: 0.081459
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 463.545584
+
+> markdew-desktop@0.1.0 prepare:bend
+> node src/web/build-bend.mjs
+
+bend 2.0.36 is available: run bend update
+
+ RUN  v3.2.7 /Users/shxi/projects/MarkDew
+
+ ↓ tests/performance/preview-growth.test.ts (1 test | 1 skipped)
+ ✓ tests/web/tabs-app.test.ts (7 tests) 2030ms
+   ✓ opens the active document print snapshot without changing source, history, selection or baseline  737ms
+   ✓ retains failed last-tab creation or activation and restores recovery after failed retirement  335ms
+ ✓ tests/web/clipboard-assets.test.ts (13 tests) 1325ms
+   ✓ includes omitted-cell padding in the copy reservation before reading  380ms
+ ✓ tests/web/table-html.test.ts (9 tests) 2188ms
+   ✓ formats headers and cells with nested Markdown, math and captured images without source or history edits  333ms
+   ✓ keeps raw-text, forged custom nodes, foreign HTML and escaped fragment boundaries as cell source  408ms
+   ✓ discards delayed parsing success and failure after editing, source changes, mode, removal, tab and image context changes  884ms
+ ✓ tests/web/table.test.ts (39 tests) 2425ms
+   ✓ appends a row with Tab at the last cell and restores exact cell history  462ms
+   ✓ runs all structure commands inside parsed list, quote, tab and combined containers with exact history  871ms
+   ✓ retains lazy quote rows and adjacent siblings when structure proposals preserve complete boundaries  351ms
+ ✓ tests/web/phrasing-html.test.ts (14 tests) 2791ms
+   ✓ cancels deferred validation success and failure on reveal, source edit, mode, removal, tab, path and Undo  793ms
+   ✓ owns every same-line nested marker without overlapping widget replacements  452ms
+ ✓ tests/web/image-drop.test.ts (25 tests) 3167ms
+   ✓ cancels pending reads after source, selection, path, tab, scroll, layout, scale, clipboard or disposal changes  561ms
+   ✓ cancels pending table drops after cell selection, cell end, source replacement, mode and child scroll changes  413ms
+   ✓ checks omitted-cell padding against the complete source limit before reading  368ms
+   ✓ reserves copied paths and omitted slots before any file read near the source limit  418ms
+ ✓ tests/web/image-paste.test.ts (15 tests) 1243ms
+   ✓ includes omitted-cell padding in the encoded source limit before reading  384ms
+ ✓ tests/web/print-load-app.test.ts (5 tests) 1127ms
+   ✓ defers print loading, captures the requested state, and blocks duplicate requests while typing continues  464ms
+ ✓ tests/web/preview-selection.test.ts (2 tests) 567ms
+   ✓ matches the full rebuild at every caret boundary, with overlapping math, containers, notes, images and metadata  563ms
+stdout | tests/web/local-preview-index.test.ts > visits a bounded local block set across document sizes and Unicode shifts
+{"experiment":"local-preview-index","requestedBytes":102400,"initialUnits":102438,"location":0,"samples":[{"visitedBlocks":3,"rebuiltItems":3,"rebuiltRanges":8},{"visitedBlocks":3,"rebuiltItems":3,"rebuiltRanges":8},{"visitedBlocks":3,"rebuiltItems":3,"rebuiltRanges":8}],"scope":"prototype block visits and rebuilds; excludes parser and production preview update"}
+{"experiment":"local-preview-index","requestedBytes":102400,"initialUnits":102438,"location":51219,"samples":[{"visitedBlocks":3,"rebuiltItems":2,"rebuiltRanges":6},{"visitedBlocks":3,"rebuiltItems":2,"rebuiltRanges":6},{"visitedBlocks":3,"rebuiltItems":2,"rebuiltRanges":6}],"scope":"prototype block visits and rebuilds; excludes parser and production preview update"}
+{"experiment":"local-preview-index","requestedBytes":102400,"initialUnits":102438,"location":102386,"samples":[{"visitedBlocks":2,"rebuiltItems":2,"rebuiltRanges":6},{"visitedBlocks":2,"rebuiltItems":2,"rebuiltRanges":6},{"visitedBlocks":2,"rebuiltItems":2,"rebuiltRanges":6}],"scope":"prototype block visits and rebuilds; excludes parser and production preview update"}
+{"experiment":"local-preview-index","requestedBytes":1048576,"initialUnits":1048635,"location":0,"samples":[{"visitedBlocks":3,"rebuiltItems":3,"rebuiltRanges":8},{"visitedBlocks":3,"rebuiltItems":3,"rebuiltRanges":8},{"visitedBlocks":3,"rebuiltItems":3,"rebuiltRanges":8}],"scope":"prototype block visits and rebuilds; excludes parser and production preview update"}
+{"experiment":"local-preview-index","requestedBytes":1048576,"initialUnits":1048635,"location":524317,"samples":[{"visitedBlocks":3,"rebuiltItems":2,"rebuiltRanges":6},{"visitedBlocks":3,"rebuiltItems":2,"rebuiltRanges":6},{"visitedBlocks":3,"rebuiltItems":2,"rebuiltRanges":6}],"scope":"prototype block visits and rebuilds; excludes parser and production preview update"}
+{"experiment":"local-preview-index","requestedBytes":1048576,"initialUnits":1048635,"location":1048583,"samples":[{"visitedBlocks":2,"rebuiltItems":2,"rebuiltRanges":6},{"visitedBlocks":2,"rebuiltItems":2,"rebuiltRanges":6},{"visitedBlocks":2,"rebuiltItems":2,"rebuiltRanges":6}],"scope":"prototype block visits and rebuilds; excludes parser and production preview update"}
+
+ ✓ tests/web/local-preview-index.test.ts (2 tests) 4111ms
+   ✓ visits a bounded local block set across document sizes and Unicode shifts  4087ms
+ ✓ tests/web/table-math.test.ts (9 tests) 1282ms
+   ✓ discards delayed formula success and failure after cell editing, Source mode, removal, tab change and Undo  589ms
+ ✓ tests/web/table-images.test.ts (11 tests) 1508ms
+   ✓ discards late success and failure after cell activation, Source mode, deletion and tab replacement  505ms
+ ✓ tests/web/preview-edits.test.ts (5 tests) 4747ms
+   ✓ matches full construction through split, merge, zero-length, Unicode and multi-change boundaries  4304ms
+ ✓ tests/web/print-view.test.ts (17 tests) 907ms
+ ✓ tests/web/quit-app.test.ts (2 tests) 909ms
+   ✓ guards application Quit and awaits exact recovery before approval while retaining source history  827ms
+ ✓ tests/web/navigation.test.ts (8 tests) 598ms
+   ✓ matches the full outline traversal across leaf blocks, containers, metadata, and partial trees  484ms
+ ✓ tests/web/recovery-app.test.ts (1 test) 757ms
+   ✓ restores exact source without an original-file baseline and retains newer edits after Save  756ms
+ ✓ tests/web/file-sidebar-app.test.ts (1 test) 647ms
+   ✓ opens sidebar files through document guards and retains dirty tabs on reuse and failed reads  647ms
+ ✓ tests/web/file-watch-app.test.ts (1 test) 821ms
+   ✓ keeps current source on file warnings and failed Reload then starts new exact history on accepted Reload  820ms
+ ✓ tests/web/return-keymap.test.ts (1 test) 298ms
+ ✓ tests/web/save.test.ts (1 test) 529ms
+   ✓ retains the pending destination and captured baseline after another Save As attempt  528ms
+ ✓ tests/web/images.test.ts (11 tests) 855ms
+ ✓ tests/web/file-drop-app.test.ts (1 test) 515ms
+   ✓ opens dropped files through guarded recovery and exact source loading  514ms
+ ✓ tests/web/footnote-incremental.test.ts (33 tests) 6344ms
+   ✓ matches fresh parsing across prose, delimiter, Unicode, line and code boundaries  1442ms
+   ✓ matches fresh models at every code and text boundary across containers and delimiters  4538ms
+ ✓ tests/web/strike-app.test.ts (1 test) 371ms
+   ✓ routes the toolbar through source history and rejects composition without losing focus  370ms
+ ✓ tests/web/code-block-app.test.ts (1 test) 446ms
+   ✓ converts a source block through the toolbar with unchanged baseline and exact history  445ms
+ ✓ tests/web/composition.test.ts (1 test) 430ms
+   ✓ keeps the edit surface when New is clicked during composition  429ms
+ ✓ tests/web/preview-cache.test.ts (6 tests) 408ms
+ ✓ tests/web/file-sidebar.test.ts (5 tests) 500ms
+ ✓ tests/web/preview.test.ts (8 tests) 420ms
+   ✓ keeps exact source/history through preview, source mode, formula rendering and widget activation  301ms
+ ✓ tests/web/formatting.test.ts (19 tests) 457ms
+ ✓ tests/web/heading-app.test.ts (1 test) 419ms
+   ✓ uses the heading menu inside a quoted list and retains source history across display modes  418ms
+ ✓ tests/web/file-shortcuts-app.test.ts (1 test) 330ms
+   ✓ uses guarded native file commands from editor, cell, and form shortcuts  329ms
+ ✓ tests/web/tools-panel-app.test.ts (1 test) 209ms
+ ✓ tests/web/table-insert.test.ts (4 tests) 251ms
+ ✓ tests/web/footnote-math.test.ts (4 tests) 421ms
+   ✓ renders inline and block MathJax formulas in notes and keeps exact source and history  333ms
+ ✓ tests/web/frontmatter.test.ts (7 tests) 253ms
+ ✓ tests/web/footnotes.test.ts (8 tests) 334ms
+ ✓ tests/web/table-insert-app.test.ts (1 test) 299ms
+ ✓ tests/web/links.test.ts (15 tests) 178ms
+ ✓ tests/web/block-preview.test.ts (8 tests) 135ms
+ ✓ tests/web/code-block-command.test.ts (3 tests) 159ms
+ ✓ tests/web/image-controls.test.ts (8 tests) 165ms
+ ✓ tests/web/preview-index.test.ts (3 tests) 152ms
+ ✓ tests/web/footnote-commands.test.ts (6 tests) 135ms
+ ✓ tests/web/image-assets.test.ts (8 tests) 252ms
+ ✓ tests/web/document-tabs.test.ts (3 tests) 135ms
+ ✓ tests/web/png-export.test.ts (7 tests) 94ms
+ ✓ tests/web/svg-images.test.ts (6 tests) 40ms
+ ✓ tests/web/file-shortcuts.test.ts (2 tests) 25ms
+ ✓ tests/web/print-png.test.ts (2 tests) 95ms
+ ✓ tests/web/theme.test.ts (2 tests) 22ms
+ ↓ tests/performance/guarded-nesting.test.ts (6 tests | 6 skipped)
+ ✓ tests/web/return.test.ts (16 tests) 146ms
+ ↓ tests/performance/guard-cost.test.ts (1 test | 1 skipped)
+ ✓ tests/web/source-offsets.test.ts (3 tests) 24ms
+ ✓ tests/web/recovery.test.ts (5 tests) 16ms
+ ✓ tests/web/file-drop.test.ts (4 tests) 4ms
+ ↓ tests/performance/editor.test.ts (4 tests | 4 skipped)
+ ✓ tests/web/physical-lines.test.ts (4 tests) 162ms
+ ✓ tests/web/math.test.ts (3 tests) 48ms
+ ✓ tests/web/source.test.ts (2 tests) 22ms
+ ✓ tests/web/theme-contrast.test.ts (1 test) 4ms
+ ✓ tests/web/commands.test.ts (14 tests) 5ms
+ ✓ tests/web/file-guard.test.ts (1 test) 2ms
+ ✓ tests/web/file-watch.test.ts (3 tests) 2ms
+ ✓ tests/web/raster.test.ts (5 tests) 4ms
+ ↓ tests/performance/parser-wrapper.test.ts (1 test | 1 skipped)
+ ↓ tests/performance/offsets.test.ts (1 test | 1 skipped)
+ ↓ tests/performance/preview-index-build.test.ts (1 test | 1 skipped)
+
+ Test Files  64 passed | 7 skipped (71)
+      Tests  435 passed | 15 skipped (450)
+   Start at  14:18:56
+   Duration  10.67s (transform 1.33s, setup 0ms, collect 15.23s, tests 49.26s, environment 13.74s, prepare 3.02s)
+

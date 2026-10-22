@@ -1,0 +1,173 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Fallback retention diagnostic</title>
+<link rel="stylesheet" href="/src/web/style.css"><style>
+body{padding:12px}.panes{display:flex;gap:16px}.surface{width:400px;height:560px;border:1px solid var(--border)}
+.surface>.cm-editor>.cm-scroller>.cm-content{flex:1 1 auto;min-width:0;padding:24px 20px 60px;font-family:system-ui,sans-serif;line-height:1.65}
+#result{font:11px monospace;white-space:pre-wrap;max-height:180px;overflow:auto}
+</style></head><body><p>Inactive fallback retention: mapped display can be stale until parsing completes. No timing or production adoption.</p>
+<button id="run">Run browser batch</button><button id="store">Store result</button><span id="stored" role="status"></span>
+<p id="summary" role="note">Waiting for diagnostic.</p><div class="panes"><section><p>Complete native reference</p><div id="baseline" class="surface"></div></section>
+<section><p id="label">Candidate</p><div id="candidate" class="surface"></div></section></div><pre id="result">Loading…</pre>
+<script type="module">
+import {Compartment,EditorState,RangeSet,StateField,Transaction} from '@codemirror/state';
+import {Decoration,EditorView} from '@codemirror/view';
+import {history,isolateHistory,undo,redo,undoDepth,redoDepth} from '@codemirror/commands';
+import {ensureSyntaxTree,syntaxTree,syntaxTreeAvailable,Language,LanguageSupport} from '@codemirror/language';
+import {Parser,TreeFragment} from '@lezer/common';
+import {documentLanguage} from '/src/web/document-language.ts';
+import {completeDocument} from '/src/web/preview-index.ts';
+import {fromSource,normalize,sourceExtensions,sourceField,savedSource,sourceOffset,lineEnding} from '/src/web/source.ts';
+import {footnoteField} from '/src/web/footnotes.ts';
+import {tableCellField,tableHistoryView,tableImageVersion} from '/src/web/table.ts';
+import {collectPreview,previewDecorations,combinedLivePreview,combinedPreviewField,retainedLivePreview,retainedPreviewField} from '/tests/performance/experiments/point-comparison/static-preview.ts';
+import {mountedDocumentLanguage} from '/tests/performance/experiments/point-comparison/mounted-document-language.ts';
+import {enableLocalCoverage,enableFallbackObservation,diagnoseFallback} from '/tests/performance/experiments/point-comparison/fallback-observer.ts';
+
+const header='\uFEFF# Heading\r\n\r\nParagraph words 日本語 **strong**[^a].\r\n\r\n';
+const block='# Heading\n\nParagraph words **strong** and *inner text* with `code`.\n\n';
+const tail='\r\n[^a]: 日本語 **note**\r\n\rFinal sentinel.\n';
+const remaining=1048576-new TextEncoder().encode(header+tail).length;
+const original=header+block.repeat(Math.floor(remaining/block.length))+'w'.repeat(remaining%block.length)+tail;
+const originalCompare=RangeSet.compare,results=[],treeIds=new WeakMap(),waits=new Set();
+const parameters=new URLSearchParams(location.search),selectedProfile='partial',selectedReverse=parameters.get('reverse')==='true',delivery='combined',retention=parameters.get('retention');
+if(!['drop','map'].includes(retention))throw Error('Explicit retention required');
+const previewField=retention==='map'?retainedPreviewField:combinedPreviewField,livePreview=retention==='map'?retainedLivePreview:combinedLivePreview;
+let treeNumber=0,views=[],disposed=false,running=false,ready=false,progress,lastFrame;
+const visibility=[];
+document.addEventListener('visibilitychange',()=>visibility.push({at:performance.now(),state:document.visibilityState,action:progress?.action}));
+const source=view=>savedSource(view.state.field(sourceField));
+const publish=()=>{document.querySelector('#result').textContent=JSON.stringify({ready,running,progress,results,comparatorUnchanged:RangeSet.compare===originalCompare,delivery,retention,visibility});
+  const checks=results.flatMap(record=>record.checks),failed=checks.filter(c=>c.failure),errors=results.filter(record=>record.error);document.querySelector('#summary').textContent=retention+': '+checks.length+' recorded actions; '+failed.length+' failures'+(failed.length?' ('+failed.map(c=>c.action).join(', ')+')':'')+'; '+errors.length+' errors. Mapped display is a stale diagnostic control.'};
+function destroyViews(){for(const view of views)view?.destroy();views=[];document.querySelectorAll('.surface').forEach(node=>node.replaceChildren())}
+window.addEventListener('pagehide',()=>{disposed=true;for(const wait of waits){cancelAnimationFrame(wait.id);clearTimeout(wait.timer);wait.resolve(false)}waits.clear();destroyViews();enableLocalCoverage(false);enableFallbackObservation(false)},{once:true});
+function frame(deadline){return new Promise(resolve=>{const wait={resolve},requested=performance.now();waits.add(wait);const done=value=>{lastFrame={requested,observed:performance.now(),delay:performance.now()-requested,deadline,visibility:document.visibilityState,ok:value};waits.delete(wait);clearTimeout(wait.timer);resolve(value)};
+  wait.id=requestAnimationFrame(()=>done(!disposed&&performance.now()<deadline));wait.timer=setTimeout(()=>{cancelAnimationFrame(wait.id);done(false)},Math.max(0,deadline-performance.now()))})}
+const fullField=StateField.define({create:state=>previewDecorations(state,collectPreview(state,syntaxTree(state))),
+  update:(value,tr)=>tr.docChanged||tr.selection||tr.reconfigured||syntaxTree(tr.state)!==syntaxTree(tr.startState)?previewDecorations(tr.state,collectPreview(tr.state,syntaxTree(tr.state))):value,
+  provide:field=>EditorView.decorations.from(field)});
+const fullPreview=[footnoteField,tableCellField,tableImageVersion,tableHistoryView,fullField];
+const equal=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
+// Read-only attribution for the installed view 6.43.13. Never reset estimates.
+function attribution(view){const state=view.viewState,oracle=state.heightOracle,map={text:0,gap:0,block:0,collapsed:0,gapLength:0,classes:{}};
+  function visit(node){const name=node.constructor.name;map.classes[name]=(map.classes[name]||0)+1;
+    if(node.left){visit(node.left);visit(node.right)}else if('collapsed' in node){map.text++;map.collapsed+=node.collapsed}
+    else if('deco' in node)map.block++;else{map.gap++;map.gapLength+=node.length}}
+  visit(state.heightMap);const style=getComputedStyle(view.contentDOM);
+  return {version:'6.43.13',height:state.heightMap.height,map,oracle:{lineHeight:oracle.lineHeight,charWidth:oracle.charWidth,textHeight:oracle.textHeight,lineLength:oracle.lineLength,lineWrapping:oracle.lineWrapping},
+    font:{family:style.fontFamily,size:style.fontSize,lineHeight:style.lineHeight,whiteSpace:style.whiteSpace},visibility:document.visibilityState};}
+function resourceDetails(){return views.map(view=>({fonts:document.fonts.status,nodes:[...view.dom.querySelectorAll('.preview-math,.preview-mermaid,.preview-inline-html,.preview-block-html,.table-math,.preview-error')].map(node=>({classes:node.className,ready:node.dataset.ready,connected:node.isConnected,text:node.textContent}))}))}
+function coverage(view,cutoff){const tree=syntaxTree(view.state);if(!treeIds.has(tree))treeIds.set(tree,++treeNumber);
+  let body=tree.resolveInner(0,1);while(body&&body.name!=='Document')body=body.parent;
+  const plan=view.state.field(previewField,false);
+  return {cutoff,tree:treeIds.get(tree),outer:tree.length,length:view.state.doc.length,available:syntaxTreeAvailable(view.state,view.state.doc.length),
+    body:body?{from:body.from,to:body.to,length:body.tree?.length}:null,complete:!!completeDocument(view.state),mode:plan?.mode||'full-reference',index:!!plan?.index,retained:!!plan?.retained,retentionStarts:plan?.retentionStarts||0,retentionEnds:plan?.retentionEnds||0,certificate:plan?.certificate?{length:plan.certificate.length,mappedEdits:plan.certificate.mappedEdits}:null,
+    points:plan?.layers?.points.size,marks:plan?.layers?.marks.size,total:plan?.decorations.size,deliveredSets:view.state.facet(EditorView.decorations).length,counts:plan?.mode==='indexed'?plan.localCounts:undefined}}
+function observation(view,cutoff){const scroll=view.scrollDOM.getBoundingClientRect(),caret=view.coordsAtPos(view.state.selection.main.head);
+  const lines=[...view.dom.querySelectorAll('.cm-line')].filter(node=>!node.closest('.editing-cell')).map(node=>{const box=node.getBoundingClientRect();return {from:view.posAtDOM(node,0),text:node.textContent,width:box.width,height:box.height,top:box.top-scroll.top}});
+  const widgets=[...view.dom.querySelectorAll('.preview-widget')].map(node=>{const box=node.getBoundingClientRect();return {from:node.dataset.from,to:node.dataset.to,kind:node.className,text:node.textContent,width:box.width,height:box.height,top:box.top-scroll.top}});
+  return {coverage:coverage(view,cutoff),metrics:{head:view.state.selection.main.head,caret:caret?{top:caret.top-scroll.top,bottom:caret.bottom-scroll.top}:null,
+    height:view.contentHeight,scrollTop:view.scrollDOM.scrollTop,scrollHeight:view.scrollDOM.scrollHeight,width:view.scrollDOM.clientWidth,clientHeight:view.scrollDOM.clientHeight},lines,widgets}}
+function patch(raw,from,to,insert){const record=fromSource(raw);return savedSource({...record,raw:record.raw.slice(0,sourceOffset(record,from))+insert.replace(/\n/g,lineEnding(record.raw))+record.raw.slice(sourceOffset(record,to))})}
+function settle(view){if(!ensureSyntaxTree(view.state,view.state.doc.length,10000))throw Error('Complete reference deadline');view.dispatch({});if(!completeDocument(view.state))throw Error('Incomplete settled body')}
+function decorations(view){return view.state.field(previewField,false)?.decorations||view.state.field(fullField,false)||Decoration.none}
+// public-spans-v1: ordered public spans, active values, point openness/rank,
+// decoration class/point/sides/spec, and widget class/own data. No DOM IDs.
+// Counts describe input sets; signatures describe their exact emitted stream.
+function emitted(view){
+  const sets=view.state.facet(EditorView.decorations);if(sets.some(set=>typeof set==='function'))throw Error('Unexpected dynamic decoration input');
+  const describe=value=>({type:value.constructor.name,point:value.point,startSide:value.startSide,endSide:value.endSide,
+    spec:{...value.spec,widget:value.spec.widget?{type:value.spec.widget.constructor.name,...value.spec.widget}:undefined}});
+  const events=[];RangeSet.spans(sets,0,view.state.doc.length,{
+    span(from,to,active,open){events.push(['span',from,to,active.map(describe),open])},
+    point(from,to,value,active,open,rank){events.push(['point',from,to,describe(value),active.map(describe),open,rank])}});
+  const encoded=JSON.stringify(events);return {encoded,values:events,events:events.length,counts:sets.map(set=>set.size),length:view.state.doc.length};
+}
+async function streams(){const raw=views.map(emitted);let firstDifference;
+  if(raw[0].encoded!==raw[1].encoded){let index=0;while(index<Math.max(raw[0].values.length,raw[1].values.length)&&equal(raw[0].values[index],raw[1].values[index]))index++;firstDifference={index,baseline:raw[0].values[index]??null,candidate:raw[1].values[index]??null};}
+  return Promise.all(raw.map(async({encoded,values,...data},index)=>({...data,firstDifference:index?firstDifference:undefined,
+  sha256:[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(encoded)))].map(byte=>byte.toString(16).padStart(2,'0')).join('')})))}
+async function check(action,expected,control,partial,immediate,diagnostic){
+  const before=views.map(view=>({source:source(view),undo:undoDepth(view.state),redo:redoDepth(view.state),selection:view.state.selection.toJSON()}));
+  // The reference settles independently. Never settle the partial candidate.
+  settle(views[0]);if(!partial)settle(views[1]);
+  const resourceDeadline=performance.now()+15000;let resourcesReady=false;
+  while(await frame(resourceDeadline)){resourcesReady=document.fonts.status==='loaded'&&views.every(view=>[...view.dom.querySelectorAll('.preview-math,.preview-mermaid,.preview-inline-html,.preview-block-html,.table-math')].every(node=>node.dataset.ready==='true')&&!view.dom.querySelector('.preview-error'));if(resourcesReady)break}
+  if(!resourcesReady){const error=new Error('Resource readiness deadline');error.details={resources:resourceDetails(),lastFrame};throw error}
+  for(const view of views)view.dispatch({effects:EditorView.scrollIntoView(view.state.selection.main.head,{y:'start'})});
+  const deadline=performance.now()+4000,samples=[];let transitions=0,frames=0,stable=false;
+  while(await frame(deadline)){const observations=views.map(view=>observation(view,control.cutoff));const prior=samples.at(-1),same=prior&&equal(prior.observations,observations);transitions=same?transitions+1:0;frames++;
+    if(same)prior.frames++;else samples.push({frames:1,observations});if(frames>=8&&transitions>=4){stable=true;break}}
+  const final=views.map(view=>observation(view,control.cutoff)),right=new Map(final[1].lines.map(line=>[line.from,line])),shared=final[0].lines.filter(line=>right.has(line.from));
+  const differences=[];const plan=views[1].state.field(previewField,false),inputs=views[1].state.facet(EditorView.decorations);
+  RangeSet.compare(inputs,[decorations(views[0])],views[1].state.changes([]),{compareRange:(from,to)=>differences.push(['range',from,to]),comparePoint:(from,to)=>differences.push(['point',from,to]),boundChange:at=>differences.push(['bound',at])});
+  const deliveryStreams=await streams();
+  const result={action,partial,immediate,diagnostic,deliveryStreams,streamsEqual:deliveryStreams[0].sha256===deliveryStreams[1].sha256,resourcesReady,stable,frames,transitions,lastFrame,attribution:views.map(attribution),sampleEncoding:'consecutive-exact',samples,final,
+    sourceExact:views.every(view=>source(view)===expected),selectionEqual:views[0].state.selection.eq(views[1].state.selection),
+    history:views.map(view=>({undo:undoDepth(view.state),redo:redoDepth(view.state)})),
+    unchanged:views.every((view,i)=>equal(before[i],{source:source(view),undo:undoDepth(view.state),redo:redoDepth(view.state),selection:view.state.selection.toJSON()})),
+    decorationsEqual:RangeSet.eq([decorations(views[0])],[decorations(views[1])]),differences,geometryEqual:equal(final[0].metrics,final[1].metrics),
+    sharedLines:shared.length,lineEqual:shared.length>0&&shared.every(line=>equal(line,right.get(line.from))),widgetEqual:equal(final[0].widgets,final[1].widgets),comparatorUnchanged:RangeSet.compare===originalCompare};
+  result.partialRetained=!partial||(!immediate.complete&&immediate.index&&immediate.mode==='indexed'&&samples.every(sample=>{const value=sample.observations[1].coverage;return !value.complete&&value.index&&value.mode==='indexed'}));
+  if(!result.streamsEqual||!stable||!result.sourceExact||!result.selectionEqual||!equal(result.history[0],result.history[1])||!result.unchanged||!result.decorationsEqual||differences.length||!result.geometryEqual||!result.lineEqual||!result.widgetEqual||!result.partialRetained||!result.comparatorUnchanged)result.failure='Agreement or partial-retention check failed';
+  return result;
+}
+async function runCase(profile,reverse){
+  destroyViews();const control={cutoff:null},record={profile,reverse,delivery,retention,bytes:new TextEncoder().encode(original).length,checks:[]};results.push(record);progress={profile,reverse};publish();
+  const raw=fromSource(original),doc=normalize(raw.raw),prefix=doc.slice(0,100),at=doc.indexOf('words')+2,modes=[new Compartment(),new Compartment()];let expected=original;
+  const support=mountedDocumentLanguage(),native=support.language.parser;
+  const parser=new class extends Parser{createParse(input,fragments,ranges){const stopped=control.cutoff!==null&&input.read(0,100)!==prefix;
+    const retained=stopped?fragments.filter(fragment=>fragment.from<control.cutoff).map(fragment=>new TreeFragment(fragment.from,Math.min(fragment.to,control.cutoff),fragment.tree,fragment.offset,fragment.openStart,true)):fragments;
+    const parse=native.startParse(input,retained,ranges);if(stopped)parse.stopAt(control.cutoff);return parse}};
+  const candidateLanguage=profile==='partial'?new LanguageSupport(new Language(support.language.data,parser),support.support):support;
+  function create(i){const parent=document.querySelector(i?'#candidate':'#baseline');parent.style.width='400px';
+    let state=EditorState.create({doc,selection:{anchor:at},extensions:[sourceExtensions(raw),history(),i&&profile!=='control'?candidateLanguage:documentLanguage(),EditorView.lineWrapping,
+      modes[i].of(i&&profile!=='control'?livePreview:fullPreview),EditorView.contentAttributes.of({'aria-label':i?'Candidate Markdown':'Reference Markdown'})]});
+    if(!ensureSyntaxTree(state,state.doc.length,10000))throw Error('Initial parser deadline');state=state.update({}).state;views[i]=new EditorView({state,parent})}
+  const step=async(action,partial=false,immediate,diagnostic)=>{progress={profile,reverse,action};publish();const value=await check(action,expected,control,partial,immediate,diagnostic);record.checks.push(value);publish();return !value.failure};
+  try{
+    if(reverse){create(1);create(0)}else{create(0);create(1)}document.querySelector('#label').textContent=retention+' / '+delivery+' / '+profile;
+    await step('initial');if(profile==='partial')control.cutoff=1024;
+    for(const insert of ['Z','中','𠀀','e\u0301']){
+      const position=views[0].state.selection.main.head;expected=patch(expected,position,position,insert);let immediate,diagnostic;
+      for(let i=0;i<2;i++){const view=views[i],before=view.state.field(previewField,false);const tr=view.state.update({changes:{from:position,insert},selection:{anchor:position+insert.length},annotations:[Transaction.userEvent.of('input.type'),isolateHistory.of('full')]});
+        view.dispatch(tr);if(i){immediate=coverage(view,control.cutoff);if(before)diagnostic=diagnoseFallback(tr,before,view.state.field(previewField).mode==='indexed')}}
+      const ok=await step('unicode-'+insert,profile==='partial',immediate,diagnostic);if(!ok)break;
+    }
+    const edited=expected;
+    control.cutoff=null;await step('released');
+    for(const [kind,insert] of [['structural','\n\n'],['resource','$x$'],['note','Q']]){
+      const beforeFallback={coverage:views.map(view=>coverage(view,control.cutoff)),streams:await streams()};
+      const position=kind==='note'?views[0].state.doc.toString().lastIndexOf('note')+2:at;
+      for(const view of views)view.dispatch({selection:{anchor:position}});
+      if(profile==='partial')control.cutoff=1024;
+      expected=patch(expected,position,position,insert);let immediate,diagnostic;
+      for(let i=0;i<2;i++){const view=views[i],before=view.state.field(previewField,false);const tr=view.state.update({changes:{from:position,insert},selection:{anchor:position+insert.length},annotations:[Transaction.userEvent.of('input.type'),isolateHistory.of('full')]});
+        view.dispatch(tr);if(i){immediate=coverage(view,control.cutoff);if(before)diagnostic=diagnoseFallback(tr,before,view.state.field(previewField).mode==='indexed')}}
+      const afterFallback={coverage:views.map(view=>coverage(view,control.cutoff)),streams:await streams()};
+      control.cutoff=null;await step('fallback-'+kind,false,immediate,diagnostic);
+      const value=record.checks.at(-1);value.fallbackTransition={before:beforeFallback,after:afterFallback};value.fallbackRejected=profile==='control'||(immediate.mode==='full'&&diagnostic?.returnedIndex===false);
+      if(!value.fallbackRejected)value.failure='Local reuse did not reject unsupported edit';publish();
+      for(const view of views)if(!undo(view))throw Error('Fallback Undo failed');expected=edited;await step('restore-'+kind);
+    }
+    for(const target of [Math.floor(views[0].state.doc.length/2),views[0].state.doc.length]){for(const view of views)view.dispatch({selection:{anchor:target}});await step(target===views[0].state.doc.length?'end':'middle')}
+    document.querySelectorAll('.surface').forEach(node=>node.style.width='240px');await step('narrow');
+    for(let i=0;i<2;i++)views[i].dispatch({effects:modes[i].reconfigure([])});await step('source');
+    const depths=views.map(view=>undoDepth(view.state));if(depths[0]!==depths[1])throw Error('History depth differs');
+    for(let count=0;count<depths[0];count++)for(const view of views)if(!undo(view))throw Error('Undo failed');expected=original;await step('undo-original');
+    for(let count=0;count<depths[0];count++)for(const view of views)if(!redo(view))throw Error('Redo failed');expected=edited;await step('redo');
+    for(let i=0;i<2;i++)views[i].dispatch({effects:modes[i].reconfigure(i&&profile!=='control'?livePreview:fullPreview)});await step('live');
+  }catch(error){record.error=String(error);record.errorDetails=error.details;destroyViews()}publish();
+}
+document.querySelector('#run').onclick=async()=>{if(!ready||running)return;running=true;results.length=0;document.querySelector('#run').disabled=true;enableLocalCoverage(true);enableFallbackObservation(true);publish();
+  visibility.length=0;visibility.push({at:performance.now(),state:document.visibilityState,action:'start'});
+  try{
+    // Let the UI click return before expensive view construction. This delay
+    // precedes both views and every check; parser/frame deadlines stay fixed.
+    await new Promise(resolve=>setTimeout(resolve,100));if(disposed)return;
+    if(document.visibilityState!=='visible'){results.push({profile:selectedProfile,reverse:selectedReverse,delivery,retention,bytes:new TextEncoder().encode(original).length,checks:[],error:'Harness rejection: hidden before construction'});return;}
+    for(const profile of selectedProfile?[selectedProfile]:['control','mounted','partial'])for(const reverse of selectedProfile?[selectedReverse]:[false,true]){if(disposed)return;await runCase(profile,reverse)}
+  }
+  finally{running=false;if(!disposed){progress={done:true};document.querySelector('#run').disabled=false;publish()}}};
+document.querySelector('#store').onclick=async()=>{if(running)return;try{const response=await fetch('/__fallback_retention_result__',{method:'POST',headers:{'Content-Type':'application/json','x-markdew-browser-result':'fallback-retention-v1'},body:document.querySelector('#result').textContent});
+  const value=await response.text();if(!response.ok)throw Error(value);document.querySelector('#stored').textContent=value}catch(error){document.querySelector('#stored').textContent=String(error)}};
+await document.fonts.ready;ready=true;publish();
+</script></body></html>

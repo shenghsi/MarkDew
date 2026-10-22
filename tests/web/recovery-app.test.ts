@@ -1,0 +1,62 @@
+// @vitest-environment jsdom
+import { expect, it, vi } from 'vitest';
+import { startupFixture } from './startup-fixture';
+import { undoDepth } from '@codemirror/commands';
+import { normalize, savedSource, sourceField } from '../../src/web/source';
+const mocks = vi.hoisted(() => ({ invoke: vi.fn(), save: vi.fn(), ask: vi.fn(), destroy: vi.fn(), close: undefined as undefined | ((event: { preventDefault(): void }) => Promise<void>) }));
+vi.mock('@tauri-apps/api/core', () => ({ invoke: mocks.invoke, isTauri: () => true }));
+vi.mock('@tauri-apps/plugin-dialog', () => ({ ask: mocks.ask, open: vi.fn(), save: mocks.save }));
+vi.mock('@tauri-apps/api/window', () => ({ getCurrentWindow: () => ({ onDragDropEvent: async () => vi.fn(), listen: vi.fn(), onCloseRequested: (callback: typeof mocks.close) => { mocks.close = callback; }, destroy: mocks.destroy }) }));
+it('restores exact source without an original-file baseline and retains newer edits after Save', async () => {
+  const original = '\uFEFF# 日本語😀\r\nbody\rtail\nEnd';
+  const listing = { session: 'session-current', revision: 0, entries: [{ id: 'session-old', label: '<script>original.md</script>', bytes: original.length }], warnings: [] };
+  let failWrite = false, failCopy = false, finishSave!: () => void;
+  const saving = new Promise<void>(resolve => { finishSave = resolve; });
+  let saveCount = 0;
+  mocks.invoke.mockImplementation(async (command: string) => {
+    if (command === 'document_start') return startupFixture(listing);
+    if (command === 'create_document') return 1;
+    if (command === 'recovery_document') return { session: 'tab-one', revision: 0, entries: [], warnings: [] };
+    if (command === 'recovery_start' || command === 'recovery_list') return listing;
+    if (command === 'recovery_copy') { if (failCopy) throw 'copy read failed'; return { source: original, label: 'original.md' }; }
+    if (command === 'recovery_checkpoint' && failWrite) throw 'disk failed';
+    if (command === 'save_document' && ++saveCount === 1) await saving;
+  });
+  mocks.ask.mockResolvedValue(true); mocks.save.mockResolvedValue('/tmp/recovered-copy.md');
+  document.body.innerHTML = '<div id="app"></div>';
+  const { view } = await import('../../src/web/main');
+  const source = () => savedSource(view.state.field(sourceField));
+  const calls = (command: string) => mocks.invoke.mock.calls.filter(([name]) => name === command);
+  const restore = () => document.querySelector<HTMLButtonElement>('.recovery-panel [aria-label^="Restore "]')!.click();
+  await vi.waitFor(() => expect(document.querySelector('.recovery-panel')?.textContent).toContain('<script>original.md</script>'));
+  expect(document.querySelector('.recovery-panel script')).toBeNull();
+  view.dispatch({ changes: { from: 0, insert: 'current unsaved' } });
+  const depth = undoDepth(view.state); failWrite = true; restore();
+  await vi.waitFor(() => expect(document.querySelector('#status')!.textContent).toContain('disk failed'));
+  expect(source()).toBe('current unsaved'); expect(undoDepth(view.state)).toBe(depth); expect(calls('new_document')).toHaveLength(0);
+  failWrite = false;
+  restore();
+  await vi.waitFor(() => expect(source()).toBe(original));
+  await vi.waitFor(() => expect(calls('recovery_checkpoint').at(-1)?.[1]).toMatchObject({ source: original, dirty: true, label: 'Untitled' }));
+  expect(view.state.doc.toString()).toBe(normalize(original.slice(1))); expect(undoDepth(view.state)).toBe(0);
+  expect(document.querySelector('#status')!.textContent).toBe('Untitled • Unsaved');
+  document.querySelector<HTMLButtonElement>('#save')!.click();
+  await vi.waitFor(() => expect(calls('save_document')).toHaveLength(1));
+  expect(calls('save_document')[0][1]).toEqual({ document: 1, path: '/tmp/recovered-copy.md', source: original });
+  view.dispatch({ changes: { from: view.state.doc.length, insert: ' later' } }); finishSave();
+  await vi.waitFor(() => expect(calls('recovery_checkpoint').at(-1)?.[1]).toMatchObject({ source: original + ' later', dirty: true }));
+  await vi.waitFor(() => expect(document.querySelector('#status')!.textContent).toBe('recovered-copy.md • Unsaved'));
+  document.querySelector<HTMLButtonElement>('#save')!.click();
+  await vi.waitFor(() => expect(calls('recovery_checkpoint').at(-1)?.[1]).toMatchObject({ source: original + ' later', dirty: false }));
+  failCopy = true; restore();
+  await vi.waitFor(() => expect(document.querySelector('#status')!.textContent).toContain('copy read failed'));
+  expect(source()).toBe(original + ' later'); expect(calls('new_document')).toHaveLength(0);
+  view.dispatch({ changes: { from: view.state.doc.length, insert: ' unsaved' } });
+  failWrite = true; await mocks.close!({ preventDefault: vi.fn() });
+  expect(mocks.destroy).not.toHaveBeenCalled(); expect(source()).toBe(original + ' later unsaved');
+  expect(view.state.readOnly).toBe(false);
+  failWrite = false; await mocks.close!({ preventDefault: vi.fn() });
+  expect(mocks.destroy).toHaveBeenCalledTimes(1);
+  expect(listing.entries).toHaveLength(1); // This milestone never removes an orphan copy.
+  view.destroy();
+});

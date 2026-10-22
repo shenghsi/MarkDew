@@ -1,0 +1,94 @@
+[
+  {
+    "comparator": {
+      "active": false,
+      "calls": {
+        "dispatch": 0,
+        "fallback": 0,
+        "geometry": 0,
+        "other": 0,
+        "paired": 0,
+        "setup": 0
+      },
+      "owned": false,
+      "ownershipLost": false,
+      "phaseStats": {
+        "dispatch": {
+          "jumps": 0,
+          "rangesSkipped": 0
+        },
+        "geometry": {
+          "jumps": 0,
+          "rangesSkipped": 0
+        },
+        "other": {
+          "jumps": 0,
+          "rangesSkipped": 0
+        },
+        "setup": {
+          "jumps": 0,
+          "rangesSkipped": 0
+        }
+      },
+      "restored": true,
+      "sourceSHA256": "cf4ffe7d177bf2c7c5da66c49be0811cc79a29e12cb658238876bbdcef12939c",
+      "stats": {
+        "jumps": 0,
+        "rangesSkipped": 0
+      },
+      "version": "6.7.6"
+    },
+    "createdViews": 1,
+    "disposed": true,
+    "pairedRequested": true,
+    "ready": false,
+    "remainingEditors": 0,
+    "viewSetupError": "Error: Requested failure after first view construction"
+  },
+  {
+    "comparator": {
+      "active": false,
+      "calls": {
+        "dispatch": 0,
+        "fallback": 0,
+        "geometry": 0,
+        "other": 0,
+        "paired": 0,
+        "setup": 0
+      },
+      "owned": false,
+      "ownershipLost": false,
+      "phaseStats": {
+        "dispatch": {
+          "jumps": 0,
+          "rangesSkipped": 0
+        },
+        "geometry": {
+          "jumps": 0,
+          "rangesSkipped": 0
+        },
+        "other": {
+          "jumps": 0,
+          "rangesSkipped": 0
+        },
+        "setup": {
+          "jumps": 0,
+          "rangesSkipped": 0
+        }
+      },
+      "restored": true,
+      "sourceSHA256": "cf4ffe7d177bf2c7c5da66c49be0811cc79a29e12cb658238876bbdcef12939c",
+      "stats": {
+        "jumps": 0,
+        "rangesSkipped": 0
+      },
+      "version": "6.7.6"
+    },
+    "createdViews": 1,
+    "disposed": true,
+    "pairedRequested": true,
+    "ready": false,
+    "remainingEditors": 0,
+    "viewSetupError": "Error: Requested failure after first view construction"
+  }
+]

@@ -1,0 +1,47 @@
+
+ RUN  v3.2.7 /Users/shxi/projects/MarkDew
+
+stdout | tests/performance/preview-growth.test.ts > measures growing word edits with exact source and complete decoration checks
+{"benchmark":"growing-preview-state","date":"2026-10-11T05:59:27.467Z","node":"v22.23.2","platform":"darwin","arch":"arm64","language":"guarded-nesting-yaml-wrapper","bytes":102400,"note":false,"location":"start","samples":20,"units":"ms","scope":"growing word edit state transaction and dirty comparison; excludes outline, oracle, DOM, native input and screen frame","indexed":19,"full":1,"median":1.695,"p95":5.086,"min":1.358,"max":33.576,"timings":[33.576,4.226,5.086,3.872,3.241,2.021,2.051,1.992,1.721,1.469,1.477,1.358,1.997,1.466,1.553,1.397,1.57,1.415,1.601,1.669]}
+
+stdout | tests/performance/preview-growth.test.ts > measures growing word edits with exact source and complete decoration checks
+{"benchmark":"growing-preview-state","date":"2026-10-11T05:59:27.708Z","node":"v22.23.2","platform":"darwin","arch":"arm64","language":"guarded-nesting-yaml-wrapper","bytes":102400,"note":false,"location":"middle","samples":20,"units":"ms","scope":"growing word edit state transaction and dirty comparison; excludes outline, oracle, DOM, native input and screen frame","indexed":19,"full":1,"median":1.715,"p95":3.124,"min":1.514,"max":13.992,"timings":[13.992,2.69,1.576,2.343,2.272,2.503,2.42,2.376,1.713,1.673,1.665,3.124,1.662,1.561,1.519,1.767,1.57,1.545,1.514,1.717]}
+
+stdout | tests/performance/preview-growth.test.ts > measures growing word edits with exact source and complete decoration checks
+{"benchmark":"growing-preview-state","date":"2026-10-11T05:59:27.961Z","node":"v22.23.2","platform":"darwin","arch":"arm64","language":"guarded-nesting-yaml-wrapper","bytes":102400,"note":false,"location":"end","samples":20,"units":"ms","scope":"growing word edit state transaction and dirty comparison; excludes outline, oracle, DOM, native input and screen frame","indexed":20,"full":0,"median":1.841,"p95":4.094,"min":1.315,"max":5.892,"timings":[1.472,1.842,1.593,1.841,2.011,1.638,1.901,2.196,2.127,1.948,1.934,1.421,1.437,1.396,4.094,5.892,2.402,1.505,1.315,1.32]}
+
+stdout | tests/performance/preview-growth.test.ts > measures growing word edits with exact source and complete decoration checks
+{"benchmark":"growing-preview-state","date":"2026-10-11T05:59:28.631Z","node":"v22.23.2","platform":"darwin","arch":"arm64","language":"guarded-nesting-yaml-wrapper","bytes":102400,"note":true,"location":"start","samples":20,"units":"ms","scope":"growing word edit state transaction and dirty comparison; excludes outline, oracle, DOM, native input and screen frame","indexed":0,"full":20,"median":10.226,"p95":24.44,"min":6.667,"max":26.573,"timings":[16.064,14.948,10.341,9.229,7.886,9.987,10.111,7.554,11.358,11.294,9.921,8.832,7.662,6.667,26.573,24.44,17.019,7.924,10.944,10.665]}
+
+stdout | tests/performance/preview-growth.test.ts > measures growing word edits with exact source and complete decoration checks
+{"benchmark":"growing-preview-state","date":"2026-10-11T05:59:28.925Z","node":"v22.23.2","platform":"darwin","arch":"arm64","language":"guarded-nesting-yaml-wrapper","bytes":102400,"note":true,"location":"middle","samples":20,"units":"ms","scope":"growing word edit state transaction and dirty comparison; excludes outline, oracle, DOM, native input and screen frame","indexed":0,"full":20,"median":5.505,"p95":8.177,"min":4.383,"max":8.18,"timings":[6.666,5.424,6.354,8.177,8.18,7.801,5.52,5.647,5.491,5.518,5.305,4.383,5.157,4.625,5.704,4.448,5.484,4.465,5.547,4.531]}
+
+stdout | tests/performance/preview-growth.test.ts > measures growing word edits with exact source and complete decoration checks
+{"benchmark":"growing-preview-state","date":"2026-10-11T05:59:29.175Z","node":"v22.23.2","platform":"darwin","arch":"arm64","language":"guarded-nesting-yaml-wrapper","bytes":102400,"note":true,"location":"end","samples":20,"units":"ms","scope":"growing word edit state transaction and dirty comparison; excludes outline, oracle, DOM, native input and screen frame","indexed":0,"full":20,"median":4.448,"p95":5.341,"min":3.472,"max":5.354,"timings":[5.354,3.579,3.561,3.472,4.733,4.456,4.694,5.341,4.557,4.44,4.437,4.759,3.629,3.53,3.586,3.741,4.434,4.486,4.699,4.465]}
+
+stdout | tests/performance/preview-growth.test.ts > measures growing word edits with exact source and complete decoration checks
+{"benchmark":"growing-preview-state","date":"2026-10-11T05:59:31.671Z","node":"v22.23.2","platform":"darwin","arch":"arm64","language":"guarded-nesting-yaml-wrapper","bytes":1048576,"note":false,"location":"start","samples":20,"units":"ms","scope":"growing word edit state transaction and dirty comparison; excludes outline, oracle, DOM, native input and screen frame","indexed":19,"full":1,"median":12.132,"p95":44.19,"min":10.745,"max":186.873,"timings":[186.873,44.19,10.917,10.745,10.767,10.799,10.873,10.754,11.888,12.192,15.44,18.918,31.994,12.284,12.139,13.624,12.087,14.196,12.031,12.126]}
+
+stdout | tests/performance/preview-growth.test.ts > measures growing word edits with exact source and complete decoration checks
+{"benchmark":"growing-preview-state","date":"2026-10-11T05:59:33.967Z","node":"v22.23.2","platform":"darwin","arch":"arm64","language":"guarded-nesting-yaml-wrapper","bytes":1048576,"note":false,"location":"middle","samples":20,"units":"ms","scope":"growing word edit state transaction and dirty comparison; excludes outline, oracle, DOM, native input and screen frame","indexed":19,"full":1,"median":12.811,"p95":35.787,"min":11.315,"max":103.118,"timings":[103.118,12.282,17.038,27.236,35.787,11.943,12.572,11.315,12.143,15.506,12.079,12.544,14.152,12.377,13.965,12.591,13.031,33.869,14.037,11.402]}
+
+stdout | tests/performance/preview-growth.test.ts > measures growing word edits with exact source and complete decoration checks
+{"benchmark":"growing-preview-state","date":"2026-10-11T05:59:36.161Z","node":"v22.23.2","platform":"darwin","arch":"arm64","language":"guarded-nesting-yaml-wrapper","bytes":1048576,"note":false,"location":"end","samples":20,"units":"ms","scope":"growing word edit state transaction and dirty comparison; excludes outline, oracle, DOM, native input and screen frame","indexed":19,"full":1,"median":12.415,"p95":49.235,"min":11.391,"max":87.324,"timings":[87.324,11.714,11.533,14.25,11.586,11.77,13.95,12.424,15.022,49.235,12.021,11.87,12.407,11.391,12.73,15.58,11.944,12.544,14.566,12.212]}
+
+stdout | tests/performance/preview-growth.test.ts > measures growing word edits with exact source and complete decoration checks
+{"benchmark":"growing-preview-state","date":"2026-10-11T05:59:41.481Z","node":"v22.23.2","platform":"darwin","arch":"arm64","language":"guarded-nesting-yaml-wrapper","bytes":1048576,"note":true,"location":"start","samples":20,"units":"ms","scope":"growing word edit state transaction and dirty comparison; excludes outline, oracle, DOM, native input and screen frame","indexed":0,"full":20,"median":89.685,"p95":146.399,"min":77.531,"max":229.754,"timings":[77.531,95.98,121.484,90.162,94.127,104.598,87.631,146.399,82.333,81.319,89.017,85.008,101.265,229.754,104.79,88.008,83.685,85.612,89.208,121.166]}
+
+stdout | tests/performance/preview-growth.test.ts > measures growing word edits with exact source and complete decoration checks
+{"benchmark":"growing-preview-state","date":"2026-10-11T05:59:44.953Z","node":"v22.23.2","platform":"darwin","arch":"arm64","language":"guarded-nesting-yaml-wrapper","bytes":1048576,"note":true,"location":"middle","samples":20,"units":"ms","scope":"growing word edit state transaction and dirty comparison; excludes outline, oracle, DOM, native input and screen frame","indexed":0,"full":20,"median":68.418,"p95":117.523,"min":64.603,"max":160.089,"timings":[160.089,67.294,65.369,64.773,69.109,68.592,68.904,74.765,78.778,117.523,64.603,65.732,65.077,67.69,74.213,69.46,111.16,66.153,64.748,68.244]}
+
+stdout | tests/performance/preview-growth.test.ts > measures growing word edits with exact source and complete decoration checks
+{"benchmark":"growing-preview-state","date":"2026-10-11T05:59:47.836Z","node":"v22.23.2","platform":"darwin","arch":"arm64","language":"guarded-nesting-yaml-wrapper","bytes":1048576,"note":true,"location":"end","samples":20,"units":"ms","scope":"growing word edit state transaction and dirty comparison; excludes outline, oracle, DOM, native input and screen frame","indexed":0,"full":20,"median":48.581,"p95":96.161,"min":46.217,"max":124.074,"timings":[67.887,48.768,47.555,50.668,50.625,124.074,96.161,47.196,48.395,47.107,46.478,46.217,48.999,48.13,48.305,74.921,49.801,46.258,46.349,48.958]}
+
+ ✓ tests/performance/preview-growth.test.ts (1 test) 20750ms
+   ✓ measures growing word edits with exact source and complete decoration checks  20750ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  13:59:26
+   Duration  21.28s (transform 98ms, setup 0ms, collect 241ms, tests 20.75s, environment 141ms, prepare 30ms)
+

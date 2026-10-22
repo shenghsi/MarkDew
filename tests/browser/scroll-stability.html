@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><title>Typing scroll stability</title>
+<link rel="stylesheet" href="/src/web/style.css">
+<div id="app"><div id="editor"></div></div>
+<pre id="result" role="status" style="position:fixed;right:0;top:0;background:white;color:black;z-index:100;max-height:180px;overflow:auto"></pre>
+<script type="module">
+import {Compartment, EditorState} from '@codemirror/state';
+import {EditorView} from '@codemirror/view';
+import {history, undo, redo} from '@codemirror/commands';
+import {documentLanguage} from '/src/web/document-language.ts';
+import {livePreview} from '/src/web/preview.ts';
+import {createScrollStabilizer} from '/src/web/scroll-stabilizer.ts';
+const display = new Compartment();
+const original = Array.from({length: 300}, (_, i) => `Paragraph ${i}: ordinary writing with **bold text**, and words that can wrap. ` .repeat(3) + '\n').join('\n');
+const view = new EditorView({parent: document.querySelector('#editor'),
+  state: EditorState.create({doc: original, extensions: [documentLanguage(), history(), EditorView.lineWrapping, display.of(livePreview)]}),
+  dispatchTransactions: createScrollStabilizer()});
+function anchorTop(pos) { view.coordsAtPos(pos); return view.lineBlockAt(pos).top + view.documentTop; }
+const settle = () => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+const results = [], timings = [];
+function check(name, pass, detail) {
+  results.push({name, pass, detail});
+  document.querySelector('#result').textContent = JSON.stringify({checks:results.length, failures:results.filter(r=>!r.pass), maxDispatchMs:Math.max(0,...timings)},null,2);
+  if (!pass) throw Error(name + ': ' + JSON.stringify(detail));
+}
+try {
+await document.fonts.ready; await settle();
+for (const mode of ['Live', 'Source']) {
+  view.dispatch({effects: display.reconfigure(mode === 'Live' ? livePreview : [])}); await settle();
+  for (const number of [1, 301, 599]) {
+    const pos = view.state.doc.line(number).from + 35;
+    view.dispatch({selection:{anchor:pos}, effects:EditorView.scrollIntoView(pos,{y:'center'})}); view.focus(); await settle();
+    for (const insert of ['x', ' words that wrap '.repeat(8), '\n']) {
+      const before = view.state.doc.toString(), at = view.state.selection.main.head;
+      const anchor = view.state.doc.lineAt(at).from;
+      const top = anchorTop(anchor);
+      const time = performance.now();
+      view.dispatch({changes:{from:at,insert},selection:{anchor:at+insert.length},userEvent:'input.type',scrollIntoView:true});
+      timings.push(performance.now()-time); await settle();
+      const after = anchorTop(anchor), caret = view.coordsAtPos(view.state.selection.main.head), box = view.scrollDOM.getBoundingClientRect();
+      check(`${mode} ${number} ${JSON.stringify(insert.slice(0,8))} anchor`, Math.abs(after-top)<1, {top,after});
+      check(`${mode} caret visible`, caret.top>=box.top-1 && caret.bottom<=box.bottom+1, {caret,box});
+      undo(view); await settle(); check(`${mode} exact undo`, view.state.doc.toString()===before);
+      redo(view); await settle(); check(`${mode} exact redo`, view.state.doc.toString()===before.slice(0,at)+insert+before.slice(at));
+      undo(view); await settle();
+    }
+  }
+}
+// Keep the fixture available for real keyboard input. Each key reports the
+// settled position of the unchanged preceding line as well as the caret.
+view.dispatch({selection:{anchor:view.state.doc.line(301).from+35},effects:EditorView.scrollIntoView(view.state.doc.line(301).from,{y:'center'})});
+view.focus(); await settle();
+view.contentDOM.addEventListener('keydown', () => {
+  const anchor = view.state.doc.lineAt(view.state.selection.main.from).from;
+  const top = anchorTop(anchor);
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    const after = anchorTop(Math.min(anchor,view.state.doc.length));
+    check('native key anchor', Math.abs(after-top)<1, {top,after});
+  }));
+});
+document.querySelector('#result').textContent += '\nREADY FOR KEYBOARD';
+} catch(error) { document.querySelector('#result').textContent += '\nFAILED '+error; }
+</script></html>

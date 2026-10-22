@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Mixed text direction app check</title></head>
+<body><div id="app"></div><div style="position:fixed;bottom:24px;right:16px;max-width:380px;z-index:80;background:var(--paper);color:var(--ink);border:1px solid var(--border);padding:8px;font:12px monospace"><button id="hebrew">Select Hebrew start</button><pre id="evidence" style="max-height:160px;overflow:auto"></pre></div>
+<script type="module">
+import {view} from '/src/web/main.ts';
+import {fromSource,normalize,restoreSource,sourceField,savedSource} from '/src/web/source.ts';
+import {undoDepth} from '@codemirror/commands';
+const original='\uFEFF# Mixed text direction\r\n\r\nمرحبا بالعالم English 123\r\n\r\nשלום עולם English 456\r\n\r\nEnglish first العربية 789\r\n\r\n... 123\r\n\r\n'+('שלום wrapped English 123 '.repeat(12))+'\r\n\r\n| العربية | English |\r\n|---|---|\r\n| שלום 123 | text العربية |\r\n\r\nEnd\n';
+const record=fromSource(original);view.dispatch({changes:{from:0,insert:normalize(record.raw)},effects:restoreSource.of(record),selection:{anchor:normalize(record.raw).length}});
+document.querySelector('#hebrew').onclick=()=>{view.dispatch({selection:{anchor:view.state.doc.toString().indexOf('שלום עולם')}});view.focus()};
+const depth=undoDepth(view.state);
+function report(){const head=view.state.selection.main.head,rect=view.coordsAtPos(head);document.querySelector('#evidence').textContent=JSON.stringify({exactOriginal:savedSource(view.state.field(sourceField))===original,history:undoDepth(view.state),initialHistory:depth,head,caretLeft:rect?.left,lines:[...view.contentDOM.querySelectorAll('.cm-line')].filter(line=>line.textContent.trim()).map(line=>({text:line.textContent.slice(0,35),direction:getComputedStyle(line).direction,dir:line.getAttribute('dir')}))},null,2)}
+const timer=setInterval(report,200);report();window.addEventListener('pagehide',()=>{clearInterval(timer);view.destroy()},{once:true});
+</script></body></html>

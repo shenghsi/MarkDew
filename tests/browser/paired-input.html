@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Static projection input comparison</title><link rel="stylesheet" href="/src/web/style.css"></head>
+<body><div id="app"><main id="editor" style="height:90vh;width:860px;max-width:100%"></main></div>
+<aside style="position:fixed;bottom:16px;right:16px;z-index:80;background:var(--paper);color:var(--ink);border:1px solid var(--border);padding:8px;max-width:470px;font:12px monospace">
+  <button id="start">Start input samples</button><button id="finish">Check source and Undo</button>
+  <div id="check-status" role="status"></div>
+  <pre id="evidence" style="max-height:260px;overflow:auto">Loading…</pre>
+</aside>
+<script type="module">
+import {documentLanguage} from '/src/web/document-language.ts';
+import {textDirection} from '/src/web/text-direction.ts';
+import {searchSupport} from '/src/web/navigation.ts';
+import {sourceExtensions} from '/src/web/source.ts';
+import {livePreview} from '/tests/performance/experiments/point-comparison/static-preview.ts';
+import {installPairedComparator} from '/tests/performance/experiments/point-comparison/browser-comparator.ts';
+import {enableFallbackObservation,enableLocalCoverage,diagnoseFallback} from '/tests/performance/experiments/point-comparison/fallback-observer.ts';
+import {fromSource,normalize,restoreSource,sourceField,savedSource,sourceOffset} from '/src/web/source.ts';
+import {previewField} from '/tests/performance/experiments/point-comparison/static-preview.ts';
+import {completeDocument} from '/src/web/preview-index.ts';
+import {noteEligible} from '/src/web/preview-note-index.ts';
+import {footnotes} from '/src/web/footnotes.ts';
+import {Compartment,EditorState,RangeSet,StateEffect,Transaction} from '@codemirror/state';
+import {EditorView,keymap} from '@codemirror/view';
+import {forceParsing,syntaxTree} from '@codemirror/language';
+import {defaultKeymap,history,historyKeymap,undo,undoDepth} from '@codemirror/commands';
+const params=new URLSearchParams(location.search),notes=true,source=false;
+const diagnostics=params.get('diagnostics')==='1';enableFallbackObservation(diagnostics);
+const localCoverage=params.get('local')==='1';enableLocalCoverage(localCoverage);
+const header='\uFEFF# Input observation\r\n\r\nParagraph words 日本語 and **strong text**'+(notes?'[^a]':'')+'.\r\n\r\n';
+const block='# Heading\n\nParagraph with **strong text**, `code`, and words.\n\n';
+const tail=notes?'\r\n[^a]: 日本語 note\r\n':'\r\nFinal paragraph\r\n';
+const bytes=new TextEncoder(),remaining=1048576-bytes.encode(header+tail).length;
+const original=header+block.repeat(Math.floor(remaining/block.length))+'w'.repeat(remaining%block.length)+tail;
+const record=fromSource(original),doc=normalize(record.raw),position=doc.indexOf('words')+2;
+const originalCompare=RangeSet.compare,pairedRequested=params.get('paired')==='1';
+let comparatorTrial,view;
+try{
+  if(pairedRequested){const moduleURL='/__markdew_paired_state__.mjs';const module=await import(/* @vite-ignore */ moduleURL);
+    comparatorTrial=installPairedComparator(module,{pathname:location.pathname,search:location.search,expectedOriginal:originalCompare});}
+  view=new EditorView({parent:document.querySelector('#editor'),state:EditorState.create({extensions:[
+    sourceExtensions(fromSource('')),documentLanguage(),history(),textDirection,EditorView.lineWrapping,
+    EditorView.contentAttributes.of({'aria-label':'Markdown document'}),keymap.of([...defaultKeymap,...historyKeymap]),
+    livePreview,searchSupport(()=>view),
+  ]})});
+}catch(error){comparatorTrial?.dispose();document.querySelector('#evidence').textContent=JSON.stringify({ready:false,setupError:String(error),comparator:comparatorTrial?.snapshot()});throw error}
+const setupAt=performance.now();let setupReadyMs;
+view.dispatch({changes:{from:0,to:view.state.doc.length,insert:doc},effects:restoreSource.of(record),selection:{anchor:position},annotations:Transaction.addToHistory.of(false)});
+const setupDispatchMs=performance.now()-setupAt;
+if(source) document.querySelector('#source').click();
+const samples=[],failures=[],checkLock=new Compartment();let pending,armed=false,ready=false,updates=0,checked,checking=false,disposed=false;
+const trace=params.get('trace')==='1',originalDispatch=view.dispatch,originalUpdate=view.update;
+const motion=params.get('motion')==='1',moves=[];let pendingMove;
+let traceSetup;
+if(trace){
+  view.dispatch=function(...input){
+    const sample=pending,at=performance.now();
+    try{return originalDispatch.apply(this,input)}finally{if(sample){sample.dispatchMs=(sample.dispatchMs??0)+performance.now()-at;sample.dispatchCalls=(sample.dispatchCalls??0)+1}}
+  };
+  view.update=function(transactions){
+    const sample=pending,at=performance.now();
+    // Explicit diagnostic state realization. Normal update also reads these states.
+    for(const transaction of transactions)void transaction.state;
+    const stateEnd=performance.now();
+    try{return originalUpdate.call(this,transactions)}finally{if(sample){sample.stateMs=(sample.stateMs??0)+stateEnd-at;sample.viewMs=(sample.viewMs??0)+performance.now()-stateEnd;sample.updateCalls=(sample.updateCalls??0)+1}}
+  };
+}
+view.dispatch({effects:StateEffect.appendConfig.of(checkLock.of([]))});
+const output=document.querySelector('#evidence');
+function stats(key){const values=samples.map(sample=>sample[key]).sort((a,b)=>a-b);return values.length?{median:values[Math.floor(values.length/2)],p95:values[Math.ceil(values.length*.95)-1],max:values.at(-1)}:null}
+function report(){output.textContent=JSON.stringify({scope:'static projection with original versus paired comparator; standalone view; Chrome development observation',diagnostics,localCoverage,pairedRequested,comparator:comparatorTrial?.snapshot(),mode:source?'Source':'Live preview',notes,bytes:bytes.encode(original).length,ready,armed,setupDispatchMs,setupReadyMs,samples:samples.length,completeSamples:samples.filter(sample=>sample.complete).length,unexpectedUpdates:updates,failures,treeComplete:syntaxTree(view.state).length===view.state.doc.length,previewMode:view.state.field(previewField,false)?.mode??'source',keyToUpdateMs:stats('keyToUpdateMs'),inputToUpdateMs:stats('inputToUpdateMs'),keyToRafMs:stats('keyToRafMs'),keyToGeometryMs:stats('keyToGeometryMs'),...(trace?{traceSetup,dispatchInclusiveMs:stats('dispatchMs'),stateRealizationMs:stats('stateMs'),viewUpdateMs:stats('viewMs')}:{}),...(motion?{moves}:{}),checked,raw:samples},null,2)}
+function blockCheckInput(event){if(!checking)return false;event.preventDefault();event.stopImmediatePropagation();return true}
+function keydown(event){if(blockCheckInput(event)||!armed||event.metaKey||event.ctrlKey||event.altKey)return;
+  if(motion&&(event.key==='ArrowLeft'||event.key==='ArrowRight')){
+    if(pending||pendingMove){failures.push('Overlapping cursor input');return}
+    pendingMove={key:event.key,keyAt:performance.now(),fromHead:view.state.selection.main.head,indexBefore:!!view.state.field(previewField,false)?.index};return;
+  }
+  if(event.key.length!==1)return;
+  if(pendingMove){failures.push('Typing before cursor observation');return}
+  if(pending){failures.push('Overlapping key input');return}
+  const plan=view.state.field(previewField,false);
+  pending={keyAt:performance.now(),key:event.key,inputType:null,indexBefore:!!plan?.index,noteAwareBefore:!!plan?.noteAware};
+}
+function beforeinput(event){if(blockCheckInput(event)||!armed)return;if(!pending){failures.push('Input without a measured key');return}
+  pending.inputAt=performance.now();pending.inputType=event.inputType;pending.data=event.data;
+}
+view.dom.addEventListener('keydown',keydown,true);view.dom.addEventListener('beforeinput',beforeinput,true);
+view.dom.addEventListener('paste',blockCheckInput,true);view.dom.addEventListener('drop',blockCheckInput,true);
+view.dispatch({effects:StateEffect.appendConfig.of(EditorView.updateListener.of(update=>{
+  if(armed&&pendingMove&&pendingMove.keyToUpdateMs===undefined&&update.selectionSet&&!update.docChanged){
+    const move=pendingMove;move.keyToUpdateMs=performance.now()-move.keyAt;move.toHead=update.state.selection.main.head;move.indexAfter=!!update.state.field(previewField,false)?.index;
+    requestAnimationFrame(()=>{const rect=view.coordsAtPos(move.toHead),box=view.scrollDOM.getBoundingClientRect();move.keyToGeometryMs=performance.now()-move.keyAt;move.visible=!!rect&&rect.bottom>box.top&&rect.top<box.bottom;moves.push(move);pendingMove=undefined;report()});
+  }
+  if(!armed||!update.docChanged)return;
+  if(!pending||pending.updateAt!==undefined){updates++;return}
+  const sample=pending;sample.updateAt=performance.now();sample.head=update.state.selection.main.head;
+  sample.complete=syntaxTree(update.state).length===update.state.doc.length;
+  sample.previewMode=update.state.field(previewField,false)?.mode??'source';
+  {const plan=update.state.field(previewField,false);sample.indexAfter=!!plan?.index;sample.noteAwareAfter=!!plan?.noteAware}
+  sample.keyToUpdateMs=sample.updateAt-sample.keyAt;sample.inputToUpdateMs=sample.updateAt-sample.inputAt;
+  if(sample.inputType!=='insertText'||sample.data!==sample.key||sample.data.length!==1)
+    failures.push('Sample is not a one-character insertText');
+  requestAnimationFrame(()=>{
+    sample.keyToRafMs=performance.now()-sample.keyAt;
+    const rect=view.coordsAtPos(sample.head),box=view.scrollDOM.getBoundingClientRect();
+    sample.keyToGeometryMs=performance.now()-sample.keyAt;
+    if(diagnostics){let transaction=update.transactions.find(item=>item.docChanged);
+      if(transaction){sample.fallback=diagnoseFallback(transaction,transaction.startState.field(previewField),sample.previewMode==='indexed');transaction=undefined}}
+    sample.visible=!!rect&&rect.bottom>box.top&&rect.top<box.bottom;
+    sample.domContainsInput=view.contentDOM.textContent.includes('wo'+samples.map(item=>item.key).join('')+sample.key+'rds');
+    if(!sample.visible||!sample.domContainsInput)failures.push('Current input is not visible in the DOM');
+    samples.push(sample);pending=undefined;report();
+  });
+}))});
+document.querySelector('#start').onclick=()=>{if(!ready||pending||pendingMove||checked)return;comparatorTrial?.phase('dispatch');armed=true;report();view.focus()};
+document.querySelector('#finish').onclick=async()=>{
+  if(pending||pendingMove||checking||checked)return;armed=false;checking=true;
+  const buttons=[...document.querySelectorAll('button')].map(button=>[button,button.disabled]);
+  buttons.forEach(([button])=>{button.disabled=true});
+  view.dispatch({effects:checkLock.reconfigure(EditorView.editable.of(false))});
+  const offset=sourceOffset(record,position)+(record.bom?1:0),expected=original.slice(0,offset)+samples.map(sample=>sample.data).join('')+original.slice(offset);
+  const exactEdited=savedSource(view.state.field(sourceField))===expected,historyBefore=undoDepth(view.state);
+  checked={checking:true};document.querySelector('#check-status').textContent='Checking source and Undo';report();
+  try{
+    let undoCalls=0;
+    while(undoDepth(view.state)>0&&undoCalls<=samples.length){
+      await new Promise(resolve=>requestAnimationFrame(resolve));
+      if(disposed)return;if(!undo(view))break;undoCalls++;
+    }
+    checked={exactEdited,exactOriginal:savedSource(view.state.field(sourceField))===original,historyBefore,historyAfter:undoDepth(view.state),undoCalls};
+  }catch(error){checked={error:String(error)}}
+  finally{
+    checking=false;comparatorTrial?.dispose();
+    if(!disposed){view.dispatch({effects:checkLock.reconfigure([])});buttons.forEach(([button,disabled])=>{button.disabled=disabled});document.querySelector('#check-status').textContent=checked.exactEdited&&checked.exactOriginal&&checked.historyAfter===0?'Source and Undo pass':'Source or Undo failed';report()}
+  }
+};
+// Explicit full parse is setup work. It is not part of an Open or input sample.
+requestAnimationFrame(()=>{
+  ready=forceParsing(view,view.state.doc.length,5000);view.dispatch({selection:{anchor:position},scrollIntoView:true});
+  setupReadyMs=performance.now()-setupAt;
+  if(trace){
+    const definitions=footnotes(view.state).definitions.map(({from,to})=>({from,to}));let rejected;
+    for(let node=completeDocument(view.state)?.firstChild;node;node=node.nextSibling){
+      if(!noteEligible(node,view.state)){rejected={name:node.name,from:node.from,to:node.to,text:view.state.sliceDoc(node.from,Math.min(node.to,node.from+100)),definitions:definitions.filter(note=>node.from<note.to&&node.to>note.from)};break}
+    }
+    traceSetup={definitions,firstRejectedBlock:rejected};
+  }
+  requestAnimationFrame(report);
+});
+window.addEventListener('pagehide',()=>{disposed=true;view.dispatch=originalDispatch;view.update=originalUpdate;view.dom.removeEventListener('keydown',keydown,true);view.dom.removeEventListener('beforeinput',beforeinput,true);view.dom.removeEventListener('paste',blockCheckInput,true);view.dom.removeEventListener('drop',blockCheckInput,true);try{view.destroy()}finally{comparatorTrial?.dispose()}},{once:true});
+</script></body></html>

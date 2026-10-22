@@ -1,0 +1,6 @@
+{
+  "navigationChecks": 80,
+  "editChecks": 36,
+  "geometry": "exact",
+  "scope": "static projection with complete trees; comparator unchanged; no input, latency, memory or native acceptance claim"
+}

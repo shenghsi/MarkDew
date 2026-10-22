@@ -1,0 +1,4161 @@
+{
+  "baselineComplete": true,
+  "batchResults": [],
+  "checking": false,
+  "complete": true,
+  "control": false,
+  "editMode": "indexed",
+  "editResults": [
+    {
+      "action": "edit-anchor",
+      "actionStart": {
+        "action": "edit-anchor",
+        "baseline": {
+          "clientHeight": 478,
+          "contentHeight": 1864593.125,
+          "head": 0,
+          "relativeTop": 33.328125,
+          "scrollHeight": 1864593,
+          "scrollTop": 0,
+          "visible": true
+        },
+        "candidate": {
+          "clientHeight": 478,
+          "contentHeight": 1864593.125,
+          "head": 0,
+          "relativeTop": 33.328125,
+          "scrollHeight": 1864593,
+          "scrollTop": 0,
+          "visible": true
+        }
+      },
+      "attribution": {
+        "baseline": {
+          "height": 1864509.125,
+          "map": {
+            "block": 1,
+            "classes": {
+              "HeightMapBlock": 1,
+              "HeightMapBranch": 66573,
+              "_HeightMapGap": 33272,
+              "_HeightMapText": 33301
+            },
+            "collapsed": 116511,
+            "gap": 33272,
+            "gapLength": 34,
+            "nodes": 133147,
+            "text": 33301
+          },
+          "oracle": {
+            "charWidth": 7.475694444444445,
+            "lineHeight": 28,
+            "lineLength": 51.23269856014863,
+            "lineWrapping": true,
+            "textHeight": 20
+          },
+          "version": "6.43.13"
+        },
+        "candidate": {
+          "height": 1864509.125,
+          "map": {
+            "block": 1,
+            "classes": {
+              "HeightMapBlock": 1,
+              "HeightMapBranch": 66573,
+              "_HeightMapGap": 33272,
+              "_HeightMapText": 33301
+            },
+            "collapsed": 116511,
+            "gap": 33272,
+            "gapLength": 34,
+            "nodes": 133147,
+            "text": 33301
+          },
+          "oracle": {
+            "charWidth": 7.475694444444445,
+            "lineHeight": 28,
+            "lineLength": 51.23269856014863,
+            "lineWrapping": true,
+            "textHeight": 20
+          },
+          "version": "6.43.13"
+        }
+      },
+      "baselineComplete": true,
+      "baselineEstimatedHeight": 1864593.125,
+      "baselineHead": {
+        "clientHeight": 478,
+        "contentHeight": 1864593.125,
+        "head": 22,
+        "relativeTop": 113.625,
+        "scrollHeight": 1864593,
+        "scrollTop": 0,
+        "visible": true
+      },
+      "boxes": [
+        {
+          "baseline": 53.921875,
+          "candidate": 53.921875,
+          "delta": 0,
+          "from": 0,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 18,
+          "textEqual": true
+        },
+        {
+          "baseline": 31.703125,
+          "candidate": 31.703125,
+          "delta": 0,
+          "from": 19,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 59,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 60,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 70,
+          "textEqual": true
+        },
+        {
+          "baseline": 56.28125,
+          "candidate": 56.28125,
+          "delta": 0,
+          "from": 71,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 122,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 123,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 133,
+          "textEqual": true
+        },
+        {
+          "baseline": 56.28125,
+          "candidate": 56.28125,
+          "delta": 0,
+          "from": 134,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 185,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 186,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 196,
+          "textEqual": true
+        },
+        {
+          "baseline": 56.28125,
+          "candidate": 56.28125,
+          "delta": 0,
+          "from": 197,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 248,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 249,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 259,
+          "textEqual": true
+        },
+        {
+          "baseline": 56.28125,
+          "candidate": 56.28125,
+          "delta": 0,
+          "from": 260,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 311,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 312,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 322,
+          "textEqual": true
+        },
+        {
+          "baseline": 56.28125,
+          "candidate": 56.28125,
+          "delta": 0,
+          "from": 323,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 374,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 375,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 385,
+          "textEqual": true
+        },
+        {
+          "baseline": 56.28125,
+          "candidate": 56.28125,
+          "delta": 0,
+          "from": 386,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 437,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 438,
+          "textEqual": true
+        }
+      ],
+      "candidateEstimatedHeight": 1864593.125,
+      "candidateHead": {
+        "clientHeight": 478,
+        "contentHeight": 1864593.125,
+        "head": 22,
+        "relativeTop": 113.625,
+        "scrollHeight": 1864593,
+        "scrollTop": 0,
+        "visible": true
+      },
+      "complete": true,
+      "differences": [],
+      "exactExpected": true,
+      "exactOriginal": true,
+      "fonts": [
+        {
+          "fontFamily": "system-ui, sans-serif",
+          "fontSize": "17px",
+          "lineHeight": "28.05px",
+          "width": 383
+        },
+        {
+          "fontFamily": "system-ui, sans-serif",
+          "fontSize": "17px",
+          "lineHeight": "28.05px",
+          "width": 383
+        }
+      ],
+      "history": 0,
+      "historyUnchangedByCheck": true,
+      "historyUnchangedDuringSettle": true,
+      "maxHeightDelta": 0,
+      "selectionEqual": true,
+      "settling": {
+        "deadlineMs": 1200,
+        "minimumFrames": 8,
+        "requiredEqualTransitions": 4,
+        "samples": [
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 22,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 22,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "elapsed": 14.599999904632568
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 22,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 22,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "elapsed": 16.299999952316284
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 22,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 22,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "elapsed": 28.5
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 22,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 22,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "elapsed": 44.59999990463257
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 22,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 22,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "elapsed": 59.40000009536743
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 22,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 22,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "elapsed": 76.29999995231628
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 22,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 22,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "elapsed": 93.09999990463255
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 22,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 22,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "elapsed": 111.29999995231628
+          }
+        ],
+        "status": "stable",
+        "tolerancePixels": 0.05
+      },
+      "sourceEqual": true,
+      "sourceUnchangedByCheck": true,
+      "sourceUnchangedDuringSettle": true
+    },
+    {
+      "action": "unicode-edit",
+      "actionStart": {
+        "action": "unicode-edit",
+        "baseline": {
+          "clientHeight": 478,
+          "contentHeight": 1864593.125,
+          "head": 22,
+          "relativeTop": 113.625,
+          "scrollHeight": 1864593,
+          "scrollTop": 0,
+          "visible": true
+        },
+        "candidate": {
+          "clientHeight": 478,
+          "contentHeight": 1864593.125,
+          "head": 22,
+          "relativeTop": 113.625,
+          "scrollHeight": 1864593,
+          "scrollTop": 0,
+          "visible": true
+        }
+      },
+      "attribution": {
+        "baseline": {
+          "height": 1864509.125,
+          "map": {
+            "block": 1,
+            "classes": {
+              "HeightMapBlock": 1,
+              "HeightMapBranch": 66573,
+              "_HeightMapGap": 33272,
+              "_HeightMapText": 33301
+            },
+            "collapsed": 116511,
+            "gap": 33272,
+            "gapLength": 34,
+            "nodes": 133147,
+            "text": 33301
+          },
+          "oracle": {
+            "charWidth": 7.475694444444445,
+            "lineHeight": 28,
+            "lineLength": 51.23269856014863,
+            "lineWrapping": true,
+            "textHeight": 20
+          },
+          "version": "6.43.13"
+        },
+        "candidate": {
+          "height": 1864509.125,
+          "map": {
+            "block": 1,
+            "classes": {
+              "HeightMapBlock": 1,
+              "HeightMapBranch": 66573,
+              "_HeightMapGap": 33272,
+              "_HeightMapText": 33301
+            },
+            "collapsed": 116511,
+            "gap": 33272,
+            "gapLength": 34,
+            "nodes": 133147,
+            "text": 33301
+          },
+          "oracle": {
+            "charWidth": 7.475694444444445,
+            "lineHeight": 28,
+            "lineLength": 51.23269856014863,
+            "lineWrapping": true,
+            "textHeight": 20
+          },
+          "version": "6.43.13"
+        }
+      },
+      "baselineComplete": true,
+      "baselineEstimatedHeight": 1864593.125,
+      "baselineHead": {
+        "clientHeight": 478,
+        "contentHeight": 1864593.125,
+        "head": 27,
+        "relativeTop": 113.625,
+        "scrollHeight": 1864593,
+        "scrollTop": 0,
+        "visible": true
+      },
+      "boxes": [
+        {
+          "baseline": 53.921875,
+          "candidate": 53.921875,
+          "delta": 0,
+          "from": 0,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 18,
+          "textEqual": true
+        },
+        {
+          "baseline": 31.703125,
+          "candidate": 31.703125,
+          "delta": 0,
+          "from": 19,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 64,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 65,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 75,
+          "textEqual": true
+        },
+        {
+          "baseline": 56.28125,
+          "candidate": 56.28125,
+          "delta": 0,
+          "from": 76,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 127,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 128,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 138,
+          "textEqual": true
+        },
+        {
+          "baseline": 56.28125,
+          "candidate": 56.28125,
+          "delta": 0,
+          "from": 139,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 190,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 191,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 201,
+          "textEqual": true
+        },
+        {
+          "baseline": 56.28125,
+          "candidate": 56.28125,
+          "delta": 0,
+          "from": 202,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 253,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 254,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 264,
+          "textEqual": true
+        },
+        {
+          "baseline": 56.28125,
+          "candidate": 56.28125,
+          "delta": 0,
+          "from": 265,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 316,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 317,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 327,
+          "textEqual": true
+        },
+        {
+          "baseline": 56.28125,
+          "candidate": 56.28125,
+          "delta": 0,
+          "from": 328,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 379,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 380,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 390,
+          "textEqual": true
+        },
+        {
+          "baseline": 56.28125,
+          "candidate": 56.28125,
+          "delta": 0,
+          "from": 391,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 442,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 443,
+          "textEqual": true
+        }
+      ],
+      "candidateEstimatedHeight": 1864593.125,
+      "candidateHead": {
+        "clientHeight": 478,
+        "contentHeight": 1864593.125,
+        "head": 27,
+        "relativeTop": 113.625,
+        "scrollHeight": 1864593,
+        "scrollTop": 0,
+        "visible": true
+      },
+      "complete": true,
+      "differences": [],
+      "editMode": "indexed",
+      "exactExpected": true,
+      "exactOriginal": false,
+      "fonts": [
+        {
+          "fontFamily": "system-ui, sans-serif",
+          "fontSize": "17px",
+          "lineHeight": "28.05px",
+          "width": 383
+        },
+        {
+          "fontFamily": "system-ui, sans-serif",
+          "fontSize": "17px",
+          "lineHeight": "28.05px",
+          "width": 383
+        }
+      ],
+      "history": 1,
+      "historyUnchangedByCheck": true,
+      "historyUnchangedDuringSettle": true,
+      "maxHeightDelta": 0,
+      "selectionEqual": true,
+      "settling": {
+        "deadlineMs": 1200,
+        "minimumFrames": 8,
+        "requiredEqualTransitions": 4,
+        "samples": [
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 27,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 27,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "elapsed": 10.799999952316284
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 27,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 27,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "elapsed": 21.799999952316284
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 27,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 27,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "elapsed": 39
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 27,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 27,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "elapsed": 52.20000004768371
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 27,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 27,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "elapsed": 68.89999985694885
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 27,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 27,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "elapsed": 85.79999995231628
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 27,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 27,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "elapsed": 102.89999985694884
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 27,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 27,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "elapsed": 118.89999985694884
+          }
+        ],
+        "status": "stable",
+        "tolerancePixels": 0.05
+      },
+      "sourceEqual": true,
+      "sourceUnchangedByCheck": true,
+      "sourceUnchangedDuringSettle": true
+    },
+    {
+      "action": "distant",
+      "actionStart": {
+        "action": "distant",
+        "baseline": {
+          "clientHeight": 478,
+          "contentHeight": 1864593.125,
+          "head": 27,
+          "relativeTop": 113.625,
+          "scrollHeight": 1864593,
+          "scrollTop": 0,
+          "visible": true
+        },
+        "candidate": {
+          "clientHeight": 478,
+          "contentHeight": 1864593.125,
+          "head": 27,
+          "relativeTop": 113.625,
+          "scrollHeight": 1864593,
+          "scrollTop": 0,
+          "visible": true
+        }
+      },
+      "attribution": {
+        "baseline": {
+          "height": 1864848.25,
+          "map": {
+            "block": 0,
+            "classes": {
+              "HeightMapBranch": 66574,
+              "_HeightMapGap": 33255,
+              "_HeightMapText": 33320
+            },
+            "collapsed": 116511,
+            "gap": 33255,
+            "gapLength": 0,
+            "nodes": 133149,
+            "text": 33320
+          },
+          "oracle": {
+            "charWidth": 7.475694444444445,
+            "lineHeight": 28,
+            "lineLength": 51.23269856014863,
+            "lineWrapping": true,
+            "textHeight": 20
+          },
+          "version": "6.43.13"
+        },
+        "candidate": {
+          "height": 1864848.25,
+          "map": {
+            "block": 0,
+            "classes": {
+              "HeightMapBranch": 66574,
+              "_HeightMapGap": 33255,
+              "_HeightMapText": 33320
+            },
+            "collapsed": 116511,
+            "gap": 33255,
+            "gapLength": 0,
+            "nodes": 133149,
+            "text": 33320
+          },
+          "oracle": {
+            "charWidth": 7.475694444444445,
+            "lineHeight": 28,
+            "lineLength": 51.23269856014863,
+            "lineWrapping": true,
+            "textHeight": 20
+          },
+          "version": "6.43.13"
+        }
+      },
+      "baselineComplete": true,
+      "baselineEstimatedHeight": 1864932.25,
+      "baselineHead": {
+        "clientHeight": 478,
+        "contentHeight": 1864932.25,
+        "head": 1048559,
+        "relativeTop": 452.8125,
+        "scrollHeight": 1864933,
+        "scrollTop": 1864368,
+        "visible": true
+      },
+      "boxes": [
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048143,
+          "textEqual": true
+        },
+        {
+          "baseline": 56.28125,
+          "candidate": 56.28125,
+          "delta": 0,
+          "from": 1048144,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048195,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 1048196,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048206,
+          "textEqual": true
+        },
+        {
+          "baseline": 56.28125,
+          "candidate": 56.28125,
+          "delta": 0,
+          "from": 1048207,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048258,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 1048259,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048269,
+          "textEqual": true
+        },
+        {
+          "baseline": 56.28125,
+          "candidate": 56.28125,
+          "delta": 0,
+          "from": 1048270,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048321,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 1048322,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048332,
+          "textEqual": true
+        },
+        {
+          "baseline": 56.28125,
+          "candidate": 56.28125,
+          "delta": 0,
+          "from": 1048333,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048384,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 1048385,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048395,
+          "textEqual": true
+        },
+        {
+          "baseline": 56.28125,
+          "candidate": 56.28125,
+          "delta": 0,
+          "from": 1048396,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048447,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 1048448,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048458,
+          "textEqual": true
+        },
+        {
+          "baseline": 56.28125,
+          "candidate": 56.28125,
+          "delta": 0,
+          "from": 1048459,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048510,
+          "textEqual": true
+        },
+        {
+          "baseline": 56.09375,
+          "candidate": 56.09375,
+          "delta": 0,
+          "from": 1048511,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048545,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048560,
+          "textEqual": true
+        }
+      ],
+      "candidateEstimatedHeight": 1864932.25,
+      "candidateHead": {
+        "clientHeight": 478,
+        "contentHeight": 1864932.25,
+        "head": 1048559,
+        "relativeTop": 452.8125,
+        "scrollHeight": 1864933,
+        "scrollTop": 1864368,
+        "visible": true
+      },
+      "complete": true,
+      "differences": [],
+      "editMode": "indexed",
+      "exactExpected": true,
+      "exactOriginal": false,
+      "fonts": [
+        {
+          "fontFamily": "system-ui, sans-serif",
+          "fontSize": "17px",
+          "lineHeight": "28.05px",
+          "width": 383
+        },
+        {
+          "fontFamily": "system-ui, sans-serif",
+          "fontSize": "17px",
+          "lineHeight": "28.05px",
+          "width": 383
+        }
+      ],
+      "history": 1,
+      "historyUnchangedByCheck": true,
+      "historyUnchangedDuringSettle": true,
+      "maxHeightDelta": 0,
+      "selectionEqual": true,
+      "settling": {
+        "deadlineMs": 1200,
+        "minimumFrames": 8,
+        "requiredEqualTransitions": 4,
+        "samples": [
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 452.8125,
+              "scrollHeight": 1864933,
+              "scrollTop": 1864368,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 452.8125,
+              "scrollHeight": 1864933,
+              "scrollTop": 1864368,
+              "visible": true
+            },
+            "elapsed": 75.5
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 452.8125,
+              "scrollHeight": 1864933,
+              "scrollTop": 1864368,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 452.8125,
+              "scrollHeight": 1864933,
+              "scrollTop": 1864368,
+              "visible": true
+            },
+            "elapsed": 102.5
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 452.8125,
+              "scrollHeight": 1864933,
+              "scrollTop": 1864368,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 452.8125,
+              "scrollHeight": 1864933,
+              "scrollTop": 1864368,
+              "visible": true
+            },
+            "elapsed": 105.40000009536745
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 452.8125,
+              "scrollHeight": 1864933,
+              "scrollTop": 1864368,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 452.8125,
+              "scrollHeight": 1864933,
+              "scrollTop": 1864368,
+              "visible": true
+            },
+            "elapsed": 118.5
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 452.8125,
+              "scrollHeight": 1864933,
+              "scrollTop": 1864368,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 452.8125,
+              "scrollHeight": 1864933,
+              "scrollTop": 1864368,
+              "visible": true
+            },
+            "elapsed": 125
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 452.8125,
+              "scrollHeight": 1864933,
+              "scrollTop": 1864368,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 452.8125,
+              "scrollHeight": 1864933,
+              "scrollTop": 1864368,
+              "visible": true
+            },
+            "elapsed": 142.20000004768372
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 452.8125,
+              "scrollHeight": 1864933,
+              "scrollTop": 1864368,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 452.8125,
+              "scrollHeight": 1864933,
+              "scrollTop": 1864368,
+              "visible": true
+            },
+            "elapsed": 159.5
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 452.8125,
+              "scrollHeight": 1864933,
+              "scrollTop": 1864368,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 452.8125,
+              "scrollHeight": 1864933,
+              "scrollTop": 1864368,
+              "visible": true
+            },
+            "elapsed": 176
+          }
+        ],
+        "status": "stable",
+        "tolerancePixels": 0.05
+      },
+      "sourceEqual": true,
+      "sourceUnchangedByCheck": true,
+      "sourceUnchangedDuringSettle": true
+    },
+    {
+      "action": "narrow",
+      "actionStart": {
+        "action": "width",
+        "baseline": {
+          "clientHeight": 478,
+          "contentHeight": 1864932.25,
+          "head": 1048559,
+          "relativeTop": 452.8125,
+          "scrollHeight": 1864933,
+          "scrollTop": 1864368,
+          "visible": true
+        },
+        "candidate": {
+          "clientHeight": 478,
+          "contentHeight": 1864932.25,
+          "head": 1048559,
+          "relativeTop": 452.8125,
+          "scrollHeight": 1864933,
+          "scrollTop": 1864368,
+          "visible": true
+        }
+      },
+      "attribution": {
+        "baseline": {
+          "height": 1865045.234375,
+          "map": {
+            "block": 0,
+            "classes": {
+              "HeightMapBranch": 66574,
+              "_HeightMapGap": 33255,
+              "_HeightMapText": 33320
+            },
+            "collapsed": 116511,
+            "gap": 33255,
+            "gapLength": 0,
+            "nodes": 133149,
+            "text": 33320
+          },
+          "oracle": {
+            "charWidth": 7.475694444444445,
+            "lineHeight": 28.046875,
+            "lineLength": 29.83000464468184,
+            "lineWrapping": true,
+            "textHeight": 20
+          },
+          "version": "6.43.13"
+        },
+        "candidate": {
+          "height": 1865045.234375,
+          "map": {
+            "block": 0,
+            "classes": {
+              "HeightMapBranch": 66574,
+              "_HeightMapGap": 33255,
+              "_HeightMapText": 33320
+            },
+            "collapsed": 116511,
+            "gap": 33255,
+            "gapLength": 0,
+            "nodes": 133149,
+            "text": 33320
+          },
+          "oracle": {
+            "charWidth": 7.475694444444445,
+            "lineHeight": 28.046875,
+            "lineLength": 29.83000464468184,
+            "lineWrapping": true,
+            "textHeight": 20
+          },
+          "version": "6.43.13"
+        }
+      },
+      "baselineComplete": true,
+      "baselineEstimatedHeight": 1865129.234375,
+      "baselineHead": {
+        "clientHeight": 478,
+        "contentHeight": 1865129.234375,
+        "head": 1048559,
+        "relativeTop": 564.140625,
+        "scrollHeight": 1865129,
+        "scrollTop": 1864453,
+        "visible": false
+      },
+      "boxes": [
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048143,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.328125,
+          "candidate": 84.328125,
+          "delta": 0,
+          "from": 1048144,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048195,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 1048196,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048206,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.328125,
+          "candidate": 84.328125,
+          "delta": 0,
+          "from": 1048207,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048258,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 1048259,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048269,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.328125,
+          "candidate": 84.328125,
+          "delta": 0,
+          "from": 1048270,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048321,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 1048322,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048332,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.328125,
+          "candidate": 84.328125,
+          "delta": 0,
+          "from": 1048333,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048384,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 1048385,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048395,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.328125,
+          "candidate": 84.328125,
+          "delta": 0,
+          "from": 1048396,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048447,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 1048448,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048458,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.328125,
+          "candidate": 84.328125,
+          "delta": 0,
+          "from": 1048459,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048510,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.140625,
+          "candidate": 84.140625,
+          "delta": 0,
+          "from": 1048511,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048545,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048560,
+          "textEqual": true
+        }
+      ],
+      "candidateEstimatedHeight": 1865129.234375,
+      "candidateHead": {
+        "clientHeight": 478,
+        "contentHeight": 1865129.234375,
+        "head": 1048559,
+        "relativeTop": 564.140625,
+        "scrollHeight": 1865129,
+        "scrollTop": 1864453,
+        "visible": false
+      },
+      "complete": true,
+      "differences": [],
+      "editMode": "indexed",
+      "exactExpected": true,
+      "exactOriginal": false,
+      "fonts": [
+        {
+          "fontFamily": "system-ui, sans-serif",
+          "fontSize": "17px",
+          "lineHeight": "28.05px",
+          "width": 223
+        },
+        {
+          "fontFamily": "system-ui, sans-serif",
+          "fontSize": "17px",
+          "lineHeight": "28.05px",
+          "width": 223
+        }
+      ],
+      "history": 1,
+      "historyUnchangedByCheck": true,
+      "historyUnchangedDuringSettle": true,
+      "maxHeightDelta": 0,
+      "selectionEqual": true,
+      "settling": {
+        "deadlineMs": 1200,
+        "minimumFrames": 8,
+        "requiredEqualTransitions": 4,
+        "samples": [
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 649.140625,
+              "scrollHeight": 1865129,
+              "scrollTop": 1864368,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 649.140625,
+              "scrollHeight": 1865129,
+              "scrollTop": 1864368,
+              "visible": false
+            },
+            "elapsed": 24.40000009536743
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 649.140625,
+              "scrollHeight": 1865129,
+              "scrollTop": 1864368,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 649.140625,
+              "scrollHeight": 1865129,
+              "scrollTop": 1864368,
+              "visible": false
+            },
+            "elapsed": 37
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 649.140625,
+              "scrollHeight": 1865129,
+              "scrollTop": 1864368,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 649.140625,
+              "scrollHeight": 1865129,
+              "scrollTop": 1864368,
+              "visible": false
+            },
+            "elapsed": 53.29999995231629
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 649.140625,
+              "scrollHeight": 1865129,
+              "scrollTop": 1864368,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 649.140625,
+              "scrollHeight": 1865129,
+              "scrollTop": 1864368,
+              "visible": false
+            },
+            "elapsed": 70.59999990463257
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865129.234375,
+              "head": 1048559,
+              "relativeTop": 564.140625,
+              "scrollHeight": 1865129,
+              "scrollTop": 1864453,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865129.234375,
+              "head": 1048559,
+              "relativeTop": 564.140625,
+              "scrollHeight": 1865129,
+              "scrollTop": 1864453,
+              "visible": false
+            },
+            "elapsed": 88.29999995231628
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865129.234375,
+              "head": 1048559,
+              "relativeTop": 564.140625,
+              "scrollHeight": 1865129,
+              "scrollTop": 1864453,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865129.234375,
+              "head": 1048559,
+              "relativeTop": 564.140625,
+              "scrollHeight": 1865129,
+              "scrollTop": 1864453,
+              "visible": false
+            },
+            "elapsed": 128.09999990463257
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865129.234375,
+              "head": 1048559,
+              "relativeTop": 564.140625,
+              "scrollHeight": 1865129,
+              "scrollTop": 1864453,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865129.234375,
+              "head": 1048559,
+              "relativeTop": 564.140625,
+              "scrollHeight": 1865129,
+              "scrollTop": 1864453,
+              "visible": false
+            },
+            "elapsed": 137.40000009536743
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865129.234375,
+              "head": 1048559,
+              "relativeTop": 564.140625,
+              "scrollHeight": 1865129,
+              "scrollTop": 1864453,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865129.234375,
+              "head": 1048559,
+              "relativeTop": 564.140625,
+              "scrollHeight": 1865129,
+              "scrollTop": 1864453,
+              "visible": false
+            },
+            "elapsed": 156
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865129.234375,
+              "head": 1048559,
+              "relativeTop": 564.140625,
+              "scrollHeight": 1865129,
+              "scrollTop": 1864453,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865129.234375,
+              "head": 1048559,
+              "relativeTop": 564.140625,
+              "scrollHeight": 1865129,
+              "scrollTop": 1864453,
+              "visible": false
+            },
+            "elapsed": 170.70000004768372
+          }
+        ],
+        "status": "stable",
+        "tolerancePixels": 0.05
+      },
+      "sourceEqual": true,
+      "sourceUnchangedByCheck": true,
+      "sourceUnchangedDuringSettle": true
+    },
+    {
+      "action": "undo",
+      "actionStart": {
+        "action": "undo",
+        "baseline": {
+          "clientHeight": 478,
+          "contentHeight": 1865129.234375,
+          "head": 1048559,
+          "relativeTop": 564.140625,
+          "scrollHeight": 1865129,
+          "scrollTop": 1864453,
+          "visible": false
+        },
+        "candidate": {
+          "clientHeight": 478,
+          "contentHeight": 1865129.234375,
+          "head": 1048559,
+          "relativeTop": 564.140625,
+          "scrollHeight": 1865129,
+          "scrollTop": 1864453,
+          "visible": false
+        }
+      },
+      "attribution": {
+        "baseline": {
+          "height": 1865122.890625,
+          "map": {
+            "block": 1,
+            "classes": {
+              "HeightMapBlock": 1,
+              "HeightMapBranch": 66574,
+              "_HeightMapGap": 33255,
+              "_HeightMapText": 33319
+            },
+            "collapsed": 116511,
+            "gap": 33255,
+            "gapLength": 0,
+            "nodes": 133149,
+            "text": 33319
+          },
+          "oracle": {
+            "charWidth": 7.475694444444445,
+            "lineHeight": 28.046875,
+            "lineLength": 29.83000464468184,
+            "lineWrapping": true,
+            "textHeight": 20
+          },
+          "version": "6.43.13"
+        },
+        "candidate": {
+          "height": 1865313.328125,
+          "map": {
+            "block": 1,
+            "classes": {
+              "HeightMapBlock": 1,
+              "HeightMapBranch": 66574,
+              "_HeightMapGap": 33255,
+              "_HeightMapText": 33319
+            },
+            "collapsed": 52,
+            "gap": 33255,
+            "gapLength": 0,
+            "nodes": 133149,
+            "text": 33319
+          },
+          "oracle": {
+            "charWidth": 7.475694444444445,
+            "lineHeight": 28.046875,
+            "lineLength": 29.83000464468184,
+            "lineWrapping": true,
+            "textHeight": 20
+          },
+          "version": "6.43.13"
+        }
+      },
+      "baselineComplete": true,
+      "baselineEstimatedHeight": 1865206.890625,
+      "baselineHead": {
+        "clientHeight": 478,
+        "contentHeight": 1865206.890625,
+        "head": 22,
+        "relativeTop": -1864371,
+        "scrollHeight": 1865231,
+        "scrollTop": 1864481,
+        "visible": false
+      },
+      "boxes": [
+        {
+          "baseline": 59.75,
+          "candidate": 59.75,
+          "delta": 0,
+          "from": 19,
+          "textEqual": true
+        }
+      ],
+      "candidateEstimatedHeight": 1865397.328125,
+      "candidateHead": {
+        "clientHeight": 478,
+        "contentHeight": 1865397.328125,
+        "head": 22,
+        "relativeTop": 4.96875,
+        "scrollHeight": 1865398,
+        "scrollTop": 105,
+        "visible": true
+      },
+      "complete": false,
+      "differences": [],
+      "editMode": "indexed",
+      "exactExpected": true,
+      "exactOriginal": true,
+      "fonts": [
+        {
+          "fontFamily": "system-ui, sans-serif",
+          "fontSize": "17px",
+          "lineHeight": "28.05px",
+          "width": 223
+        },
+        {
+          "fontFamily": "system-ui, sans-serif",
+          "fontSize": "17px",
+          "lineHeight": "28.05px",
+          "width": 223
+        }
+      ],
+      "history": 0,
+      "historyUnchangedByCheck": true,
+      "historyUnchangedDuringSettle": true,
+      "maxHeightDelta": 0,
+      "selectionEqual": true,
+      "settling": {
+        "deadlineMs": 1200,
+        "minimumFrames": 8,
+        "requiredEqualTransitions": 4,
+        "samples": [
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865206.890625,
+              "head": 22,
+              "relativeTop": -1864371,
+              "scrollHeight": 1865231,
+              "scrollTop": 1864481,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865397.328125,
+              "head": 22,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865398,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 115.79999995231628
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865206.890625,
+              "head": 22,
+              "relativeTop": -1864371,
+              "scrollHeight": 1865231,
+              "scrollTop": 1864481,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865397.328125,
+              "head": 22,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865398,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 124.60000014305116
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865206.890625,
+              "head": 22,
+              "relativeTop": -1864371,
+              "scrollHeight": 1865231,
+              "scrollTop": 1864481,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865397.328125,
+              "head": 22,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865398,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 137.40000009536743
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865206.890625,
+              "head": 22,
+              "relativeTop": -1864371,
+              "scrollHeight": 1865231,
+              "scrollTop": 1864481,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865397.328125,
+              "head": 22,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865398,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 372.2999999523163
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865206.890625,
+              "head": 22,
+              "relativeTop": -1864371,
+              "scrollHeight": 1865231,
+              "scrollTop": 1864481,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865397.328125,
+              "head": 22,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865398,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 373.10000014305115
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865206.890625,
+              "head": 22,
+              "relativeTop": -1864371,
+              "scrollHeight": 1865231,
+              "scrollTop": 1864481,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865397.328125,
+              "head": 22,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865398,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 378.5
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865206.890625,
+              "head": 22,
+              "relativeTop": -1864371,
+              "scrollHeight": 1865231,
+              "scrollTop": 1864481,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865397.328125,
+              "head": 22,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865398,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 397.10000014305115
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865206.890625,
+              "head": 22,
+              "relativeTop": -1864371,
+              "scrollHeight": 1865231,
+              "scrollTop": 1864481,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865397.328125,
+              "head": 22,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865398,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 412.90000009536743
+          }
+        ],
+        "status": "stable",
+        "tolerancePixels": 0.05
+      },
+      "sourceEqual": true,
+      "sourceUnchangedByCheck": true,
+      "sourceUnchangedDuringSettle": true
+    },
+    {
+      "action": "redo",
+      "actionStart": {
+        "action": "redo",
+        "baseline": {
+          "clientHeight": 478,
+          "contentHeight": 1865206.890625,
+          "head": 22,
+          "relativeTop": -1864371,
+          "scrollHeight": 1865231,
+          "scrollTop": 1864481,
+          "visible": false
+        },
+        "candidate": {
+          "clientHeight": 478,
+          "contentHeight": 1865397.328125,
+          "head": 22,
+          "relativeTop": 4.96875,
+          "scrollHeight": 1865398,
+          "scrollTop": 105,
+          "visible": true
+        }
+      },
+      "attribution": {
+        "baseline": {
+          "height": 1865150.890625,
+          "map": {
+            "block": 1,
+            "classes": {
+              "HeightMapBlock": 1,
+              "HeightMapBranch": 66574,
+              "_HeightMapGap": 33255,
+              "_HeightMapText": 33319
+            },
+            "collapsed": 116511,
+            "gap": 33255,
+            "gapLength": 0,
+            "nodes": 133149,
+            "text": 33319
+          },
+          "oracle": {
+            "charWidth": 7.475694444444445,
+            "lineHeight": 28.046875,
+            "lineLength": 29.83000464468184,
+            "lineWrapping": true,
+            "textHeight": 20
+          },
+          "version": "6.43.13"
+        },
+        "candidate": {
+          "height": 1865341.546875,
+          "map": {
+            "block": 1,
+            "classes": {
+              "HeightMapBlock": 1,
+              "HeightMapBranch": 66574,
+              "_HeightMapGap": 33255,
+              "_HeightMapText": 33319
+            },
+            "collapsed": 11168,
+            "gap": 33255,
+            "gapLength": 0,
+            "nodes": 133149,
+            "text": 33319
+          },
+          "oracle": {
+            "charWidth": 7.475694444444445,
+            "lineHeight": 28,
+            "lineLength": 29.83000464468184,
+            "lineWrapping": true,
+            "textHeight": 20
+          },
+          "version": "6.43.13"
+        }
+      },
+      "baselineComplete": true,
+      "baselineEstimatedHeight": 1865234.890625,
+      "baselineHead": {
+        "clientHeight": 478,
+        "contentHeight": 1865234.890625,
+        "head": 27,
+        "relativeTop": -1864399,
+        "scrollHeight": 1865259,
+        "scrollTop": 1864509,
+        "visible": false
+      },
+      "boxes": [
+        {
+          "baseline": 87.75,
+          "candidate": 87.796875,
+          "delta": 0.046875,
+          "from": 19,
+          "textEqual": true
+        }
+      ],
+      "candidateEstimatedHeight": 1865425.546875,
+      "candidateHead": {
+        "clientHeight": 478,
+        "contentHeight": 1865425.546875,
+        "head": 27,
+        "relativeTop": 4.96875,
+        "scrollHeight": 1865426,
+        "scrollTop": 105,
+        "visible": true
+      },
+      "complete": false,
+      "differences": [],
+      "editMode": "indexed",
+      "exactExpected": true,
+      "exactOriginal": false,
+      "fonts": [
+        {
+          "fontFamily": "system-ui, sans-serif",
+          "fontSize": "17px",
+          "lineHeight": "28.05px",
+          "width": 223
+        },
+        {
+          "fontFamily": "system-ui, sans-serif",
+          "fontSize": "17px",
+          "lineHeight": "28.05px",
+          "width": 223
+        }
+      ],
+      "history": 1,
+      "historyUnchangedByCheck": true,
+      "historyUnchangedDuringSettle": true,
+      "maxHeightDelta": 0.046875,
+      "selectionEqual": true,
+      "settling": {
+        "deadlineMs": 1200,
+        "minimumFrames": 8,
+        "requiredEqualTransitions": 4,
+        "samples": [
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865234.890625,
+              "head": 27,
+              "relativeTop": -1864399,
+              "scrollHeight": 1865259,
+              "scrollTop": 1864509,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 103.90000009536745
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865234.890625,
+              "head": 27,
+              "relativeTop": -1864399,
+              "scrollHeight": 1865259,
+              "scrollTop": 1864509,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 108.90000009536745
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865234.890625,
+              "head": 27,
+              "relativeTop": -1864399,
+              "scrollHeight": 1865259,
+              "scrollTop": 1864509,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 121.5
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865234.890625,
+              "head": 27,
+              "relativeTop": -1864399,
+              "scrollHeight": 1865259,
+              "scrollTop": 1864509,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 319
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865234.890625,
+              "head": 27,
+              "relativeTop": -1864399,
+              "scrollHeight": 1865259,
+              "scrollTop": 1864509,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 319.5
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865234.890625,
+              "head": 27,
+              "relativeTop": -1864399,
+              "scrollHeight": 1865259,
+              "scrollTop": 1864509,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 320.2000000476837
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865234.890625,
+              "head": 27,
+              "relativeTop": -1864399,
+              "scrollHeight": 1865259,
+              "scrollTop": 1864509,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 336.90000009536743
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865234.890625,
+              "head": 27,
+              "relativeTop": -1864399,
+              "scrollHeight": 1865259,
+              "scrollTop": 1864509,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 353.59999990463257
+          }
+        ],
+        "status": "stable",
+        "tolerancePixels": 0.05
+      },
+      "sourceEqual": true,
+      "sourceUnchangedByCheck": true,
+      "sourceUnchangedDuringSettle": true
+    },
+    {
+      "action": "source",
+      "actionStart": {
+        "action": "source-mode",
+        "baseline": {
+          "clientHeight": 478,
+          "contentHeight": 1865234.890625,
+          "head": 27,
+          "relativeTop": -1864399,
+          "scrollHeight": 1865259,
+          "scrollTop": 1864509,
+          "visible": false
+        },
+        "candidate": {
+          "clientHeight": 478,
+          "contentHeight": 1865425.546875,
+          "head": 27,
+          "relativeTop": 4.96875,
+          "scrollHeight": 1865426,
+          "scrollTop": 105,
+          "visible": true
+        }
+      },
+      "attribution": {
+        "baseline": {
+          "height": 1865119.484375,
+          "map": {
+            "block": 0,
+            "classes": {
+              "HeightMapBranch": 66573,
+              "_HeightMapGap": 33256,
+              "_HeightMapText": 33318
+            },
+            "collapsed": 0,
+            "gap": 33256,
+            "gapLength": 10,
+            "nodes": 133147,
+            "text": 33318
+          },
+          "oracle": {
+            "charWidth": 10.23611111111111,
+            "lineHeight": 28.046875,
+            "lineLength": 21.78561736770692,
+            "lineWrapping": true,
+            "textHeight": 20
+          },
+          "version": "6.43.13"
+        },
+        "candidate": {
+          "height": 1865281.578125,
+          "map": {
+            "block": 0,
+            "classes": {
+              "HeightMapBranch": 66574,
+              "_HeightMapGap": 33256,
+              "_HeightMapText": 33319
+            },
+            "collapsed": 0,
+            "gap": 33256,
+            "gapLength": 14,
+            "nodes": 133149,
+            "text": 33319
+          },
+          "oracle": {
+            "charWidth": 10.235294117647058,
+            "lineHeight": 28.046875,
+            "lineLength": 21.78735632183908,
+            "lineWrapping": true,
+            "textHeight": 20
+          },
+          "version": "6.43.13"
+        }
+      },
+      "baselineComplete": true,
+      "baselineEstimatedHeight": 1865203.484375,
+      "baselineHead": {
+        "clientHeight": 478,
+        "contentHeight": 1865203.484375,
+        "head": 27,
+        "relativeTop": -1864401,
+        "scrollHeight": 1865204,
+        "scrollTop": 1864511,
+        "visible": false
+      },
+      "boxes": [
+        {
+          "baseline": 84.125,
+          "candidate": 84.140625,
+          "delta": 0.015625,
+          "from": 19,
+          "textEqual": true
+        }
+      ],
+      "candidateEstimatedHeight": 1865365.578125,
+      "candidateHead": {
+        "clientHeight": 478,
+        "contentHeight": 1865365.578125,
+        "head": 27,
+        "relativeTop": 5.09375,
+        "scrollHeight": 1865366,
+        "scrollTop": 79,
+        "visible": true
+      },
+      "complete": false,
+      "differences": [],
+      "editMode": "indexed",
+      "exactExpected": true,
+      "exactOriginal": false,
+      "fonts": [
+        {
+          "fontFamily": "ui-monospace, monospace",
+          "fontSize": "17px",
+          "lineHeight": "28.05px",
+          "width": 223
+        },
+        {
+          "fontFamily": "ui-monospace, monospace",
+          "fontSize": "17px",
+          "lineHeight": "28.05px",
+          "width": 223
+        }
+      ],
+      "history": 1,
+      "historyUnchangedByCheck": true,
+      "historyUnchangedDuringSettle": true,
+      "maxHeightDelta": 0.015625,
+      "selectionEqual": true,
+      "settling": {
+        "deadlineMs": 1200,
+        "minimumFrames": 8,
+        "requiredEqualTransitions": 4,
+        "samples": [
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865203.484375,
+              "head": 27,
+              "relativeTop": -1864401,
+              "scrollHeight": 1865204,
+              "scrollTop": 1864511,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865365.578125,
+              "head": 27,
+              "relativeTop": 5.09375,
+              "scrollHeight": 1865366,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "elapsed": 167.59999990463257
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865203.484375,
+              "head": 27,
+              "relativeTop": -1864401,
+              "scrollHeight": 1865204,
+              "scrollTop": 1864511,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865365.578125,
+              "head": 27,
+              "relativeTop": 5.09375,
+              "scrollHeight": 1865366,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "elapsed": 172.39999985694885
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865203.484375,
+              "head": 27,
+              "relativeTop": -1864401,
+              "scrollHeight": 1865204,
+              "scrollTop": 1864511,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865365.578125,
+              "head": 27,
+              "relativeTop": 5.09375,
+              "scrollHeight": 1865366,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "elapsed": 195.5
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865203.484375,
+              "head": 27,
+              "relativeTop": -1864401,
+              "scrollHeight": 1865204,
+              "scrollTop": 1864511,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865365.578125,
+              "head": 27,
+              "relativeTop": 5.09375,
+              "scrollHeight": 1865366,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "elapsed": 202.79999995231628
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865203.484375,
+              "head": 27,
+              "relativeTop": -1864401,
+              "scrollHeight": 1865204,
+              "scrollTop": 1864511,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865365.578125,
+              "head": 27,
+              "relativeTop": 5.09375,
+              "scrollHeight": 1865366,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "elapsed": 215
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865203.484375,
+              "head": 27,
+              "relativeTop": -1864401,
+              "scrollHeight": 1865204,
+              "scrollTop": 1864511,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865365.578125,
+              "head": 27,
+              "relativeTop": 5.09375,
+              "scrollHeight": 1865366,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "elapsed": 234.79999995231628
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865203.484375,
+              "head": 27,
+              "relativeTop": -1864401,
+              "scrollHeight": 1865204,
+              "scrollTop": 1864511,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865365.578125,
+              "head": 27,
+              "relativeTop": 5.09375,
+              "scrollHeight": 1865366,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "elapsed": 248
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865203.484375,
+              "head": 27,
+              "relativeTop": -1864401,
+              "scrollHeight": 1865204,
+              "scrollTop": 1864511,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865365.578125,
+              "head": 27,
+              "relativeTop": 5.09375,
+              "scrollHeight": 1865366,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "elapsed": 264.7999999523163
+          }
+        ],
+        "status": "stable",
+        "tolerancePixels": 0.05
+      },
+      "sourceEqual": true,
+      "sourceUnchangedByCheck": true,
+      "sourceUnchangedDuringSettle": true
+    },
+    {
+      "action": "live",
+      "actionStart": {
+        "action": "source-mode",
+        "baseline": {
+          "clientHeight": 478,
+          "contentHeight": 1865203.484375,
+          "head": 27,
+          "relativeTop": -1864401,
+          "scrollHeight": 1865204,
+          "scrollTop": 1864511,
+          "visible": false
+        },
+        "candidate": {
+          "clientHeight": 478,
+          "contentHeight": 1865365.578125,
+          "head": 27,
+          "relativeTop": 5.09375,
+          "scrollHeight": 1865366,
+          "scrollTop": 79,
+          "visible": true
+        }
+      },
+      "attribution": {
+        "baseline": {
+          "height": 1865131.34375,
+          "map": {
+            "block": 1,
+            "classes": {
+              "HeightMapBlock": 1,
+              "HeightMapBranch": 66574,
+              "_HeightMapGap": 33256,
+              "_HeightMapText": 33318
+            },
+            "collapsed": 116511,
+            "gap": 33256,
+            "gapLength": 0,
+            "nodes": 133149,
+            "text": 33318
+          },
+          "oracle": {
+            "charWidth": 10.23611111111111,
+            "lineHeight": 28.046875,
+            "lineLength": 21.78561736770692,
+            "lineWrapping": true,
+            "textHeight": 20
+          },
+          "version": "6.43.13"
+        },
+        "candidate": {
+          "height": 1865341.546875,
+          "map": {
+            "block": 1,
+            "classes": {
+              "HeightMapBlock": 1,
+              "HeightMapBranch": 66574,
+              "_HeightMapGap": 33255,
+              "_HeightMapText": 33319
+            },
+            "collapsed": 11168,
+            "gap": 33255,
+            "gapLength": 0,
+            "nodes": 133149,
+            "text": 33319
+          },
+          "oracle": {
+            "charWidth": 10.235294117647058,
+            "lineHeight": 28.046875,
+            "lineLength": 21.78735632183908,
+            "lineWrapping": true,
+            "textHeight": 20
+          },
+          "version": "6.43.13"
+        }
+      },
+      "baselineComplete": true,
+      "baselineEstimatedHeight": 1865215.34375,
+      "baselineHead": {
+        "clientHeight": 478,
+        "contentHeight": 1865215.34375,
+        "head": 27,
+        "relativeTop": -1864380,
+        "scrollHeight": 1865239,
+        "scrollTop": 1864490,
+        "visible": false
+      },
+      "boxes": [
+        {
+          "baseline": 87.75,
+          "candidate": 87.796875,
+          "delta": 0.046875,
+          "from": 19,
+          "textEqual": true
+        }
+      ],
+      "candidateEstimatedHeight": 1865425.546875,
+      "candidateHead": {
+        "clientHeight": 478,
+        "contentHeight": 1865425.546875,
+        "head": 27,
+        "relativeTop": 4.96875,
+        "scrollHeight": 1865426,
+        "scrollTop": 105,
+        "visible": true
+      },
+      "complete": false,
+      "differences": [],
+      "editMode": "indexed",
+      "exactExpected": true,
+      "exactOriginal": false,
+      "fonts": [
+        {
+          "fontFamily": "system-ui, sans-serif",
+          "fontSize": "17px",
+          "lineHeight": "28.05px",
+          "width": 223
+        },
+        {
+          "fontFamily": "system-ui, sans-serif",
+          "fontSize": "17px",
+          "lineHeight": "28.05px",
+          "width": 223
+        }
+      ],
+      "history": 1,
+      "historyUnchangedByCheck": true,
+      "historyUnchangedDuringSettle": true,
+      "maxHeightDelta": 0.046875,
+      "selectionEqual": true,
+      "settling": {
+        "deadlineMs": 1200,
+        "minimumFrames": 8,
+        "requiredEqualTransitions": 4,
+        "samples": [
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865215.34375,
+              "head": 27,
+              "relativeTop": -1864380,
+              "scrollHeight": 1865239,
+              "scrollTop": 1864490,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 20.5
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865215.34375,
+              "head": 27,
+              "relativeTop": -1864380,
+              "scrollHeight": 1865239,
+              "scrollTop": 1864490,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 25.299999952316284
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865215.34375,
+              "head": 27,
+              "relativeTop": -1864380,
+              "scrollHeight": 1865239,
+              "scrollTop": 1864490,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 36.40000009536743
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865215.34375,
+              "head": 27,
+              "relativeTop": -1864380,
+              "scrollHeight": 1865239,
+              "scrollTop": 1864490,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 53.10000014305115
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865215.34375,
+              "head": 27,
+              "relativeTop": -1864380,
+              "scrollHeight": 1865239,
+              "scrollTop": 1864490,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 69.70000004768372
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865215.34375,
+              "head": 27,
+              "relativeTop": -1864380,
+              "scrollHeight": 1865239,
+              "scrollTop": 1864490,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 87.60000014305115
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865215.34375,
+              "head": 27,
+              "relativeTop": -1864380,
+              "scrollHeight": 1865239,
+              "scrollTop": 1864490,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 101.5
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865215.34375,
+              "head": 27,
+              "relativeTop": -1864380,
+              "scrollHeight": 1865239,
+              "scrollTop": 1864490,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 120.20000004768372
+          }
+        ],
+        "status": "stable",
+        "tolerancePixels": 0.05
+      },
+      "sourceEqual": true,
+      "sourceUnchangedByCheck": true,
+      "sourceUnchangedDuringSettle": true
+    },
+    {
+      "action": "end",
+      "actionStart": {
+        "action": "jump",
+        "baseline": {
+          "clientHeight": 478,
+          "contentHeight": 1865215.34375,
+          "head": 27,
+          "relativeTop": -1864380,
+          "scrollHeight": 1865239,
+          "scrollTop": 1864490,
+          "visible": false
+        },
+        "candidate": {
+          "clientHeight": 478,
+          "contentHeight": 1865425.546875,
+          "head": 27,
+          "relativeTop": 4.96875,
+          "scrollHeight": 1865426,
+          "scrollTop": 105,
+          "visible": true
+        }
+      },
+      "attribution": {
+        "baseline": {
+          "height": 1865131.34375,
+          "map": {
+            "block": 1,
+            "classes": {
+              "HeightMapBlock": 1,
+              "HeightMapBranch": 66574,
+              "_HeightMapGap": 33256,
+              "_HeightMapText": 33318
+            },
+            "collapsed": 116511,
+            "gap": 33256,
+            "gapLength": 0,
+            "nodes": 133149,
+            "text": 33318
+          },
+          "oracle": {
+            "charWidth": 10.23611111111111,
+            "lineHeight": 28.046875,
+            "lineLength": 21.78561736770692,
+            "lineWrapping": true,
+            "textHeight": 20
+          },
+          "version": "6.43.13"
+        },
+        "candidate": {
+          "height": 1865239.25,
+          "map": {
+            "block": 1,
+            "classes": {
+              "HeightMapBlock": 1,
+              "HeightMapBranch": 66574,
+              "_HeightMapGap": 33255,
+              "_HeightMapText": 33319
+            },
+            "collapsed": 11168,
+            "gap": 33255,
+            "gapLength": 0,
+            "nodes": 133149,
+            "text": 33319
+          },
+          "oracle": {
+            "charWidth": 8.694444444444445,
+            "lineHeight": 28,
+            "lineLength": 25.648562300319487,
+            "lineWrapping": true,
+            "textHeight": 20
+          },
+          "version": "6.43.13"
+        }
+      },
+      "baselineComplete": true,
+      "baselineEstimatedHeight": 1865215.34375,
+      "baselineHead": {
+        "clientHeight": 478,
+        "contentHeight": 1865215.34375,
+        "head": 1048560,
+        "relativeTop": 453.296875,
+        "scrollHeight": 1865239,
+        "scrollTop": 1864702,
+        "visible": true
+      },
+      "boxes": [
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048206,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.328125,
+          "candidate": 84.140625,
+          "delta": 0.1875,
+          "from": 1048207,
+          "textEqual": false
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048258,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 28.046875,
+          "delta": 19.546875,
+          "from": 1048259,
+          "textEqual": false
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048269,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.328125,
+          "candidate": 84.140625,
+          "delta": 0.1875,
+          "from": 1048270,
+          "textEqual": false
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048321,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 28.046875,
+          "delta": 19.546875,
+          "from": 1048322,
+          "textEqual": false
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048332,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.328125,
+          "candidate": 84.140625,
+          "delta": 0.1875,
+          "from": 1048333,
+          "textEqual": false
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048384,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 28.046875,
+          "delta": 19.546875,
+          "from": 1048385,
+          "textEqual": false
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048395,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.328125,
+          "candidate": 84.140625,
+          "delta": 0.1875,
+          "from": 1048396,
+          "textEqual": false
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048447,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 28.046875,
+          "delta": 19.546875,
+          "from": 1048448,
+          "textEqual": false
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048458,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.328125,
+          "candidate": 84.140625,
+          "delta": 0.1875,
+          "from": 1048459,
+          "textEqual": false
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048510,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.140625,
+          "candidate": 84.140625,
+          "delta": 0,
+          "from": 1048511,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048560,
+          "textEqual": true
+        }
+      ],
+      "candidateEstimatedHeight": 1865323.25,
+      "candidateHead": {
+        "clientHeight": 478,
+        "contentHeight": 1865323.25,
+        "head": 1048560,
+        "relativeTop": 453.03125,
+        "scrollHeight": 1865348,
+        "scrollTop": 1864811,
+        "visible": true
+      },
+      "complete": false,
+      "differences": [],
+      "editMode": "indexed",
+      "exactExpected": true,
+      "exactOriginal": false,
+      "fonts": [
+        {
+          "fontFamily": "system-ui, sans-serif",
+          "fontSize": "17px",
+          "lineHeight": "28.05px",
+          "width": 223
+        },
+        {
+          "fontFamily": "system-ui, sans-serif",
+          "fontSize": "17px",
+          "lineHeight": "28.05px",
+          "width": 223
+        }
+      ],
+      "history": 1,
+      "historyUnchangedByCheck": true,
+      "historyUnchangedDuringSettle": true,
+      "maxHeightDelta": 19.546875,
+      "selectionEqual": true,
+      "settling": {
+        "deadlineMs": 1200,
+        "minimumFrames": 8,
+        "requiredEqualTransitions": 4,
+        "samples": [
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865215.34375,
+              "head": 1048560,
+              "relativeTop": 453.296875,
+              "scrollHeight": 1865239,
+              "scrollTop": 1864702,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865323.25,
+              "head": 1048560,
+              "relativeTop": 453.03125,
+              "scrollHeight": 1865348,
+              "scrollTop": 1864811,
+              "visible": true
+            },
+            "elapsed": 149
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865215.34375,
+              "head": 1048560,
+              "relativeTop": 453.296875,
+              "scrollHeight": 1865239,
+              "scrollTop": 1864702,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865323.25,
+              "head": 1048560,
+              "relativeTop": 453.03125,
+              "scrollHeight": 1865348,
+              "scrollTop": 1864811,
+              "visible": true
+            },
+            "elapsed": 156.60000014305115
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865215.34375,
+              "head": 1048560,
+              "relativeTop": 453.296875,
+              "scrollHeight": 1865239,
+              "scrollTop": 1864702,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865323.25,
+              "head": 1048560,
+              "relativeTop": 453.03125,
+              "scrollHeight": 1865348,
+              "scrollTop": 1864811,
+              "visible": true
+            },
+            "elapsed": 258.10000014305115
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865215.34375,
+              "head": 1048560,
+              "relativeTop": 453.296875,
+              "scrollHeight": 1865239,
+              "scrollTop": 1864702,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865323.25,
+              "head": 1048560,
+              "relativeTop": 453.03125,
+              "scrollHeight": 1865348,
+              "scrollTop": 1864811,
+              "visible": true
+            },
+            "elapsed": 258.90000009536743
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865215.34375,
+              "head": 1048560,
+              "relativeTop": 453.296875,
+              "scrollHeight": 1865239,
+              "scrollTop": 1864702,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865323.25,
+              "head": 1048560,
+              "relativeTop": 453.03125,
+              "scrollHeight": 1865348,
+              "scrollTop": 1864811,
+              "visible": true
+            },
+            "elapsed": 266.7000000476837
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865215.34375,
+              "head": 1048560,
+              "relativeTop": 453.296875,
+              "scrollHeight": 1865239,
+              "scrollTop": 1864702,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865323.25,
+              "head": 1048560,
+              "relativeTop": 453.03125,
+              "scrollHeight": 1865348,
+              "scrollTop": 1864811,
+              "visible": true
+            },
+            "elapsed": 282.2000000476837
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865215.34375,
+              "head": 1048560,
+              "relativeTop": 453.296875,
+              "scrollHeight": 1865239,
+              "scrollTop": 1864702,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865323.25,
+              "head": 1048560,
+              "relativeTop": 453.03125,
+              "scrollHeight": 1865348,
+              "scrollTop": 1864811,
+              "visible": true
+            },
+            "elapsed": 300.60000014305115
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865215.34375,
+              "head": 1048560,
+              "relativeTop": 453.296875,
+              "scrollHeight": 1865239,
+              "scrollTop": 1864702,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865323.25,
+              "head": 1048560,
+              "relativeTop": 453.03125,
+              "scrollHeight": 1865348,
+              "scrollTop": 1864811,
+              "visible": true
+            },
+            "elapsed": 313.40000009536743
+          }
+        ],
+        "status": "stable",
+        "tolerancePixels": 0.05
+      },
+      "sourceEqual": true,
+      "sourceUnchangedByCheck": true,
+      "sourceUnchangedDuringSettle": true
+    }
+  ],
+  "exactOriginal": false,
+  "head": 1048560,
+  "history": 1,
+  "indexed": true,
+  "lastCheck": {
+    "actionStart": {
+      "action": "jump",
+      "baseline": {
+        "clientHeight": 478,
+        "contentHeight": 1865215.34375,
+        "head": 27,
+        "relativeTop": -1864380,
+        "scrollHeight": 1865239,
+        "scrollTop": 1864490,
+        "visible": false
+      },
+      "candidate": {
+        "clientHeight": 478,
+        "contentHeight": 1865425.546875,
+        "head": 27,
+        "relativeTop": 4.96875,
+        "scrollHeight": 1865426,
+        "scrollTop": 105,
+        "visible": true
+      }
+    },
+    "attribution": {
+      "baseline": {
+        "height": 1865131.34375,
+        "map": {
+          "block": 1,
+          "classes": {
+            "HeightMapBlock": 1,
+            "HeightMapBranch": 66574,
+            "_HeightMapGap": 33256,
+            "_HeightMapText": 33318
+          },
+          "collapsed": 116511,
+          "gap": 33256,
+          "gapLength": 0,
+          "nodes": 133149,
+          "text": 33318
+        },
+        "oracle": {
+          "charWidth": 10.23611111111111,
+          "lineHeight": 28.046875,
+          "lineLength": 21.78561736770692,
+          "lineWrapping": true,
+          "textHeight": 20
+        },
+        "version": "6.43.13"
+      },
+      "candidate": {
+        "height": 1865239.25,
+        "map": {
+          "block": 1,
+          "classes": {
+            "HeightMapBlock": 1,
+            "HeightMapBranch": 66574,
+            "_HeightMapGap": 33255,
+            "_HeightMapText": 33319
+          },
+          "collapsed": 11168,
+          "gap": 33255,
+          "gapLength": 0,
+          "nodes": 133149,
+          "text": 33319
+        },
+        "oracle": {
+          "charWidth": 8.694444444444445,
+          "lineHeight": 28,
+          "lineLength": 25.648562300319487,
+          "lineWrapping": true,
+          "textHeight": 20
+        },
+        "version": "6.43.13"
+      }
+    },
+    "baselineComplete": true,
+    "baselineEstimatedHeight": 1865215.34375,
+    "baselineHead": {
+      "clientHeight": 478,
+      "contentHeight": 1865215.34375,
+      "head": 1048560,
+      "relativeTop": 453.296875,
+      "scrollHeight": 1865239,
+      "scrollTop": 1864702,
+      "visible": true
+    },
+    "boxes": [
+      {
+        "baseline": 28.046875,
+        "candidate": 28.046875,
+        "delta": 0,
+        "from": 1048206,
+        "textEqual": true
+      },
+      {
+        "baseline": 84.328125,
+        "candidate": 84.140625,
+        "delta": 0.1875,
+        "from": 1048207,
+        "textEqual": false
+      },
+      {
+        "baseline": 28.046875,
+        "candidate": 28.046875,
+        "delta": 0,
+        "from": 1048258,
+        "textEqual": true
+      },
+      {
+        "baseline": 47.59375,
+        "candidate": 28.046875,
+        "delta": 19.546875,
+        "from": 1048259,
+        "textEqual": false
+      },
+      {
+        "baseline": 28.046875,
+        "candidate": 28.046875,
+        "delta": 0,
+        "from": 1048269,
+        "textEqual": true
+      },
+      {
+        "baseline": 84.328125,
+        "candidate": 84.140625,
+        "delta": 0.1875,
+        "from": 1048270,
+        "textEqual": false
+      },
+      {
+        "baseline": 28.046875,
+        "candidate": 28.046875,
+        "delta": 0,
+        "from": 1048321,
+        "textEqual": true
+      },
+      {
+        "baseline": 47.59375,
+        "candidate": 28.046875,
+        "delta": 19.546875,
+        "from": 1048322,
+        "textEqual": false
+      },
+      {
+        "baseline": 28.046875,
+        "candidate": 28.046875,
+        "delta": 0,
+        "from": 1048332,
+        "textEqual": true
+      },
+      {
+        "baseline": 84.328125,
+        "candidate": 84.140625,
+        "delta": 0.1875,
+        "from": 1048333,
+        "textEqual": false
+      },
+      {
+        "baseline": 28.046875,
+        "candidate": 28.046875,
+        "delta": 0,
+        "from": 1048384,
+        "textEqual": true
+      },
+      {
+        "baseline": 47.59375,
+        "candidate": 28.046875,
+        "delta": 19.546875,
+        "from": 1048385,
+        "textEqual": false
+      },
+      {
+        "baseline": 28.046875,
+        "candidate": 28.046875,
+        "delta": 0,
+        "from": 1048395,
+        "textEqual": true
+      },
+      {
+        "baseline": 84.328125,
+        "candidate": 84.140625,
+        "delta": 0.1875,
+        "from": 1048396,
+        "textEqual": false
+      },
+      {
+        "baseline": 28.046875,
+        "candidate": 28.046875,
+        "delta": 0,
+        "from": 1048447,
+        "textEqual": true
+      },
+      {
+        "baseline": 47.59375,
+        "candidate": 28.046875,
+        "delta": 19.546875,
+        "from": 1048448,
+        "textEqual": false
+      },
+      {
+        "baseline": 28.046875,
+        "candidate": 28.046875,
+        "delta": 0,
+        "from": 1048458,
+        "textEqual": true
+      },
+      {
+        "baseline": 84.328125,
+        "candidate": 84.140625,
+        "delta": 0.1875,
+        "from": 1048459,
+        "textEqual": false
+      },
+      {
+        "baseline": 28.046875,
+        "candidate": 28.046875,
+        "delta": 0,
+        "from": 1048510,
+        "textEqual": true
+      },
+      {
+        "baseline": 84.140625,
+        "candidate": 84.140625,
+        "delta": 0,
+        "from": 1048511,
+        "textEqual": true
+      },
+      {
+        "baseline": 28.046875,
+        "candidate": 28.046875,
+        "delta": 0,
+        "from": 1048560,
+        "textEqual": true
+      }
+    ],
+    "candidateEstimatedHeight": 1865323.25,
+    "candidateHead": {
+      "clientHeight": 478,
+      "contentHeight": 1865323.25,
+      "head": 1048560,
+      "relativeTop": 453.03125,
+      "scrollHeight": 1865348,
+      "scrollTop": 1864811,
+      "visible": true
+    },
+    "complete": false,
+    "differences": [],
+    "editMode": "indexed",
+    "exactExpected": true,
+    "exactOriginal": false,
+    "fonts": [
+      {
+        "fontFamily": "system-ui, sans-serif",
+        "fontSize": "17px",
+        "lineHeight": "28.05px",
+        "width": 223
+      },
+      {
+        "fontFamily": "system-ui, sans-serif",
+        "fontSize": "17px",
+        "lineHeight": "28.05px",
+        "width": 223
+      }
+    ],
+    "history": 1,
+    "historyUnchangedByCheck": true,
+    "historyUnchangedDuringSettle": true,
+    "maxHeightDelta": 19.546875,
+    "selectionEqual": true,
+    "settling": {
+      "deadlineMs": 1200,
+      "minimumFrames": 8,
+      "requiredEqualTransitions": 4,
+      "samples": [
+        {
+          "baseline": {
+            "clientHeight": 478,
+            "contentHeight": 1865215.34375,
+            "head": 1048560,
+            "relativeTop": 453.296875,
+            "scrollHeight": 1865239,
+            "scrollTop": 1864702,
+            "visible": true
+          },
+          "candidate": {
+            "clientHeight": 478,
+            "contentHeight": 1865323.25,
+            "head": 1048560,
+            "relativeTop": 453.03125,
+            "scrollHeight": 1865348,
+            "scrollTop": 1864811,
+            "visible": true
+          },
+          "elapsed": 149
+        },
+        {
+          "baseline": {
+            "clientHeight": 478,
+            "contentHeight": 1865215.34375,
+            "head": 1048560,
+            "relativeTop": 453.296875,
+            "scrollHeight": 1865239,
+            "scrollTop": 1864702,
+            "visible": true
+          },
+          "candidate": {
+            "clientHeight": 478,
+            "contentHeight": 1865323.25,
+            "head": 1048560,
+            "relativeTop": 453.03125,
+            "scrollHeight": 1865348,
+            "scrollTop": 1864811,
+            "visible": true
+          },
+          "elapsed": 156.60000014305115
+        },
+        {
+          "baseline": {
+            "clientHeight": 478,
+            "contentHeight": 1865215.34375,
+            "head": 1048560,
+            "relativeTop": 453.296875,
+            "scrollHeight": 1865239,
+            "scrollTop": 1864702,
+            "visible": true
+          },
+          "candidate": {
+            "clientHeight": 478,
+            "contentHeight": 1865323.25,
+            "head": 1048560,
+            "relativeTop": 453.03125,
+            "scrollHeight": 1865348,
+            "scrollTop": 1864811,
+            "visible": true
+          },
+          "elapsed": 258.10000014305115
+        },
+        {
+          "baseline": {
+            "clientHeight": 478,
+            "contentHeight": 1865215.34375,
+            "head": 1048560,
+            "relativeTop": 453.296875,
+            "scrollHeight": 1865239,
+            "scrollTop": 1864702,
+            "visible": true
+          },
+          "candidate": {
+            "clientHeight": 478,
+            "contentHeight": 1865323.25,
+            "head": 1048560,
+            "relativeTop": 453.03125,
+            "scrollHeight": 1865348,
+            "scrollTop": 1864811,
+            "visible": true
+          },
+          "elapsed": 258.90000009536743
+        },
+        {
+          "baseline": {
+            "clientHeight": 478,
+            "contentHeight": 1865215.34375,
+            "head": 1048560,
+            "relativeTop": 453.296875,
+            "scrollHeight": 1865239,
+            "scrollTop": 1864702,
+            "visible": true
+          },
+          "candidate": {
+            "clientHeight": 478,
+            "contentHeight": 1865323.25,
+            "head": 1048560,
+            "relativeTop": 453.03125,
+            "scrollHeight": 1865348,
+            "scrollTop": 1864811,
+            "visible": true
+          },
+          "elapsed": 266.7000000476837
+        },
+        {
+          "baseline": {
+            "clientHeight": 478,
+            "contentHeight": 1865215.34375,
+            "head": 1048560,
+            "relativeTop": 453.296875,
+            "scrollHeight": 1865239,
+            "scrollTop": 1864702,
+            "visible": true
+          },
+          "candidate": {
+            "clientHeight": 478,
+            "contentHeight": 1865323.25,
+            "head": 1048560,
+            "relativeTop": 453.03125,
+            "scrollHeight": 1865348,
+            "scrollTop": 1864811,
+            "visible": true
+          },
+          "elapsed": 282.2000000476837
+        },
+        {
+          "baseline": {
+            "clientHeight": 478,
+            "contentHeight": 1865215.34375,
+            "head": 1048560,
+            "relativeTop": 453.296875,
+            "scrollHeight": 1865239,
+            "scrollTop": 1864702,
+            "visible": true
+          },
+          "candidate": {
+            "clientHeight": 478,
+            "contentHeight": 1865323.25,
+            "head": 1048560,
+            "relativeTop": 453.03125,
+            "scrollHeight": 1865348,
+            "scrollTop": 1864811,
+            "visible": true
+          },
+          "elapsed": 300.60000014305115
+        },
+        {
+          "baseline": {
+            "clientHeight": 478,
+            "contentHeight": 1865215.34375,
+            "head": 1048560,
+            "relativeTop": 453.296875,
+            "scrollHeight": 1865239,
+            "scrollTop": 1864702,
+            "visible": true
+          },
+          "candidate": {
+            "clientHeight": 478,
+            "contentHeight": 1865323.25,
+            "head": 1048560,
+            "relativeTop": 453.03125,
+            "scrollHeight": 1865348,
+            "scrollTop": 1864811,
+            "visible": true
+          },
+          "elapsed": 313.40000009536743
+        }
+      ],
+      "status": "stable",
+      "tolerancePixels": 0.05
+    },
+    "sourceEqual": true,
+    "sourceUnchangedByCheck": true,
+    "sourceUnchangedDuringSettle": true
+  },
+  "narrow": true,
+  "pointRanges": 99861,
+  "ready": true,
+  "reverse": false,
+  "sourceEqual": true,
+  "sourceMode": false,
+  "visibleRanges": [
+    {
+      "from": 1048206,
+      "to": 1048560
+    }
+  ]
+}

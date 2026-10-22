@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Web link navigation check</title>
+<link rel="stylesheet" href="/src/web/style.css">
+<style>body{display:block;margin:24px;font:16px system-ui}#editor{max-width:760px;margin:16px auto;border:1px solid var(--border)}pre#result{white-space:pre-wrap}button{margin:4px}</style></head>
+<body><h1>Web link navigation check</h1><p>The test host records browser requests. It opens no external page.</p>
+<button id="start">Select web link</button><button id="source">Source mode</button><button id="accept">Accept host request</button><button id="reject">Reject host request</button><button id="undo">Undo</button>
+<div id="editor"></div><pre id="result" role="status"></pre>
+<script type="module">
+import {EditorState,Compartment} from '@codemirror/state';
+import {EditorView} from '@codemirror/view';
+import {ensureSyntaxTree} from '@codemirror/language';
+import {history,undo,undoDepth} from '@codemirror/commands';
+import {mockIPC,clearMocks} from '@tauri-apps/api/mocks';
+import {documentLanguage} from '/src/web/document-language.ts';
+import {livePreview} from '/src/web/preview.ts';
+import {footnoteField} from '/src/web/footnotes.ts';
+import {linkNavigation} from '/src/web/link-navigation.ts';
+import {webLinkOpener} from '/src/web/web-links.ts';
+import {fromSource,normalize,sourceExtensions,sourceField,savedSource} from '/src/web/source.ts';
+const requests=[];let pending,sourceMode=false,message='';window.isTauri=true;
+mockIPC((command,args)=>{if(command!=='open_web_link')throw new Error('Unexpected host command');requests.push({command,...args});report();return new Promise((resolve,reject)=>{pending={resolve,reject}})});
+const original='\uFEFF[Unicode web link](https://例え.テスト/日本語) and [reference web link][web].\r\n\r\n[web]: HTTPS://Example.COM:443/a%2Fb?q=1&x=2\r\n\r\n[Heading link](#target)\r\n\r\n# Target\r\n\r\nDirect and reference web links retain their exact source.\r\n\r\nEnd\n';
+const record=fromSource(original),doc=normalize(record.raw),mode=new Compartment();
+const reportMessage=text=>{message=text;report()};
+let state=EditorState.create({doc,selection:{anchor:doc.length},extensions:[sourceExtensions(record),history(),documentLanguage(),footnoteField,EditorView.lineWrapping,mode.of(livePreview),linkNavigation(reportMessage,()=>null,url=>links.open(url)),EditorView.updateListener.of(()=>queueMicrotask(report))]});
+if(!ensureSyntaxTree(state,state.doc.length,1000))throw new Error('Incomplete syntax tree');state=state.update({}).state;
+const view=new EditorView({parent:document.querySelector('#editor'),state}),links=webLinkOpener(view,reportMessage,()=>null,undefined,()=>message==='Opening web link…');
+function report(){document.querySelector('#result').textContent=JSON.stringify({exactOriginal:savedSource(view.state.field(sourceField))===original,history:undoDepth(view.state),sourceMode,selection:view.state.selection.main.head,requests,message},null,2)}
+document.querySelector('#start').onclick=()=>{view.dispatch({selection:{anchor:1}});view.focus();report()};
+document.querySelector('#source').onclick=()=>{sourceMode=!sourceMode;view.dispatch({effects:mode.reconfigure(sourceMode?[]:livePreview)});report()};
+document.querySelector('#accept').onclick=()=>{pending?.resolve();pending=undefined};
+document.querySelector('#reject').onclick=()=>{pending?.reject(new Error('Test host rejected'));pending=undefined};
+document.querySelector('#undo').onclick=()=>{undo(view);report()};report();
+window.addEventListener('pagehide',()=>{links.dispose();view.destroy();clearMocks();delete window.isTauri},{once:true});
+</script></body></html>

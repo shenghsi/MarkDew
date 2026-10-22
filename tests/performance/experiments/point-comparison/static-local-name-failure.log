@@ -1,0 +1,45 @@
+
+ RUN  v3.2.7 /Users/shxi/projects/MarkDew
+
+ ❯ tests/web/static-preview-experiment.test.ts (4 tests | 4 failed) 991ms
+   × retains all selection boundaries, resource owners, spans and static external order 15ms
+     → hidden is not defined
+   × patches actual local regions without old-set enumeration and retains source history 1ms
+     → hidden is not defined
+   × retains single-layer points and actual paired jumps over growing 1 MiB note edits 972ms
+     → hidden is not defined
+   × uses full fallbacks for structural edits, changed notes, resources and multiple edits 2ms
+     → hidden is not defined
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/web/static-preview-experiment.test.ts > retains all selection boundaries, resource owners, spans and static external order
+ FAIL  tests/web/static-preview-experiment.test.ts > patches actual local regions without old-set enumeration and retains source history
+ FAIL  tests/web/static-preview-experiment.test.ts > retains single-layer points and actual paired jumps over growing 1 MiB note edits
+ FAIL  tests/web/static-preview-experiment.test.ts > uses full fallbacks for structural edits, changed notes, resources and multiple edits
+ReferenceError: hidden is not defined
+ ❯ partition tests/performance/experiments/point-comparison/static-preview.ts:461:13
+    459|     const value = cursor.value;
+    460|     const move = value.point;
+    461|     (move ? hidden : fixed).push(value.range(cursor.from, cursor.to));
+       |             ^
+    462|   }
+    463|   return { marks: Decoration.set(fixed, true), points: Decoration.set(…
+ ❯ projectPlan tests/performance/experiments/point-comparison/static-preview.ts:466:29
+ ❯ create tests/performance/experiments/point-comparison/static-preview.ts:502:12
+ ❯ StateField.create node_modules/@codemirror/state/dist/index.js:1774:91
+ ❯ Object.create node_modules/@codemirror/state/dist/index.js:1783:42
+ ❯ EditorState.computeSlot node_modules/@codemirror/state/dist/index.js:2768:129
+ ❯ ensureAddr node_modules/@codemirror/state/dist/index.js:2033:25
+ ❯ new EditorState node_modules/@codemirror/state/dist/index.js:2569:13
+ ❯ Function.create node_modules/@codemirror/state/dist/index.js:2768:16
+ ❯ create tests/web/static-preview-experiment.test.ts:16:27
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed (4)
+   Start at  00:10:11
+   Duration  1.60s (transform 100ms, setup 0ms, collect 241ms, tests 991ms, environment 129ms, prepare 23ms)
+

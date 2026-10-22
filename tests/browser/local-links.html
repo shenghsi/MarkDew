@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Local link app check</title></head>
+<body><div id="app"></div><pre id="evidence" style="position:fixed;bottom:24px;right:16px;max-width:420px;max-height:180px;overflow:auto;z-index:80;background:white;color:#24272c;border:1px solid #ccc;padding:8px;font:12px monospace"></pre>
+<script type="module">
+import {mockIPC,mockWindows,clearMocks} from '@tauri-apps/api/mocks';
+import {undoDepth} from '@codemirror/commands';
+import {sourceField,savedSource} from '/src/web/source.ts';
+window.isTauri=true;mockWindows('main');let next=0;const requests=[];
+const origin='\uFEFF# Local file links\r\n\r\n[日本語 notes](notes%20%E6%97%A5.md#summary)\r\n\r\n[Same document](origin.md#local-file-links)\r\n\r\n[Missing file](missing.md)\r\n\r\nThis page uses a test host. No native files are read.\n';
+const target='\uFEFF# 日本語 notes\r\n\r\n## Summary\r\n\r\nEdit this document, then follow the link again. Its unsaved text must stay.\r\n\r\nEnd\n';
+const recovery={session:'test',revision:0,entries:[],warnings:[]};
+mockIPC((command,args)=>{
+  if(command==='document_start')return {documents:[{id:0,path:'/test/origin.md',baseline:origin,uncertain:false}],sessions:[{document:0,session:'test',revision:0}],recovery};
+  if(command==='recovery_document'||command==='recovery_list')return recovery;
+  if(command==='create_document')return ++next;
+  if(command==='resolve_document_link'){
+    requests.push(args);if(args.destination==='missing.md')throw new Error('Test file not found');
+    return {path:args.destination==='origin.md'?'/test/origin.md':'/test/notes 日.md',origin:'/test/origin.md'};
+  }
+  if(command==='open_document')return {path:args.path,source:target};
+  if(command==='file_status')return {kind:'unchanged',generation:0};
+  return null;
+},{shouldMockEvents:true});
+const {view,tabs}=await import('/src/web/main.ts');
+function report(){document.querySelector('#evidence').textContent=JSON.stringify({testHost:true,tabs:tabs.all.length,active:tabs.active.id,source:savedSource(view.state.field(sourceField)),history:undoDepth(view.state),requests},null,2)}
+const timer=setInterval(report,200);report();
+window.addEventListener('pagehide',()=>{clearInterval(timer);view.destroy();clearMocks();delete window.isTauri},{once:true});
+</script></body></html>

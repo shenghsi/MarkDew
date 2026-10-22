@@ -1,0 +1,56 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Image drop geometry check</title>
+<style>
+  body { font: 16px system-ui; margin: 24px; color: #222; background: white; }
+  #editor { border: 1px solid #888; margin: 12px 0; }
+  .cm-editor { height: 300px; }
+  .cm-scroller { overflow: auto; }
+  pre { white-space: pre-wrap; }
+</style>
+<h1>Image drop geometry check</h1>
+<p>This check uses browser layout and a test image read. It does not use a native OS drop.</p>
+<button id="show">Show drop target</button>
+<button id="drop">Drop image at target</button>
+<button id="undo">Undo</button>
+<button id="redo">Redo</button>
+<div id="editor"></div>
+<p id="status" role="status">Ready</p>
+<pre id="result"></pre>
+<script type="module">
+  import { EditorState } from '@codemirror/state';
+  import { EditorView } from '@codemirror/view';
+  import { history, undo, redo } from '@codemirror/commands';
+  import { imageDrops } from '/src/web/image-drop.ts';
+  import { imageBasePath, imageDocument, imagePath } from '/src/web/images.ts';
+  import { linkVersion } from '/src/web/links.ts';
+  import { documentLanguage } from '/src/web/document-language.ts';
+  import { fromSource, normalize, sourceExtensions, sourceField, savedSource } from '/src/web/source.ts';
+  const original = '\uFEFF' + Array.from({length: 100}, (_, n) => `Paragraph ${n}\r\n\r\n`).join('') + '日本語😀 DROP HERE\rTail\n';
+  const status = document.querySelector('#status'), result = document.querySelector('#result');
+  const view = new EditorView({ parent: document.querySelector('#editor'), state: EditorState.create({
+    doc: normalize(fromSource(original).raw), extensions: [sourceExtensions(fromSource(original)),
+      documentLanguage(), history(), linkVersion, imagePath, imageBasePath.of('/notes/doc.md'), imageDocument.of(7)]
+  }) });
+  const at = view.state.doc.toString().indexOf(' HERE');
+  const image = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aDLsAAAAASUVORK5CYII=';
+  const drops = imageDrops(view, { scale: async () => devicePixelRatio, blocked: () => null,
+    read: async () => Uint8Array.from(atob(image), c => c.charCodeAt(0)).buffer,
+    report: message => { status.textContent = message; } });
+  function showResult() {
+    const source = savedSource(view.state.field(sourceField));
+    result.textContent = JSON.stringify({ exactOriginal: source === original, sourceTail: source.slice(-130),
+      scrollTop: view.scrollDOM.scrollTop, selection: view.state.selection.main.head });
+  }
+  document.querySelector('#show').onclick = () => { view.dispatch({ effects: EditorView.scrollIntoView(at, {y: 'center'}) }); showResult(); };
+  document.querySelector('#drop').onclick = async () => {
+    const rect = view.coordsAtPos(at);
+    if (!rect) { status.textContent = 'Show the target first.'; return; }
+    await drops.drop('/images/图 %23#?.png', {x: rect.left * devicePixelRatio, y: (rect.top + rect.bottom) / 2 * devicePixelRatio});
+    showResult();
+  };
+  document.querySelector('#undo').onclick = () => { undo(view); showResult(); };
+  document.querySelector('#redo').onclick = () => { redo(view); showResult(); };
+  window.addEventListener('pagehide', () => { drops.dispose(); view.destroy(); }, {once: true});
+  showResult();
+</script>

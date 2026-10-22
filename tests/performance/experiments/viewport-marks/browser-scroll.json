@@ -1,0 +1,1702 @@
+{
+  "baseline": "580029b",
+  "candidate": "inactive viewport snapshot",
+  "checks": [
+    {
+      "action": "Top",
+      "narrow": false,
+      "exactOriginal": true,
+      "sourceEqual": true,
+      "head": 0,
+      "visibleRanges": [
+        {
+          "from": 0,
+          "to": 878
+        }
+      ],
+      "lastCheck": {
+        "differences": [],
+        "boxes": [
+          {
+            "from": 0,
+            "baseline": 47.59375,
+            "candidate": 47.59375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 21,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 22,
+            "baseline": 172.125,
+            "candidate": 172.125,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 297,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 298,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 311,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 344,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 377,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 410,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 443,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 476,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 509,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 542,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 575,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 608,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 641,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 675,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 709,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 743,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          }
+        ],
+        "maxHeightDelta": 0,
+        "sourceEqual": true,
+        "baselineHead": {
+          "head": 0,
+          "visible": true,
+          "relativeTop": 27,
+          "scrollTop": 0,
+          "scrollHeight": 11651,
+          "clientHeight": 478
+        },
+        "candidateHead": {
+          "head": 0,
+          "visible": true,
+          "relativeTop": 27,
+          "scrollTop": 0,
+          "scrollHeight": 11090,
+          "clientHeight": 478
+        },
+        "sourceUnchangedByCheck": true,
+        "historyUnchangedByCheck": true,
+        "baselineEstimatedHeight": 11650.515625,
+        "candidateEstimatedHeight": 11089.578125
+      }
+    },
+    {
+      "action": "Middle",
+      "narrow": false,
+      "exactOriginal": true,
+      "sourceEqual": true,
+      "head": 7615,
+      "visibleRanges": [
+        {
+          "from": 6486,
+          "to": 8200
+        }
+      ],
+      "lastCheck": {
+        "differences": [],
+        "boxes": [
+          {
+            "from": 6486,
+            "baseline": 168.46875,
+            "candidate": 168.46875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 6756,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 6757,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 6771,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 6772,
+            "baseline": 168.46875,
+            "candidate": 168.46875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7042,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7043,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7057,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7058,
+            "baseline": 168.46875,
+            "candidate": 168.46875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7328,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7329,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7343,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7344,
+            "baseline": 168.46875,
+            "candidate": 168.46875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7614,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7615,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7629,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7630,
+            "baseline": 168.46875,
+            "candidate": 168.46875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7900,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7901,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7915,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7916,
+            "baseline": 168.46875,
+            "candidate": 168.46875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 8186,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 8187,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          }
+        ],
+        "maxHeightDelta": 0,
+        "sourceEqual": true,
+        "baselineHead": {
+          "head": 7615,
+          "visible": true,
+          "relativeTop": 442.140625,
+          "scrollTop": 11483,
+          "scrollHeight": 22574,
+          "clientHeight": 478
+        },
+        "candidateHead": {
+          "head": 7615,
+          "visible": true,
+          "relativeTop": 441.953125,
+          "scrollTop": 10853,
+          "scrollHeight": 21050,
+          "clientHeight": 478
+        },
+        "sourceUnchangedByCheck": true,
+        "historyUnchangedByCheck": true,
+        "baselineEstimatedHeight": 22574.40625,
+        "candidateEstimatedHeight": 21050.390625
+      }
+    },
+    {
+      "action": "End",
+      "narrow": false,
+      "exactOriginal": true,
+      "sourceEqual": true,
+      "head": 14228,
+      "visibleRanges": [
+        {
+          "from": 13064,
+          "to": 14228
+        }
+      ],
+      "lastCheck": {
+        "differences": [],
+        "boxes": [
+          {
+            "from": 13064,
+            "baseline": 168.46875,
+            "candidate": 168.46875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13334,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13335,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13349,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13350,
+            "baseline": 168.46875,
+            "candidate": 168.46875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13620,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13621,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13635,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13636,
+            "baseline": 168.46875,
+            "candidate": 168.46875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13906,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13907,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13921,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13922,
+            "baseline": 168.46875,
+            "candidate": 168.46875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 14192,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 14212,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 14213,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 14228,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          }
+        ],
+        "maxHeightDelta": 0,
+        "sourceEqual": true,
+        "baselineHead": {
+          "head": 14228,
+          "visible": true,
+          "relativeTop": 453.265625,
+          "scrollTop": 12493,
+          "scrollHeight": 13030,
+          "clientHeight": 478
+        },
+        "candidateHead": {
+          "head": 14228,
+          "visible": true,
+          "relativeTop": 452.71875,
+          "scrollTop": 11568,
+          "scrollHeight": 12105,
+          "clientHeight": 478
+        },
+        "sourceUnchangedByCheck": true,
+        "historyUnchangedByCheck": true,
+        "baselineEstimatedHeight": 13006.3125,
+        "candidateEstimatedHeight": 12080.765625
+      }
+    },
+    {
+      "action": "Distant Find",
+      "narrow": false,
+      "exactOriginal": true,
+      "sourceEqual": true,
+      "head": 13920,
+      "visibleRanges": [
+        {
+          "from": 13064,
+          "to": 14228
+        }
+      ],
+      "lastCheck": {
+        "differences": [],
+        "boxes": [
+          {
+            "from": 13064,
+            "baseline": 168.46875,
+            "candidate": 168.46875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13334,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13335,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13349,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13350,
+            "baseline": 168.46875,
+            "candidate": 168.46875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13620,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13621,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13635,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13636,
+            "baseline": 168.46875,
+            "candidate": 168.46875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13906,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13907,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13921,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13922,
+            "baseline": 168.46875,
+            "candidate": 168.46875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 14192,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 14212,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 14213,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 14228,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          }
+        ],
+        "maxHeightDelta": 0,
+        "sourceEqual": true,
+        "baselineHead": {
+          "head": 13920,
+          "visible": true,
+          "relativeTop": 32.078125,
+          "scrollTop": 12493,
+          "scrollHeight": 13030,
+          "clientHeight": 478
+        },
+        "candidateHead": {
+          "head": 13920,
+          "visible": true,
+          "relativeTop": 31.53125,
+          "scrollTop": 11568,
+          "scrollHeight": 12105,
+          "clientHeight": 478
+        },
+        "sourceUnchangedByCheck": true,
+        "historyUnchangedByCheck": true,
+        "baselineEstimatedHeight": 13006.3125,
+        "candidateEstimatedHeight": 12080.765625
+      }
+    },
+    {
+      "action": "Top",
+      "narrow": false,
+      "exactOriginal": true,
+      "sourceEqual": true,
+      "head": 0,
+      "visibleRanges": [
+        {
+          "from": 0,
+          "to": 1150
+        }
+      ],
+      "lastCheck": {
+        "differences": [],
+        "boxes": [
+          {
+            "from": 0,
+            "baseline": 47.59375,
+            "candidate": 47.59375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 21,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 22,
+            "baseline": 172.125,
+            "candidate": 172.125,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 297,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 298,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 311,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 344,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 377,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 410,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 443,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 476,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 509,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 542,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 575,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 608,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 641,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 675,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 709,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 743,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 777,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 811,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 845,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 879,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 913,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 947,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 981,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1015,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1049,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1083,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1117,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          }
+        ],
+        "maxHeightDelta": 0,
+        "sourceEqual": true,
+        "baselineHead": {
+          "head": 0,
+          "visible": true,
+          "relativeTop": 5,
+          "scrollTop": 22,
+          "scrollHeight": 12861,
+          "clientHeight": 478
+        },
+        "candidateHead": {
+          "head": 0,
+          "visible": true,
+          "relativeTop": 5,
+          "scrollTop": 22,
+          "scrollHeight": 11179,
+          "clientHeight": 478
+        },
+        "sourceUnchangedByCheck": true,
+        "historyUnchangedByCheck": true,
+        "baselineEstimatedHeight": 12861.421875,
+        "candidateEstimatedHeight": 11178.609375
+      }
+    },
+    {
+      "action": "Narrow",
+      "narrow": true,
+      "exactOriginal": true,
+      "sourceEqual": true,
+      "head": 0,
+      "visibleRanges": [
+        {
+          "from": 0,
+          "to": 1150
+        }
+      ],
+      "lastCheck": {
+        "differences": [],
+        "boxes": [
+          {
+            "from": 0,
+            "baseline": 95.1875,
+            "candidate": 95.1875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 21,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 22,
+            "baseline": 368.640625,
+            "candidate": 368.640625,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 297,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 298,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 311,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 344,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 377,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 410,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 443,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 476,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 509,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 542,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 575,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 608,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 641,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 675,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 709,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 743,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 777,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 811,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 845,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 879,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 913,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 947,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 981,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1015,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1049,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1083,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1117,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          }
+        ],
+        "maxHeightDelta": 0,
+        "sourceEqual": true,
+        "baselineHead": {
+          "head": 0,
+          "visible": true,
+          "relativeTop": 5,
+          "scrollTop": 22,
+          "scrollHeight": 13807,
+          "clientHeight": 478
+        },
+        "candidateHead": {
+          "head": 0,
+          "visible": true,
+          "relativeTop": 5,
+          "scrollTop": 22,
+          "scrollHeight": 12124,
+          "clientHeight": 478
+        },
+        "sourceUnchangedByCheck": true,
+        "historyUnchangedByCheck": true,
+        "baselineEstimatedHeight": 13806.703125,
+        "candidateEstimatedHeight": 12123.890625
+      }
+    },
+    {
+      "action": "Middle",
+      "narrow": true,
+      "exactOriginal": true,
+      "sourceEqual": true,
+      "head": 7615,
+      "visibleRanges": [
+        {
+          "from": 6772,
+          "to": 8185
+        }
+      ],
+      "lastCheck": {
+        "differences": [],
+        "boxes": [
+          {
+            "from": 6772,
+            "baseline": 336.9375,
+            "candidate": 336.9375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7042,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7043,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7057,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7058,
+            "baseline": 336.9375,
+            "candidate": 336.9375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7328,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7329,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7343,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7344,
+            "baseline": 336.9375,
+            "candidate": 336.9375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7614,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7615,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7629,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7630,
+            "baseline": 336.9375,
+            "candidate": 336.9375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7900,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7901,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7915,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7916,
+            "baseline": 336.9375,
+            "candidate": 336.9375,
+            "delta": 0,
+            "textEqual": true
+          }
+        ],
+        "maxHeightDelta": 0,
+        "sourceEqual": true,
+        "baselineHead": {
+          "head": 7615,
+          "visible": true,
+          "relativeTop": 442.453125,
+          "scrollTop": 19602,
+          "scrollHeight": 38209,
+          "clientHeight": 478
+        },
+        "candidateHead": {
+          "head": 7615,
+          "visible": true,
+          "relativeTop": 441.734375,
+          "scrollTop": 17267,
+          "scrollHeight": 33104,
+          "clientHeight": 478
+        },
+        "sourceUnchangedByCheck": true,
+        "historyUnchangedByCheck": true,
+        "baselineEstimatedHeight": 38209.140625,
+        "candidateEstimatedHeight": 33104.03125
+      }
+    },
+    {
+      "action": "End",
+      "narrow": true,
+      "exactOriginal": true,
+      "sourceEqual": true,
+      "head": 14228,
+      "visibleRanges": [
+        {
+          "from": 13350,
+          "to": 14228
+        }
+      ],
+      "lastCheck": {
+        "differences": [],
+        "boxes": [
+          {
+            "from": 13921,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13922,
+            "baseline": 336.9375,
+            "candidate": 336.9375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 14192,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 14212,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 14213,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 14228,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          }
+        ],
+        "maxHeightDelta": 0,
+        "sourceEqual": true,
+        "baselineHead": {
+          "head": 14228,
+          "visible": true,
+          "relativeTop": 393.984375,
+          "scrollTop": 19453,
+          "scrollHeight": 19931,
+          "clientHeight": 478
+        },
+        "candidateHead": {
+          "head": 14228,
+          "visible": true,
+          "relativeTop": 452.859375,
+          "scrollTop": 17898,
+          "scrollHeight": 18435,
+          "clientHeight": 478
+        },
+        "sourceUnchangedByCheck": true,
+        "historyUnchangedByCheck": true,
+        "baselineEstimatedHeight": 19907.03125,
+        "candidateEstimatedHeight": 18410.90625
+      }
+    },
+    {
+      "action": "Distant Find",
+      "narrow": true,
+      "exactOriginal": true,
+      "sourceEqual": true,
+      "head": 13920,
+      "visibleRanges": [
+        {
+          "from": 13350,
+          "to": 14228
+        }
+      ],
+      "lastCheck": {
+        "differences": [],
+        "boxes": [
+          {
+            "from": 13350,
+            "baseline": 336.9375,
+            "candidate": 336.9375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13620,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13621,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13635,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13636,
+            "baseline": 336.9375,
+            "candidate": 336.9375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13906,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13907,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13921,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13922,
+            "baseline": 336.9375,
+            "candidate": 336.9375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 14192,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 14212,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 14213,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 14228,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          }
+        ],
+        "maxHeightDelta": 0,
+        "sourceEqual": true,
+        "baselineHead": {
+          "head": 13920,
+          "visible": true,
+          "relativeTop": 442.046875,
+          "scrollTop": 39380,
+          "scrollHeight": 40496,
+          "clientHeight": 478
+        },
+        "candidateHead": {
+          "head": 13920,
+          "visible": true,
+          "relativeTop": 5.203125,
+          "scrollTop": 17756,
+          "scrollHeight": 18435,
+          "clientHeight": 478
+        },
+        "sourceUnchangedByCheck": true,
+        "historyUnchangedByCheck": true,
+        "baselineEstimatedHeight": 40471.75,
+        "candidateEstimatedHeight": 18410.90625
+      }
+    },
+    {
+      "action": "Top",
+      "narrow": true,
+      "exactOriginal": true,
+      "sourceEqual": true,
+      "head": 0,
+      "visibleRanges": [
+        {
+          "from": 0,
+          "to": 574
+        }
+      ],
+      "lastCheck": {
+        "differences": [],
+        "boxes": [
+          {
+            "from": 0,
+            "baseline": 95.1875,
+            "candidate": 95.1875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 21,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 22,
+            "baseline": 368.640625,
+            "candidate": 368.640625,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 297,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 298,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 311,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 344,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 377,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 410,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 443,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 476,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 509,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 542,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          }
+        ],
+        "maxHeightDelta": 0,
+        "sourceEqual": true,
+        "baselineHead": {
+          "head": 0,
+          "visible": true,
+          "relativeTop": 5,
+          "scrollTop": 22,
+          "scrollHeight": 18766,
+          "clientHeight": 478
+        },
+        "candidateHead": {
+          "head": 0,
+          "visible": true,
+          "relativeTop": 5,
+          "scrollTop": 22,
+          "scrollHeight": 17276,
+          "clientHeight": 478
+        },
+        "sourceUnchangedByCheck": true,
+        "historyUnchangedByCheck": true,
+        "baselineEstimatedHeight": 18766.109375,
+        "candidateEstimatedHeight": 17276.0625
+      }
+    }
+  ],
+  "limits": "Both destination carets are visible; shared rendered lines agree, but total height and relative caret placement differ materially. This does not establish scroll stability."
+}

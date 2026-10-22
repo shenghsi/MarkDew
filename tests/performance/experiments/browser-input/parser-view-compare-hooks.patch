@@ -1,0 +1,170 @@
+diff --git a/src/web/document-language.ts b/src/web/document-language.ts
+index 8fce793..52bb58e 100644
+--- a/src/web/document-language.ts
++++ b/src/web/document-language.ts
+@@ -1,8 +1,17 @@
+ import { markdown, markdownLanguage } from '@codemirror/lang-markdown';
+ import { yamlFrontmatter } from '@codemirror/lang-yaml';
+ import { languages } from '@codemirror/language-data';
++import { Language, LanguageSupport, LRLanguage } from '@codemirror/language';
++import { MarkdownParser } from '@lezer/markdown';
++import { parserPhase } from './parser-trace';
+ 
+ // The upstream mixed parser owns both metadata and Markdown body boundaries.
+ export function documentLanguage() {
+-  return yamlFrontmatter({ content: markdown({ base: markdownLanguage, codeLanguages: languages, addKeymap: false }) });
++  const core = new Language(markdownLanguage.data,
++    (markdownLanguage.parser as MarkdownParser).configure({ wrap: parserPhase('markdown-core') }), [], markdownLanguage.name);
++  const configured = markdown({ base: core, codeLanguages: languages, addKeymap: false });
++  const body = new Language(configured.language.data,
++    (configured.language.parser as MarkdownParser).configure({ wrap: parserPhase('markdown-with-nesting') }), [], configured.language.name);
++  const document = yamlFrontmatter({ content: new LanguageSupport(body, configured.support) });
++  return new LanguageSupport((document.language as LRLanguage).configure({ wrap: parserPhase('document-parser') }), document.support);
+ }
+diff --git a/tests/browser/input-frame.html b/tests/browser/input-frame.html
+index e8c169e..b90d4c6 100644
+--- a/tests/browser/input-frame.html
++++ b/tests/browser/input-frame.html
+@@ -13,7 +13,8 @@ import {previewField} from '/src/web/preview.ts';
+ import {completeDocument} from '/src/web/preview-index.ts';
+ import {noteEligible} from '/src/web/preview-note-index.ts';
+ import {footnotes} from '/src/web/footnotes.ts';
+-import {Compartment,StateEffect,Transaction} from '@codemirror/state';
++import {observePhases,timePhase} from '/src/web/parser-trace.ts';
++import {Compartment,RangeSet,StateEffect,Transaction} from '@codemirror/state';
+ import {EditorView} from '@codemirror/view';
+ import {forceParsing,syntaxTree} from '@codemirror/language';
+ import {undo,undoDepth} from '@codemirror/commands';
+@@ -32,10 +33,32 @@ const samples=[],failures=[],checkLock=new Compartment();let pending,armed=false
+ const trace=params.get('trace')==='1',originalDispatch=view.dispatch,originalUpdate=view.update;
+ const motion=params.get('motion')==='1',moves=[];let pendingMove;
+ let traceSetup;
++const phaseRestores=[];
++if(trace){
++  observePhases(({name,start,end})=>{
++    if(!pending)return;
++    const stage=pending.dispatching?'dispatch':'deferred',key=stage+':'+name;
++    const item=(pending.phases??={})[key]??={calls:0,activeMs:0,firstStart:start,lastEnd:end};
++    item.calls++;item.activeMs+=end-start;item.lastEnd=end;
++  });
++  function phase(target,key,name){
++    const original=target[key];if(typeof original!=='function')throw Error('Missing view phase '+key);
++    function wrapped(...args){return timePhase(name,()=>original.apply(this,args))}
++    target[key]=wrapped;phaseRestores.push(()=>{if(target[key]===wrapped)target[key]=original});
++  }
++  phase(view.viewState,'update','view-state');phase(view,'updatePlugins','view-plugins');
++  phase(view.inputState,'update','view-input');phase(view.docView,'update','view-document');
++  phase(view.docView,'updateSelection','view-selection');phase(view,'updateAttrs','view-attributes');
++  phase(view.observer,'clear','view-observer-clear');
++  const originalCompare=RangeSet.compare;
++  function compare(...args){return timePhase('range-compare-'+(args[4]??-1),()=>originalCompare.apply(this,args))}
++  RangeSet.compare=compare;phaseRestores.push(()=>{if(RangeSet.compare===compare)RangeSet.compare=originalCompare});
++}
+ if(trace){
+   view.dispatch=function(...input){
+     const sample=pending,at=performance.now();
+-    try{return originalDispatch.apply(this,input)}finally{if(sample){sample.dispatchMs=(sample.dispatchMs??0)+performance.now()-at;sample.dispatchCalls=(sample.dispatchCalls??0)+1}}
++    if(sample)sample.dispatching=true;
++    try{return originalDispatch.apply(this,input)}finally{if(sample){sample.dispatching=false;sample.dispatchMs=(sample.dispatchMs??0)+performance.now()-at;sample.dispatchCalls=(sample.dispatchCalls??0)+1}}
+   };
+   view.update=function(transactions){
+     const sample=pending,at=performance.now();
+@@ -76,7 +99,7 @@ view.dispatch({effects:StateEffect.appendConfig.of(EditorView.updateListener.of(
+   const sample=pending;sample.updateAt=performance.now();sample.head=update.state.selection.main.head;
+   sample.complete=syntaxTree(update.state).length===update.state.doc.length;
+   sample.previewMode=update.state.field(previewField,false)?.mode??'source';
+-  if(trace){const plan=update.state.field(previewField,false);sample.indexAfter=!!plan?.index;sample.noteAwareAfter=!!plan?.noteAware}
++  if(trace){const plan=update.state.field(previewField,false);sample.indexAfter=!!plan?.index;sample.noteAwareAfter=!!plan?.noteAware;const notes=footnotes(update.state);sample.noteCount={definitions:notes.definitions.length,references:notes.references.length}}
+   sample.keyToUpdateMs=sample.updateAt-sample.keyAt;sample.inputToUpdateMs=sample.updateAt-sample.inputAt;
+   if(sample.inputType!=='insertText'||sample.data!==sample.key||sample.data.length!==1)
+     failures.push('Sample is not a one-character insertText');
+@@ -125,5 +148,5 @@ requestAnimationFrame(()=>{
+   }
+   requestAnimationFrame(report);
+ });
+-window.addEventListener('pagehide',()=>{disposed=true;view.dispatch=originalDispatch;view.update=originalUpdate;view.dom.removeEventListener('keydown',keydown,true);view.dom.removeEventListener('beforeinput',beforeinput,true);view.dom.removeEventListener('paste',blockCheckInput,true);view.dom.removeEventListener('drop',blockCheckInput,true);view.destroy()},{once:true});
++window.addEventListener('pagehide',()=>{disposed=true;observePhases();phaseRestores.forEach(restore=>restore());view.dispatch=originalDispatch;view.update=originalUpdate;view.dom.removeEventListener('keydown',keydown,true);view.dom.removeEventListener('beforeinput',beforeinput,true);view.dom.removeEventListener('paste',blockCheckInput,true);view.dom.removeEventListener('drop',blockCheckInput,true);view.destroy()},{once:true});
+ </script></body></html>
+diff --git a/src/web/parser-trace.ts b/src/web/parser-trace.ts
+new file mode 100644
+index 0000000..e134c51
+--- /dev/null
++++ b/src/web/parser-trace.ts
+@@ -0,0 +1,22 @@
++import type { ParseWrapper } from '@lezer/common';
++
++// Temporary diagnosis only. The fixture owns aggregation and observer lifetime.
++export interface PhaseInterval { name: string; start: number; end: number }
++let observer: ((interval: PhaseInterval) => void) | undefined;
++export function observePhases(next?: typeof observer) { observer = next; }
++export function timePhase<T>(name: string, run: () => T): T {
++  if (!observer) return run();
++  const start = performance.now();
++  try { return run(); } finally {
++    const end = performance.now();
++    try { observer?.({ name, start, end }); } catch { /* Keep parsing unchanged. */ }
++  }
++}
++export function parserPhase(name: string): ParseWrapper {
++  return inner => ({
++    advance: () => timePhase(name, () => inner.advance()),
++    stopAt: position => inner.stopAt(position),
++    get stoppedAt() { return inner.stoppedAt; },
++    get parsedPos() { return inner.parsedPos; },
++  });
++}
+diff --git a/tests/web/parser-phase.test.ts b/tests/web/parser-phase.test.ts
+new file mode 100644
+index 0000000..fbccf60
+--- /dev/null
++++ b/tests/web/parser-phase.test.ts
+@@ -0,0 +1,49 @@
++// @vitest-environment jsdom
++import { expect, it } from 'vitest';
++import { EditorState, Transaction } from '@codemirror/state';
++import { ensureSyntaxTree, getIndentation, syntaxTree } from '@codemirror/language';
++import { markdown, markdownLanguage } from '@codemirror/lang-markdown';
++import { yamlFrontmatter } from '@codemirror/lang-yaml';
++import { languages } from '@codemirror/language-data';
++import { history, undo } from '@codemirror/commands';
++import { documentLanguage } from '../../src/web/document-language';
++import { fromSource, normalize, savedSource, sourceExtensions, sourceField } from '../../src/web/source';
++
++// Temporary differential check for parser wrappers used only in diagnosis.
++it('retains fresh and incremental mounted trees, services, and exact source history', async () => {
++  await languages.find(language => language.name === 'JavaScript')!.load();
++  const fixtures = [
++    '\uFEFF---\r\ntitle: 日本語\r\n---\n\n# Body\rText **bold** $x$[^a].\n\n[^a]: Note',
++    '---\ntitle: unclosed\n# Hidden',
++    '# Heading\n\nParagraph `code` and **bold**.\n\n<div>HTML <b>text</b></div>\n',
++    'Paragraph words\n\n```javascript\nfunction f() {\n  return 1\n}\n```\n\nEnd',
++    '> Quote\n>\n> ```html\n> <p>Text</p>\n> ```\n\n| A | B |\n| --- | --- |\n| one | two |\n',
++  ];
++  for (const original of fixtures) {
++    const record = fromSource(original);
++    const extensions = [sourceExtensions(record), history()];
++    const normal = yamlFrontmatter({ content: markdown({ base: markdownLanguage, codeLanguages: languages, addKeymap: false }) });
++    let states = [normal, documentLanguage()].map(language => EditorState.create({ doc: normalize(record.raw), extensions: [...extensions, language] }));
++    function compare() {
++      states = states.map(state => { expect(ensureSyntaxTree(state, state.doc.length, 5000)).not.toBeNull(); return state.update({}).state; });
++      expect(syntaxTree(states[1]).toString()).toBe(syntaxTree(states[0]).toString());
++      expect(savedSource(states[1].field(sourceField))).toBe(savedSource(states[0].field(sourceField)));
++      for (let position = 0; position <= states[0].doc.length; position++) {
++        expect(states[1].languageDataAt('commentTokens', position)).toEqual(states[0].languageDataAt('commentTokens', position));
++        expect(getIndentation(states[1], position)).toBe(getIndentation(states[0], position));
++      }
++    }
++    compare();
++    for (const insert of ['中文', '\n```\n', '<span>x</span>', '', 'QQ']) {
++      states = states.map(state => state.update({ changes: { from: 2, to: insert ? 2 : 3, insert }, userEvent: 'input.paste' }).state);
++      compare();
++    }
++    states = states.map(initial => {
++      let state = initial;
++      const target = { get state() { return state; }, dispatch(transaction: Transaction) { state = transaction.state; } };
++      while (undo(target)) { /* Restore each source edit through normal history. */ }
++      expect(savedSource(state.field(sourceField))).toBe(original); return state;
++    });
++    compare();
++  }
++});

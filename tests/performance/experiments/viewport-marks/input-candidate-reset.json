@@ -1,0 +1,24 @@
+{
+  "accepted": false,
+  "reason": "Separate HTML fixture changed during the pending Undo check; input tab reset before a terminal result was saved",
+  "observation": {
+    "mode": "Live preview",
+    "notes": true,
+    "bytes": 1048576,
+    "ready": true,
+    "armed": false,
+    "setupDispatchMs": 584.9000000953674,
+    "setupReadyMs": 922.6000001430511,
+    "samples": 0,
+    "completeSamples": 0,
+    "unexpectedUpdates": 0,
+    "failures": [],
+    "treeComplete": true,
+    "previewMode": "full",
+    "keyToUpdateMs": null,
+    "inputToUpdateMs": null,
+    "keyToRafMs": null,
+    "keyToGeometryMs": null,
+    "raw": []
+  }
+}

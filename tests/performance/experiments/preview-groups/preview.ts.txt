@@ -1,0 +1,462 @@
+import { EditorState, Range, StateField, Transaction } from '@codemirror/state';
+import { syntaxTree } from '@codemirror/language';
+import { Decoration, DecorationSet, EditorView, WidgetType } from '@codemirror/view';
+import { Tree, SyntaxNode } from '@lezer/common';
+import { mathRanges } from './math-ranges';
+import { htmlFrame, mountResult, renderDiagram, renderedMarkdown } from './renderers';
+import { TableEditor, tableCellField, tableComposing, tableEditor, tableHistoryView, tableImageVersion } from './table';
+import { blockItems, Marker, MarkerWidget } from './block-preview';
+import { imageDocument, imagePath, imageReader, ImageInfo, mountImage, setImagePath } from './images';
+import { footnoteField, footnotes, Footnotes, NoteDefinition, overlaps } from './footnotes';
+import { mountFootnote } from './footnote-renderer';
+import { physicalLines } from './physical-lines';
+
+type Kind = 'math' | 'mermaid' | 'html' | 'table' | 'image' | 'frontmatter' | 'footnote' | 'footnote-definition';
+interface Item { from: number; to: number; kind?: Kind; source?: string; block?: boolean;
+  className?: string; hide?: { from: number; to: number }[]; line?: boolean; style?: string; marker?: Marker; image?: ImageInfo; imageVersion?: number; imageBodyFrom?: number;
+  note?: { label: string; number?: number; duplicate?: boolean }; definition?: NoteDefinition }
+interface Group { from: number; to: number; items: Item[] }
+interface Plan { tree: Tree; items: Item[]; decorations: DecorationSet; imagePath: string; imageVersion: number; groups?: Group[] }
+const provenance = new WeakMap<Group, object>();
+function groupToken(item: Group): object {
+  let token = provenance.get(item);
+  if (!token) { token = {}; provenance.set(item, token); }
+  return token;
+}
+
+export function selected(state: EditorState, from: number, to: number) {
+  return state.selection.ranges.some(range => range.from <= to && range.to >= from);
+}
+
+class PreviewWidget extends WidgetType {
+  constructor(readonly item: Item) { super(); }
+  eq(other: PreviewWidget) {
+    return this.item.from === other.item.from && this.item.to === other.item.to &&
+      this.item.kind === other.item.kind && this.item.source === other.item.source && this.item.block === other.item.block &&
+      JSON.stringify(this.item.image) === JSON.stringify(other.item.image) && this.item.imageVersion === other.item.imageVersion &&
+      this.item.imageBodyFrom === other.item.imageBodyFrom &&
+      JSON.stringify(this.item.note) === JSON.stringify(other.item.note);
+  }
+  updateDOM(dom: HTMLElement, view: EditorView) {
+    if (this.item.kind !== 'table') return false;
+    dom.dataset.from = String(this.item.from); dom.dataset.to = String(this.item.to);
+    return tableEditor(dom)?.refresh(this.item.from, this.item.to, this.item.source!) || false;
+  }
+  toDOM(view: EditorView): HTMLElement {
+    const { item } = this;
+    const dom = document.createElement(item.block ? 'div' : 'span');
+    dom.className = `preview-widget preview-${item.kind}`;
+    dom.dataset.from = String(item.from); dom.dataset.to = String(item.to);
+    dom.tabIndex = item.kind === 'table' ? -1 : 0; dom.setAttribute('role', item.kind === 'table' ? 'group' : 'button');
+    dom.setAttribute('aria-label', item.kind === 'table' ? 'Editable table' : `Edit ${item.kind === 'frontmatter' ? 'front matter' : item.kind} source`);
+    const reveal = () => {
+      if (view.compositionStarted || tableComposing(view) || view.state.readOnly) return;
+      tableEditor(dom)?.finish();
+      view.dispatch({ selection: { anchor: Number(dom.dataset.from) }, scrollIntoView: true }); view.focus();
+    };
+    dom.addEventListener('mousedown', event => {
+      if (item.kind === 'table' && (event.target as HTMLElement).closest('th, td, .table-source, .table-tools')) return;
+      event.preventDefault(); reveal();
+    });
+    dom.addEventListener('click', event => event.preventDefault());
+    dom.addEventListener('keydown', event => {
+      if (event.defaultPrevented) return;
+      if (item.kind === 'table' && (event.target as HTMLElement).closest('th, td, .table-tools')) return;
+      const key = (event as KeyboardEvent).key;
+      if (key === 'Enter' || key === ' ') { event.preventDefault(); reveal(); }
+    });
+    if (item.kind === 'footnote') {
+      const number = document.createElement('sup'); number.textContent = String(item.note!.number); dom.append(number);
+      dom.setAttribute('aria-label', `Edit footnote ${item.note!.number}: ${item.note!.label}`);
+    } else if (item.kind === 'footnote-definition') {
+      const caption = document.createElement('span'); caption.className = 'preview-caption';
+      caption.textContent = `Footnote ${item.note!.number || item.note!.label}${item.note!.duplicate ? ' · duplicate definition' : ''} · select to edit`;
+      const body = document.createElement('div'); dom.append(caption, body);
+      cancellations.set(dom, mountFootnote(body, item.definition!, () => view.requestMeasure()));
+      dom.setAttribute('aria-label', `Edit footnote definition: ${item.note!.label}`);
+    } else if (item.kind === 'frontmatter') {
+      const caption = document.createElement('span'); caption.className = 'preview-caption'; caption.textContent = 'Front matter · select to edit';
+      const source = document.createElement('pre'); source.textContent = item.source!; dom.append(caption, source);
+    } else if (item.kind === 'image') cancellations.set(dom, mountImage(dom, item.image!, () => view.requestMeasure()));
+    else if (item.kind === 'html') {
+      const frame = document.createElement('iframe'); frame.title = 'HTML preview';
+      frame.setAttribute('sandbox', ''); frame.srcdoc = htmlFrame(item.source!);
+      frame.tabIndex = -1; dom.append(frame);
+      const label = document.createElement('span'); label.className = 'preview-caption'; label.textContent = 'HTML · select to edit'; dom.append(label);
+    } else if (item.kind === 'table') new TableEditor(dom, view, item.from, item.to, item.source!);
+    else {
+      dom.textContent = 'Rendering…';
+      const promise = item.kind === 'math' ? import('./math-renderer').then(module => module.renderMath(item.source!, !!item.block))
+        : renderDiagram(item.source!);
+      cancellations.set(dom, mountResult(dom, promise, () => view.requestMeasure()));
+    }
+    return dom;
+  }
+  destroy(dom: HTMLElement) { tableEditor(dom)?.destroy(); cancellations.get(dom)?.(); cancellations.delete(dom); }
+  get estimatedHeight() { return this.item.block ? (this.item.kind === 'html' ? 200 : 100) : -1; }
+}
+const cancellations = new WeakMap<HTMLElement, () => void>();
+
+function children(node: SyntaxNode) {
+  const result: SyntaxNode[] = [];
+  for (let child = node.firstChild; child; child = child.nextSibling) result.push(child);
+  return result;
+}
+
+function analyzePreview(state: EditorState, tree: Tree, imageVersion: number,
+  readImage: ReturnType<typeof imageReader>, notes: Footnotes) {
+  const blocks: Item[] = blockItems(state, tree), items: Item[] = [];
+  const read = (from: number, to: number) => state.doc.sliceString(from, to);
+  let hasImage = false;
+  tree.iterate({ enter(ref) {
+    const node = ref.node, { from, to, name } = node;
+    if (notes.definitions.some(note => from >= note.from && to <= note.to)) return false;
+    if (name === 'Frontmatter') {
+      if (to > from) items.push({ from, to, className: 'md-frontmatter-source' });
+      if (children(node).filter(child => child.name === 'DashLine').length === 2)
+        items.push({ from, to, kind: 'frontmatter', source: read(from, to), block: true });
+      return false;
+    }
+    if (name === 'Image') {
+      hasImage = true;
+      if (items.some(item => item.kind === 'math' && item.from <= from && item.to >= to)) return false;
+      const image = readImage(read(from, to));
+      if (image) items.push({ from, to, kind: 'image', image, imageVersion });
+      return false;
+    }
+    if (name === 'FencedCode') {
+      const info = children(node).find(child => child.name === 'CodeInfo');
+      const language = info ? read(info.from, info.to).trim().split(/\s/)[0] : '';
+      const code = children(node).find(child => child.name === 'CodeText');
+      if (language === 'mermaid' || language === 'math' || language === 'latex') {
+        items.push({ from, to, kind: language === 'mermaid' ? 'mermaid' : 'math', source: code ? read(code.from, code.to) : '', block: true });
+      } else {
+        const marks = children(node).filter(child => child.name === 'CodeMark' || child.name === 'CodeInfo');
+        items.push({ from, to, className: 'md-code-block', hide: marks.map(child => ({ from: child.from, to: child.to })) });
+      }
+      return false;
+    }
+    if (name === 'HTMLBlock' || name === 'Table') {
+      if (name === 'Table') hasImage = true; // Reference images depend on source outside the table.
+      items.push({ from, to, kind: name === 'Table' ? 'table' : 'html', source: read(from, to), block: true,
+        ...(name === 'Table' ? { imageVersion: state.field(tableImageVersion, false) || 0,
+          imageBodyFrom: syntaxTree(state).topNode.getChild('Frontmatter')?.to || 0 } : {}) }); return false;
+    }
+    if (name === 'Paragraph' || /^ATXHeading/.test(name) || /^SetextHeading/.test(name)) {
+      const source = read(from, to);
+      if (children(node).some(child => child.name === 'HTMLTag')) {
+        items.push({ from, to, kind: 'html', source: renderedMarkdown(source), block: true }); return false;
+      }
+      if (source.includes('$')) for (const math of mathRanges(source)) {
+        items.push({ from: from + math.from, to: from + math.to, kind: 'math', source: math.formula, block: math.block });
+      }
+      const level = /^(?:ATXHeading|SetextHeading)(\d)$/.exec(name)?.[1] || '';
+      if (level) items.push({ from, to, className: `md-heading md-h${level}`, line: true,
+        hide: children(node).filter(child => child.name === 'HeaderMark').map(child => ({ from: child.from, to: child.to })) });
+    }
+    // Lezer can treat an unresolved footnote as a shortcut link. Keep its marks.
+    if (name === 'Link' && read(from, to).startsWith('[^') &&
+      !children(node).some(child => child.name === 'URL' || child.name === 'LinkLabel')) return false;
+    const className = ({ StrongEmphasis: 'md-strong', Emphasis: 'md-emphasis', Strikethrough: 'md-strike', InlineCode: 'md-code', Link: 'md-link' } as Record<string, string>)[name];
+    if (className) items.push({ from, to, className,
+      hide: children(node).filter(child => /^(EmphasisMark|StrikethroughMark|CodeMark|LinkMark|LinkLabel|URL|LinkTitle)$/.test(child.name)).map(child => ({ from: child.from, to: child.to })) });
+  } });
+  return { blocks, items, hasImage };
+}
+
+function withFootnotes(state: EditorState, items: Item[], notes: Footnotes): Item[] {
+  const read = (from: number, to: number) => state.doc.sliceString(from, to);
+  const ordinary = items.filter(item => !notes.definitions.some(note => overlaps(item, note)) &&
+    !notes.references.some(note => item.from >= note.from && item.to <= note.to));
+  for (const note of notes.references) {
+    if (ordinary.some(item => item.kind && item.from <= note.from && item.to >= note.to)) continue;
+    ordinary.push({ from: note.from, to: note.to, kind: 'footnote', source: read(note.from, note.to), note: { label: note.label, number: note.number } });
+  }
+  for (const definition of notes.definitions) ordinary.push({ from: definition.from, to: definition.to,
+    kind: 'footnote-definition', source: read(definition.from, definition.to), note: { label: definition.label, number: definition.number, duplicate: definition.duplicate }, definition, block: true });
+  return ordinary;
+}
+
+function previewImageReader(state: EditorState, tree: Tree) {
+  const bodyFrom = tree.topNode.getChild('Frontmatter')?.to || 0;
+  return imageReader(() => state.doc.sliceString(bodyFrom), state.field(imagePath, false) || '', state.facet(imageDocument));
+}
+
+// The full traversal remains the reference for incremental integration checks.
+export function collectPreview(state: EditorState, tree: Tree, imageVersion = 0): Item[] {
+  const notes = footnotes(state), analysis = analyzePreview(state, tree, imageVersion, previewImageReader(state, tree), notes);
+  return withFootnotes(state, [...analysis.blocks, ...analysis.items], notes);
+}
+
+interface BlockAnalysis { source: string; prefix: number; from: number; blocks: Item[]; items: Item[]; groups?: Group[] }
+const blockCache = new WeakMap<Tree, BlockAnalysis>();
+const assembledGroups = new WeakMap<Item[], Group[]>();
+const maxEnvelope = 65536;
+
+function shiftItem(item: Item, offset: number): Item {
+  const span = <T extends { from: number; to: number }>(value: T): T => ({ ...value, from: value.from + offset, to: value.to + offset });
+  const shifted = { ...span(item), ...(item.hide ? { hide: item.hide.map(span) } : {}),
+    ...(item.marker ? { marker: { ...span(item.marker), ownerFrom: item.marker.ownerFrom + offset, ownerTo: item.marker.ownerTo + offset } } : {}) };
+  return shifted;
+}
+
+export function collectCachedPreview(state: EditorState, tree: Tree, imageVersion = 0): Item[] {
+  if (tree.topNode.name !== 'Document') return collectPreview(state, tree, imageVersion);
+  const nodes: SyntaxNode[] = [];
+  function visit(node: SyntaxNode): boolean {
+    if (node.name === 'Document') {
+      for (let child = node.firstChild; child; child = child.nextSibling) if (!visit(child)) return false;
+    } else {
+      // Syntax-node navigation enters the mounted Markdown body and skips
+      // anonymous balancing nodes. Buffered top-level nodes use the reference.
+      if (!node.tree || node.tree.length !== node.to - node.from) return false;
+      nodes.push(node);
+    }
+    return true;
+  }
+  if (!visit(tree.topNode)) return collectPreview(state, tree, imageVersion);
+  const notes = footnotes(state), readImage = previewImageReader(state, tree), lines = physicalLines(state.doc);
+  const blocks: Item[] = [], items: Item[] = [];
+  const localGroups: Group[] = [];
+  let grouped = !notes.definitions.length && !notes.references.length && tree.length === state.doc.length;
+  const appendGroups = (groups: Group[]) => {
+    if (!grouped) return;
+    for (const group of groups) {
+      const last = localGroups[localGroups.length - 1];
+      // Cross-block overlaps retain the uncached complete grouping reference.
+      if (last && group.from <= last.to) { grouped = false; return; }
+      localGroups.push(group);
+    }
+  };
+  for (const node of nodes) {
+    const key = node.tree!, from = node.from, to = node.to;
+    const start = lines.lineAt(from).from, end = lines.lineAt(to).to;
+    const allowed = end - start <= maxEnvelope && !notes.definitions.some(note => overlaps({ from: start, to: end }, note));
+    const source = allowed ? lines.slice(start, end) : '', prefix = from - start;
+    const previous = allowed ? blockCache.get(key) : undefined;
+    if (previous && previous.source === source && previous.prefix === prefix) {
+      const offset = from - previous.from;
+      let current = previous;
+      if (offset) {
+        const shifted = new Map<Item, Item>();
+        const move = (item: Item) => { const next = shiftItem(item, offset); shifted.set(item, next); return next; };
+        const blocks = previous.blocks.map(move), items = previous.items.map(move);
+        const groups = grouped ? previous.groups?.map(group => {
+          const next = { from: group.from + offset, to: group.to + offset, items: group.items.map(item => shifted.get(item)!) };
+          // Group identity retains no previous item or group reference.
+          provenance.set(next, groupToken(group)); return next;
+        }) : undefined;
+        current = { ...previous, from, blocks, items, groups };
+      }
+      if (offset) blockCache.set(key, current);
+      for (const item of current.blocks) blocks.push(item);
+      for (const item of current.items) items.push(item);
+      if (grouped) {
+        current.groups ??= previewGroups(state, [...current.blocks, ...current.items]);
+        appendGroups(current.groups);
+      }
+      continue;
+    }
+    const wrapper = new Tree(tree.type, [key], [from], state.doc.length);
+    const analysis = analyzePreview(state, wrapper, imageVersion, readImage, notes);
+    for (const item of analysis.blocks) blocks.push(item);
+    for (const item of analysis.items) items.push(item);
+    if (analysis.hasImage) grouped = false;
+    const groups = grouped ? previewGroups(state, [...analysis.blocks, ...analysis.items]) : undefined;
+    if (groups) appendGroups(groups);
+    // Do not retain a substring of the complete temporary snapshot in this cache.
+    if (allowed && !analysis.hasImage) blockCache.set(key, { source: state.doc.sliceString(start, end), prefix, from, blocks: analysis.blocks, items: analysis.items, groups });
+  }
+  const result = withFootnotes(state, [...blocks, ...items], notes);
+  if (grouped) assembledGroups.set(result, localGroups);
+  return result;
+}
+
+interface ItemRanges { selected: boolean; editing: boolean; lineStart: number; ranges: Range<Decoration>[] }
+// Items are immutable. Shifted source ranges and changed content get new items.
+// Weak keys release ranges with their item; entries retain no editor state.
+const rangeCache = new WeakMap<Item, ItemRanges>();
+
+export function previewDecorations(state: EditorState, items: Item[], reuse = false): DecorationSet {
+  const ranges: Range<Decoration>[] = [];
+  const replacements: { from: number; to: number }[] = [];
+  const active = state.field(tableCellField, false);
+  for (const item of items) {
+    const isSelected = selected(state, item.marker?.ownerFrom ?? item.from, item.marker?.ownerTo ?? item.to);
+    const editing = !!(item.kind === 'table' && active?.from === item.from && active.to === item.to);
+    const lineStart = item.line ? state.doc.lineAt(item.from).from : -1;
+    if (item.kind && (!isSelected || editing) && item.to > item.from) replacements.push(item);
+    const cached = reuse ? rangeCache.get(item) : undefined;
+    if (cached && cached.selected === isSelected && cached.editing === editing && cached.lineStart === lineStart) {
+      for (const range of cached.ranges) ranges.push(range);
+      continue;
+    }
+    const start = ranges.length;
+    if (item.marker) {
+      if (!isSelected)
+        ranges.push(Decoration.replace({ widget: new MarkerWidget(item.marker) }).range(item.from, item.to));
+    } else if (item.kind) {
+      if ((!isSelected || editing) && item.to > item.from) {
+        ranges.push(Decoration.replace({ widget: new PreviewWidget(item), block: !!item.block }).range(item.from, item.to));
+      }
+    } else {
+      if (item.line) ranges.push(Decoration.line({ attributes: { class: item.className!, ...(item.style ? { style: item.style } : {}) } }).range(lineStart));
+      else if (item.className) ranges.push(Decoration.mark({ class: item.className }).range(item.from, item.to));
+      if (!isSelected) for (const hide of item.hide || []) {
+        if (hide.to > hide.from) ranges.push(Decoration.replace({}).range(hide.from, hide.to));
+      }
+    }
+    if (reuse) rangeCache.set(item, { selected: isSelected, editing, lineStart, ranges: ranges.slice(start) });
+  }
+  // A math replacement must not overlap hidden Markdown marks inside its source.
+  replacements.sort((a, b) => a.from - b.from);
+  const insideReplacement = (from: number, to: number) => {
+    let low = 0, high = replacements.length;
+    while (low < high) { const middle = (low + high) >> 1;
+      if (replacements[middle].from <= from) low = middle + 1; else high = middle; }
+    return low > 0 && to <= replacements[low - 1].to;
+  };
+  return Decoration.set(ranges.filter(range => range.value.spec.widget || !insideReplacement(range.from, range.to)), true);
+}
+
+// A replacement and every mark it can suppress must be updated together.
+// List owner ranges and physical line starts also belong to that group.
+function previewGroups(state: EditorState, items: Item[]): Group[] {
+  const assembled = assembledGroups.get(items); if (assembled) return assembled;
+  const spans = items.map(item => ({ item,
+    from: Math.min(item.from, item.marker?.ownerFrom ?? item.from,
+      item.line ? state.doc.lineAt(item.from).from : item.from, ...(item.hide || []).map(span => span.from)),
+    to: Math.max(item.to, item.marker?.ownerTo ?? item.to, ...(item.hide || []).map(span => span.to))
+  })).sort((a, b) => a.from - b.from || a.to - b.to);
+  const groups: Group[] = [];
+  for (const span of spans) {
+    const previous = groups[groups.length - 1];
+    if (previous && span.from <= previous.to) {
+      previous.to = Math.max(previous.to, span.to); previous.items.push(span.item);
+    } else groups.push({ from: span.from, to: span.to, items: [span.item] });
+  }
+  return groups;
+}
+
+function selectionDecorations(plan: Plan, before: EditorState, after: EditorState, groups: Group[]): DecorationSet {
+  if (before.selection.eq(after.selection)) return plan.decorations;
+  const candidates = new Set<Group>();
+  for (const range of [...before.selection.ranges, ...after.selection.ranges]) {
+    let low = 0, high = groups.length;
+    while (low < high) { const middle = (low + high) >> 1;
+      if (groups[middle].to < range.from) low = middle + 1; else high = middle; }
+    for (let index = low; index < groups.length && groups[index].from <= range.to; index++) candidates.add(groups[index]);
+  }
+  const changed = [...candidates].filter(group => group.items.some(item => {
+    if (!item.marker && !item.kind && !item.hide?.length) return false;
+    const from = item.marker?.ownerFrom ?? item.from, to = item.marker?.ownerTo ?? item.to;
+    return selected(before, from, to) !== selected(after, from, to);
+  }));
+  // Large selections can touch most groups. One full construction is cheaper.
+  if (changed.length > groups.length / 2) return previewDecorations(after, plan.items, true);
+  let decorations = plan.decorations;
+  for (const group of changed) {
+    const add: Range<Decoration>[] = [];
+    for (const cursor = previewDecorations(after, group.items, true).iter(); cursor.value; cursor.next())
+      add.push(cursor.value.range(cursor.from, cursor.to));
+    decorations = decorations.update({ filterFrom: group.from, filterTo: group.to,
+      filter: (from, to) => from < group.from || to > group.to, add, sort: true });
+  }
+  return decorations;
+}
+
+type DecorationStage = 'groups' | 'mapping' | 'correspondence' | 'rebuild';
+export function editDecorations(plan: Plan, transaction: Transaction, items: Item[],
+  stage?: (name: DecorationStage) => void): { decorations: DecorationSet; groups: Group[] } | undefined {
+  const before = transaction.startState, after = transaction.state, changes = transaction.changes;
+  // Global resources and incomplete syntax retain the independent full path.
+  if (plan.tree.length !== before.doc.length || syntaxTree(after).length !== after.doc.length ||
+    footnotes(before).definitions.length || footnotes(before).references.length ||
+    footnotes(after).definitions.length || footnotes(after).references.length ||
+    plan.items.some(item => item.kind === 'image' || item.kind === 'table') || items.some(item => item.kind === 'image' || item.kind === 'table') ||
+    before.field(tableCellField, false) || after.field(tableCellField, false)) return;
+  const oldGroups = plan.groups || previewGroups(before, plan.items), groups = previewGroups(after, items);
+  stage?.('groups');
+  const decorations = plan.decorations.map(changes);
+  stage?.('mapping');
+  const previous = new Map<object, Group>();
+  for (const group of oldGroups) previous.set(groupToken(group), group);
+  const retained = new Set<Group>(), dirty: Group[] = [], spans: { from: number; to: number }[] = [];
+  const edited: { from: number; to: number }[] = [];
+  changes.iterChangedRanges((_from, _to, from, to) => edited.push({ from, to }));
+  const mapped = (group: Group) => ({ from: changes.mapPos(group.from, -1), to: changes.mapPos(group.to, 1) });
+  for (const group of groups) {
+    const old = previous.get(groupToken(group));
+    let same = old === group || !!old && old.items.length === group.items.length &&
+      changes.mapPos(old.from, 1) === group.from && changes.mapPos(old.to, -1) === group.to &&
+      !edited.some(edit => edit.from <= group.to && edit.to >= group.from);
+    const selectionTouches = same && (selected(before, old!.from, old!.to) || selected(after, group.from, group.to));
+    if (same && old !== group && group.items.some(item => item.kind || item.marker)) same = false;
+    if (same && selectionTouches) for (let index = 0; index < group.items.length; index++) {
+      const item = group.items[index], prior = old!.items[index];
+      if (selected(before, prior.marker?.ownerFrom ?? prior.from, prior.marker?.ownerTo ?? prior.to) !==
+        selected(after, item.marker?.ownerFrom ?? item.from, item.marker?.ownerTo ?? item.to) ||
+        (item.kind || item.marker) && (item.from !== prior.from || item.to !== prior.to)) { same = false; break; }
+    }
+    if (same) retained.add(old!);
+    else { dirty.push(group); spans.push(group); }
+  }
+  for (const group of oldGroups) if (!retained.has(group)) spans.push(mapped(group));
+  stage?.('correspondence');
+  if (dirty.length > groups.length / 2 || spans.length > 128) return;
+  // Merge dirty intervals, then include complete touching groups. This keeps
+  // zero-length line decorations and nested replacement suppression together.
+  spans.sort((a, b) => a.from - b.from || a.to - b.to);
+  const patches: { from: number; to: number; items: Item[] }[] = [];
+  for (const span of spans) {
+    const last = patches[patches.length - 1];
+    if (last && span.from <= last.to) last.to = Math.max(last.to, span.to);
+    else patches.push({ from: span.from, to: span.to, items: [] });
+  }
+  let index = 0;
+  for (const group of groups) {
+    while (index < patches.length && patches[index].to < group.from) index++;
+    const patch = patches[index];
+    if (patch && group.from <= patch.to && group.to >= patch.from) {
+      patch.from = Math.min(patch.from, group.from); patch.to = Math.max(patch.to, group.to); patch.items.push(...group.items);
+      while (index + 1 < patches.length && patches[index + 1].from <= patch.to) {
+        const next = patches.splice(index + 1, 1)[0]; patch.to = Math.max(patch.to, next.to);
+      }
+    }
+  }
+  let result = decorations;
+  for (const patch of patches) {
+    const add: Range<Decoration>[] = [];
+    for (const cursor = previewDecorations(after, patch.items, true).iter(); cursor.value; cursor.next()) add.push(cursor.value.range(cursor.from, cursor.to));
+    result = result.update({ filterFrom: patch.from, filterTo: patch.to,
+      filter: (from, to) => to < patch.from || from > patch.to, add, sort: true });
+  }
+  stage?.('rebuild'); return { decorations: result, groups };
+}
+
+export const previewField = StateField.define<Plan>({
+  create(state) { const tree = syntaxTree(state), items = collectCachedPreview(state, tree); return { tree, items, decorations: previewDecorations(state, items, true), imagePath: state.field(imagePath, false) || '', imageVersion: 0 }; },
+  update(plan, transaction) {
+    const tree = syntaxTree(transaction.state);
+    const path = transaction.state.field(imagePath, false) || '', pathChanged = path !== plan.imagePath ||
+      transaction.startState.facet(imageDocument) !== transaction.state.facet(imageDocument) || transaction.effects.some(effect => effect.is(setImagePath));
+    const oldCell = transaction.startState.field(tableCellField, false), cell = transaction.state.field(tableCellField, false);
+    const sameTable = oldCell?.from === cell?.from && oldCell?.to === cell?.to;
+    if (!transaction.docChanged && !transaction.selection && tree === plan.tree &&
+      !pathChanged && sameTable) return plan;
+    if (!transaction.docChanged && tree === plan.tree && !pathChanged &&
+      sameTable) {
+      const groups = plan.groups || previewGroups(transaction.state, plan.items);
+      return { ...plan, groups, decorations: selectionDecorations(plan, transaction.startState, transaction.state, groups) };
+    }
+    const imageVersion = plan.imageVersion + (pathChanged ? 1 : 0);
+    const items = transaction.docChanged || tree !== plan.tree || pathChanged ? collectCachedPreview(transaction.state, tree, imageVersion) : plan.items;
+    if (transaction.docChanged && !pathChanged) {
+      const partial = editDecorations(plan, transaction, items);
+      if (partial) return { tree, items, ...partial, imagePath: path, imageVersion };
+    }
+    return { tree, items, decorations: previewDecorations(transaction.state, items, true), imagePath: path, imageVersion };
+  },
+  provide: field => EditorView.decorations.from(field, plan => plan.decorations),
+});
+export const livePreview = [footnoteField, tableCellField, tableImageVersion, previewField, tableHistoryView];

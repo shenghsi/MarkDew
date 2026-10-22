@@ -1,0 +1,59 @@
+name: draft-release
+
+on:
+  push:
+    tags:
+      - 'v*-beta.*'
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node src/release/release.mjs validate
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+          CI_CHECKOUT_SHA: ${{ github.sha }}
+
+  packages:
+    needs: validate
+    uses: ./.github/workflows/portability.yml
+    with:
+      build_packages: true
+      sign_updates: true
+    secrets:
+      TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+      TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+
+  draft:
+    needs: [validate, packages]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: unsigned-package-*-${{ github.sha }}
+          path: release-input
+      - run: node src/release/release.mjs create
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+          CI_CHECKOUT_SHA: ${{ github.sha }}
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}

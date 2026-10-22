@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Blank line spacing check</title>
+<link rel="stylesheet" href="/src/web/style.css">
+<div id="app"><div id="editor"></div></div>
+<pre id="result"></pre>
+<script type="module">
+import {Compartment, EditorState} from '@codemirror/state';
+import {EditorView} from '@codemirror/view';
+import {history, undo, redo, undoDepth} from '@codemirror/commands';
+import {ensureSyntaxTree} from '@codemirror/language';
+import {documentLanguage} from '/src/web/document-language.ts';
+import {livePreview} from '/src/web/preview.ts';
+import {endTableEdit, tableEditor} from '/src/web/table.ts';
+import {fromSource, normalize, sourceExtensions, sourceField, savedSource} from '/src/web/source.ts';
+
+const original = '\uFEFFParagraph one\r\n\r\nParagraph two\n\n| A | B |\r\n| --- | --- |\r\n| 1 | 2 |\n\n```text\ncode\n\ncode\n```\n\n    indented\n\n    code\n\nEnd';
+const record = fromSource(original), display = new Compartment();
+let state = EditorState.create({doc: normalize(record.raw), selection: {anchor: normalize(record.raw).length},
+  extensions: [sourceExtensions(record), documentLanguage(), history(), display.of(livePreview)]});
+ensureSyntaxTree(state, state.doc.length, 1000);
+state = state.update({}).state;
+const view = new EditorView({state, parent: document.querySelector('#editor')});
+const results = [];
+const settle = () => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+function check(name, actual, expected) {
+  results.push({name, actual, expected});
+  if (actual !== expected) throw new Error(`${name}: ${actual} != ${expected}`);
+}
+function lineDOM(number) {
+  const node = view.domAtPos(view.state.doc.line(number).from).node;
+  return (node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement).closest('.cm-line');
+}
+function height(number) { return lineDOM(number).getBoundingClientRect().height; }
+function select(number) { view.dispatch({selection: {anchor: view.state.doc.line(number).from}}); }
+function source() { return savedSource(view.state.field(sourceField)); }
+try {
+  await settle();
+  check('paragraph blank height', height(2), 14);
+  check('paragraph blank offsetHeight', lineDOM(2).offsetHeight, 14);
+  check('blank br display', getComputedStyle(lineDOM(2).querySelector('br')).display, 'none');
+  check('blank before table', height(4), 0);
+  check('blank after table', height(8), 0);
+  check('resting table padding', getComputedStyle(document.querySelector('.preview-table')).paddingTop, '12px');
+  const normalHeight = height(1);
+  check('fenced code blank remains visible', height(11) > 14, true);
+  check('indented code blank remains visible', height(16) > 14, true);
+  select(2); await settle();
+  check('selected paragraph blank height', height(2), normalHeight);
+  check('selected paragraph br display', getComputedStyle(lineDOM(2).querySelector('br')).display !== 'none', true);
+  select(4); await settle();
+  check('selected table separator height', height(4), normalHeight);
+  select(19); await settle();
+  check('table separator collapses again', height(4), 0);
+  tableEditor(document.querySelector('.preview-table')).begin(1, 0); await settle();
+  const table = document.querySelector('.preview-table'), bar = table.querySelector('.table-floating-bar');
+  check('editing table padding', getComputedStyle(table).paddingTop, '34px');
+  check('toolbar clears table', bar.getBoundingClientRect().bottom <= table.querySelector('table').getBoundingClientRect().top, true);
+  endTableEdit(view); await settle();
+  check('finished table padding', getComputedStyle(document.querySelector('.preview-table')).paddingTop, '12px');
+  document.documentElement.style.setProperty('--writing-scale', '1.5'); await settle();
+  check('scaled blank height', height(2), 21);
+  document.documentElement.style.removeProperty('--writing-scale');
+  view.dispatch({effects: display.reconfigure([])}); await settle();
+  check('Source blank height', height(2), normalHeight);
+  check('Source has no compact blanks', view.dom.querySelectorAll('.md-blank-line, .md-blank-line-block').length, 0);
+  view.dispatch({effects: display.reconfigure(livePreview)}); await settle();
+  check('Live blank height', height(2), 14);
+  check('presentation retains exact source', source(), original);
+  check('presentation adds no history', undoDepth(view.state), 0);
+  select(2); view.focus();
+  view.dispatch({changes: {from: view.state.selection.main.head, insert: 'Typed'}}); await settle();
+  check('typed blank is normal height', height(2), normalHeight);
+  const typedSource = source();
+  undo(view); await settle();
+  check('Undo restores exact source', source(), original);
+  redo(view); await settle();
+  check('Redo restores input', view.state.doc.line(2).text, 'Typed');
+  check('Redo restores exact source', source(), typedSource);
+  document.querySelector('#result').textContent = JSON.stringify({passed: true, results}, null, 2);
+} catch (error) {
+  document.querySelector('#result').textContent = JSON.stringify({passed: false, error: String(error), results}, null, 2);
+}
+window.addEventListener('pagehide', () => view.destroy(), {once: true});
+</script>
+</html>

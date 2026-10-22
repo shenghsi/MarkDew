@@ -1,0 +1,68 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Table image drop check</title>
+<style>
+  body { font: 16px system-ui; margin: 24px; color: #222; background: white; }
+  #editor { border: 1px solid #888; margin: 12px 0; }
+  #editor > .cm-editor { height: 300px; }
+  .cm-scroller { overflow: auto; }
+  td, th { border: 1px solid #888; padding: 12px; min-width: 120px; }
+  table { border-collapse: collapse; }
+  pre { white-space: pre-wrap; }
+</style>
+<h1>Table image drop check</h1>
+<p>This check uses browser layout and a test image read. It does not use a native OS drop.</p>
+<button id="show">Show table</button>
+<button id="inactive">Drop on rendered cell</button>
+<button id="open">Open cell edit</button>
+<button id="active">Drop in cell text</button>
+<button id="undo">Undo</button>
+<button id="redo">Redo</button>
+<div id="editor"></div>
+<p id="status" role="status">Ready</p>
+<pre id="result"></pre>
+<script type="module">
+  import { EditorState } from '@codemirror/state';
+  import { EditorView } from '@codemirror/view';
+  import { history, undo, redo } from '@codemirror/commands';
+  import { imageDrops } from '/src/web/image-drop.ts';
+  import { imageBasePath, imageDocument, imagePath } from '/src/web/images.ts';
+  import { linkVersion } from '/src/web/links.ts';
+  import { documentLanguage } from '/src/web/document-language.ts';
+  import { livePreview } from '/src/web/preview.ts';
+  import { tableEditor } from '/src/web/table.ts';
+  import { fromSource, normalize, sourceExtensions, sourceField, savedSource } from '/src/web/source.ts';
+  const original = '\uFEFF' + Array.from({length: 60}, (_, n) => `Paragraph ${n}\r\n\r\n`).join('') + '| A | B |\r\n| - | - |\r| 图😀 text | tail |\n\nEnd';
+  const status = document.querySelector('#status'), result = document.querySelector('#result');
+  const doc = normalize(fromSource(original).raw);
+  const view = new EditorView({ parent: document.querySelector('#editor'), state: EditorState.create({
+    doc, selection: {anchor: doc.length}, extensions: [sourceExtensions(fromSource(original)),
+      documentLanguage(), history(), linkVersion, imagePath, imageBasePath.of('/notes/doc.md'), imageDocument.of(7), livePreview]
+  }) });
+  const at = doc.indexOf('| A |');
+  const drops = imageDrops(view, { scale: async () => devicePixelRatio, blocked: () => null,
+    read: async () => Uint8Array.from(atob('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aDLsAAAAASUVORK5CYII='), c => c.charCodeAt(0)).buffer,
+    report: message => { status.textContent = message; } });
+  const table = () => tableEditor(document.querySelector('.preview-table'));
+  function showResult() {
+    const source = savedSource(view.state.field(sourceField));
+    result.textContent = JSON.stringify({exactOriginal: source === original, sourceTail: source.slice(-240), scrollTop: view.scrollDOM.scrollTop});
+  }
+  const dropAt = async (x, y) => { await drops.drop('/images/图 a|b%23#?.png', {x: x * devicePixelRatio, y: y * devicePixelRatio}); showResult(); };
+  document.querySelector('#show').onclick = () => view.dispatch({effects: EditorView.scrollIntoView(at, {y: 'center'})});
+  document.querySelector('#inactive').onclick = async () => {
+    const cell = document.querySelector('td'); if (!cell) return;
+    const rect = cell.getBoundingClientRect(); await dropAt(rect.left + 20, rect.top + 20);
+  };
+  document.querySelector('#open').onclick = () => {
+    table()?.begin(1, 0); table()?.child?.dispatch({selection: {anchor: 0, head: 3}}); showResult();
+  };
+  document.querySelector('#active').onclick = async () => {
+    const child = table()?.child, rect = child?.coordsAtPos(3); if (!rect) return;
+    await dropAt(rect.left, (rect.top + rect.bottom) / 2);
+  };
+  document.querySelector('#undo').onclick = () => { undo(view); showResult(); };
+  document.querySelector('#redo').onclick = () => { redo(view); showResult(); };
+  window.addEventListener('pagehide', () => { drops.dispose(); view.destroy(); }, {once: true});
+  showResult();
+</script>

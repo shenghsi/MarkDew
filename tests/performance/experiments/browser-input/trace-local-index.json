@@ -1,0 +1,1511 @@
+{
+  "revision": "5e68fb5",
+  "hooks": true,
+  "observation": {
+    "mode": "Live preview",
+    "notes": true,
+    "bytes": 1048576,
+    "ready": true,
+    "armed": false,
+    "setupDispatchMs": 542,
+    "setupReadyMs": 884.1999998092651,
+    "samples": 20,
+    "completeSamples": 20,
+    "unexpectedUpdates": 0,
+    "failures": [],
+    "treeComplete": false,
+    "previewMode": "full",
+    "keyToUpdateMs": {
+      "median": 102.5,
+      "p95": 122.70000004768372,
+      "max": 145.40000009536743
+    },
+    "inputToUpdateMs": {
+      "median": 102.29999995231628,
+      "p95": 122.59999990463257,
+      "max": 143.30000019073486
+    },
+    "keyToRafMs": {
+      "median": 117.80000019073486,
+      "p95": 130.90000009536743,
+      "max": 163.09999990463257
+    },
+    "keyToGeometryMs": {
+      "median": 117.80000019073486,
+      "p95": 131,
+      "max": 163.70000004768372
+    },
+    "traceSetup": {
+      "definitions": [
+        {
+          "from": 1048540,
+          "to": 1048554
+        }
+      ]
+    },
+    "dispatchInclusiveMs": {
+      "median": 100.79999995231628,
+      "p95": 121.19999980926514,
+      "max": 140
+    },
+    "stateRealizationMs": {
+      "median": 41.60000014305115,
+      "p95": 54.69999980926514,
+      "max": 56.5
+    },
+    "viewUpdateMs": {
+      "median": 60,
+      "p95": 68.10000014305115,
+      "max": 83.40000009536743
+    },
+    "checked": {
+      "exactEdited": true,
+      "exactOriginal": true,
+      "historyBefore": 20,
+      "historyAfter": 0,
+      "undoCalls": 20
+    },
+    "raw": [
+      {
+        "keyAt": 8991.099999904633,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 8993.199999809265,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 8996.899999856949,
+            "end": 8997.399999856949
+          },
+          {
+            "name": "footnotes",
+            "start": 8997.699999809265,
+            "end": 9048.399999856949
+          },
+          {
+            "name": "stable-notes",
+            "start": 9048.399999856949,
+            "end": 9048.5
+          },
+          {
+            "name": "local-collect",
+            "start": 9051.399999856949,
+            "end": 9051.399999856949
+          },
+          {
+            "name": "local-decorations",
+            "start": 9051.399999856949,
+            "end": 9051.5
+          },
+          {
+            "name": "index",
+            "start": 9048.5,
+            "end": 9053.099999904633
+          },
+          {
+            "name": "note-overlay",
+            "start": 9053.099999904633,
+            "end": 9053.199999809265
+          },
+          {
+            "name": "preview",
+            "start": 9048.399999856949,
+            "end": 9053.199999809265
+          }
+        ],
+        "updateAt": 9136.5,
+        "head": 34,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 145.40000009536743,
+        "inputToUpdateMs": 143.30000019073486,
+        "stateMs": 56.5,
+        "viewMs": 83.40000009536743,
+        "updateCalls": 1,
+        "dispatchMs": 140,
+        "dispatchCalls": 1,
+        "keyToRafMs": 163.09999990463257,
+        "keyToGeometryMs": 163.70000004768372,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 9202.799999952316,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 9202.899999856949,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 9203.899999856949,
+            "end": 9204.299999952316
+          },
+          {
+            "name": "footnotes",
+            "start": 9204.299999952316,
+            "end": 9238.5
+          },
+          {
+            "name": "stable-notes",
+            "start": 9238.5,
+            "end": 9238.5
+          },
+          {
+            "name": "local-collect",
+            "start": 9238.699999809265,
+            "end": 9238.899999856949
+          },
+          {
+            "name": "local-decorations",
+            "start": 9238.899999856949,
+            "end": 9238.899999856949
+          },
+          {
+            "name": "index",
+            "start": 9238.5,
+            "end": 9240.199999809265
+          },
+          {
+            "name": "note-overlay",
+            "start": 9240.199999809265,
+            "end": 9240.199999809265
+          },
+          {
+            "name": "preview",
+            "start": 9238.5,
+            "end": 9240.199999809265
+          }
+        ],
+        "updateAt": 9308.199999809265,
+        "head": 35,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 105.39999985694885,
+        "inputToUpdateMs": 105.29999995231628,
+        "stateMs": 36.299999952316284,
+        "viewMs": 68.10000014305115,
+        "updateCalls": 1,
+        "dispatchMs": 104.40000009536743,
+        "dispatchCalls": 1,
+        "keyToRafMs": 122.79999995231628,
+        "keyToGeometryMs": 123,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 9364.699999809265,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 9364.799999952316,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 9366.599999904633,
+            "end": 9367.099999904633
+          },
+          {
+            "name": "footnotes",
+            "start": 9367.199999809265,
+            "end": 9415.5
+          },
+          {
+            "name": "stable-notes",
+            "start": 9415.5,
+            "end": 9415.599999904633
+          },
+          {
+            "name": "local-collect",
+            "start": 9415.899999856949,
+            "end": 9415.899999856949
+          },
+          {
+            "name": "local-decorations",
+            "start": 9415.899999856949,
+            "end": 9416
+          },
+          {
+            "name": "index",
+            "start": 9415.599999904633,
+            "end": 9417.099999904633
+          },
+          {
+            "name": "note-overlay",
+            "start": 9417.099999904633,
+            "end": 9417.199999809265
+          },
+          {
+            "name": "preview",
+            "start": 9415.5,
+            "end": 9417.199999809265
+          }
+        ],
+        "updateAt": 9467,
+        "head": 36,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 102.30000019073486,
+        "inputToUpdateMs": 102.20000004768372,
+        "stateMs": 50.69999980926514,
+        "viewMs": 49.90000009536743,
+        "updateCalls": 1,
+        "dispatchMs": 100.59999990463257,
+        "dispatchCalls": 1,
+        "keyToRafMs": 110.80000019073486,
+        "keyToGeometryMs": 110.80000019073486,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 9513.899999856949,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 9514,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 9515.599999904633,
+            "end": 9516.299999952316
+          },
+          {
+            "name": "footnotes",
+            "start": 9516.5,
+            "end": 9567.899999856949
+          },
+          {
+            "name": "stable-notes",
+            "start": 9568,
+            "end": 9568
+          },
+          {
+            "name": "local-collect",
+            "start": 9568.299999952316,
+            "end": 9568.5
+          },
+          {
+            "name": "local-decorations",
+            "start": 9568.5,
+            "end": 9568.599999904633
+          },
+          {
+            "name": "index",
+            "start": 9568,
+            "end": 9570.099999904633
+          },
+          {
+            "name": "note-overlay",
+            "start": 9570.099999904633,
+            "end": 9570.099999904633
+          },
+          {
+            "name": "preview",
+            "start": 9567.899999856949,
+            "end": 9570.099999904633
+          }
+        ],
+        "updateAt": 9636.599999904633,
+        "head": 37,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 122.70000004768372,
+        "inputToUpdateMs": 122.59999990463257,
+        "stateMs": 54.69999980926514,
+        "viewMs": 66.5,
+        "updateCalls": 1,
+        "dispatchMs": 121.19999980926514,
+        "dispatchCalls": 1,
+        "keyToRafMs": 130.90000009536743,
+        "keyToGeometryMs": 131,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 9702,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 9702.199999809265,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 9703.099999904633,
+            "end": 9703.599999904633
+          },
+          {
+            "name": "footnotes",
+            "start": 9703.699999809265,
+            "end": 9741
+          },
+          {
+            "name": "stable-notes",
+            "start": 9741,
+            "end": 9741
+          },
+          {
+            "name": "local-collect",
+            "start": 9741.199999809265,
+            "end": 9741.199999809265
+          },
+          {
+            "name": "local-decorations",
+            "start": 9741.199999809265,
+            "end": 9741.299999952316
+          },
+          {
+            "name": "index",
+            "start": 9741,
+            "end": 9741.799999952316
+          },
+          {
+            "name": "note-overlay",
+            "start": 9741.799999952316,
+            "end": 9741.899999856949
+          },
+          {
+            "name": "preview",
+            "start": 9741,
+            "end": 9741.899999856949
+          }
+        ],
+        "updateAt": 9802.099999904633,
+        "head": 38,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 100.09999990463257,
+        "inputToUpdateMs": 99.90000009536743,
+        "stateMs": 38.89999985694885,
+        "viewMs": 60.200000047683716,
+        "updateCalls": 1,
+        "dispatchMs": 99.09999990463257,
+        "dispatchCalls": 1,
+        "keyToRafMs": 115.39999985694885,
+        "keyToGeometryMs": 115.39999985694885,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 9862.5,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 9862.5,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 9863.599999904633,
+            "end": 9864
+          },
+          {
+            "name": "footnotes",
+            "start": 9864,
+            "end": 9904.299999952316
+          },
+          {
+            "name": "stable-notes",
+            "start": 9904.299999952316,
+            "end": 9904.399999856949
+          },
+          {
+            "name": "local-collect",
+            "start": 9904.5,
+            "end": 9904.599999904633
+          },
+          {
+            "name": "local-decorations",
+            "start": 9904.599999904633,
+            "end": 9904.699999809265
+          },
+          {
+            "name": "index",
+            "start": 9904.399999856949,
+            "end": 9905.399999856949
+          },
+          {
+            "name": "note-overlay",
+            "start": 9905.399999856949,
+            "end": 9905.399999856949
+          },
+          {
+            "name": "preview",
+            "start": 9904.299999952316,
+            "end": 9905.399999856949
+          }
+        ],
+        "updateAt": 9966.699999809265,
+        "head": 39,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 104.19999980926514,
+        "inputToUpdateMs": 104.19999980926514,
+        "stateMs": 41.89999985694885,
+        "viewMs": 61.299999952316284,
+        "updateCalls": 1,
+        "dispatchMs": 103.19999980926514,
+        "dispatchCalls": 1,
+        "keyToRafMs": 120.5,
+        "keyToGeometryMs": 120.59999990463257,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 10032.699999809265,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 10032.899999856949,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 10034.099999904633,
+            "end": 10034.799999952316
+          },
+          {
+            "name": "footnotes",
+            "start": 10034.799999952316,
+            "end": 10074.799999952316
+          },
+          {
+            "name": "stable-notes",
+            "start": 10074.799999952316,
+            "end": 10074.799999952316
+          },
+          {
+            "name": "local-collect",
+            "start": 10075,
+            "end": 10075.099999904633
+          },
+          {
+            "name": "local-decorations",
+            "start": 10075.099999904633,
+            "end": 10075.099999904633
+          },
+          {
+            "name": "index",
+            "start": 10074.799999952316,
+            "end": 10075.899999856949
+          },
+          {
+            "name": "note-overlay",
+            "start": 10075.899999856949,
+            "end": 10075.899999856949
+          },
+          {
+            "name": "preview",
+            "start": 10074.799999952316,
+            "end": 10075.899999856949
+          }
+        ],
+        "updateAt": 10135.799999952316,
+        "head": 40,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 103.10000014305115,
+        "inputToUpdateMs": 102.90000009536743,
+        "stateMs": 42,
+        "viewMs": 59.799999952316284,
+        "updateCalls": 1,
+        "dispatchMs": 101.79999995231628,
+        "dispatchCalls": 1,
+        "keyToRafMs": 118.80000019073486,
+        "keyToGeometryMs": 118.80000019073486,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 10198.799999952316,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 10198.899999856949,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 10199.599999904633,
+            "end": 10200
+          },
+          {
+            "name": "footnotes",
+            "start": 10200,
+            "end": 10236.299999952316
+          },
+          {
+            "name": "stable-notes",
+            "start": 10236.299999952316,
+            "end": 10236.299999952316
+          },
+          {
+            "name": "local-collect",
+            "start": 10236.5,
+            "end": 10236.5
+          },
+          {
+            "name": "local-decorations",
+            "start": 10236.599999904633,
+            "end": 10236.599999904633
+          },
+          {
+            "name": "index",
+            "start": 10236.299999952316,
+            "end": 10237.199999809265
+          },
+          {
+            "name": "note-overlay",
+            "start": 10237.199999809265,
+            "end": 10237.199999809265
+          },
+          {
+            "name": "preview",
+            "start": 10236.299999952316,
+            "end": 10237.199999809265
+          }
+        ],
+        "updateAt": 10296.099999904633,
+        "head": 41,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 97.29999995231628,
+        "inputToUpdateMs": 97.20000004768372,
+        "stateMs": 37.700000047683716,
+        "viewMs": 58.799999952316284,
+        "updateCalls": 1,
+        "dispatchMs": 96.5,
+        "dispatchCalls": 1,
+        "keyToRafMs": 111.59999990463257,
+        "keyToGeometryMs": 111.70000004768372,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 10396.099999904633,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 10396.199999809265,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 10397.799999952316,
+            "end": 10398.199999809265
+          },
+          {
+            "name": "footnotes",
+            "start": 10398.199999809265,
+            "end": 10437
+          },
+          {
+            "name": "stable-notes",
+            "start": 10437.099999904633,
+            "end": 10437.099999904633
+          },
+          {
+            "name": "local-collect",
+            "start": 10437.199999809265,
+            "end": 10437.399999856949
+          },
+          {
+            "name": "local-decorations",
+            "start": 10437.399999856949,
+            "end": 10437.5
+          },
+          {
+            "name": "index",
+            "start": 10437.099999904633,
+            "end": 10438.099999904633
+          },
+          {
+            "name": "note-overlay",
+            "start": 10438.099999904633,
+            "end": 10438.099999904633
+          },
+          {
+            "name": "preview",
+            "start": 10437,
+            "end": 10438.099999904633
+          }
+        ],
+        "updateAt": 10500.899999856949,
+        "head": 42,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 104.79999995231628,
+        "inputToUpdateMs": 104.70000004768372,
+        "stateMs": 40.40000009536743,
+        "viewMs": 62.90000009536743,
+        "updateCalls": 1,
+        "dispatchMs": 103.30000019073486,
+        "dispatchCalls": 1,
+        "keyToRafMs": 120.40000009536743,
+        "keyToGeometryMs": 120.5,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 10570.299999952316,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 10570.5,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 10571.399999856949,
+            "end": 10571.899999856949
+          },
+          {
+            "name": "footnotes",
+            "start": 10571.899999856949,
+            "end": 10599.5
+          },
+          {
+            "name": "stable-notes",
+            "start": 10599.5,
+            "end": 10599.5
+          },
+          {
+            "name": "local-collect",
+            "start": 10599.5,
+            "end": 10599.5
+          },
+          {
+            "name": "local-decorations",
+            "start": 10599.599999904633,
+            "end": 10599.599999904633
+          },
+          {
+            "name": "index",
+            "start": 10599.5,
+            "end": 10600.099999904633
+          },
+          {
+            "name": "note-overlay",
+            "start": 10600.099999904633,
+            "end": 10600.099999904633
+          },
+          {
+            "name": "preview",
+            "start": 10599.5,
+            "end": 10600.099999904633
+          }
+        ],
+        "updateAt": 10653.799999952316,
+        "head": 43,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 83.5,
+        "inputToUpdateMs": 83.29999995231628,
+        "stateMs": 28.700000047683716,
+        "viewMs": 53.700000047683716,
+        "updateCalls": 1,
+        "dispatchMs": 82.40000009536743,
+        "dispatchCalls": 1,
+        "keyToRafMs": 93.29999995231628,
+        "keyToGeometryMs": 93.39999985694885,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 10695.799999952316,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 10695.899999856949,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 10696.699999809265,
+            "end": 10697.199999809265
+          },
+          {
+            "name": "footnotes",
+            "start": 10697.199999809265,
+            "end": 10740.799999952316
+          },
+          {
+            "name": "stable-notes",
+            "start": 10740.899999856949,
+            "end": 10740.899999856949
+          },
+          {
+            "name": "local-collect",
+            "start": 10741.099999904633,
+            "end": 10741.299999952316
+          },
+          {
+            "name": "local-decorations",
+            "start": 10741.299999952316,
+            "end": 10741.299999952316
+          },
+          {
+            "name": "index",
+            "start": 10740.899999856949,
+            "end": 10742.699999809265
+          },
+          {
+            "name": "note-overlay",
+            "start": 10742.699999809265,
+            "end": 10742.699999809265
+          },
+          {
+            "name": "preview",
+            "start": 10740.799999952316,
+            "end": 10742.699999809265
+          }
+        ],
+        "updateAt": 10806,
+        "head": 44,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 110.20000004768372,
+        "inputToUpdateMs": 110.10000014305115,
+        "stateMs": 46,
+        "viewMs": 63.40000009536743,
+        "updateCalls": 1,
+        "dispatchMs": 109.5,
+        "dispatchCalls": 1,
+        "keyToRafMs": 119,
+        "keyToGeometryMs": 119,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 10870.199999809265,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 10870.199999809265,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 10870.899999856949,
+            "end": 10871.599999904633
+          },
+          {
+            "name": "footnotes",
+            "start": 10871.699999809265,
+            "end": 10912.399999856949
+          },
+          {
+            "name": "stable-notes",
+            "start": 10912.5,
+            "end": 10912.5
+          },
+          {
+            "name": "local-collect",
+            "start": 10912.599999904633,
+            "end": 10912.699999809265
+          },
+          {
+            "name": "local-decorations",
+            "start": 10912.699999809265,
+            "end": 10912.699999809265
+          },
+          {
+            "name": "index",
+            "start": 10912.5,
+            "end": 10913.399999856949
+          },
+          {
+            "name": "note-overlay",
+            "start": 10913.399999856949,
+            "end": 10913.5
+          },
+          {
+            "name": "preview",
+            "start": 10912.5,
+            "end": 10913.5
+          }
+        ],
+        "updateAt": 10975,
+        "head": 45,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 104.80000019073486,
+        "inputToUpdateMs": 104.80000019073486,
+        "stateMs": 42.60000014305115,
+        "viewMs": 61.5,
+        "updateCalls": 1,
+        "dispatchMs": 104.10000014305115,
+        "dispatchCalls": 1,
+        "keyToRafMs": 117.80000019073486,
+        "keyToGeometryMs": 117.80000019073486,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 11036.599999904633,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 11036.699999809265,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 11037.399999856949,
+            "end": 11037.799999952316
+          },
+          {
+            "name": "footnotes",
+            "start": 11037.799999952316,
+            "end": 11077
+          },
+          {
+            "name": "stable-notes",
+            "start": 11077,
+            "end": 11077
+          },
+          {
+            "name": "local-collect",
+            "start": 11077.199999809265,
+            "end": 11077.199999809265
+          },
+          {
+            "name": "local-decorations",
+            "start": 11077.199999809265,
+            "end": 11077.199999809265
+          },
+          {
+            "name": "index",
+            "start": 11077,
+            "end": 11077.899999856949
+          },
+          {
+            "name": "note-overlay",
+            "start": 11077.899999856949,
+            "end": 11077.899999856949
+          },
+          {
+            "name": "preview",
+            "start": 11077,
+            "end": 11077.899999856949
+          }
+        ],
+        "updateAt": 11134.699999809265,
+        "head": 46,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 98.09999990463257,
+        "inputToUpdateMs": 98,
+        "stateMs": 40.5,
+        "viewMs": 56.90000009536743,
+        "updateCalls": 1,
+        "dispatchMs": 97.40000009536743,
+        "dispatchCalls": 1,
+        "keyToRafMs": 112.90000009536743,
+        "keyToGeometryMs": 112.90000009536743,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 11198.199999809265,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 11198.199999809265,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 11199,
+            "end": 11199.399999856949
+          },
+          {
+            "name": "footnotes",
+            "start": 11199.399999856949,
+            "end": 11237.599999904633
+          },
+          {
+            "name": "stable-notes",
+            "start": 11237.599999904633,
+            "end": 11237.599999904633
+          },
+          {
+            "name": "local-collect",
+            "start": 11237.699999809265,
+            "end": 11237.699999809265
+          },
+          {
+            "name": "local-decorations",
+            "start": 11237.699999809265,
+            "end": 11237.799999952316
+          },
+          {
+            "name": "index",
+            "start": 11237.599999904633,
+            "end": 11238.399999856949
+          },
+          {
+            "name": "note-overlay",
+            "start": 11238.399999856949,
+            "end": 11238.399999856949
+          },
+          {
+            "name": "preview",
+            "start": 11237.599999904633,
+            "end": 11238.399999856949
+          }
+        ],
+        "updateAt": 11298.5,
+        "head": 47,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 100.30000019073486,
+        "inputToUpdateMs": 100.30000019073486,
+        "stateMs": 39.5,
+        "viewMs": 60,
+        "updateCalls": 1,
+        "dispatchMs": 99.5,
+        "dispatchCalls": 1,
+        "keyToRafMs": 114.90000009536743,
+        "keyToGeometryMs": 115,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 11368.299999952316,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 11368.399999856949,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 11369.199999809265,
+            "end": 11369.799999952316
+          },
+          {
+            "name": "footnotes",
+            "start": 11369.899999856949,
+            "end": 11405.299999952316
+          },
+          {
+            "name": "stable-notes",
+            "start": 11405.299999952316,
+            "end": 11405.299999952316
+          },
+          {
+            "name": "local-collect",
+            "start": 11405.399999856949,
+            "end": 11405.5
+          },
+          {
+            "name": "local-decorations",
+            "start": 11405.5,
+            "end": 11405.5
+          },
+          {
+            "name": "index",
+            "start": 11405.299999952316,
+            "end": 11406.099999904633
+          },
+          {
+            "name": "note-overlay",
+            "start": 11406.099999904633,
+            "end": 11406.199999809265
+          },
+          {
+            "name": "preview",
+            "start": 11405.299999952316,
+            "end": 11406.199999809265
+          }
+        ],
+        "updateAt": 11466.799999952316,
+        "head": 48,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 98.5,
+        "inputToUpdateMs": 98.40000009536743,
+        "stateMs": 37.09999990463257,
+        "viewMs": 60.60000014305115,
+        "updateCalls": 1,
+        "dispatchMs": 97.70000004768372,
+        "dispatchCalls": 1,
+        "keyToRafMs": 113.59999990463257,
+        "keyToGeometryMs": 113.59999990463257,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 11536.5,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 11536.599999904633,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 11537.899999856949,
+            "end": 11538.399999856949
+          },
+          {
+            "name": "footnotes",
+            "start": 11538.399999856949,
+            "end": 11578.399999856949
+          },
+          {
+            "name": "stable-notes",
+            "start": 11578.399999856949,
+            "end": 11578.399999856949
+          },
+          {
+            "name": "local-collect",
+            "start": 11578.599999904633,
+            "end": 11578.699999809265
+          },
+          {
+            "name": "local-decorations",
+            "start": 11578.699999809265,
+            "end": 11578.699999809265
+          },
+          {
+            "name": "index",
+            "start": 11578.399999856949,
+            "end": 11579.399999856949
+          },
+          {
+            "name": "note-overlay",
+            "start": 11579.399999856949,
+            "end": 11579.5
+          },
+          {
+            "name": "preview",
+            "start": 11578.399999856949,
+            "end": 11579.5
+          }
+        ],
+        "updateAt": 11638.299999952316,
+        "head": 49,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 101.79999995231628,
+        "inputToUpdateMs": 101.70000004768372,
+        "stateMs": 41.60000014305115,
+        "viewMs": 58.89999985694885,
+        "updateCalls": 1,
+        "dispatchMs": 100.5,
+        "dispatchCalls": 1,
+        "keyToRafMs": 121.59999990463257,
+        "keyToGeometryMs": 121.69999980926514,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 11700.299999952316,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 11700.5,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 11702.099999904633,
+            "end": 11702.899999856949
+          },
+          {
+            "name": "footnotes",
+            "start": 11702.899999856949,
+            "end": 11742.5
+          },
+          {
+            "name": "stable-notes",
+            "start": 11742.599999904633,
+            "end": 11742.599999904633
+          },
+          {
+            "name": "local-collect",
+            "start": 11742.799999952316,
+            "end": 11742.899999856949
+          },
+          {
+            "name": "local-decorations",
+            "start": 11742.899999856949,
+            "end": 11742.899999856949
+          },
+          {
+            "name": "index",
+            "start": 11742.599999904633,
+            "end": 11744.099999904633
+          },
+          {
+            "name": "note-overlay",
+            "start": 11744.099999904633,
+            "end": 11744.099999904633
+          },
+          {
+            "name": "preview",
+            "start": 11742.599999904633,
+            "end": 11744.099999904633
+          }
+        ],
+        "updateAt": 11802.799999952316,
+        "head": 50,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 102.5,
+        "inputToUpdateMs": 102.29999995231628,
+        "stateMs": 42,
+        "viewMs": 58.700000047683716,
+        "updateCalls": 1,
+        "dispatchMs": 100.79999995231628,
+        "dispatchCalls": 1,
+        "keyToRafMs": 109.59999990463257,
+        "keyToGeometryMs": 109.70000004768372,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 11848.099999904633,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 11848.299999952316,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 11849.799999952316,
+            "end": 11850.599999904633
+          },
+          {
+            "name": "footnotes",
+            "start": 11850.699999809265,
+            "end": 11899.599999904633
+          },
+          {
+            "name": "stable-notes",
+            "start": 11899.599999904633,
+            "end": 11899.599999904633
+          },
+          {
+            "name": "local-collect",
+            "start": 11899.799999952316,
+            "end": 11899.899999856949
+          },
+          {
+            "name": "local-decorations",
+            "start": 11899.899999856949,
+            "end": 11900
+          },
+          {
+            "name": "index",
+            "start": 11899.599999904633,
+            "end": 11901.099999904633
+          },
+          {
+            "name": "note-overlay",
+            "start": 11901.099999904633,
+            "end": 11901.099999904633
+          },
+          {
+            "name": "preview",
+            "start": 11899.599999904633,
+            "end": 11901.099999904633
+          }
+        ],
+        "updateAt": 11960.199999809265,
+        "head": 51,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 112.09999990463257,
+        "inputToUpdateMs": 111.89999985694885,
+        "stateMs": 51.39999985694885,
+        "viewMs": 59,
+        "updateCalls": 1,
+        "dispatchMs": 110.39999985694885,
+        "dispatchCalls": 1,
+        "keyToRafMs": 119.59999990463257,
+        "keyToGeometryMs": 119.70000004768372,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 12025.899999856949,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 12025.899999856949,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 12026.799999952316,
+            "end": 12027.299999952316
+          },
+          {
+            "name": "footnotes",
+            "start": 12027.299999952316,
+            "end": 12065.799999952316
+          },
+          {
+            "name": "stable-notes",
+            "start": 12065.799999952316,
+            "end": 12065.799999952316
+          },
+          {
+            "name": "local-collect",
+            "start": 12066.099999904633,
+            "end": 12066.099999904633
+          },
+          {
+            "name": "local-decorations",
+            "start": 12066.099999904633,
+            "end": 12066.099999904633
+          },
+          {
+            "name": "index",
+            "start": 12065.799999952316,
+            "end": 12066.699999809265
+          },
+          {
+            "name": "note-overlay",
+            "start": 12066.699999809265,
+            "end": 12066.799999952316
+          },
+          {
+            "name": "preview",
+            "start": 12065.799999952316,
+            "end": 12066.799999952316
+          }
+        ],
+        "updateAt": 12117.599999904633,
+        "head": 52,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 91.70000004768372,
+        "inputToUpdateMs": 91.70000004768372,
+        "stateMs": 40,
+        "viewMs": 50.799999952316284,
+        "updateCalls": 1,
+        "dispatchMs": 90.89999985694885,
+        "dispatchCalls": 1,
+        "keyToRafMs": 105.29999995231628,
+        "keyToGeometryMs": 105.29999995231628,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 12179.5,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 12179.599999904633,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 12180.5,
+            "end": 12180.899999856949
+          },
+          {
+            "name": "footnotes",
+            "start": 12181,
+            "end": 12220.799999952316
+          },
+          {
+            "name": "stable-notes",
+            "start": 12220.799999952316,
+            "end": 12220.799999952316
+          },
+          {
+            "name": "local-collect",
+            "start": 12221,
+            "end": 12221
+          },
+          {
+            "name": "local-decorations",
+            "start": 12221,
+            "end": 12221.099999904633
+          },
+          {
+            "name": "index",
+            "start": 12220.799999952316,
+            "end": 12221.699999809265
+          },
+          {
+            "name": "note-overlay",
+            "start": 12221.699999809265,
+            "end": 12221.799999952316
+          },
+          {
+            "name": "preview",
+            "start": 12220.799999952316,
+            "end": 12221.799999952316
+          }
+        ],
+        "updateAt": 12260.5,
+        "head": 53,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 81,
+        "inputToUpdateMs": 80.90000009536743,
+        "stateMs": 41.40000009536743,
+        "viewMs": 38.700000047683716,
+        "updateCalls": 1,
+        "dispatchMs": 80.10000014305115,
+        "dispatchCalls": 1,
+        "keyToRafMs": 93.89999985694885,
+        "keyToGeometryMs": 93.89999985694885,
+        "visible": true,
+        "domContainsInput": true
+      }
+    ]
+  }
+}

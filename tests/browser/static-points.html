@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Static point projection experiment</title>
+<link rel="stylesheet" href="/src/web/style.css">
+<style>body{padding:12px}.panes{display:flex;gap:16px}.surface{width:400px;height:480px;border:1px solid var(--border);margin-top:8px}.surface>.cm-editor>.cm-scroller>.cm-content{flex:1 1 auto;min-width:0;padding:24px 20px 60px;font-family:system-ui,sans-serif;line-height:1.65}.source-mode .cm-content{font-family:ui-monospace,monospace!important}#result{font:12px monospace;white-space:pre-wrap;max-height:200px;overflow:auto}button{margin:4px}</style></head>
+<body><p>Inactive experiment: full preview / static points and marks</p>
+<button id="top">Top</button><button id="middle">Middle</button><button id="end">End</button>
+<button id="distant">Distant Find</button>
+<button id="owner">Off-screen owner</button><button id="find">Find inner text</button>
+<button id="narrow">Narrow</button><button id="source">Source mode</button>
+<button id="batch">Run layout batch</button><button id="edit-batch">Run edit layout batch</button><button id="check">Check layout</button><button id="undo">Undo</button><button id="redo">Redo</button>
+<button id="restore-comparator">Restore comparator</button>
+<div class="panes"><section><span>Full preview</span><div id="baseline" class="surface"></div></section>
+<section><span>Static points and marks</span><div id="candidate" class="surface"></div></section></div>
+<pre id="result" role="status">Loading…</pre>
+<script type="module">
+import {Compartment,EditorState,RangeSet,StateField,Transaction} from '@codemirror/state';
+import {Decoration,EditorView,keymap} from '@codemirror/view';
+import {defaultKeymap,history,historyKeymap,isolateHistory,undo,redo,undoDepth} from '@codemirror/commands';
+import {ensureSyntaxTree,syntaxTree} from '@codemirror/language';
+import {SearchQuery,findNext,setSearchQuery} from '@codemirror/search';
+import {documentLanguage} from '/src/web/document-language.ts';
+import {completeDocument} from '/src/web/preview-index.ts';
+import {fromSource,normalize,savedSource,sourceExtensions,sourceField,sourceOffset} from '/src/web/source.ts';
+import {footnoteField} from '/src/web/footnotes.ts';
+import {tableCellField,tableHistoryView,tableImageVersion} from '/src/web/table.ts';
+import {textDirection} from '/src/web/text-direction.ts';
+import {searchSupport} from '/src/web/navigation.ts';
+import {collectPreview,livePreview,previewDecorations,previewField} from '/tests/performance/experiments/point-comparison/static-preview.ts';
+import {installPairedComparator} from '/tests/performance/experiments/point-comparison/browser-comparator.ts';
+const paragraph='Paragraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. '+('Wrapped words **bold** and *italic*. '.repeat(5));
+const owner='*Owner start\n'+Array.from({length:30},(_,i)=>`Owner continuation ${i} with words.`).join('\n')+'\nOwner end*';
+const mixedOriginal='\uFEFF# Layout **heading**\r\n\r\n'+paragraph+'[^a].\n\n'+owner+'\r\n\r\n'
+  +Array.from({length:45},(_,i)=>`## Section ${i}\n\n${paragraph}\n\n`).join('')+'[^a]: 日本語 **note**\r\n\rEnd paragraph.\n';
+const indexed=new URLSearchParams(location.search).get('fixture')==='indexed';
+const header='\uFEFF# **Heading[^a]**\r\n\r\nParagraph words 日本語 and **strong**[^a].\r\n\r\n';
+const block='# Heading\n\nParagraph with **strong text**, `code`, and words.\n\n',tail='\r\n[^a]: 日本語 note\r\n';
+const remaining=1048576-new TextEncoder().encode(header+tail).length;
+const original=indexed?header+block.repeat(Math.floor(remaining/block.length))+'w'.repeat(remaining%block.length)+tail:mixedOriginal;
+const record=fromSource(original),doc=normalize(record.raw),mode=new Compartment(),baselineMode=new Compartment();
+const parameters=new URLSearchParams(location.search),control=parameters.get('control')==='full',reverse=parameters.get('order')==='reverse';
+const originalCompare=RangeSet.compare,pairedRequested=parameters.get('paired')==='1';
+let comparatorTrial,pairedModule,callbackControl;
+if(pairedRequested){
+  try{
+    const moduleURL='/__markdew_paired_state__.mjs';
+    const module=await import(/* @vite-ignore */ moduleURL);
+    pairedModule=module;
+    comparatorTrial=installPairedComparator(module,{pathname:location.pathname,search:location.search,expectedOriginal:originalCompare});
+  }catch(error){document.querySelector('#result').textContent=JSON.stringify({ready:false,pairedRequested,comparatorSetupError:String(error)});throw error}
+}
+let candidate,baseline,sourceMode=false,narrow=false,ready=false,disposed=false,lastCheck,actionStart,checking=false,batchResults=[],editResults=[],editMode,expectedSource=original,editedSource;
+const baselineField=StateField.define({
+  create(state){return previewDecorations(state,collectPreview(state,syntaxTree(state)))},
+  update(value,tr){return tr.docChanged||tr.selection||syntaxTree(tr.state)!==syntaxTree(tr.startState)
+    ?previewDecorations(tr.state,collectPreview(tr.state,syntaxTree(tr.state))):value},
+  provide:field=>EditorView.decorations.from(field),
+});
+function state(extension,label){let value=EditorState.create({doc,selection:{anchor:doc.length},extensions:[sourceExtensions(record),history(),documentLanguage(),
+  textDirection,EditorView.lineWrapping,EditorView.contentAttributes.of({'aria-label':label}),
+  keymap.of([...defaultKeymap,...historyKeymap]),extension]});
+  if(!ensureSyntaxTree(value,value.doc.length,10000))throw Error('Incomplete initial tree');value=value.update({}).state;
+  if(!completeDocument(value))throw Error('Incomplete initial Markdown body');return value;
+}
+const fullPreview=[footnoteField,tableCellField,tableImageVersion,tableHistoryView,baselineField];
+const candidatePreview=control?fullPreview:livePreview;
+const createBaseline=()=>baseline=new EditorView({parent:document.querySelector('#baseline'),state:state(baselineMode.of(fullPreview),'Full Markdown document')});
+const createCandidate=()=>candidate=new EditorView({parent:document.querySelector('#candidate'),state:state([mode.of(candidatePreview),searchSupport(()=>candidate),EditorView.updateListener.of(update=>{
+  if(baseline&&(update.docChanged||update.selectionSet))baseline.dispatch({changes:update.changes,selection:update.state.selection,annotations:Transaction.addToHistory.of(false)});
+})],control?'Control Markdown document':'Static Markdown document')});
+function cleanup(){disposed=true;try{candidate?.destroy()}finally{try{baseline?.destroy()}finally{comparatorTrial?.dispose()}}}
+window.addEventListener('pagehide',cleanup,{once:true});
+function betweenViews(){if(parameters.get('setupFailure')==='after-first')throw Error('Requested failure after first view construction')}
+try{if(reverse){createCandidate();betweenViews();createBaseline()}else{createBaseline();betweenViews();createCandidate()}}
+catch(error){try{cleanup()}finally{document.querySelector('#result').textContent=JSON.stringify({ready:false,pairedRequested,viewSetupError:String(error),disposed,createdViews:Number(!!candidate)+Number(!!baseline),remainingEditors:document.querySelectorAll('.surface>.cm-editor').length,comparator:comparatorTrial?.snapshot()})}throw error}
+document.querySelector('#candidate').previousElementSibling.textContent=control?'Full preview control':'Static points and marks';
+const source=view=>savedSource(view.state.field(sourceField));
+function report(){document.querySelector('#result').textContent=JSON.stringify({ready,control,reverse,indexed,checking,sourceMode,narrow,pairedRequested,comparator:comparatorTrial?.snapshot(),batchResults,editResults,editMode,sourceEqual:source(candidate)===source(baseline),
+  exactOriginal:source(candidate)===original,history:undoDepth(candidate.state),head:candidate.state.selection.main.head,
+  complete:!!completeDocument(candidate.state),baselineComplete:!!completeDocument(baseline.state),
+  visibleRanges:candidate.visibleRanges,pointRanges:candidate.state.field(previewField,false)?.layers.points.size??0,lastCheck},null,2)}
+function headBox(view){const caret=view.coordsAtPos(view.state.selection.main.head),box=view.scrollDOM.getBoundingClientRect();
+  return {head:view.state.selection.main.head,visible:!!caret&&caret.bottom>box.top&&caret.top<box.bottom,
+    relativeTop:caret?caret.top-box.top:null,scrollTop:view.scrollDOM.scrollTop,scrollHeight:view.scrollDOM.scrollHeight,clientHeight:view.scrollDOM.clientHeight,contentHeight:view.contentHeight};}
+function start(action){comparatorTrial?.phase('dispatch');actionStart={action,baseline:headBox(baseline),candidate:headBox(candidate),comparator:comparatorTrial?.snapshot()}}
+function jump(position,action='jump'){start(action);candidate.dispatch({selection:{anchor:position},scrollIntoView:true});baseline.dispatch({scrollIntoView:true});candidate.focus()}
+document.querySelector('#top').onclick=()=>jump(0);
+document.querySelector('#middle').onclick=()=>jump(indexed?Math.floor(candidate.state.doc.length/2):candidate.state.doc.toString().indexOf('## Section 22'));
+document.querySelector('#end').onclick=()=>jump(candidate.state.doc.length);
+document.querySelector('#owner').onclick=()=>{if(indexed){jump(candidate.state.doc.toString().lastIndexOf('Paragraph'));return;}jump(candidate.state.doc.toString().indexOf('Owner start'));requestAnimationFrame(()=>{
+  const at=candidate.state.doc.toString().indexOf('Owner end');for(const view of [candidate,baseline])view.dispatch({effects:EditorView.scrollIntoView(at,{y:'start'})});
+})};
+document.querySelector('#find').onclick=()=>{start('find');candidate.dispatch({effects:setSearchQuery.of(new SearchQuery({search:indexed?'strong text':'inner text'}))});findNext(candidate);baseline.dispatch({scrollIntoView:true});candidate.focus()};
+document.querySelector('#distant').onclick=()=>{start('distant');candidate.dispatch({effects:setSearchQuery.of(new SearchQuery({search:indexed?'日本語 note':'Section 44'}))});findNext(candidate);baseline.dispatch({scrollIntoView:true});candidate.focus()};
+document.querySelector('#narrow').onclick=()=>{start('width');narrow=!narrow;document.querySelectorAll('.surface').forEach(el=>el.style.width=narrow?'240px':'400px')};
+document.querySelector('#source').onclick=()=>{start('source-mode');sourceMode=!sourceMode;candidate.dispatch({effects:mode.reconfigure(sourceMode?[]:candidatePreview)});baseline.dispatch({effects:baselineMode.reconfigure(sourceMode?[]:fullPreview)});document.querySelectorAll('.surface').forEach(el=>el.classList.toggle('source-mode',sourceMode));for(const view of [candidate,baseline])view.dispatch({scrollIntoView:true});candidate.focus()};
+document.querySelector('#undo').onclick=()=>{undo(candidate);report()};document.querySelector('#redo').onclick=()=>{redo(candidate);report()};
+document.querySelector('#restore-comparator').onclick=()=>{comparatorTrial?.dispose();report()};
+function layout(){
+  const plan=candidate.state.field(previewField,false),differences=[],boxes=[];
+  const priorSource=source(candidate),priorHistory=undoDepth(candidate.state);
+  {const full=sourceMode?Decoration.none:previewDecorations(candidate.state,collectPreview(candidate.state,syntaxTree(candidate.state),plan?.imageVersion));
+    // Check complete static preview semantics, then shared actual line boxes.
+    const inputs=sourceMode?[Decoration.none]:plan?[plan.layers.points,plan.layers.marks]:[candidate.state.field(baselineField)];
+    originalCompare.call(RangeSet,inputs,[full],candidate.state.changes([]),{
+      compareRange(from,to){differences.push(["range",from,to])},comparePoint(from,to){differences.push(["point",from,to])},boundChange(at){differences.push(["bound",at])}
+    });
+    for(const visible of candidate.visibleRanges){const from=candidate.state.doc.lineAt(visible.from).from,to=candidate.state.doc.lineAt(visible.to).to;
+      for(let line=candidate.state.doc.lineAt(from);line.from<=to;){
+        const domLine=(view,position)=>{const at=view.domAtPos(position),node=at.node.nodeType===1?at.node:at.node.parentElement;
+          const element=node?.closest('.cm-line');return element&&view.posAtDOM(element,0)===position?element:null};
+        const left=domLine(baseline,line.from),right=domLine(candidate,line.from);
+        if(left&&right){const a=left.getBoundingClientRect(),b=right.getBoundingClientRect();
+          boxes.push({from:line.from,baseline:a.height,candidate:b.height,delta:Math.abs(a.height-b.height),
+            textEqual:left.textContent===right.textContent});}
+        if(line.to>=candidate.state.doc.length)break;line=candidate.state.doc.lineAt(line.to+1);
+      }
+    }
+  }
+  return {differences,boxes,maxHeightDelta:Math.max(0,...boxes.map(box=>box.delta)),sourceEqual:source(candidate)===source(baseline),
+    baselineHead:headBox(baseline),candidateHead:headBox(candidate),
+    complete:!!completeDocument(candidate.state),baselineComplete:!!completeDocument(baseline.state),
+    exactOriginal:source(candidate)===original,exactExpected:source(candidate)===expectedSource,history:undoDepth(candidate.state),
+    selectionEqual:candidate.state.selection.eq(baseline.state.selection),editMode,
+    comparator:comparatorTrial?.snapshot(),callbackControl,
+    fonts:[baseline,candidate].map(view=>{const style=getComputedStyle(view.contentDOM);return {fontFamily:style.fontFamily,fontSize:style.fontSize,lineHeight:style.lineHeight,width:view.scrollDOM.clientWidth}}),
+    sourceUnchangedByCheck:source(candidate)===priorSource,historyUnchangedByCheck:undoDepth(candidate.state)===priorHistory,
+    baselineEstimatedHeight:baseline.contentHeight,candidateEstimatedHeight:candidate.contentHeight};
+}
+// Read-only attribution. These private fields are specific to view 6.43.13.
+// They are read after the public settling samples and never changed.
+function attribution(view){const oracle=view.viewState.heightOracle,root=view.viewState.heightMap;
+  const map={nodes:0,text:0,gap:0,block:0,collapsed:0,gapLength:0,classes:{}};
+  function visit(node){map.nodes++;const name=node.constructor.name;map.classes[name]=(map.classes[name]??0)+1;
+    if(node.left){visit(node.left);visit(node.right)}
+    else if('collapsed' in node){map.text++;map.collapsed+=node.collapsed}
+    else if('deco' in node)map.block++;
+    else{map.gap++;map.gapLength+=node.length}}
+  visit(root);return {version:'6.43.13',map,height:root.height,oracle:{lineHeight:oracle.lineHeight,charWidth:oracle.charWidth,
+    textHeight:oracle.textHeight,lineLength:oracle.lineLength,lineWrapping:oracle.lineWrapping}};
+}
+const frame=deadline=>new Promise(resolve=>{let id;
+  const timer=setTimeout(()=>{cancelAnimationFrame(id);resolve(false)},Math.max(0,deadline-performance.now()));
+  id=requestAnimationFrame(()=>{clearTimeout(timer);resolve(performance.now()<deadline)});
+});
+document.querySelector('#check').onclick=async()=>{
+  if(checking)return;checking=true;document.querySelectorAll('button').forEach(button=>button.disabled=true);report();
+  const comparatorBeforeGeometry=comparatorTrial?.snapshot();comparatorTrial?.phase('geometry');
+  const initialSource=source(candidate),initialHistory=undoDepth(candidate.state),samples=[];
+  const planMode=()=>candidate.state.field(previewField,false)?.mode??(sourceMode?'source':'full-control');
+  const readiness={before:planMode(),scope:'complete tree publication outside geometry samples'};
+  let begin;
+  let equal=0,status='deadline';
+  const metrics=value=>[value.baseline,value.candidate].flatMap(box=>[box.contentHeight,box.scrollTop,box.scrollHeight,box.relativeTop]);
+  try{
+    for(const view of [baseline,candidate]){
+      if(!ensureSyntaxTree(view.state,view.state.doc.length,10000))throw Error('Geometry parser did not complete');
+      view.dispatch({});if(!completeDocument(view.state))throw Error('Geometry Markdown body is incomplete');
+    }
+    readiness.after=planMode();begin=performance.now();
+    while(!disposed&&performance.now()-begin<1200){const next=await frame(begin+1200);if(disposed)return;if(!next)break;
+    const sample={elapsed:performance.now()-begin,baseline:headBox(baseline),candidate:headBox(candidate)};
+    const prior=samples.at(-1);samples.push(sample);
+    equal=prior&&metrics(sample).every((value,i)=>{const before=metrics(prior)[i];
+      return value===null||before===null?value===before:Math.abs(value-before)<=0.05})?equal+1:0;
+    if(samples.length>=8&&equal>=4){status='stable';break;}
+  }
+  lastCheck={...layout(),actionStart,readiness,comparatorBeforeGeometry,settling:{status,tolerancePixels:0.05,requiredEqualTransitions:4,minimumFrames:8,deadlineMs:1200,samples},
+    sourceUnchangedDuringSettle:source(candidate)===initialSource,historyUnchangedDuringSettle:undoDepth(candidate.state)===initialHistory,
+    attribution:{baseline:attribution(baseline),candidate:attribution(candidate)}};
+  }catch(error){lastCheck={error:String(error),comparator:comparatorTrial?.snapshot()}}finally{comparatorTrial?.phase('other');checking=false;if(!disposed){document.querySelectorAll('button').forEach(button=>button.disabled=false);report()}}
+};
+document.querySelector('#batch').onclick=async()=>{
+  if(checking||!ready)return;batchResults=[];report();
+  for(const action of ['top','middle','end','distant','owner','narrow','find','top','middle','end']){
+    if(disposed)return;
+    document.querySelector('#'+action).onclick();
+    await document.querySelector('#check').onclick();
+    batchResults.push({action,...lastCheck});report();
+    if(lastCheck.error||lastCheck.settling?.status!=='stable')break;
+  }
+};
+document.querySelector('#edit-batch').onclick=async()=>{
+  if(checking||!ready||!indexed||sourceMode||undoDepth(candidate.state)!==0)return;
+  editResults=[];
+  const check=async action=>{await document.querySelector('#check').onclick();editResults.push({action,...lastCheck});report();
+    if(lastCheck.error||lastCheck.settling?.status!=='stable')throw Error('Edit geometry did not settle')};
+  try{
+    jump(candidate.state.doc.toString().indexOf('Paragraph')+3,'edit-anchor');await check('edit-anchor');
+    start('unicode-edit');const from=candidate.state.selection.main.head,insert='中𠀀e\u0301';
+    const record=candidate.state.field(sourceField),raw=source(candidate),offset=sourceOffset(record,from)+(record.bom?1:0);
+    expectedSource=editedSource=raw.slice(0,offset)+insert+raw.slice(offset);
+    const oldLayers=candidate.state.field(previewField,false)?.layers;
+    const transaction=candidate.state.update({changes:{from,insert},selection:{anchor:from+insert.length},annotations:isolateHistory.of('full'),userEvent:'input.type'});
+    candidate.dispatch(transaction);
+    if(pairedModule&&oldLayers){
+      const currentLayers=candidate.state.field(previewField).layers;
+      const events=compare=>{const result=[];compare([oldLayers.points,oldLayers.marks],[currentLayers.points,currentLayers.marks],transaction.changes,{
+        comparePoint(from,to,a,b){result.push(['point',from,to,a,b])},compareRange(from,to,a,b){result.push(['range',from,to,[...a],[...b]])},boundChange(at){result.push(['bound',at])},
+      },0);return result};
+      const expected=events(originalCompare),stats={...pairedModule.pairedStats},actual=events(pairedModule.RangeSet.compare);
+      const same=(a,b)=>Array.isArray(a)&&Array.isArray(b)?a.length===b.length&&a.every((value,i)=>same(value,b[i])):a===b;
+      callbackControl={equal:same(expected,actual),callbacks:expected.length,diagnosticJumps:pairedModule.pairedStats.jumps-stats.jumps,
+        diagnosticRangesSkipped:pairedModule.pairedStats.rangesSkipped-stats.rangesSkipped,scope:'direct comparison outside view dispatch and geometry samples'};
+      if(!callbackControl.equal)throw Error('Paired callback control differs from original');
+    }
+    editMode=candidate.state.field(previewField,false)?.mode??'full-control';await check('unicode-edit');
+    for(const action of ['distant','narrow']){document.querySelector('#'+action).onclick();await check(action)}
+    start('undo');if(!undo(candidate))throw Error('Undo failed');expectedSource=original;for(const view of [candidate,baseline])view.dispatch({scrollIntoView:true});await check('undo');
+    start('redo');if(!redo(candidate))throw Error('Redo failed');expectedSource=editedSource;for(const view of [candidate,baseline])view.dispatch({scrollIntoView:true});await check('redo');
+    document.querySelector('#source').onclick();await check('source');
+    document.querySelector('#source').onclick();await check('live');
+    document.querySelector('#end').onclick();await check('end');
+  }catch(error){editResults.push({error:String(error)});report()}
+};
+new MutationObserver(()=>{if(!disposed)report()}).observe(candidate.dom,{childList:true,subtree:true});
+document.fonts.ready.then(()=>requestAnimationFrame(()=>requestAnimationFrame(()=>{ready=true;jump(0);report()})));
+</script></body></html>
+

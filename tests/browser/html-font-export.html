@@ -1,0 +1,49 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Embedded HTML font export check</title><link rel="stylesheet" href="/src/web/style.css">
+<style>body{margin:24px;font:15px system-ui}button{margin:4px}#result{white-space:pre-wrap}#output img{max-width:820px}</style></head>
+<body><h1>Embedded HTML font export check</h1><button id="good" disabled>Capture embedded font</button><button id="bad" disabled>Capture failed font</button><button id="undo" disabled>Undo font edit</button><pre id="result" role="status">Loading the test font…</pre><div id="paper"></div><div id="output"></div>
+<script type="module">
+import fontURL from '@mathjax/mathjax-newcm-font/chtml/woff2/mjx-ncm-n.woff2?url';
+import {EditorState} from '@codemirror/state';
+import {history,undo,undoDepth} from '@codemirror/commands';
+import {EditorView} from '@codemirror/view';
+import {documentLanguage} from '/src/web/document-language.ts';
+import {sourceExtensions,sourceField,savedSource,fromSource,normalize} from '/src/web/source.ts';
+import {printView} from '/src/web/print-view.ts';
+import {pngBytes} from '/src/web/png-export.ts';
+// Only this fixture fetches the existing local package asset. The authored HTML
+// receives embedded data bytes and makes no external font request.
+const bytes=new Uint8Array(await (await fetch(fontURL)).arrayBuffer());
+let binary='';for(const byte of bytes)binary+=String.fromCharCode(byte);
+const data='data:font/woff2;base64,'+btoa(binary);
+function html(resource){return '<div><style>@font-face{font-family:MarkDewEmbeddedFont;src:url("'+resource+'") format("woff2")}'
+ +'p{margin:12px 0}#custom{font:40px MarkDewEmbeddedFont;color:rgb(180,20,80)}#control{font:40px monospace;color:rgb(20,80,180)}</style>'
+ +'<p>Embedded font</p><p><span id="custom">tttttttt</span></p><p>Monospace control</p><p><span id="control">tttttttt</span></p><p id="sentinel">FINAL FONT SENTINEL 日本語😀</p></div>'}
+const original='\uFEFF'+html(data)+'\r\n\rTail\n',record=fromSource(original);
+const host=document.createElement('div');host.hidden=true;document.body.append(host);
+const view=new EditorView({parent:host,state:EditorState.create({doc:normalize(record.raw),extensions:[sourceExtensions(record),history(),documentLanguage()]})});
+const controller=new AbortController();let projection,url;
+function pixels(canvas,kind,band){const rgba=canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height).data;let left=Infinity,right=-1,top=Infinity,bottom=-1;
+ for(let y=Math.max(0,Math.floor(band.top)-3);y<Math.min(canvas.height,Math.ceil(band.bottom)+3);y++)for(let x=0;x<canvas.width;x++){const at=(y*canvas.width+x)*4,r=rgba[at],g=rgba[at+1],b=rgba[at+2];
+  if(rgba[at+3]>100&&(kind==='custom'?r>g+40&&r>b+40:b>g+40&&b>r+40)){left=Math.min(left,x);right=Math.max(right,x);top=Math.min(top,y);bottom=Math.max(bottom,y)}}
+ return {width:right<0?0:right-left+1,height:bottom<0?0:bottom-top+1};}
+function report(extra){document.querySelector('#result').textContent=JSON.stringify({exactOriginal:savedSource(view.state.field(sourceField))===original,history:undoDepth(view.state),...extra},null,2)}
+async function capture(){const before=savedSource(view.state.field(sourceField)),depth=undoDepth(view.state);projection?.dispose();projection=printView({state:view.state,id:0,path:'',title:'Embedded font check'});document.querySelector('#paper').append(projection.element);
+ const warnings=await projection.ready,frame=projection.element.querySelector('iframe'),doc=frame.contentDocument,custom=doc.querySelector('#custom'),control=doc.querySelector('#control');
+ const fonts=Array.from(doc.fonts).map(face=>({family:face.family,status:face.status}));const customBox=custom.getBoundingClientRect(),controlBox=control.getBoundingClientRect(),offset=frame.getBoundingClientRect().top-projection.element.getBoundingClientRect().top;
+ const metrics={custom:customBox.width,control:controlBox.width},bands={custom:{top:offset+customBox.top,bottom:offset+customBox.bottom},control:{top:offset+controlBox.top,bottom:offset+controlBox.bottom}};
+ try{const png=await pngBytes(projection.element,controller.signal);if(url)URL.revokeObjectURL(url);url=URL.createObjectURL(new Blob([png],{type:'image/png'}));const image=new Image();image.alt='Embedded HTML font PNG';image.src=url;await image.decode();document.querySelector('#output').replaceChildren(image);
+  const canvas=document.createElement('canvas');canvas.width=image.naturalWidth;canvas.height=image.naturalHeight;canvas.getContext('2d').drawImage(image,0,0);
+  const ink={custom:pixels(canvas,'custom',bands.custom),control:pixels(canvas,'control',bands.control)};
+  // The package normal font gives t an advance of 0.389 em. This check rejects
+  // a loaded face that lacks our glyphs and silently uses a serif fallback.
+  const fontFidelity=fonts.some(face=>face.family==='MarkDewEmbeddedFont'&&face.status==='loaded')
+   &&Math.abs(metrics.custom-8*40*.389)<.5&&Math.abs(ink.custom.width-metrics.custom)<4
+   &&Math.abs(ink.control.width-metrics.control)<7&&ink.control.width>ink.custom.width*1.4;
+  report({fontFidelity,fonts,metrics,pixels:ink,width:image.naturalWidth,height:image.naturalHeight,warnings,unchangedSource:savedSource(view.state.field(sourceField))===before,unchangedHistory:undoDepth(view.state)===depth});
+ }catch(error){report({fonts,metrics,error:String(error),unchangedSource:savedSource(view.state.field(sourceField))===before,unchangedHistory:undoDepth(view.state)===depth})}}
+document.querySelector('#good').onclick=capture;
+document.querySelector('#bad').onclick=async()=>{view.dispatch({changes:{from:0,to:view.state.doc.length,insert:html('data:font/woff2;base64,AA==')+'\n\nTail'},userEvent:'input.type'});await capture()};
+document.querySelector('#undo').onclick=async()=>{undo(view);await capture()};
+for(const button of document.querySelectorAll('button'))button.disabled=false;report({ready:true,fontBytes:bytes.length});
+window.addEventListener('pagehide',()=>{controller.abort();if(url)URL.revokeObjectURL(url);projection?.dispose();view.destroy()},{once:true});
+</script></body></html>

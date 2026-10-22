@@ -1,0 +1,19 @@
+
+ RUN  v3.2.7 /Users/shxi/projects/MarkDew
+
+ ✓ tests/web/static-point-projection.test.ts (1 test) 127ms
+stdout | tests/web/static-preview-experiment.test.ts > retains single-layer points and actual paired jumps over growing 1 MiB note edits
+{"diagnostic":"static-point-local-update","bytes":1048576,"edits":4,"jumps":1595,"rangesSkipped":395144,"scope":"actual bounded ordinary updates; notes rebuild completely; no DOM or speed claim"}
+
+ ✓ tests/web/note-preview-production.test.ts (9 tests) 7058ms
+   ✓ rejects partial published trees and accepts settled complete trees  3615ms
+   ✓ retains full resource previews after edits and complete-tree settlement  3243ms
+ ✓ tests/web/static-preview-experiment.test.ts (5 tests) 8063ms
+   ✓ retains single-layer points and actual paired jumps over growing 1 MiB note edits  6059ms
+   ✓ keeps partial trees on the full path and builds the index after settlement  1737ms
+
+ Test Files  3 passed (3)
+      Tests  15 passed (15)
+   Start at  00:11:16
+   Duration  8.82s (transform 167ms, setup 0ms, collect 902ms, tests 15.25s, environment 469ms, prepare 104ms)
+

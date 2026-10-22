@@ -1,0 +1,12 @@
+
+ RUN  v3.2.7 /Users/shxi/projects/MarkDew
+
+ ✓ tests/performance/parser-wrapper.test.ts (1 test) 5668ms
+   ✓ compares metadata-free package trees and complete decorations  5667ms
+ ✓ tests/performance/guarded-nesting.test.ts (5 tests) 50ms
+
+ Test Files  2 passed (2)
+      Tests  6 passed (6)
+   Start at  14:02:43
+   Duration  6.57s (transform 106ms, setup 0ms, collect 356ms, tests 5.72s, environment 278ms, prepare 43ms)
+

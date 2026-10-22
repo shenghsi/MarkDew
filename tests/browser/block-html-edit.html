@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Block HTML edit check</title>
+<link rel="stylesheet" href="/src/web/style.css">
+<style>body{display:block;margin:24px;font:16px system-ui}#editor{max-width:760px;margin:16px auto;border:1px solid var(--border);padding:20px}pre#result{white-space:pre-wrap}button{margin:4px}</style></head>
+<body><h1>Block HTML edit check</h1><button id="theme">Change theme</button><button id="source">Source mode</button><button id="undo">Undo</button><button id="check">Check layout</button>
+<div id="editor"></div><pre id="result" role="status"></pre>
+<script type="module">
+import {EditorState,Compartment} from '@codemirror/state';
+import {EditorView} from '@codemirror/view';
+import {ensureSyntaxTree} from '@codemirror/language';
+import {history,undo,undoDepth} from '@codemirror/commands';
+import {documentLanguage} from '/src/web/document-language.ts';
+import {livePreview} from '/src/web/preview.ts';
+import {fromSource,normalize,sourceExtensions,sourceField,savedSource} from '/src/web/source.ts';
+const paragraphs=Array.from({length:12},(_,i)=>`<p>Paragraph ${i+1}: 日本語😀 with <strong>bold text</strong>. Complete text remains visible.</p>`).join('\r\n');
+const original='\uFEFF<div><h2>Natural block HTML</h2>\r\n'+paragraphs+'\r\n<table><tr><th>Column</th><th>Result</th></tr><tr><td>Final cell</td><td>Visible</td></tr></table><pre>'+('long-code-'.repeat(30))+'</pre><p>FINAL SENTINEL</p></div>\r\n\r\n> <div>\r\n> <p>Quoted HTML</p>\r\n> </div>\r\n\r\n<table><tr><td>'+('W'.repeat(300))+'</td></tr></table>\r\n\r\n<div style="color:red">Unsupported style stays isolated.</div>\r\n\r\nEnd\n';
+const record=fromSource(original),doc=normalize(record.raw),mode=new Compartment();let sourceMode=false,layout;
+let state=EditorState.create({doc,selection:{anchor:doc.length},extensions:[sourceExtensions(record),history(),documentLanguage(),EditorView.lineWrapping,mode.of(livePreview),EditorView.updateListener.of(()=>queueMicrotask(report))]});
+if(!ensureSyntaxTree(state,state.doc.length,1000))throw new Error('Incomplete syntax tree');state=state.update({}).state;
+const view=new EditorView({parent:document.querySelector('#editor'),state});
+function report(){document.querySelector('#result').textContent=JSON.stringify({exactOriginal:savedSource(view.state.field(sourceField))===original,history:undoDepth(view.state),sourceMode,semanticBlocks:view.dom.querySelectorAll('.preview-block-html').length,isolatedBlocks:view.dom.querySelectorAll('.preview-html[data-ready=isolated]').length,layout},null,2)}
+document.querySelector('#theme').onclick=()=>{document.documentElement.dataset.theme=document.documentElement.dataset.theme==='dark'?'light':'dark';report()};
+document.querySelector('#source').onclick=()=>{sourceMode=!sourceMode;view.dispatch({effects:mode.reconfigure(sourceMode?[]:livePreview)});report()};
+document.querySelector('#undo').onclick=()=>{undo(view);report()};
+document.querySelector('#check').onclick=()=>{
+ const block=view.dom.querySelector('.preview-block-html'),last=block?.querySelector('.preview-block-html-body p:last-child'),pre=block?.querySelector('pre');
+ const box=block?.getBoundingClientRect(),end=last?.getBoundingClientRect();
+ const scroller=view.dom.querySelector('.cm-scroller'),wide=Array.from(view.dom.querySelectorAll('.preview-block-html')).find(node=>node.textContent.includes('W'.repeat(300)));
+ layout={fullHeight:box?.height>600,lastInside:!!box&&!!end&&end.bottom<=box.bottom,codeContained:!!pre&&pre.clientWidth<pre.scrollWidth,tableContained:!!wide&&(wide.querySelector('table').clientWidth<=wide.clientWidth||wide.scrollWidth>wide.clientWidth),columnContained:scroller.scrollWidth<=scroller.clientWidth+1,ink:block&&getComputedStyle(block).color};report();
+};
+new MutationObserver(report).observe(view.dom,{childList:true,subtree:true,attributes:true});report();
+window.addEventListener('pagehide',()=>view.destroy(),{once:true});
+</script></body></html>

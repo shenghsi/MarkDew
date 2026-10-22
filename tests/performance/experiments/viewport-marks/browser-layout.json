@@ -1,0 +1,2472 @@
+{
+  "baseline": "580029b",
+  "candidate": "inactive viewport snapshot",
+  "checks": [
+    {
+      "action": "Check layout",
+      "ready": true,
+      "sourceMode": false,
+      "narrow": false,
+      "exactOriginal": true,
+      "sourceEqual": true,
+      "history": 0,
+      "head": 0,
+      "visibleRanges": [
+        {
+          "from": 0,
+          "to": 878
+        }
+      ],
+      "hiddenRanges": 29,
+      "lastCheck": {
+        "differences": [],
+        "boxes": [
+          {
+            "from": 0,
+            "baseline": 47.59375,
+            "candidate": 47.59375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 21,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 22,
+            "baseline": 172.125,
+            "candidate": 172.125,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 297,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 298,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 311,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 344,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 377,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 410,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 443,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 476,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 509,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 542,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 575,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 608,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 641,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 675,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 709,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 743,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          }
+        ],
+        "maxHeightDelta": 0,
+        "sourceEqual": true,
+        "sourceUnchangedByCheck": true,
+        "historyUnchangedByCheck": true,
+        "baselineEstimatedHeight": 11650.515625,
+        "candidateEstimatedHeight": 11089.578125
+      }
+    },
+    {
+      "action": "Middle",
+      "ready": true,
+      "sourceMode": false,
+      "narrow": false,
+      "exactOriginal": true,
+      "sourceEqual": true,
+      "history": 0,
+      "head": 7615,
+      "visibleRanges": [
+        {
+          "from": 6486,
+          "to": 8200
+        }
+      ],
+      "hiddenRanges": 161,
+      "lastCheck": {
+        "differences": [],
+        "boxes": [
+          {
+            "from": 6486,
+            "baseline": 168.46875,
+            "candidate": 168.46875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 6756,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 6757,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 6771,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 6772,
+            "baseline": 168.46875,
+            "candidate": 168.46875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7042,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7043,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7057,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7058,
+            "baseline": 168.46875,
+            "candidate": 168.46875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7328,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7329,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7343,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7344,
+            "baseline": 168.46875,
+            "candidate": 168.46875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7614,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7615,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7629,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7630,
+            "baseline": 168.46875,
+            "candidate": 168.46875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7900,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7901,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7915,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7916,
+            "baseline": 168.46875,
+            "candidate": 168.46875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 8186,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 8187,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          }
+        ],
+        "maxHeightDelta": 0,
+        "sourceEqual": true,
+        "sourceUnchangedByCheck": true,
+        "historyUnchangedByCheck": true,
+        "baselineEstimatedHeight": 22574.40625,
+        "candidateEstimatedHeight": 21050.390625
+      }
+    },
+    {
+      "action": "End",
+      "ready": true,
+      "sourceMode": false,
+      "narrow": false,
+      "exactOriginal": true,
+      "sourceEqual": true,
+      "history": 0,
+      "head": 14228,
+      "visibleRanges": [
+        {
+          "from": 13064,
+          "to": 14228
+        }
+      ],
+      "hiddenRanges": 107,
+      "lastCheck": {
+        "differences": [],
+        "boxes": [
+          {
+            "from": 13064,
+            "baseline": 168.46875,
+            "candidate": 168.46875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13334,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13335,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13349,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13350,
+            "baseline": 168.46875,
+            "candidate": 168.46875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13620,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13621,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13635,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13636,
+            "baseline": 168.46875,
+            "candidate": 168.46875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13906,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13907,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13921,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13922,
+            "baseline": 168.46875,
+            "candidate": 168.46875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 14192,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 14212,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 14213,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 14228,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          }
+        ],
+        "maxHeightDelta": 0,
+        "sourceEqual": true,
+        "sourceUnchangedByCheck": true,
+        "historyUnchangedByCheck": true,
+        "baselineEstimatedHeight": 13006.3125,
+        "candidateEstimatedHeight": 12080.765625
+      }
+    },
+    {
+      "action": "Top",
+      "ready": true,
+      "sourceMode": false,
+      "narrow": false,
+      "exactOriginal": true,
+      "sourceEqual": true,
+      "history": 0,
+      "head": 0,
+      "visibleRanges": [
+        {
+          "from": 0,
+          "to": 1150
+        }
+      ],
+      "hiddenRanges": 29,
+      "lastCheck": {
+        "differences": [],
+        "boxes": [
+          {
+            "from": 0,
+            "baseline": 47.59375,
+            "candidate": 47.59375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 21,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 22,
+            "baseline": 172.125,
+            "candidate": 172.125,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 297,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 298,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 311,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 344,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 377,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 410,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 443,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 476,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 509,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 542,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 575,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 608,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 641,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 675,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 709,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 743,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 777,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 811,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 845,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 879,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 913,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 947,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 981,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1015,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1049,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1083,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1117,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          }
+        ],
+        "maxHeightDelta": 0,
+        "sourceEqual": true,
+        "sourceUnchangedByCheck": true,
+        "historyUnchangedByCheck": true,
+        "baselineEstimatedHeight": 12861.421875,
+        "candidateEstimatedHeight": 11178.609375
+      }
+    },
+    {
+      "action": "Off-screen owner",
+      "ready": true,
+      "sourceMode": false,
+      "narrow": false,
+      "exactOriginal": true,
+      "sourceEqual": true,
+      "history": 0,
+      "head": 299,
+      "visibleRanges": [
+        {
+          "from": 709,
+          "to": 2471
+        }
+      ],
+      "hiddenRanges": 108,
+      "lastCheck": {
+        "differences": [],
+        "boxes": [
+          {
+            "from": 709,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 743,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 777,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 811,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 845,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 879,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 913,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 947,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 981,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1015,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1049,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1083,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1117,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1151,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1185,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1219,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1253,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1287,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1321,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1332,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1333,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1346,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1347,
+            "baseline": 168.46875,
+            "candidate": 168.46875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1617,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1618,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1631,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1632,
+            "baseline": 168.46875,
+            "candidate": 168.46875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1902,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1903,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1916,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1917,
+            "baseline": 168.46875,
+            "candidate": 168.46875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 2187,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 2188,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 2201,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 2202,
+            "baseline": 168.46875,
+            "candidate": 168.46875,
+            "delta": 0,
+            "textEqual": true
+          }
+        ],
+        "maxHeightDelta": 0,
+        "sourceEqual": true,
+        "sourceUnchangedByCheck": true,
+        "historyUnchangedByCheck": true,
+        "baselineEstimatedHeight": 12869.4375,
+        "candidateEstimatedHeight": 11420.015625
+      }
+    },
+    {
+      "action": "Find inner text",
+      "ready": true,
+      "sourceMode": false,
+      "narrow": false,
+      "exactOriginal": true,
+      "sourceEqual": true,
+      "history": 0,
+      "head": 1376,
+      "visibleRanges": [
+        {
+          "from": 709,
+          "to": 2471
+        }
+      ],
+      "hiddenRanges": 105,
+      "lastCheck": {
+        "differences": [],
+        "boxes": [
+          {
+            "from": 709,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 743,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 777,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 811,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 845,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 879,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 913,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 947,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 981,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1015,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1049,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1083,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1117,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1151,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1185,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1219,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1253,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1287,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1321,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1332,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1333,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1346,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1347,
+            "baseline": 168.46875,
+            "candidate": 168.46875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1617,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1618,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1631,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1632,
+            "baseline": 168.46875,
+            "candidate": 168.46875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1902,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1903,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1916,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1917,
+            "baseline": 168.46875,
+            "candidate": 168.46875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 2187,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 2188,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 2201,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 2202,
+            "baseline": 168.46875,
+            "candidate": 168.46875,
+            "delta": 0,
+            "textEqual": true
+          }
+        ],
+        "maxHeightDelta": 0,
+        "sourceEqual": true,
+        "sourceUnchangedByCheck": true,
+        "historyUnchangedByCheck": true,
+        "baselineEstimatedHeight": 12869.4375,
+        "candidateEstimatedHeight": 11420.015625
+      }
+    },
+    {
+      "action": "Narrow",
+      "ready": true,
+      "sourceMode": false,
+      "narrow": true,
+      "exactOriginal": true,
+      "sourceEqual": true,
+      "history": 0,
+      "head": 1376,
+      "visibleRanges": [
+        {
+          "from": 709,
+          "to": 2471
+        }
+      ],
+      "hiddenRanges": 105,
+      "lastCheck": {
+        "differences": [],
+        "boxes": [
+          {
+            "from": 709,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 743,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 777,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 811,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 845,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 879,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 913,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 947,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 981,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1015,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1049,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1083,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1117,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1151,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1185,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1219,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1253,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1287,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1321,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1332,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1333,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1346,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1347,
+            "baseline": 336.9375,
+            "candidate": 336.9375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1617,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1618,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1631,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1632,
+            "baseline": 336.9375,
+            "candidate": 336.9375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1902,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1903,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1916,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 1917,
+            "baseline": 336.9375,
+            "candidate": 336.9375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 2187,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 2188,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 2201,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 2202,
+            "baseline": 336.9375,
+            "candidate": 336.9375,
+            "delta": 0,
+            "textEqual": true
+          }
+        ],
+        "maxHeightDelta": 0,
+        "sourceEqual": true,
+        "sourceUnchangedByCheck": true,
+        "historyUnchangedByCheck": true,
+        "baselineEstimatedHeight": 14048.15625,
+        "candidateEstimatedHeight": 12598.734375
+      }
+    },
+    {
+      "action": "Middle",
+      "ready": true,
+      "sourceMode": false,
+      "narrow": true,
+      "exactOriginal": true,
+      "sourceEqual": true,
+      "history": 0,
+      "head": 7615,
+      "visibleRanges": [
+        {
+          "from": 6772,
+          "to": 8185
+        }
+      ],
+      "hiddenRanges": 133,
+      "lastCheck": {
+        "differences": [],
+        "boxes": [
+          {
+            "from": 6772,
+            "baseline": 336.9375,
+            "candidate": 336.9375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7042,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7043,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7057,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7058,
+            "baseline": 336.9375,
+            "candidate": 336.9375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7328,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7329,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7343,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7344,
+            "baseline": 336.9375,
+            "candidate": 336.9375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7614,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7615,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7629,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7630,
+            "baseline": 336.9375,
+            "candidate": 336.9375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7900,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7901,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7915,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 7916,
+            "baseline": 336.9375,
+            "candidate": 336.9375,
+            "delta": 0,
+            "textEqual": true
+          }
+        ],
+        "maxHeightDelta": 0,
+        "sourceEqual": true,
+        "sourceUnchangedByCheck": true,
+        "historyUnchangedByCheck": true,
+        "baselineEstimatedHeight": 15113.0625,
+        "candidateEstimatedHeight": 17459.546875
+      }
+    },
+    {
+      "action": "End",
+      "ready": true,
+      "sourceMode": false,
+      "narrow": true,
+      "exactOriginal": true,
+      "sourceEqual": true,
+      "history": 0,
+      "head": 14228,
+      "visibleRanges": [
+        {
+          "from": 13635,
+          "to": 14228
+        }
+      ],
+      "hiddenRanges": 53,
+      "lastCheck": {
+        "differences": [],
+        "boxes": [
+          {
+            "from": 13635,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13636,
+            "baseline": 336.9375,
+            "candidate": 336.9375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13906,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13907,
+            "baseline": 36.875,
+            "candidate": 36.875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13921,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 13922,
+            "baseline": 336.9375,
+            "candidate": 336.9375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 14192,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 14212,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 14213,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 14228,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          }
+        ],
+        "maxHeightDelta": 0,
+        "sourceEqual": true,
+        "sourceUnchangedByCheck": true,
+        "historyUnchangedByCheck": true,
+        "baselineEstimatedHeight": 15786.9375,
+        "candidateEstimatedHeight": 18133.421875
+      }
+    },
+    {
+      "action": "Top",
+      "ready": true,
+      "sourceMode": false,
+      "narrow": true,
+      "exactOriginal": true,
+      "sourceEqual": true,
+      "history": 0,
+      "head": 0,
+      "visibleRanges": [
+        {
+          "from": 0,
+          "to": 574
+        }
+      ],
+      "hiddenRanges": 29,
+      "lastCheck": {
+        "differences": [],
+        "boxes": [
+          {
+            "from": 0,
+            "baseline": 95.1875,
+            "candidate": 95.1875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 21,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 22,
+            "baseline": 368.640625,
+            "candidate": 368.640625,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 297,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 298,
+            "baseline": 28.046875,
+            "candidate": 28.046875,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 311,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 344,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 377,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 410,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 443,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 476,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 509,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          },
+          {
+            "from": 542,
+            "baseline": 56.09375,
+            "candidate": 56.09375,
+            "delta": 0,
+            "textEqual": true
+          }
+        ],
+        "maxHeightDelta": 0,
+        "sourceEqual": true,
+        "sourceUnchangedByCheck": true,
+        "historyUnchangedByCheck": true,
+        "baselineEstimatedHeight": 16367.609375,
+        "candidateEstimatedHeight": 18714.09375
+      }
+    }
+  ],
+  "input": [
+    {
+      "stage": "live-input",
+      "observation": {
+        "ready": true,
+        "sourceMode": false,
+        "narrow": true,
+        "sourceEqual": true,
+        "exactOriginal": false,
+        "history": 4,
+        "head": 14233,
+        "source": "﻿# Layout **heading**\r\n\r\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. [^a].\n\n*Owner start\nOwner continuation 0 with words.\nOwner continuation 1 with words.\nOwner continuation 2 with words.\nOwner continuation 3 with words.\nOwner continuation 4 with words.\nOwner continuation 5 with words.\nOwner continuation 6 with words.\nOwner continuation 7 with words.\nOwner continuation 8 with words.\nOwner continuation 9 with words.\nOwner continuation 10 with words.\nOwner continuation 11 with words.\nOwner continuation 12 with words.\nOwner continuation 13 with words.\nOwner continuation 14 with words.\nOwner continuation 15 with words.\nOwner continuation 16 with words.\nOwner continuation 17 with words.\nOwner continuation 18 with words.\nOwner continuation 19 with words.\nOwner continuation 20 with words.\nOwner continuation 21 with words.\nOwner continuation 22 with words.\nOwner continuation 23 with words.\nOwner continuation 24 with words.\nOwner continuation 25 with words.\nOwner continuation 26 with words.\nOwner continuation 27 with words.\nOwner continuation 28 with words.\nOwner continuation 29 with words.\nOwner end*\r\n\r\n## Section 0\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 1\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 2\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 3\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 4\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 5\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 6\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 7\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 8\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 9\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 10\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 11\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 12\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 13\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 14\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 15\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 16\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 17\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 18\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 19\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 20\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 21\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 22\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 23\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 24\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 25\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 26\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 27\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 28\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 29\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 30\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 31\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 32\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 33\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 34\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 35\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 36\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 37\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 38\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 39\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 40\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 41\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 42\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 43\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 44\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n[^a]: 日本語 **note**\r\n\rEnd paragraph.\n中文🙂\r\n",
+        "complete": true,
+        "visibleRanges": [
+          {
+            "from": 13636,
+            "to": 14233
+          }
+        ],
+        "hiddenRanges": 53,
+        "lastCheck": {
+          "differences": [],
+          "boxes": [
+            {
+              "from": 13636,
+              "baseline": 336.9375,
+              "candidate": 336.9375,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 13906,
+              "baseline": 28.046875,
+              "candidate": 28.046875,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 13907,
+              "baseline": 36.875,
+              "candidate": 36.875,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 13921,
+              "baseline": 28.046875,
+              "candidate": 28.046875,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 13922,
+              "baseline": 336.9375,
+              "candidate": 336.9375,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 14192,
+              "baseline": 28.046875,
+              "candidate": 28.046875,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 14212,
+              "baseline": 28.046875,
+              "candidate": 28.046875,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 14213,
+              "baseline": 28.046875,
+              "candidate": 28.046875,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 14228,
+              "baseline": 28.046875,
+              "candidate": 28.046875,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 14233,
+              "baseline": 28.046875,
+              "candidate": 28.046875,
+              "delta": 0,
+              "textEqual": true
+            }
+          ],
+          "maxHeightDelta": 0,
+          "sourceEqual": true,
+          "sourceUnchangedByCheck": true,
+          "historyUnchangedByCheck": true,
+          "baselineEstimatedHeight": 16395.65625,
+          "candidateEstimatedHeight": 18742.140625
+        }
+      }
+    },
+    {
+      "stage": "source-mode",
+      "observation": {
+        "ready": true,
+        "sourceMode": true,
+        "narrow": true,
+        "sourceEqual": true,
+        "exactOriginal": false,
+        "history": 4,
+        "head": 14233,
+        "source": "﻿# Layout **heading**\r\n\r\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. [^a].\n\n*Owner start\nOwner continuation 0 with words.\nOwner continuation 1 with words.\nOwner continuation 2 with words.\nOwner continuation 3 with words.\nOwner continuation 4 with words.\nOwner continuation 5 with words.\nOwner continuation 6 with words.\nOwner continuation 7 with words.\nOwner continuation 8 with words.\nOwner continuation 9 with words.\nOwner continuation 10 with words.\nOwner continuation 11 with words.\nOwner continuation 12 with words.\nOwner continuation 13 with words.\nOwner continuation 14 with words.\nOwner continuation 15 with words.\nOwner continuation 16 with words.\nOwner continuation 17 with words.\nOwner continuation 18 with words.\nOwner continuation 19 with words.\nOwner continuation 20 with words.\nOwner continuation 21 with words.\nOwner continuation 22 with words.\nOwner continuation 23 with words.\nOwner continuation 24 with words.\nOwner continuation 25 with words.\nOwner continuation 26 with words.\nOwner continuation 27 with words.\nOwner continuation 28 with words.\nOwner continuation 29 with words.\nOwner end*\r\n\r\n## Section 0\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 1\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 2\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 3\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 4\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 5\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 6\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 7\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 8\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 9\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 10\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 11\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 12\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 13\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 14\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 15\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 16\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 17\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 18\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 19\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 20\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 21\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 22\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 23\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 24\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 25\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 26\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 27\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 28\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 29\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 30\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 31\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 32\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 33\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 34\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 35\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 36\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 37\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 38\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 39\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 40\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 41\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 42\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 43\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 44\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n[^a]: 日本語 **note**\r\n\rEnd paragraph.\n中文🙂\r\n",
+        "complete": true,
+        "visibleRanges": [
+          {
+            "from": 13636,
+            "to": 14233
+          }
+        ],
+        "hiddenRanges": 0,
+        "lastCheck": {
+          "differences": [],
+          "boxes": [
+            {
+              "from": 13636,
+              "baseline": 336.9375,
+              "candidate": 336.9375,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 13906,
+              "baseline": 28.046875,
+              "candidate": 28.046875,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 13907,
+              "baseline": 36.875,
+              "candidate": 36.875,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 13921,
+              "baseline": 28.046875,
+              "candidate": 28.046875,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 13922,
+              "baseline": 336.9375,
+              "candidate": 336.9375,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 14192,
+              "baseline": 28.046875,
+              "candidate": 28.046875,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 14212,
+              "baseline": 28.046875,
+              "candidate": 28.046875,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 14213,
+              "baseline": 28.046875,
+              "candidate": 28.046875,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 14228,
+              "baseline": 28.046875,
+              "candidate": 28.046875,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 14233,
+              "baseline": 28.046875,
+              "candidate": 28.046875,
+              "delta": 0,
+              "textEqual": true
+            }
+          ],
+          "maxHeightDelta": 0,
+          "sourceEqual": true,
+          "sourceUnchangedByCheck": true,
+          "historyUnchangedByCheck": true,
+          "baselineEstimatedHeight": 16395.65625,
+          "candidateEstimatedHeight": 18742.140625
+        }
+      }
+    },
+    {
+      "stage": "terminal-undo",
+      "observation": {
+        "ready": true,
+        "sourceMode": true,
+        "narrow": true,
+        "sourceEqual": true,
+        "exactOriginal": true,
+        "history": 0,
+        "head": 14228,
+        "source": "﻿# Layout **heading**\r\n\r\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. [^a].\n\n*Owner start\nOwner continuation 0 with words.\nOwner continuation 1 with words.\nOwner continuation 2 with words.\nOwner continuation 3 with words.\nOwner continuation 4 with words.\nOwner continuation 5 with words.\nOwner continuation 6 with words.\nOwner continuation 7 with words.\nOwner continuation 8 with words.\nOwner continuation 9 with words.\nOwner continuation 10 with words.\nOwner continuation 11 with words.\nOwner continuation 12 with words.\nOwner continuation 13 with words.\nOwner continuation 14 with words.\nOwner continuation 15 with words.\nOwner continuation 16 with words.\nOwner continuation 17 with words.\nOwner continuation 18 with words.\nOwner continuation 19 with words.\nOwner continuation 20 with words.\nOwner continuation 21 with words.\nOwner continuation 22 with words.\nOwner continuation 23 with words.\nOwner continuation 24 with words.\nOwner continuation 25 with words.\nOwner continuation 26 with words.\nOwner continuation 27 with words.\nOwner continuation 28 with words.\nOwner continuation 29 with words.\nOwner end*\r\n\r\n## Section 0\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 1\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 2\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 3\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 4\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 5\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 6\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 7\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 8\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 9\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 10\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 11\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 12\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 13\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 14\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 15\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 16\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 17\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 18\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 19\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 20\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 21\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 22\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 23\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 24\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 25\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 26\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 27\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 28\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 29\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 30\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 31\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 32\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 33\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 34\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 35\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 36\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 37\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 38\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 39\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 40\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 41\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 42\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 43\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 44\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n[^a]: 日本語 **note**\r\n\rEnd paragraph.\n",
+        "complete": true,
+        "visibleRanges": [
+          {
+            "from": 13636,
+            "to": 14228
+          }
+        ],
+        "hiddenRanges": 0,
+        "lastCheck": {
+          "differences": [],
+          "boxes": [
+            {
+              "from": 13636,
+              "baseline": 336.9375,
+              "candidate": 336.9375,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 13906,
+              "baseline": 28.046875,
+              "candidate": 28.046875,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 13907,
+              "baseline": 36.875,
+              "candidate": 36.875,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 13921,
+              "baseline": 28.046875,
+              "candidate": 28.046875,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 13922,
+              "baseline": 336.9375,
+              "candidate": 336.9375,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 14192,
+              "baseline": 28.046875,
+              "candidate": 28.046875,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 14212,
+              "baseline": 28.046875,
+              "candidate": 28.046875,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 14213,
+              "baseline": 28.046875,
+              "candidate": 28.046875,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 14228,
+              "baseline": 28.046875,
+              "candidate": 28.046875,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 14233,
+              "baseline": 28.046875,
+              "candidate": 28.046875,
+              "delta": 0,
+              "textEqual": true
+            }
+          ],
+          "maxHeightDelta": 0,
+          "sourceEqual": true,
+          "sourceUnchangedByCheck": true,
+          "historyUnchangedByCheck": true,
+          "baselineEstimatedHeight": 16395.65625,
+          "candidateEstimatedHeight": 18742.140625
+        }
+      }
+    },
+    {
+      "stage": "terminal-redo",
+      "observation": {
+        "ready": true,
+        "sourceMode": true,
+        "narrow": true,
+        "sourceEqual": true,
+        "exactOriginal": false,
+        "history": 4,
+        "head": 14233,
+        "source": "﻿# Layout **heading**\r\n\r\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. [^a].\n\n*Owner start\nOwner continuation 0 with words.\nOwner continuation 1 with words.\nOwner continuation 2 with words.\nOwner continuation 3 with words.\nOwner continuation 4 with words.\nOwner continuation 5 with words.\nOwner continuation 6 with words.\nOwner continuation 7 with words.\nOwner continuation 8 with words.\nOwner continuation 9 with words.\nOwner continuation 10 with words.\nOwner continuation 11 with words.\nOwner continuation 12 with words.\nOwner continuation 13 with words.\nOwner continuation 14 with words.\nOwner continuation 15 with words.\nOwner continuation 16 with words.\nOwner continuation 17 with words.\nOwner continuation 18 with words.\nOwner continuation 19 with words.\nOwner continuation 20 with words.\nOwner continuation 21 with words.\nOwner continuation 22 with words.\nOwner continuation 23 with words.\nOwner continuation 24 with words.\nOwner continuation 25 with words.\nOwner continuation 26 with words.\nOwner continuation 27 with words.\nOwner continuation 28 with words.\nOwner continuation 29 with words.\nOwner end*\r\n\r\n## Section 0\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 1\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 2\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 3\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 4\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 5\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 6\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 7\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 8\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 9\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 10\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 11\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 12\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 13\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 14\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 15\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 16\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 17\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 18\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 19\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 20\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 21\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 22\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 23\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 24\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 25\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 26\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 27\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 28\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 29\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 30\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 31\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 32\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 33\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 34\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 35\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 36\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 37\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 38\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 39\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 40\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 41\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 42\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 43\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 44\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n[^a]: 日本語 **note**\r\n\rEnd paragraph.\n中文🙂\r\n",
+        "complete": true,
+        "visibleRanges": [
+          {
+            "from": 13636,
+            "to": 14233
+          }
+        ],
+        "hiddenRanges": 0,
+        "lastCheck": {
+          "differences": [],
+          "boxes": [
+            {
+              "from": 13636,
+              "baseline": 336.9375,
+              "candidate": 336.9375,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 13906,
+              "baseline": 28.046875,
+              "candidate": 28.046875,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 13907,
+              "baseline": 36.875,
+              "candidate": 36.875,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 13921,
+              "baseline": 28.046875,
+              "candidate": 28.046875,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 13922,
+              "baseline": 336.9375,
+              "candidate": 336.9375,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 14192,
+              "baseline": 28.046875,
+              "candidate": 28.046875,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 14212,
+              "baseline": 28.046875,
+              "candidate": 28.046875,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 14213,
+              "baseline": 28.046875,
+              "candidate": 28.046875,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 14228,
+              "baseline": 28.046875,
+              "candidate": 28.046875,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 14233,
+              "baseline": 28.046875,
+              "candidate": 28.046875,
+              "delta": 0,
+              "textEqual": true
+            }
+          ],
+          "maxHeightDelta": 0,
+          "sourceEqual": true,
+          "sourceUnchangedByCheck": true,
+          "historyUnchangedByCheck": true,
+          "baselineEstimatedHeight": 16395.65625,
+          "candidateEstimatedHeight": 18742.140625
+        }
+      }
+    },
+    {
+      "stage": "live-keyboard-selection",
+      "observation": {
+        "ready": true,
+        "sourceMode": false,
+        "narrow": true,
+        "sourceEqual": true,
+        "exactOriginal": false,
+        "history": 4,
+        "head": 50,
+        "source": "﻿# Layout **heading**\r\n\r\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. [^a].\n\n*Owner start\nOwner continuation 0 with words.\nOwner continuation 1 with words.\nOwner continuation 2 with words.\nOwner continuation 3 with words.\nOwner continuation 4 with words.\nOwner continuation 5 with words.\nOwner continuation 6 with words.\nOwner continuation 7 with words.\nOwner continuation 8 with words.\nOwner continuation 9 with words.\nOwner continuation 10 with words.\nOwner continuation 11 with words.\nOwner continuation 12 with words.\nOwner continuation 13 with words.\nOwner continuation 14 with words.\nOwner continuation 15 with words.\nOwner continuation 16 with words.\nOwner continuation 17 with words.\nOwner continuation 18 with words.\nOwner continuation 19 with words.\nOwner continuation 20 with words.\nOwner continuation 21 with words.\nOwner continuation 22 with words.\nOwner continuation 23 with words.\nOwner continuation 24 with words.\nOwner continuation 25 with words.\nOwner continuation 26 with words.\nOwner continuation 27 with words.\nOwner continuation 28 with words.\nOwner continuation 29 with words.\nOwner end*\r\n\r\n## Section 0\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 1\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 2\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 3\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 4\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 5\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 6\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 7\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 8\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 9\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 10\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 11\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 12\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 13\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 14\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 15\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 16\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 17\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 18\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 19\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 20\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 21\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 22\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 23\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 24\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 25\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 26\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 27\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 28\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 29\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 30\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 31\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 32\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 33\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 34\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 35\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 36\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 37\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 38\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 39\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 40\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 41\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 42\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 43\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 44\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n[^a]: 日本語 **note**\r\n\rEnd paragraph.\n中文🙂\r\n",
+        "complete": true,
+        "visibleRanges": [
+          {
+            "from": 0,
+            "to": 640
+          }
+        ],
+        "hiddenRanges": 26,
+        "lastCheck": {
+          "differences": [],
+          "boxes": [
+            {
+              "from": 0,
+              "baseline": 95.1875,
+              "candidate": 95.1875,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 21,
+              "baseline": 28.046875,
+              "candidate": 28.046875,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 22,
+              "baseline": 368.640625,
+              "candidate": 368.640625,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 297,
+              "baseline": 28.046875,
+              "candidate": 28.046875,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 298,
+              "baseline": 28.046875,
+              "candidate": 28.046875,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 311,
+              "baseline": 56.09375,
+              "candidate": 56.09375,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 344,
+              "baseline": 56.09375,
+              "candidate": 56.09375,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 377,
+              "baseline": 56.09375,
+              "candidate": 56.09375,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 410,
+              "baseline": 56.09375,
+              "candidate": 56.09375,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 443,
+              "baseline": 56.09375,
+              "candidate": 56.09375,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 476,
+              "baseline": 56.09375,
+              "candidate": 56.09375,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 509,
+              "baseline": 56.09375,
+              "candidate": 56.09375,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 542,
+              "baseline": 56.09375,
+              "candidate": 56.09375,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 575,
+              "baseline": 56.09375,
+              "candidate": 56.09375,
+              "delta": 0,
+              "textEqual": true
+            },
+            {
+              "from": 608,
+              "baseline": 56.09375,
+              "candidate": 56.09375,
+              "delta": 0,
+              "textEqual": true
+            }
+          ],
+          "maxHeightDelta": 0,
+          "sourceEqual": true,
+          "sourceUnchangedByCheck": true,
+          "historyUnchangedByCheck": true,
+          "baselineEstimatedHeight": 16395.65625,
+          "candidateEstimatedHeight": 18742.140625
+        }
+      }
+    }
+  ],
+  "limits": "shared rendered DOM lines only; estimated full-document heights can differ; Unicode key input is not native IME acceptance"
+}

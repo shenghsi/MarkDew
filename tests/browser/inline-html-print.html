@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Inline HTML print check</title></head>
+<body><p id="result" role="status">Preparing print check…</p><main id="paper"></main>
+<script type="module">
+import { EditorState } from '@codemirror/state';
+import { history, undoDepth } from '@codemirror/commands';
+import { documentLanguage } from '/src/web/document-language.ts';
+import { fromSource, normalize, sourceExtensions, sourceField, savedSource } from '/src/web/source.ts';
+import { printView } from '/src/web/print-view.ts';
+const original = '\uFEFF# Inline HTML print\r\n\r\nPress <kbd>Enter</kbd>. **Markdown** inside <span lang="ja">**日本語** and $\\frac{1}{2}$</span>.\r\n\r\nWater H<sub>2</sub>O and x<sup>2</sup>. <mark>Marked text</mark> and <small>small text</small>.\r\n\r\n| Key | Value |\r\n| - | - |\r\n| <kbd>Tab</kbd> | <b>$x^2$</b> |\r\n\r\nBefore <span data-print-slot="0" class="print-controls" title="authored" style="display:none" onclick="bad()">authored text</span> after.\r\n\r\nBefore <script>bad()<\/script> $literal$ after.\r\n\r\nFinal **sentinel**.\r\n';
+try {
+  const record = fromSource(original), state = EditorState.create({doc:normalize(record.raw), extensions:[sourceExtensions(record), history(), documentLanguage()]});
+  const projection = printView({state,id:42,path:'/tmp/inline.md',title:'Inline HTML print'});
+  document.querySelector('#paper').append(projection.element);
+  const warnings = await projection.ready;
+  const paper = projection.element;
+  if (warnings.length !== 1 || !warnings[0].includes('Unsupported inline HTML') || paper.querySelectorAll('mjx-container').length !== 2
+    || !paper.querySelector('td b mjx-container') || paper.querySelectorAll('kbd').length !== 2
+    || paper.querySelector('[onclick], .print-controls, script, iframe') || paper.querySelector('[title=authored]')?.hasAttribute('style')
+    || !paper.textContent.includes('Final sentinel.') || !paper.textContent.includes('<script>bad()<\/script> $literal$')
+    || savedSource(state.field(sourceField)) !== original || undoDepth(state) !== 0) throw new Error('Print contract failed');
+  document.querySelector('#result').textContent = 'PASS · inline formatting, formulas, table cells, source fallback, exact source and history';
+  window.inlineHTMLPrintCheck = {passed:true,warnings,formulas:2,sourceExact:true,history:0};
+} catch (error) {
+  document.querySelector('#result').textContent = 'FAIL · ' + String(error);
+  window.inlineHTMLPrintCheck = {passed:false,error:String(error)};
+}
+</script></body></html>

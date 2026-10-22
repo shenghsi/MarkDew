@@ -1,0 +1,152 @@
+diff --git a/src/web/footnotes.ts b/src/web/footnotes.ts
+index 94845ab..25f5f55 100644
+--- a/src/web/footnotes.ts
++++ b/src/web/footnotes.ts
+@@ -9,6 +9,7 @@ import { toHast } from 'mdast-util-to-hast';
+ import { toHtml } from 'hast-util-to-html';
+ import DOMPurify from 'dompurify';
+ import type { Root, RootContent, FootnoteDefinition } from 'mdast';
++import { inputTrace } from './input-trace';
+ 
+ interface Span { from: number; to: number }
+ interface PlainText extends Span { codeBefore?: Span }
+@@ -226,8 +227,10 @@ function mapStableSpans(value: Footnotes, transaction: Transaction): Footnotes |
+ export const footnoteField = StateField.define<Footnotes>({
+   create: state => parse(state),
+   update(value, transaction) {
++    return inputTrace<Footnotes>('footnotes', () => {
+     if (transaction.docChanged) return retainEmpty(value, transaction) || mapStableSpans(value, transaction) || parse(transaction.state);
+     return (syntaxTree(transaction.state).topNode.getChild('Frontmatter')?.to || 0) !== value.bodyFrom ? parse(transaction.state) : value;
++    });
+   },
+ });
+ export const freshFootnotes = (state: EditorState) => parse(state, true);
+diff --git a/src/web/preview.ts b/src/web/preview.ts
+index 1e83fcc..c358aa8 100644
+--- a/src/web/preview.ts
++++ b/src/web/preview.ts
+@@ -14,6 +14,7 @@ import { mountFootnote } from './footnote-renderer';
+ import { physicalLines } from './physical-lines';
+ import { createIndex, updateIndex, Index, Counts } from './preview-index';
+ import { noteEligible, stableNotes } from './preview-note-index';
++import { inputTrace } from './input-trace';
+ 
+ type Kind = 'math' | 'mermaid' | 'html' | 'inline-html' | 'table' | 'image' | 'frontmatter' | 'footnote' | 'footnote-definition';
+ interface Item { from: number; to: number; kind?: Kind; source?: string; block?: boolean;
+@@ -456,6 +457,7 @@ export const previewField = StateField.define<Plan>({
+       imagePath: state.field(imagePath, false) || '', imageVersion: 0 };
+   },
+   update(plan, transaction) {
++    return inputTrace<Plan>('preview', () => {
+     const tree = syntaxTree(transaction.state);
+     const path = transaction.state.field(imagePath, false) || '', pathChanged = path !== plan.imagePath ||
+       transaction.startState.facet(imageDocument) !== transaction.state.facet(imageDocument) || transaction.effects.some(effect => effect.is(setImagePath));
+@@ -481,20 +483,22 @@ export const previewField = StateField.define<Plan>({
+     const imageVersion = plan.imageVersion + (pathChanged ? 1 : 0);
+     if (transaction.docChanged && plan.index && !pathChanged && !oldCell && !cell &&
+       !transaction.reconfigured && transaction.effects.length === 0) {
+-      const local = (!plan.noteAware || stableNotes(transaction)) ? updateIndex(plan.index, transaction, (state, region) => {
+-        const all = collectPreview(state, region, imageVersion), items = plan.noteAware ? all.filter(item => !isNote(item)) : all;
++      const stable = !plan.noteAware || inputTrace('stable-notes', () => stableNotes(transaction));
++      const local = stable ? inputTrace('index', () => updateIndex(plan.index!, transaction, (state, region) => {
++        const all = inputTrace('local-collect', () => collectPreview(state, region, imageVersion)), items = plan.noteAware ? all.filter(item => !isNote(item)) : all;
+         if (plan.noteAware && items.some(item => item.kind)) return;
+-        return { decorations: previewDecorations(state, items, true), items: items.length };
+-      }, undefined, plan.noteAware ? noteEligible : undefined) : undefined;
++        return { decorations: inputTrace('local-decorations', () => previewDecorations(state, items, true)), items: items.length };
++      }, undefined, plan.noteAware ? noteEligible : undefined)) : undefined;
+       if (local) return { mode: 'indexed', tree, index: local.index, localCounts: local.counts,
+         decorations: plan.noteAware ? RangeSet.join([local.index.decorations,
+-          previewDecorations(transaction.state, withFootnotes(transaction.state, [], footnotes(transaction.state)), true)]) : local.index.decorations,
++          inputTrace('note-overlay', () => previewDecorations(transaction.state, withFootnotes(transaction.state, [], footnotes(transaction.state)), true))]) : local.index.decorations,
+         noteAware: plan.noteAware, imagePath: path, imageVersion };
+     }
+     const items = transaction.docChanged || tree !== plan.tree || pathChanged || plan.mode === 'indexed'
+       ? collectCachedPreview(transaction.state, tree, imageVersion) : plan.items;
+     return { mode: 'full', tree, items, ...fullDecorations(transaction.state, items),
+       imagePath: path, imageVersion };
++    });
+   },
+   provide: field => EditorView.decorations.from(field, plan => plan.decorations),
+ });
+diff --git a/src/web/source.ts b/src/web/source.ts
+index 3376d3e..19dbc68 100644
+--- a/src/web/source.ts
++++ b/src/web/source.ts
+@@ -1,5 +1,6 @@
+ import { EditorState, StateEffect, StateField } from '@codemirror/state';
+ import { invertedEffects, isolateHistory } from '@codemirror/commands';
++import { inputTrace } from './input-trace';
+ 
+ export interface SourceRecord { readonly raw: string; readonly bom: boolean }
+ export const normalize = (text: string) => text.replace(/\r\n|\r/g, '\n');
+@@ -42,6 +43,7 @@ export const restoreSource = StateEffect.define<SourceRecord>();
+ export const sourceField = StateField.define<SourceRecord>({
+   create: state => ({ raw: state.doc.toString(), bom: false }),
+   update(record, transaction) {
++    return inputTrace<SourceRecord>('source', () => {
+     const restores = transaction.effects.filter(effect => effect.is(restoreSource));
+     if (restores.length) return restores[restores.length - 1].value;
+     if (!transaction.docChanged) return record;
+@@ -53,6 +55,7 @@ export const sourceField = StateField.define<SourceRecord>({
+     let raw = record.raw;
+     for (const edit of edits.reverse()) raw = raw.slice(0, edit.from) + edit.text + raw.slice(edit.to);
+     return { ...record, raw };
++    });
+   },
+ });
+ 
+diff --git a/tests/browser/input-frame.html b/tests/browser/input-frame.html
+index e8c169e..ee448a9 100644
+--- a/tests/browser/input-frame.html
++++ b/tests/browser/input-frame.html
+@@ -13,6 +13,7 @@ import {previewField} from '/src/web/preview.ts';
+ import {completeDocument} from '/src/web/preview-index.ts';
+ import {noteEligible} from '/src/web/preview-note-index.ts';
+ import {footnotes} from '/src/web/footnotes.ts';
++import {observeInputTrace} from '/src/web/input-trace.ts';
+ import {Compartment,StateEffect,Transaction} from '@codemirror/state';
+ import {EditorView} from '@codemirror/view';
+ import {forceParsing,syntaxTree} from '@codemirror/language';
+@@ -32,6 +33,7 @@ const samples=[],failures=[],checkLock=new Compartment();let pending,armed=false
+ const trace=params.get('trace')==='1',originalDispatch=view.dispatch,originalUpdate=view.update;
+ const motion=params.get('motion')==='1',moves=[];let pendingMove;
+ let traceSetup;
++if(trace)observeInputTrace(interval=>{if(pending)(pending.intervals??=[]).push(interval)});
+ if(trace){
+   view.dispatch=function(...input){
+     const sample=pending,at=performance.now();
+@@ -76,7 +78,7 @@ view.dispatch({effects:StateEffect.appendConfig.of(EditorView.updateListener.of(
+   const sample=pending;sample.updateAt=performance.now();sample.head=update.state.selection.main.head;
+   sample.complete=syntaxTree(update.state).length===update.state.doc.length;
+   sample.previewMode=update.state.field(previewField,false)?.mode??'source';
+-  if(trace){const plan=update.state.field(previewField,false);sample.indexAfter=!!plan?.index;sample.noteAwareAfter=!!plan?.noteAware}
++  if(trace){const plan=update.state.field(previewField,false);sample.indexAfter=!!plan?.index;sample.noteAwareAfter=!!plan?.noteAware;const notes=footnotes(update.state);sample.noteCount={definitions:notes.definitions.length,references:notes.references.length}}
+   sample.keyToUpdateMs=sample.updateAt-sample.keyAt;sample.inputToUpdateMs=sample.updateAt-sample.inputAt;
+   if(sample.inputType!=='insertText'||sample.data!==sample.key||sample.data.length!==1)
+     failures.push('Sample is not a one-character insertText');
+@@ -125,5 +127,5 @@ requestAnimationFrame(()=>{
+   }
+   requestAnimationFrame(report);
+ });
+-window.addEventListener('pagehide',()=>{disposed=true;view.dispatch=originalDispatch;view.update=originalUpdate;view.dom.removeEventListener('keydown',keydown,true);view.dom.removeEventListener('beforeinput',beforeinput,true);view.dom.removeEventListener('paste',blockCheckInput,true);view.dom.removeEventListener('drop',blockCheckInput,true);view.destroy()},{once:true});
++window.addEventListener('pagehide',()=>{disposed=true;observeInputTrace();view.dispatch=originalDispatch;view.update=originalUpdate;view.dom.removeEventListener('keydown',keydown,true);view.dom.removeEventListener('beforeinput',beforeinput,true);view.dom.removeEventListener('paste',blockCheckInput,true);view.dom.removeEventListener('drop',blockCheckInput,true);view.destroy()},{once:true});
+ </script></body></html>
+diff --git a/src/web/input-trace.ts b/src/web/input-trace.ts
+new file mode 100644
+index 0000000..82fa60d
+--- /dev/null
++++ b/src/web/input-trace.ts
+@@ -0,0 +1,12 @@
++// Temporary diagnostic hooks. Remove before candidate comparisons.
++export interface InputInterval { name: string; start: number; end: number }
++let observer: ((interval: InputInterval) => void) | undefined;
++export function observeInputTrace(next?: typeof observer) { observer = next; }
++export function inputTrace<T>(name: string, run: () => T): T {
++  if (!observer) return run();
++  const start = performance.now();
++  try { return run(); } finally {
++    const end = performance.now();
++    try { observer?.({ name, start, end }); } catch { /* Keep input unchanged. */ }
++  }
++}

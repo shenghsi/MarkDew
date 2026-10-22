@@ -1,0 +1,2011 @@
+{
+  "revision": "5e68fb5",
+  "hooks": true,
+  "observation": {
+    "mode": "Live preview",
+    "notes": true,
+    "bytes": 1048576,
+    "ready": true,
+    "armed": false,
+    "setupDispatchMs": 538.0999999046326,
+    "setupReadyMs": 869.5999999046326,
+    "samples": 20,
+    "completeSamples": 20,
+    "unexpectedUpdates": 0,
+    "failures": [],
+    "treeComplete": false,
+    "previewMode": "full",
+    "keyToUpdateMs": {
+      "median": 99.20000004768372,
+      "p95": 117.09999990463257,
+      "max": 126.09999990463257
+    },
+    "inputToUpdateMs": {
+      "median": 99.10000014305115,
+      "p95": 116.89999985694885,
+      "max": 123.70000004768372
+    },
+    "keyToRafMs": {
+      "median": 110.79999995231628,
+      "p95": 127.40000009536743,
+      "max": 138.89999985694885
+    },
+    "keyToGeometryMs": {
+      "median": 110.89999985694885,
+      "p95": 127.40000009536743,
+      "max": 139.39999985694885
+    },
+    "traceSetup": {
+      "definitions": [
+        {
+          "from": 1048540,
+          "to": 1048554
+        }
+      ]
+    },
+    "dispatchInclusiveMs": {
+      "median": 97.70000004768372,
+      "p95": 115.39999985694885,
+      "max": 119.70000004768372
+    },
+    "stateRealizationMs": {
+      "median": 42.59999990463257,
+      "p95": 59.299999952316284,
+      "max": 61.700000047683716
+    },
+    "viewUpdateMs": {
+      "median": 56.299999952316284,
+      "p95": 59.700000047683716,
+      "max": 68.10000014305115
+    },
+    "checked": {
+      "exactEdited": true,
+      "exactOriginal": true,
+      "historyBefore": 20,
+      "historyAfter": 0,
+      "undoCalls": 20
+    },
+    "raw": [
+      {
+        "keyAt": 9521.5,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 9523.899999856949,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 9528.099999904633,
+            "end": 9528.599999904633
+          },
+          {
+            "name": "footnote-state",
+            "start": 9528.700000047684,
+            "end": 9528.700000047684
+          },
+          {
+            "name": "footnote-body",
+            "start": 9528.700000047684,
+            "end": 9580.099999904633
+          },
+          {
+            "name": "footnote-guards",
+            "start": 9580.200000047684,
+            "end": 9582.599999904633
+          },
+          {
+            "name": "footnote-definitions",
+            "start": 9582.599999904633,
+            "end": 9582.899999856949
+          },
+          {
+            "name": "footnote-map",
+            "start": 9582.899999856949,
+            "end": 9583.599999904633
+          },
+          {
+            "name": "footnotes",
+            "start": 9528.700000047684,
+            "end": 9583.799999952316
+          },
+          {
+            "name": "stable-notes",
+            "start": 9583.799999952316,
+            "end": 9584
+          },
+          {
+            "name": "local-collect",
+            "start": 9587.099999904633,
+            "end": 9587.200000047684
+          },
+          {
+            "name": "local-decorations",
+            "start": 9587.299999952316,
+            "end": 9587.299999952316
+          },
+          {
+            "name": "index",
+            "start": 9584,
+            "end": 9589.5
+          },
+          {
+            "name": "note-overlay",
+            "start": 9589.5,
+            "end": 9589.5
+          },
+          {
+            "name": "preview",
+            "start": 9583.799999952316,
+            "end": 9589.5
+          }
+        ],
+        "updateAt": 9647.599999904633,
+        "head": 34,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 126.09999990463257,
+        "inputToUpdateMs": 123.70000004768372,
+        "stateMs": 61.700000047683716,
+        "viewMs": 58,
+        "updateCalls": 1,
+        "dispatchMs": 119.70000004768372,
+        "dispatchCalls": 1,
+        "keyToRafMs": 138.89999985694885,
+        "keyToGeometryMs": 139.39999985694885,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 9693.599999904633,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 9693.700000047684,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 9694.799999952316,
+            "end": 9695.099999904633
+          },
+          {
+            "name": "footnote-state",
+            "start": 9695.200000047684,
+            "end": 9695.200000047684
+          },
+          {
+            "name": "footnote-body",
+            "start": 9695.200000047684,
+            "end": 9734.5
+          },
+          {
+            "name": "footnote-guards",
+            "start": 9734.5,
+            "end": 9734.599999904633
+          },
+          {
+            "name": "footnote-definitions",
+            "start": 9734.599999904633,
+            "end": 9734.799999952316
+          },
+          {
+            "name": "footnote-map",
+            "start": 9734.799999952316,
+            "end": 9735.099999904633
+          },
+          {
+            "name": "footnotes",
+            "start": 9695.200000047684,
+            "end": 9735.099999904633
+          },
+          {
+            "name": "stable-notes",
+            "start": 9735.099999904633,
+            "end": 9735.099999904633
+          },
+          {
+            "name": "local-collect",
+            "start": 9735.599999904633,
+            "end": 9735.599999904633
+          },
+          {
+            "name": "local-decorations",
+            "start": 9735.599999904633,
+            "end": 9735.700000047684
+          },
+          {
+            "name": "index",
+            "start": 9735.099999904633,
+            "end": 9737.200000047684
+          },
+          {
+            "name": "note-overlay",
+            "start": 9737.299999952316,
+            "end": 9737.399999856949
+          },
+          {
+            "name": "preview",
+            "start": 9735.099999904633,
+            "end": 9737.399999856949
+          }
+        ],
+        "updateAt": 9795.5,
+        "head": 35,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 101.90000009536743,
+        "inputToUpdateMs": 101.79999995231628,
+        "stateMs": 42.59999990463257,
+        "viewMs": 58.10000014305115,
+        "updateCalls": 1,
+        "dispatchMs": 100.70000004768372,
+        "dispatchCalls": 1,
+        "keyToRafMs": 108.20000004768372,
+        "keyToGeometryMs": 108.29999995231628,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 9848.799999952316,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 9848.899999856949,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 9850.200000047684,
+            "end": 9850.799999952316
+          },
+          {
+            "name": "footnote-state",
+            "start": 9850.899999856949,
+            "end": 9850.899999856949
+          },
+          {
+            "name": "footnote-body",
+            "start": 9851,
+            "end": 9890.5
+          },
+          {
+            "name": "footnote-guards",
+            "start": 9890.5,
+            "end": 9890.5
+          },
+          {
+            "name": "footnote-definitions",
+            "start": 9890.5,
+            "end": 9890.700000047684
+          },
+          {
+            "name": "footnote-map",
+            "start": 9890.700000047684,
+            "end": 9890.799999952316
+          },
+          {
+            "name": "footnotes",
+            "start": 9850.899999856949,
+            "end": 9890.799999952316
+          },
+          {
+            "name": "stable-notes",
+            "start": 9890.899999856949,
+            "end": 9890.899999856949
+          },
+          {
+            "name": "local-collect",
+            "start": 9891.099999904633,
+            "end": 9891.299999952316
+          },
+          {
+            "name": "local-decorations",
+            "start": 9891.299999952316,
+            "end": 9891.299999952316
+          },
+          {
+            "name": "index",
+            "start": 9890.899999856949,
+            "end": 9892
+          },
+          {
+            "name": "note-overlay",
+            "start": 9892.099999904633,
+            "end": 9892.099999904633
+          },
+          {
+            "name": "preview",
+            "start": 9890.899999856949,
+            "end": 9892.099999904633
+          }
+        ],
+        "updateAt": 9960.099999904633,
+        "head": 36,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 111.29999995231628,
+        "inputToUpdateMs": 111.20000004768372,
+        "stateMs": 42.09999990463257,
+        "viewMs": 68.10000014305115,
+        "updateCalls": 1,
+        "dispatchMs": 110.20000004768372,
+        "dispatchCalls": 1,
+        "keyToRafMs": 127.40000009536743,
+        "keyToGeometryMs": 127.40000009536743,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 10027.599999904633,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 10027.599999904633,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 10028.5,
+            "end": 10028.899999856949
+          },
+          {
+            "name": "footnote-state",
+            "start": 10028.899999856949,
+            "end": 10028.899999856949
+          },
+          {
+            "name": "footnote-body",
+            "start": 10028.899999856949,
+            "end": 10071.099999904633
+          },
+          {
+            "name": "footnote-guards",
+            "start": 10071.099999904633,
+            "end": 10071.200000047684
+          },
+          {
+            "name": "footnote-definitions",
+            "start": 10071.200000047684,
+            "end": 10071.299999952316
+          },
+          {
+            "name": "footnote-map",
+            "start": 10071.299999952316,
+            "end": 10071.5
+          },
+          {
+            "name": "footnotes",
+            "start": 10028.899999856949,
+            "end": 10071.5
+          },
+          {
+            "name": "stable-notes",
+            "start": 10071.5,
+            "end": 10071.599999904633
+          },
+          {
+            "name": "local-collect",
+            "start": 10071.799999952316,
+            "end": 10071.899999856949
+          },
+          {
+            "name": "local-decorations",
+            "start": 10071.899999856949,
+            "end": 10071.899999856949
+          },
+          {
+            "name": "index",
+            "start": 10071.599999904633,
+            "end": 10073
+          },
+          {
+            "name": "note-overlay",
+            "start": 10073,
+            "end": 10073.099999904633
+          },
+          {
+            "name": "preview",
+            "start": 10071.5,
+            "end": 10073.099999904633
+          }
+        ],
+        "updateAt": 10127,
+        "head": 37,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 99.40000009536743,
+        "inputToUpdateMs": 99.40000009536743,
+        "stateMs": 44.59999990463257,
+        "viewMs": 53.90000009536743,
+        "updateCalls": 1,
+        "dispatchMs": 98.5,
+        "dispatchCalls": 1,
+        "keyToRafMs": 108.70000004768372,
+        "keyToGeometryMs": 108.79999995231628,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 10170.799999952316,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 10170.899999856949,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 10171.799999952316,
+            "end": 10172.399999856949
+          },
+          {
+            "name": "footnote-state",
+            "start": 10172.399999856949,
+            "end": 10172.399999856949
+          },
+          {
+            "name": "footnote-body",
+            "start": 10172.399999856949,
+            "end": 10211.399999856949
+          },
+          {
+            "name": "footnote-guards",
+            "start": 10211.399999856949,
+            "end": 10211.399999856949
+          },
+          {
+            "name": "footnote-definitions",
+            "start": 10211.399999856949,
+            "end": 10211.599999904633
+          },
+          {
+            "name": "footnote-map",
+            "start": 10211.599999904633,
+            "end": 10211.700000047684
+          },
+          {
+            "name": "footnotes",
+            "start": 10172.399999856949,
+            "end": 10211.700000047684
+          },
+          {
+            "name": "stable-notes",
+            "start": 10211.899999856949,
+            "end": 10211.899999856949
+          },
+          {
+            "name": "local-collect",
+            "start": 10212,
+            "end": 10212.099999904633
+          },
+          {
+            "name": "local-decorations",
+            "start": 10212.099999904633,
+            "end": 10212.099999904633
+          },
+          {
+            "name": "index",
+            "start": 10211.899999856949,
+            "end": 10212.599999904633
+          },
+          {
+            "name": "note-overlay",
+            "start": 10212.599999904633,
+            "end": 10212.599999904633
+          },
+          {
+            "name": "preview",
+            "start": 10211.899999856949,
+            "end": 10212.599999904633
+          }
+        ],
+        "updateAt": 10261.700000047684,
+        "head": 38,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 90.90000009536743,
+        "inputToUpdateMs": 90.80000019073486,
+        "stateMs": 40.799999952316284,
+        "viewMs": 49.10000014305115,
+        "updateCalls": 1,
+        "dispatchMs": 89.90000009536743,
+        "dispatchCalls": 1,
+        "keyToRafMs": 96,
+        "keyToGeometryMs": 96,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 10311.099999904633,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 10311.099999904633,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 10312.099999904633,
+            "end": 10312.700000047684
+          },
+          {
+            "name": "footnote-state",
+            "start": 10312.700000047684,
+            "end": 10312.700000047684
+          },
+          {
+            "name": "footnote-body",
+            "start": 10312.700000047684,
+            "end": 10349.299999952316
+          },
+          {
+            "name": "footnote-guards",
+            "start": 10349.399999856949,
+            "end": 10349.399999856949
+          },
+          {
+            "name": "footnote-definitions",
+            "start": 10349.5,
+            "end": 10349.5
+          },
+          {
+            "name": "footnote-map",
+            "start": 10349.5,
+            "end": 10349.599999904633
+          },
+          {
+            "name": "footnotes",
+            "start": 10312.700000047684,
+            "end": 10349.599999904633
+          },
+          {
+            "name": "stable-notes",
+            "start": 10349.599999904633,
+            "end": 10349.799999952316
+          },
+          {
+            "name": "local-collect",
+            "start": 10349.899999856949,
+            "end": 10349.899999856949
+          },
+          {
+            "name": "local-decorations",
+            "start": 10349.899999856949,
+            "end": 10350
+          },
+          {
+            "name": "index",
+            "start": 10349.799999952316,
+            "end": 10350.5
+          },
+          {
+            "name": "note-overlay",
+            "start": 10350.5,
+            "end": 10350.5
+          },
+          {
+            "name": "preview",
+            "start": 10349.599999904633,
+            "end": 10350.5
+          }
+        ],
+        "updateAt": 10408.299999952316,
+        "head": 39,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 97.20000004768372,
+        "inputToUpdateMs": 97.20000004768372,
+        "stateMs": 38.5,
+        "viewMs": 57.799999952316284,
+        "updateCalls": 1,
+        "dispatchMs": 96.29999995231628,
+        "dispatchCalls": 1,
+        "keyToRafMs": 111.60000014305115,
+        "keyToGeometryMs": 111.60000014305115,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 10463.299999952316,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 10463.399999856949,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 10464.899999856949,
+            "end": 10465.799999952316
+          },
+          {
+            "name": "footnote-state",
+            "start": 10465.799999952316,
+            "end": 10465.799999952316
+          },
+          {
+            "name": "footnote-body",
+            "start": 10465.799999952316,
+            "end": 10513.200000047684
+          },
+          {
+            "name": "footnote-guards",
+            "start": 10513.200000047684,
+            "end": 10513.200000047684
+          },
+          {
+            "name": "footnote-definitions",
+            "start": 10513.200000047684,
+            "end": 10513.399999856949
+          },
+          {
+            "name": "footnote-map",
+            "start": 10513.399999856949,
+            "end": 10513.599999904633
+          },
+          {
+            "name": "footnotes",
+            "start": 10465.799999952316,
+            "end": 10513.599999904633
+          },
+          {
+            "name": "stable-notes",
+            "start": 10513.700000047684,
+            "end": 10513.700000047684
+          },
+          {
+            "name": "local-collect",
+            "start": 10513.899999856949,
+            "end": 10514.099999904633
+          },
+          {
+            "name": "local-decorations",
+            "start": 10514.099999904633,
+            "end": 10514.200000047684
+          },
+          {
+            "name": "index",
+            "start": 10513.700000047684,
+            "end": 10515.5
+          },
+          {
+            "name": "note-overlay",
+            "start": 10515.5,
+            "end": 10515.5
+          },
+          {
+            "name": "preview",
+            "start": 10513.599999904633,
+            "end": 10515.5
+          }
+        ],
+        "updateAt": 10574.799999952316,
+        "head": 40,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 111.5,
+        "inputToUpdateMs": 111.40000009536743,
+        "stateMs": 50.60000014305115,
+        "viewMs": 59.299999952316284,
+        "updateCalls": 1,
+        "dispatchMs": 109.90000009536743,
+        "dispatchCalls": 1,
+        "keyToRafMs": 120.59999990463257,
+        "keyToGeometryMs": 120.70000004768372,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 10655.599999904633,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 10656.799999952316,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 10658.200000047684,
+            "end": 10659.099999904633
+          },
+          {
+            "name": "footnote-state",
+            "start": 10659.099999904633,
+            "end": 10659.099999904633
+          },
+          {
+            "name": "footnote-body",
+            "start": 10659.099999904633,
+            "end": 10701.599999904633
+          },
+          {
+            "name": "footnote-guards",
+            "start": 10701.599999904633,
+            "end": 10701.700000047684
+          },
+          {
+            "name": "footnote-definitions",
+            "start": 10701.700000047684,
+            "end": 10701.799999952316
+          },
+          {
+            "name": "footnote-map",
+            "start": 10701.799999952316,
+            "end": 10701.899999856949
+          },
+          {
+            "name": "footnotes",
+            "start": 10659.099999904633,
+            "end": 10702
+          },
+          {
+            "name": "stable-notes",
+            "start": 10702,
+            "end": 10702
+          },
+          {
+            "name": "local-collect",
+            "start": 10702.099999904633,
+            "end": 10702.299999952316
+          },
+          {
+            "name": "local-decorations",
+            "start": 10702.299999952316,
+            "end": 10702.299999952316
+          },
+          {
+            "name": "index",
+            "start": 10702,
+            "end": 10703
+          },
+          {
+            "name": "note-overlay",
+            "start": 10703,
+            "end": 10703
+          },
+          {
+            "name": "preview",
+            "start": 10702,
+            "end": 10703
+          }
+        ],
+        "updateAt": 10753.899999856949,
+        "head": 41,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 98.29999995231628,
+        "inputToUpdateMs": 97.09999990463257,
+        "stateMs": 44.799999952316284,
+        "viewMs": 50.89999985694885,
+        "updateCalls": 1,
+        "dispatchMs": 95.69999980926514,
+        "dispatchCalls": 1,
+        "keyToRafMs": 107.29999995231628,
+        "keyToGeometryMs": 107.40000009536743,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 10815.5,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 10815.599999904633,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 10816.599999904633,
+            "end": 10817.299999952316
+          },
+          {
+            "name": "footnote-state",
+            "start": 10817.399999856949,
+            "end": 10817.399999856949
+          },
+          {
+            "name": "footnote-body",
+            "start": 10817.399999856949,
+            "end": 10859.299999952316
+          },
+          {
+            "name": "footnote-guards",
+            "start": 10859.299999952316,
+            "end": 10859.399999856949
+          },
+          {
+            "name": "footnote-definitions",
+            "start": 10859.399999856949,
+            "end": 10859.5
+          },
+          {
+            "name": "footnote-map",
+            "start": 10859.5,
+            "end": 10859.599999904633
+          },
+          {
+            "name": "footnotes",
+            "start": 10817.399999856949,
+            "end": 10859.700000047684
+          },
+          {
+            "name": "stable-notes",
+            "start": 10859.700000047684,
+            "end": 10859.700000047684
+          },
+          {
+            "name": "local-collect",
+            "start": 10859.899999856949,
+            "end": 10860
+          },
+          {
+            "name": "local-decorations",
+            "start": 10860,
+            "end": 10860
+          },
+          {
+            "name": "index",
+            "start": 10859.700000047684,
+            "end": 10860.700000047684
+          },
+          {
+            "name": "note-overlay",
+            "start": 10860.700000047684,
+            "end": 10860.700000047684
+          },
+          {
+            "name": "preview",
+            "start": 10859.700000047684,
+            "end": 10860.700000047684
+          }
+        ],
+        "updateAt": 10917.399999856949,
+        "head": 42,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 101.89999985694885,
+        "inputToUpdateMs": 101.79999995231628,
+        "stateMs": 44.10000014305115,
+        "viewMs": 56.799999952316284,
+        "updateCalls": 1,
+        "dispatchMs": 100.90000009536743,
+        "dispatchCalls": 1,
+        "keyToRafMs": 114.09999990463257,
+        "keyToGeometryMs": 114.09999990463257,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 10984.899999856949,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 10984.899999856949,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 10986.200000047684,
+            "end": 10986.899999856949
+          },
+          {
+            "name": "footnote-state",
+            "start": 10987,
+            "end": 10987
+          },
+          {
+            "name": "footnote-body",
+            "start": 10987,
+            "end": 11021.599999904633
+          },
+          {
+            "name": "footnote-guards",
+            "start": 11021.700000047684,
+            "end": 11021.799999952316
+          },
+          {
+            "name": "footnote-definitions",
+            "start": 11021.799999952316,
+            "end": 11022
+          },
+          {
+            "name": "footnote-map",
+            "start": 11022,
+            "end": 11022.099999904633
+          },
+          {
+            "name": "footnotes",
+            "start": 10987,
+            "end": 11022.099999904633
+          },
+          {
+            "name": "stable-notes",
+            "start": 11022.099999904633,
+            "end": 11022.200000047684
+          },
+          {
+            "name": "local-collect",
+            "start": 11022.399999856949,
+            "end": 11022.5
+          },
+          {
+            "name": "local-decorations",
+            "start": 11022.5,
+            "end": 11022.599999904633
+          },
+          {
+            "name": "index",
+            "start": 11022.200000047684,
+            "end": 11023.399999856949
+          },
+          {
+            "name": "note-overlay",
+            "start": 11023.399999856949,
+            "end": 11023.399999856949
+          },
+          {
+            "name": "preview",
+            "start": 11022.099999904633,
+            "end": 11023.399999856949
+          }
+        ],
+        "updateAt": 11079.799999952316,
+        "head": 43,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 94.90000009536743,
+        "inputToUpdateMs": 94.90000009536743,
+        "stateMs": 37.299999952316284,
+        "viewMs": 56.299999952316284,
+        "updateCalls": 1,
+        "dispatchMs": 93.59999990463257,
+        "dispatchCalls": 1,
+        "keyToRafMs": 110.30000019073486,
+        "keyToGeometryMs": 110.5,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 11139.399999856949,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 11139.399999856949,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 11140.099999904633,
+            "end": 11140.599999904633
+          },
+          {
+            "name": "footnote-state",
+            "start": 11140.599999904633,
+            "end": 11140.599999904633
+          },
+          {
+            "name": "footnote-body",
+            "start": 11140.599999904633,
+            "end": 11178
+          },
+          {
+            "name": "footnote-guards",
+            "start": 11178.099999904633,
+            "end": 11178.099999904633
+          },
+          {
+            "name": "footnote-definitions",
+            "start": 11178.099999904633,
+            "end": 11178.299999952316
+          },
+          {
+            "name": "footnote-map",
+            "start": 11178.299999952316,
+            "end": 11178.5
+          },
+          {
+            "name": "footnotes",
+            "start": 11140.599999904633,
+            "end": 11178.599999904633
+          },
+          {
+            "name": "stable-notes",
+            "start": 11178.599999904633,
+            "end": 11178.599999904633
+          },
+          {
+            "name": "local-collect",
+            "start": 11178.799999952316,
+            "end": 11179
+          },
+          {
+            "name": "local-decorations",
+            "start": 11179,
+            "end": 11179.099999904633
+          },
+          {
+            "name": "index",
+            "start": 11178.599999904633,
+            "end": 11180.299999952316
+          },
+          {
+            "name": "note-overlay",
+            "start": 11180.299999952316,
+            "end": 11180.399999856949
+          },
+          {
+            "name": "preview",
+            "start": 11178.599999904633,
+            "end": 11180.399999856949
+          }
+        ],
+        "updateAt": 11230.799999952316,
+        "head": 44,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 91.40000009536743,
+        "inputToUpdateMs": 91.40000009536743,
+        "stateMs": 40.299999952316284,
+        "viewMs": 50.40000009536743,
+        "updateCalls": 1,
+        "dispatchMs": 90.70000004768372,
+        "dispatchCalls": 1,
+        "keyToRafMs": 98.30000019073486,
+        "keyToGeometryMs": 98.40000009536743,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 11308.799999952316,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 11308.899999856949,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 11310.200000047684,
+            "end": 11311.200000047684
+          },
+          {
+            "name": "footnote-state",
+            "start": 11311.299999952316,
+            "end": 11311.299999952316
+          },
+          {
+            "name": "footnote-body",
+            "start": 11311.299999952316,
+            "end": 11359.200000047684
+          },
+          {
+            "name": "footnote-guards",
+            "start": 11359.200000047684,
+            "end": 11359.299999952316
+          },
+          {
+            "name": "footnote-definitions",
+            "start": 11359.299999952316,
+            "end": 11359.399999856949
+          },
+          {
+            "name": "footnote-map",
+            "start": 11359.399999856949,
+            "end": 11359.599999904633
+          },
+          {
+            "name": "footnotes",
+            "start": 11311.299999952316,
+            "end": 11359.700000047684
+          },
+          {
+            "name": "stable-notes",
+            "start": 11359.700000047684,
+            "end": 11359.700000047684
+          },
+          {
+            "name": "local-collect",
+            "start": 11359.899999856949,
+            "end": 11360
+          },
+          {
+            "name": "local-decorations",
+            "start": 11360,
+            "end": 11360.099999904633
+          },
+          {
+            "name": "index",
+            "start": 11359.700000047684,
+            "end": 11361.299999952316
+          },
+          {
+            "name": "note-overlay",
+            "start": 11361.299999952316,
+            "end": 11361.399999856949
+          },
+          {
+            "name": "preview",
+            "start": 11359.700000047684,
+            "end": 11361.399999856949
+          }
+        ],
+        "updateAt": 11420.399999856949,
+        "head": 45,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 111.59999990463257,
+        "inputToUpdateMs": 111.5,
+        "stateMs": 51.299999952316284,
+        "viewMs": 59,
+        "updateCalls": 1,
+        "dispatchMs": 110.29999995231628,
+        "dispatchCalls": 1,
+        "keyToRafMs": 124.70000004768372,
+        "keyToGeometryMs": 124.79999995231628,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 11490.5,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 11490.5,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 11491.399999856949,
+            "end": 11491.799999952316
+          },
+          {
+            "name": "footnote-state",
+            "start": 11491.899999856949,
+            "end": 11491.899999856949
+          },
+          {
+            "name": "footnote-body",
+            "start": 11491.899999856949,
+            "end": 11528.799999952316
+          },
+          {
+            "name": "footnote-guards",
+            "start": 11528.799999952316,
+            "end": 11528.899999856949
+          },
+          {
+            "name": "footnote-definitions",
+            "start": 11528.899999856949,
+            "end": 11528.899999856949
+          },
+          {
+            "name": "footnote-map",
+            "start": 11528.899999856949,
+            "end": 11529.099999904633
+          },
+          {
+            "name": "footnotes",
+            "start": 11491.899999856949,
+            "end": 11529.099999904633
+          },
+          {
+            "name": "stable-notes",
+            "start": 11529.099999904633,
+            "end": 11529.099999904633
+          },
+          {
+            "name": "local-collect",
+            "start": 11529.200000047684,
+            "end": 11529.299999952316
+          },
+          {
+            "name": "local-decorations",
+            "start": 11529.299999952316,
+            "end": 11529.299999952316
+          },
+          {
+            "name": "index",
+            "start": 11529.099999904633,
+            "end": 11529.899999856949
+          },
+          {
+            "name": "note-overlay",
+            "start": 11529.899999856949,
+            "end": 11529.899999856949
+          },
+          {
+            "name": "preview",
+            "start": 11529.099999904633,
+            "end": 11529.899999856949
+          }
+        ],
+        "updateAt": 11589.099999904633,
+        "head": 46,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 98.59999990463257,
+        "inputToUpdateMs": 98.59999990463257,
+        "stateMs": 38.5,
+        "viewMs": 59.200000047683716,
+        "updateCalls": 1,
+        "dispatchMs": 97.70000004768372,
+        "dispatchCalls": 1,
+        "keyToRafMs": 110.79999995231628,
+        "keyToGeometryMs": 110.89999985694885,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 11645.5,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 11645.700000047684,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 11647.200000047684,
+            "end": 11648
+          },
+          {
+            "name": "footnote-state",
+            "start": 11648,
+            "end": 11648
+          },
+          {
+            "name": "footnote-body",
+            "start": 11648,
+            "end": 11695.700000047684
+          },
+          {
+            "name": "footnote-guards",
+            "start": 11695.700000047684,
+            "end": 11695.799999952316
+          },
+          {
+            "name": "footnote-definitions",
+            "start": 11695.799999952316,
+            "end": 11696
+          },
+          {
+            "name": "footnote-map",
+            "start": 11696,
+            "end": 11696.200000047684
+          },
+          {
+            "name": "footnotes",
+            "start": 11648,
+            "end": 11696.200000047684
+          },
+          {
+            "name": "stable-notes",
+            "start": 11696.200000047684,
+            "end": 11696.200000047684
+          },
+          {
+            "name": "local-collect",
+            "start": 11696.5,
+            "end": 11696.599999904633
+          },
+          {
+            "name": "local-decorations",
+            "start": 11696.599999904633,
+            "end": 11696.700000047684
+          },
+          {
+            "name": "index",
+            "start": 11696.200000047684,
+            "end": 11698
+          },
+          {
+            "name": "note-overlay",
+            "start": 11698,
+            "end": 11698.099999904633
+          },
+          {
+            "name": "preview",
+            "start": 11696.200000047684,
+            "end": 11698.099999904633
+          }
+        ],
+        "updateAt": 11757.700000047684,
+        "head": 47,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 112.20000004768372,
+        "inputToUpdateMs": 112,
+        "stateMs": 50.89999985694885,
+        "viewMs": 59.700000047683716,
+        "updateCalls": 1,
+        "dispatchMs": 110.59999990463257,
+        "dispatchCalls": 1,
+        "keyToRafMs": 119.09999990463257,
+        "keyToGeometryMs": 119.29999995231628,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 11809,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 11809.200000047684,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 11810.799999952316,
+            "end": 11811.5
+          },
+          {
+            "name": "footnote-state",
+            "start": 11811.599999904633,
+            "end": 11811.599999904633
+          },
+          {
+            "name": "footnote-body",
+            "start": 11811.599999904633,
+            "end": 11867.700000047684
+          },
+          {
+            "name": "footnote-guards",
+            "start": 11867.700000047684,
+            "end": 11867.899999856949
+          },
+          {
+            "name": "footnote-definitions",
+            "start": 11867.899999856949,
+            "end": 11868
+          },
+          {
+            "name": "footnote-map",
+            "start": 11868,
+            "end": 11868.200000047684
+          },
+          {
+            "name": "footnotes",
+            "start": 11811.599999904633,
+            "end": 11868.299999952316
+          },
+          {
+            "name": "stable-notes",
+            "start": 11868.299999952316,
+            "end": 11868.299999952316
+          },
+          {
+            "name": "local-collect",
+            "start": 11868.5,
+            "end": 11868.599999904633
+          },
+          {
+            "name": "local-decorations",
+            "start": 11868.599999904633,
+            "end": 11868.700000047684
+          },
+          {
+            "name": "index",
+            "start": 11868.299999952316,
+            "end": 11870
+          },
+          {
+            "name": "note-overlay",
+            "start": 11870,
+            "end": 11870
+          },
+          {
+            "name": "preview",
+            "start": 11868.299999952316,
+            "end": 11870
+          }
+        ],
+        "updateAt": 11926.099999904633,
+        "head": 48,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 117.09999990463257,
+        "inputToUpdateMs": 116.89999985694885,
+        "stateMs": 59.299999952316284,
+        "viewMs": 56.09999990463257,
+        "updateCalls": 1,
+        "dispatchMs": 115.39999985694885,
+        "dispatchCalls": 1,
+        "keyToRafMs": 125.59999990463257,
+        "keyToGeometryMs": 125.59999990463257,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 12008.700000047684,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 12008.799999952316,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 12010.599999904633,
+            "end": 12011.5
+          },
+          {
+            "name": "footnote-state",
+            "start": 12011.5,
+            "end": 12011.5
+          },
+          {
+            "name": "footnote-body",
+            "start": 12011.5,
+            "end": 12051.899999856949
+          },
+          {
+            "name": "footnote-guards",
+            "start": 12051.899999856949,
+            "end": 12051.899999856949
+          },
+          {
+            "name": "footnote-definitions",
+            "start": 12051.899999856949,
+            "end": 12052.099999904633
+          },
+          {
+            "name": "footnote-map",
+            "start": 12052.099999904633,
+            "end": 12052.299999952316
+          },
+          {
+            "name": "footnotes",
+            "start": 12011.5,
+            "end": 12052.299999952316
+          },
+          {
+            "name": "stable-notes",
+            "start": 12052.299999952316,
+            "end": 12052.399999856949
+          },
+          {
+            "name": "local-collect",
+            "start": 12052.599999904633,
+            "end": 12052.799999952316
+          },
+          {
+            "name": "local-decorations",
+            "start": 12052.799999952316,
+            "end": 12052.899999856949
+          },
+          {
+            "name": "index",
+            "start": 12052.399999856949,
+            "end": 12054.599999904633
+          },
+          {
+            "name": "note-overlay",
+            "start": 12054.599999904633,
+            "end": 12054.700000047684
+          },
+          {
+            "name": "preview",
+            "start": 12052.299999952316,
+            "end": 12054.700000047684
+          }
+        ],
+        "updateAt": 12100.799999952316,
+        "head": 49,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 92.09999990463257,
+        "inputToUpdateMs": 92,
+        "stateMs": 44.10000014305115,
+        "viewMs": 46.19999980926514,
+        "updateCalls": 1,
+        "dispatchMs": 90.29999995231628,
+        "dispatchCalls": 1,
+        "keyToRafMs": 104.59999990463257,
+        "keyToGeometryMs": 104.69999980926514,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 12156.599999904633,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 12156.599999904633,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 12157.599999904633,
+            "end": 12158.299999952316
+          },
+          {
+            "name": "footnote-state",
+            "start": 12158.399999856949,
+            "end": 12158.399999856949
+          },
+          {
+            "name": "footnote-body",
+            "start": 12158.399999856949,
+            "end": 12192.200000047684
+          },
+          {
+            "name": "footnote-guards",
+            "start": 12192.200000047684,
+            "end": 12192.200000047684
+          },
+          {
+            "name": "footnote-definitions",
+            "start": 12192.200000047684,
+            "end": 12192.200000047684
+          },
+          {
+            "name": "footnote-map",
+            "start": 12192.200000047684,
+            "end": 12192.299999952316
+          },
+          {
+            "name": "footnotes",
+            "start": 12158.399999856949,
+            "end": 12192.299999952316
+          },
+          {
+            "name": "stable-notes",
+            "start": 12192.299999952316,
+            "end": 12192.299999952316
+          },
+          {
+            "name": "local-collect",
+            "start": 12192.399999856949,
+            "end": 12192.399999856949
+          },
+          {
+            "name": "local-decorations",
+            "start": 12192.399999856949,
+            "end": 12192.399999856949
+          },
+          {
+            "name": "index",
+            "start": 12192.299999952316,
+            "end": 12192.899999856949
+          },
+          {
+            "name": "note-overlay",
+            "start": 12192.899999856949,
+            "end": 12193
+          },
+          {
+            "name": "preview",
+            "start": 12192.299999952316,
+            "end": 12193
+          }
+        ],
+        "updateAt": 12248.099999904633,
+        "head": 50,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 91.5,
+        "inputToUpdateMs": 91.5,
+        "stateMs": 35.5,
+        "viewMs": 55,
+        "updateCalls": 1,
+        "dispatchMs": 90.5,
+        "dispatchCalls": 1,
+        "keyToRafMs": 103.79999995231628,
+        "keyToGeometryMs": 103.79999995231628,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 12304.399999856949,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 12304.399999856949,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 12305.200000047684,
+            "end": 12305.599999904633
+          },
+          {
+            "name": "footnote-state",
+            "start": 12305.599999904633,
+            "end": 12305.599999904633
+          },
+          {
+            "name": "footnote-body",
+            "start": 12305.599999904633,
+            "end": 12331
+          },
+          {
+            "name": "footnote-guards",
+            "start": 12331,
+            "end": 12331
+          },
+          {
+            "name": "footnote-definitions",
+            "start": 12331,
+            "end": 12331.099999904633
+          },
+          {
+            "name": "footnote-map",
+            "start": 12331.099999904633,
+            "end": 12331.200000047684
+          },
+          {
+            "name": "footnotes",
+            "start": 12305.599999904633,
+            "end": 12331.200000047684
+          },
+          {
+            "name": "stable-notes",
+            "start": 12331.200000047684,
+            "end": 12331.200000047684
+          },
+          {
+            "name": "local-collect",
+            "start": 12331.200000047684,
+            "end": 12331.299999952316
+          },
+          {
+            "name": "local-decorations",
+            "start": 12331.299999952316,
+            "end": 12331.399999856949
+          },
+          {
+            "name": "index",
+            "start": 12331.200000047684,
+            "end": 12331.700000047684
+          },
+          {
+            "name": "note-overlay",
+            "start": 12331.700000047684,
+            "end": 12331.700000047684
+          },
+          {
+            "name": "preview",
+            "start": 12331.200000047684,
+            "end": 12331.700000047684
+          }
+        ],
+        "updateAt": 12368.599999904633,
+        "head": 51,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 64.20000004768372,
+        "inputToUpdateMs": 64.20000004768372,
+        "stateMs": 26.5,
+        "viewMs": 36.89999985694885,
+        "updateCalls": 1,
+        "dispatchMs": 63.39999985694885,
+        "dispatchCalls": 1,
+        "keyToRafMs": 74.40000009536743,
+        "keyToGeometryMs": 74.40000009536743,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 12422.799999952316,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 12422.899999856949,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 12423.5,
+            "end": 12424
+          },
+          {
+            "name": "footnote-state",
+            "start": 12424,
+            "end": 12424
+          },
+          {
+            "name": "footnote-body",
+            "start": 12424,
+            "end": 12462.200000047684
+          },
+          {
+            "name": "footnote-guards",
+            "start": 12462.200000047684,
+            "end": 12462.299999952316
+          },
+          {
+            "name": "footnote-definitions",
+            "start": 12462.299999952316,
+            "end": 12462.399999856949
+          },
+          {
+            "name": "footnote-map",
+            "start": 12462.399999856949,
+            "end": 12462.399999856949
+          },
+          {
+            "name": "footnotes",
+            "start": 12424,
+            "end": 12462.399999856949
+          },
+          {
+            "name": "stable-notes",
+            "start": 12462.5,
+            "end": 12462.5
+          },
+          {
+            "name": "local-collect",
+            "start": 12462.5,
+            "end": 12462.599999904633
+          },
+          {
+            "name": "local-decorations",
+            "start": 12462.599999904633,
+            "end": 12462.599999904633
+          },
+          {
+            "name": "index",
+            "start": 12462.5,
+            "end": 12463.399999856949
+          },
+          {
+            "name": "note-overlay",
+            "start": 12463.399999856949,
+            "end": 12463.399999856949
+          },
+          {
+            "name": "preview",
+            "start": 12462.5,
+            "end": 12463.399999856949
+          }
+        ],
+        "updateAt": 12519.599999904633,
+        "head": 52,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 96.79999995231628,
+        "inputToUpdateMs": 96.70000004768372,
+        "stateMs": 39.89999985694885,
+        "viewMs": 56.200000047683716,
+        "updateCalls": 1,
+        "dispatchMs": 96.09999990463257,
+        "dispatchCalls": 1,
+        "keyToRafMs": 108.20000004768372,
+        "keyToGeometryMs": 108.29999995231628,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 12581.5,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 12581.599999904633,
+        "data": "x",
+        "intervals": [
+          {
+            "name": "source",
+            "start": 12584.200000047684,
+            "end": 12584.899999856949
+          },
+          {
+            "name": "footnote-state",
+            "start": 12584.899999856949,
+            "end": 12584.899999856949
+          },
+          {
+            "name": "footnote-body",
+            "start": 12584.899999856949,
+            "end": 12624.700000047684
+          },
+          {
+            "name": "footnote-guards",
+            "start": 12624.799999952316,
+            "end": 12624.799999952316
+          },
+          {
+            "name": "footnote-definitions",
+            "start": 12624.799999952316,
+            "end": 12624.799999952316
+          },
+          {
+            "name": "footnote-map",
+            "start": 12624.799999952316,
+            "end": 12625
+          },
+          {
+            "name": "footnotes",
+            "start": 12584.899999856949,
+            "end": 12625
+          },
+          {
+            "name": "stable-notes",
+            "start": 12625,
+            "end": 12625
+          },
+          {
+            "name": "local-collect",
+            "start": 12625.200000047684,
+            "end": 12625.299999952316
+          },
+          {
+            "name": "local-decorations",
+            "start": 12625.299999952316,
+            "end": 12625.299999952316
+          },
+          {
+            "name": "index",
+            "start": 12625,
+            "end": 12626
+          },
+          {
+            "name": "note-overlay",
+            "start": 12626,
+            "end": 12626.099999904633
+          },
+          {
+            "name": "preview",
+            "start": 12625,
+            "end": 12626.099999904633
+          }
+        ],
+        "updateAt": 12680.700000047684,
+        "head": 53,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 99.20000004768372,
+        "inputToUpdateMs": 99.10000014305115,
+        "stateMs": 42,
+        "viewMs": 54.60000014305115,
+        "updateCalls": 1,
+        "dispatchMs": 96.60000014305115,
+        "dispatchCalls": 1,
+        "keyToRafMs": 112.20000004768372,
+        "keyToGeometryMs": 112.20000004768372,
+        "visible": true,
+        "domContainsInput": true
+      }
+    ]
+  }
+}

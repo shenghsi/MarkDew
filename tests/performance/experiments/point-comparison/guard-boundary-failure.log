@@ -1,0 +1,45 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: touching point with boundary zero
++ actual - expected
+
+  [
+    [
+      'point',
+      0,
+      0,
++     null,
+      [
+-       'touching',
+-       true,
+-       -2,
+-       -2
+-     ],
+-     [
+        'boundary-zero',
+        true,
+        -2,
+        -2
+      ]
+
+    at check (file:///Users/shxi/projects/MarkDew/tests/performance/experiments/point-comparison/check.mjs:73:10)
+    at file:///Users/shxi/projects/MarkDew/tests/performance/experiments/point-comparison/check.mjs:83:41 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [ [ 'point', 0, 0, null, [ 'boundary-zero', true, -2, -2 ] ] ],
+  expected: [
+    [
+      'point',
+      0,
+      0,
+      [ 'touching', true, -2, -2 ],
+      [ 'boundary-zero', true, -2, -2 ]
+    ]
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.23.2

@@ -1,0 +1,19 @@
+
+ RUN  v3.2.7 /Users/shxi/projects/MarkDew
+
+stdout | tests/performance/note-profile.test.ts > profiles all growing note edits with independent source and decoration checks
+{"diagnostic":"note-edit-cpu","location":"start","bytes":1048576,"samples":20,"publishedLengths":[1048577,1048578,1048579,1048580,1048581,1048582,1048583,1048584,1048585,1048586,1048587,1048588,1048589,1048590,1048591,1048592,1048593,1048594,1048595,1048596],"footnoteReuse":[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false],"modes":["full","full","full","full","full","full","full","full","full","full","full","full","full","full","full","full","full","full","full","full"],"node":"v22.23.2","platform":"darwin","arch":"arm64","scope":"CPU samples under applyNoteGrowth, state transaction and dirty comparison; excludes setup, oracle, inspector, DOM, native input and frames"}
+
+stdout | tests/performance/note-profile.test.ts > profiles all growing note edits with independent source and decoration checks
+{"diagnostic":"note-edit-cpu","location":"middle","bytes":1048576,"samples":20,"publishedLengths":[1048577,1048578,1048579,1048580,1048581,1048582,1048583,1048584,1048585,1048586,1048587,1048588,1048589,1048590,1048591,1048592,1048593,1048594,1048595,1048596],"footnoteReuse":[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false],"modes":["full","full","full","full","full","full","full","full","full","full","full","full","full","full","full","full","full","full","full","full"],"node":"v22.23.2","platform":"darwin","arch":"arm64","scope":"CPU samples under applyNoteGrowth, state transaction and dirty comparison; excludes setup, oracle, inspector, DOM, native input and frames"}
+
+stdout | tests/performance/note-profile.test.ts > profiles all growing note edits with independent source and decoration checks
+{"diagnostic":"note-edit-cpu","location":"end","bytes":1048576,"samples":20,"publishedLengths":[1048577,1048578,1048579,1048580,1048581,1048582,1048583,1048584,1048585,1048586,1048587,1048588,1048589,1048590,1048591,1048592,1048593,1048594,1048595,1048596],"footnoteReuse":[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false],"modes":["full","full","full","full","full","full","full","full","full","full","full","full","full","full","full","full","full","full","full","full"],"node":"v22.23.2","platform":"darwin","arch":"arm64","scope":"CPU samples under applyNoteGrowth, state transaction and dirty comparison; excludes setup, oracle, inspector, DOM, native input and frames"}
+
+ ✓ tests/performance/note-profile.test.ts (1 test) 118106ms
+   ✓ profiles all growing note edits with independent source and decoration checks  118105ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  16:23:48
+   Duration  118.72s (transform 94ms, setup 0ms, collect 270ms, tests 118.11s, environment 211ms, prepare 26ms)

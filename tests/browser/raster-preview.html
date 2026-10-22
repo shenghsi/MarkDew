@@ -1,0 +1,26 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Raster preview check</title>
+<style>body{font:16px system-ui;margin:24px;background:white;color:#222} #editor{border:1px solid #888;margin:16px 0;padding:12px} img{width:64px;height:64px;border:1px solid #888} .preview-error{color:#922} pre{white-space:pre-wrap}</style>
+<h1>Raster preview check</h1>
+<p>The valid image can decode. The oversized header must show an error and retain its source.</p>
+<button id="check">Check result</button>
+<div id="editor"></div><pre id="result"></pre>
+<script type="module">
+import {EditorState} from '@codemirror/state';
+import {EditorView} from '@codemirror/view';
+import {history,undoDepth} from '@codemirror/commands';
+import {documentLanguage} from '/src/web/document-language.ts';
+import {livePreview} from '/src/web/preview.ts';
+import {fromSource,normalize,sourceExtensions,sourceField,savedSource} from '/src/web/source.ts';
+import {rasterHeader} from '/tests/web/raster-fixtures.ts';
+const valid='iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aDLsAAAAASUVORK5CYII=';
+const large=btoa(String.fromCharCode(...rasterHeader('png',16385,1)));
+const original=`\uFEFF![Valid](data:image/png;base64,${valid})\r\n\r\n![Large](data:image/png;base64,${large})\rEnd`;
+const record=fromSource(original),doc=normalize(record.raw);
+const view=new EditorView({parent:document.querySelector('#editor'),state:EditorState.create({doc,selection:{anchor:doc.length},extensions:[sourceExtensions(record),history(),documentLanguage(),livePreview,EditorView.updateListener.of(()=>queueMicrotask(report))]})});
+function report(){const image=view.dom.querySelector('img[alt="Valid"]');document.querySelector('#result').textContent=JSON.stringify({exactOriginal:savedSource(view.state.field(sourceField))===original,history:undoDepth(view.state),width:image?.naturalWidth,height:image?.naturalHeight,error:view.dom.querySelector('.preview-error')?.textContent});}
+new MutationObserver(report).observe(document.querySelector('#editor'),{childList:true,subtree:true,attributes:true});
+document.querySelector('#editor').addEventListener('load',report,true);window.addEventListener('pagehide',()=>view.destroy(),{once:true});report();
+document.querySelector('#check').onclick=report;
+</script>

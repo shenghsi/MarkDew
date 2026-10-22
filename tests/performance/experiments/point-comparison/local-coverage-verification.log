@@ -1,0 +1,13 @@
+npx vitest run tests/web/local-coverage-experiment.test.ts tests/web/fallback-observer-experiment.test.ts tests/web/static-preview-experiment.test.ts tests/web/browser-comparator-experiment.test.ts
+24 tests pass in four files.
+Local coverage: four repeated controlled partial direct-Markdown edits retain
+the complete independent oracle. Candidate tree stays partial and unchanged.
+Wrapper, dirty/boundary truncation, structural, resource and note fallbacks pass.
+This direct-parser test is a different profile, not app or speed acceptance.
+
+npx tsc --noEmit
+Exit 0. No diagnostics.
+
+bend PROOF.bend
+ALL PROOFS CHECK
+Use --verdict for mathematical validity.

@@ -1,0 +1,26 @@
+diff --git a/src/web/main.ts b/src/web/main.ts
+index fb47fcd..aa666a5 100644
+--- a/src/web/main.ts
++++ b/src/web/main.ts
+@@ -11,7 +11,7 @@ import { getCurrentWindow } from '@tauri-apps/api/window';
+ import { fromSource, normalize, savedSource, sourceExtensions, sourceField } from './source';
+ import { markdownReturn } from './commands';
+ import { canUseFiles } from './file-guard';
+-import { livePreview } from './preview';
++import { livePreview } from '../../tests/performance/experiments/viewport-marks/preview';
+ import { endTableEdit, tableComposing, tableSaveCommand, tableFindCommand, tableHistoryCommand } from './table';
+ import { find, guardedSearchKeymap, outline, refreshOutline, searchSupport } from './navigation';
+ import { format, Format } from './formatting';
+diff --git a/tests/browser/input-frame.html b/tests/browser/input-frame.html
+index e8c169e..08be721 100644
+--- a/tests/browser/input-frame.html
++++ b/tests/browser/input-frame.html
+@@ -9,7 +9,7 @@
+ <script type="module">
+ import {view} from '/src/web/main.ts';
+ import {fromSource,normalize,restoreSource,sourceField,savedSource,sourceOffset} from '/src/web/source.ts';
+-import {previewField} from '/src/web/preview.ts';
++import {previewField} from '/tests/performance/experiments/viewport-marks/preview.ts';
+ import {completeDocument} from '/src/web/preview-index.ts';
+ import {noteEligible} from '/src/web/preview-note-index.ts';
+ import {footnotes} from '/src/web/footnotes.ts';

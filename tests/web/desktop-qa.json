@@ -1,0 +1,5 @@
+{
+  "productName": "MarkDew QA",
+  "identifier": "dev.markdew.qa",
+  "app": { "windows": [{ "label": "main", "title": "MarkDew QA", "width": 1000, "height": 760 }] }
+}

@@ -1,0 +1,2449 @@
+{
+  "revision": "1980c10",
+  "hooks": true,
+  "versions": {
+    "view": "6.43.13",
+    "language": "6.12.4",
+    "markdown": "1.7.2",
+    "common": "1.5.3",
+    "markdownLanguage": "6.5.2",
+    "yamlLanguage": "6.1.3"
+  },
+  "observation": {
+    "mode": "Live preview",
+    "notes": true,
+    "bytes": 1048576,
+    "ready": true,
+    "armed": false,
+    "setupDispatchMs": 558.9000000953674,
+    "setupReadyMs": 923.3000001907349,
+    "samples": 20,
+    "completeSamples": 20,
+    "unexpectedUpdates": 0,
+    "failures": [],
+    "treeComplete": false,
+    "previewMode": "full",
+    "keyToUpdateMs": {
+      "median": 96.19999980926514,
+      "p95": 140.20000004768372,
+      "max": 178.29999995231628
+    },
+    "inputToUpdateMs": {
+      "median": 96.09999990463257,
+      "p95": 138.60000014305115,
+      "max": 178.20000004768372
+    },
+    "keyToRafMs": {
+      "median": 109.59999990463257,
+      "p95": 160.09999990463257,
+      "max": 190.59999990463257
+    },
+    "keyToGeometryMs": {
+      "median": 109.69999980926514,
+      "p95": 160.59999990463257,
+      "max": 190.69999980926514
+    },
+    "traceSetup": {
+      "definitions": [
+        {
+          "from": 1048540,
+          "to": 1048554
+        }
+      ]
+    },
+    "dispatchInclusiveMs": {
+      "median": 95,
+      "p95": 134.5,
+      "max": 176.89999985694885
+    },
+    "stateRealizationMs": {
+      "median": 40.59999990463257,
+      "p95": 46.39999985694885,
+      "max": 63.09999990463257
+    },
+    "viewUpdateMs": {
+      "median": 56.30000019073486,
+      "p95": 71.40000009536743,
+      "max": 130.5
+    },
+    "checked": {
+      "exactEdited": true,
+      "exactOriginal": true,
+      "historyBefore": 20,
+      "historyAfter": 0,
+      "undoCalls": 20
+    },
+    "raw": [
+      {
+        "keyAt": 8821.299999952316,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 8822.899999856949,
+        "data": "x",
+        "dispatching": false,
+        "phases": {
+          "dispatch:document-parser": {
+            "calls": 46,
+            "activeMs": 47.60000038146973,
+            "firstStart": 8827.899999856949,
+            "lastEnd": 8875.899999856949
+          },
+          "dispatch:markdown-core": {
+            "calls": 5,
+            "activeMs": 24.5,
+            "firstStart": 8829.299999952316,
+            "lastEnd": 8853.799999952316
+          },
+          "dispatch:markdown-with-nesting": {
+            "calls": 5,
+            "activeMs": 46.5,
+            "firstStart": 8829.299999952316,
+            "lastEnd": 8875.799999952316
+          },
+          "dispatch:view-observer-clear": {
+            "calls": 3,
+            "activeMs": 0.10000014305114746,
+            "firstStart": 8890.199999809265,
+            "lastEnd": 8961.199999809265
+          },
+          "dispatch:view-state": {
+            "calls": 1,
+            "activeMs": 64.09999990463257,
+            "firstStart": 8890.299999952316,
+            "lastEnd": 8954.399999856949
+          },
+          "dispatch:view-plugins": {
+            "calls": 1,
+            "activeMs": 0.6999998092651367,
+            "firstStart": 8954.5,
+            "lastEnd": 8955.199999809265
+          },
+          "dispatch:view-input": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 8955.299999952316,
+            "lastEnd": 8955.299999952316
+          },
+          "dispatch:view-document": {
+            "calls": 1,
+            "activeMs": 5.8999998569488525,
+            "firstStart": 8955.299999952316,
+            "lastEnd": 8961.199999809265
+          },
+          "dispatch:view-attributes": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 8961.199999809265,
+            "lastEnd": 8961.199999809265
+          },
+          "dispatch:view-selection": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 8961.199999809265,
+            "lastEnd": 8961.199999809265
+          },
+          "deferred:view-plugins": {
+            "calls": 1,
+            "activeMs": 0.09999990463256836,
+            "firstStart": 8980,
+            "lastEnd": 8980.099999904633
+          },
+          "deferred:view-input": {
+            "calls": 1,
+            "activeMs": 0.09999990463256836,
+            "firstStart": 8980.099999904633,
+            "lastEnd": 8980.199999809265
+          },
+          "deferred:view-observer-clear": {
+            "calls": 1,
+            "activeMs": 0.10000014305114746,
+            "firstStart": 8980.199999809265,
+            "lastEnd": 8980.299999952316
+          },
+          "deferred:view-attributes": {
+            "calls": 1,
+            "activeMs": 0.10000014305114746,
+            "firstStart": 8980.199999809265,
+            "lastEnd": 8980.299999952316
+          },
+          "deferred:view-document": {
+            "calls": 1,
+            "activeMs": 0.39999985694885254,
+            "firstStart": 8980.299999952316,
+            "lastEnd": 8980.699999809265
+          }
+        },
+        "updateAt": 8961.5,
+        "head": 34,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 140.20000004768372,
+        "inputToUpdateMs": 138.60000014305115,
+        "stateMs": 63.09999990463257,
+        "viewMs": 71.40000009536743,
+        "updateCalls": 1,
+        "dispatchMs": 134.5,
+        "dispatchCalls": 1,
+        "keyToRafMs": 160.09999990463257,
+        "keyToGeometryMs": 160.59999990463257,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 9017.199999809265,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 9017.299999952316,
+        "data": "x",
+        "dispatching": false,
+        "phases": {
+          "dispatch:document-parser": {
+            "calls": 46,
+            "activeMs": 36.89999985694885,
+            "firstStart": 9019.399999856949,
+            "lastEnd": 9056.399999856949
+          },
+          "dispatch:markdown-core": {
+            "calls": 5,
+            "activeMs": 20.700000047683716,
+            "firstStart": 9019.699999809265,
+            "lastEnd": 9040.399999856949
+          },
+          "dispatch:markdown-with-nesting": {
+            "calls": 5,
+            "activeMs": 36.700000047683716,
+            "firstStart": 9019.699999809265,
+            "lastEnd": 9056.399999856949
+          },
+          "dispatch:view-observer-clear": {
+            "calls": 3,
+            "activeMs": 0,
+            "firstStart": 9059.399999856949,
+            "lastEnd": 9122.5
+          },
+          "dispatch:view-state": {
+            "calls": 1,
+            "activeMs": 60.299999952316284,
+            "firstStart": 9059.5,
+            "lastEnd": 9119.799999952316
+          },
+          "dispatch:view-plugins": {
+            "calls": 1,
+            "activeMs": 0.6000001430511475,
+            "firstStart": 9119.899999856949,
+            "lastEnd": 9120.5
+          },
+          "dispatch:view-input": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 9120.5,
+            "lastEnd": 9120.5
+          },
+          "dispatch:view-document": {
+            "calls": 1,
+            "activeMs": 1.8999998569488525,
+            "firstStart": 9120.5,
+            "lastEnd": 9122.399999856949
+          },
+          "dispatch:view-attributes": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 9122.5,
+            "lastEnd": 9122.5
+          },
+          "dispatch:view-selection": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 9122.5,
+            "lastEnd": 9122.5
+          }
+        },
+        "updateAt": 9122.899999856949,
+        "head": 35,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 105.70000004768372,
+        "inputToUpdateMs": 105.59999990463257,
+        "stateMs": 40.60000014305115,
+        "viewMs": 63.59999990463257,
+        "updateCalls": 1,
+        "dispatchMs": 104.20000004768372,
+        "dispatchCalls": 1,
+        "keyToRafMs": 114.5,
+        "keyToGeometryMs": 114.70000004768372,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 9203,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 9203.099999904633,
+        "data": "x",
+        "dispatching": false,
+        "phases": {
+          "dispatch:document-parser": {
+            "calls": 46,
+            "activeMs": 43.5,
+            "firstStart": 9205.099999904633,
+            "lastEnd": 9248.699999809265
+          },
+          "dispatch:markdown-core": {
+            "calls": 5,
+            "activeMs": 21.5,
+            "firstStart": 9205.5,
+            "lastEnd": 9227
+          },
+          "dispatch:markdown-with-nesting": {
+            "calls": 5,
+            "activeMs": 43.19999980926514,
+            "firstStart": 9205.5,
+            "lastEnd": 9248.699999809265
+          },
+          "dispatch:view-observer-clear": {
+            "calls": 3,
+            "activeMs": 0,
+            "firstStart": 9250.899999856949,
+            "lastEnd": 9381.099999904633
+          },
+          "dispatch:view-state": {
+            "calls": 1,
+            "activeMs": 125.79999995231628,
+            "firstStart": 9250.899999856949,
+            "lastEnd": 9376.699999809265
+          },
+          "dispatch:view-plugins": {
+            "calls": 1,
+            "activeMs": 0.5,
+            "firstStart": 9376.699999809265,
+            "lastEnd": 9377.199999809265
+          },
+          "dispatch:view-input": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 9377.199999809265,
+            "lastEnd": 9377.199999809265
+          },
+          "dispatch:view-document": {
+            "calls": 1,
+            "activeMs": 3.9000000953674316,
+            "firstStart": 9377.199999809265,
+            "lastEnd": 9381.099999904633
+          },
+          "dispatch:view-attributes": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 9381.099999904633,
+            "lastEnd": 9381.099999904633
+          },
+          "dispatch:view-selection": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 9381.099999904633,
+            "lastEnd": 9381.099999904633
+          },
+          "deferred:view-plugins": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 9393.099999904633,
+            "lastEnd": 9393.099999904633
+          },
+          "deferred:view-input": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 9393.099999904633,
+            "lastEnd": 9393.099999904633
+          },
+          "deferred:view-observer-clear": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 9393.099999904633,
+            "lastEnd": 9393.099999904633
+          },
+          "deferred:view-attributes": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 9393.099999904633,
+            "lastEnd": 9393.099999904633
+          },
+          "deferred:view-document": {
+            "calls": 1,
+            "activeMs": 0.2999999523162842,
+            "firstStart": 9393.099999904633,
+            "lastEnd": 9393.399999856949
+          }
+        },
+        "updateAt": 9381.299999952316,
+        "head": 36,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 178.29999995231628,
+        "inputToUpdateMs": 178.20000004768372,
+        "stateMs": 46.39999985694885,
+        "viewMs": 130.5,
+        "updateCalls": 1,
+        "dispatchMs": 176.89999985694885,
+        "dispatchCalls": 1,
+        "keyToRafMs": 190.59999990463257,
+        "keyToGeometryMs": 190.69999980926514,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 9441.799999952316,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 9441.799999952316,
+        "data": "x",
+        "dispatching": false,
+        "phases": {
+          "dispatch:document-parser": {
+            "calls": 46,
+            "activeMs": 41.40000009536743,
+            "firstStart": 9443.599999904633,
+            "lastEnd": 9485.099999904633
+          },
+          "dispatch:markdown-core": {
+            "calls": 5,
+            "activeMs": 24.100000143051147,
+            "firstStart": 9443.899999856949,
+            "lastEnd": 9468
+          },
+          "dispatch:markdown-with-nesting": {
+            "calls": 5,
+            "activeMs": 41.200000047683716,
+            "firstStart": 9443.899999856949,
+            "lastEnd": 9485.099999904633
+          },
+          "dispatch:view-observer-clear": {
+            "calls": 3,
+            "activeMs": 0.09999990463256836,
+            "firstStart": 9487,
+            "lastEnd": 9543.599999904633
+          },
+          "dispatch:view-state": {
+            "calls": 1,
+            "activeMs": 52.5,
+            "firstStart": 9487.099999904633,
+            "lastEnd": 9539.599999904633
+          },
+          "dispatch:view-plugins": {
+            "calls": 1,
+            "activeMs": 0.20000004768371582,
+            "firstStart": 9539.799999952316,
+            "lastEnd": 9540
+          },
+          "dispatch:view-input": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 9540,
+            "lastEnd": 9540
+          },
+          "dispatch:view-document": {
+            "calls": 1,
+            "activeMs": 3.5999999046325684,
+            "firstStart": 9540,
+            "lastEnd": 9543.599999904633
+          },
+          "dispatch:view-attributes": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 9543.599999904633,
+            "lastEnd": 9543.599999904633
+          },
+          "dispatch:view-selection": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 9543.599999904633,
+            "lastEnd": 9543.599999904633
+          },
+          "deferred:view-plugins": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 9555.799999952316,
+            "lastEnd": 9555.799999952316
+          },
+          "deferred:view-input": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 9555.799999952316,
+            "lastEnd": 9555.799999952316
+          },
+          "deferred:view-observer-clear": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 9555.899999856949,
+            "lastEnd": 9555.899999856949
+          },
+          "deferred:view-attributes": {
+            "calls": 1,
+            "activeMs": 0.09999990463256836,
+            "firstStart": 9555.799999952316,
+            "lastEnd": 9555.899999856949
+          },
+          "deferred:view-document": {
+            "calls": 1,
+            "activeMs": 0.20000004768371582,
+            "firstStart": 9555.899999856949,
+            "lastEnd": 9556.099999904633
+          }
+        },
+        "updateAt": 9543.799999952316,
+        "head": 37,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 102,
+        "inputToUpdateMs": 102,
+        "stateMs": 44.10000014305115,
+        "viewMs": 56.89999985694885,
+        "updateCalls": 1,
+        "dispatchMs": 101.09999990463257,
+        "dispatchCalls": 1,
+        "keyToRafMs": 114.59999990463257,
+        "keyToGeometryMs": 114.59999990463257,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 9602.299999952316,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 9602.299999952316,
+        "data": "x",
+        "dispatching": false,
+        "phases": {
+          "dispatch:document-parser": {
+            "calls": 46,
+            "activeMs": 40.40000009536743,
+            "firstStart": 9604.099999904633,
+            "lastEnd": 9644.5
+          },
+          "dispatch:markdown-core": {
+            "calls": 5,
+            "activeMs": 25,
+            "firstStart": 9604.399999856949,
+            "lastEnd": 9629.399999856949
+          },
+          "dispatch:markdown-with-nesting": {
+            "calls": 5,
+            "activeMs": 40.10000014305115,
+            "firstStart": 9604.399999856949,
+            "lastEnd": 9644.5
+          },
+          "dispatch:view-observer-clear": {
+            "calls": 3,
+            "activeMs": 0,
+            "firstStart": 9646.199999809265,
+            "lastEnd": 9701
+          },
+          "dispatch:view-state": {
+            "calls": 1,
+            "activeMs": 51.80000019073486,
+            "firstStart": 9646.199999809265,
+            "lastEnd": 9698
+          },
+          "dispatch:view-plugins": {
+            "calls": 1,
+            "activeMs": 0.19999980926513672,
+            "firstStart": 9698,
+            "lastEnd": 9698.199999809265
+          },
+          "dispatch:view-input": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 9698.199999809265,
+            "lastEnd": 9698.199999809265
+          },
+          "dispatch:view-document": {
+            "calls": 1,
+            "activeMs": 2.700000047683716,
+            "firstStart": 9698.199999809265,
+            "lastEnd": 9700.899999856949
+          },
+          "dispatch:view-attributes": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 9701,
+            "lastEnd": 9701
+          },
+          "dispatch:view-selection": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 9701,
+            "lastEnd": 9701
+          },
+          "deferred:view-plugins": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 9712.5,
+            "lastEnd": 9712.5
+          },
+          "deferred:view-input": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 9712.5,
+            "lastEnd": 9712.5
+          },
+          "deferred:view-observer-clear": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 9712.599999904633,
+            "lastEnd": 9712.599999904633
+          },
+          "deferred:view-attributes": {
+            "calls": 1,
+            "activeMs": 0.09999990463256836,
+            "firstStart": 9712.5,
+            "lastEnd": 9712.599999904633
+          },
+          "deferred:view-document": {
+            "calls": 1,
+            "activeMs": 0.20000004768371582,
+            "firstStart": 9712.599999904633,
+            "lastEnd": 9712.799999952316
+          }
+        },
+        "updateAt": 9701.099999904633,
+        "head": 38,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 98.79999995231628,
+        "inputToUpdateMs": 98.79999995231628,
+        "stateMs": 42.700000047683716,
+        "viewMs": 55.09999990463257,
+        "updateCalls": 1,
+        "dispatchMs": 97.79999995231628,
+        "dispatchCalls": 1,
+        "keyToRafMs": 110.70000004768372,
+        "keyToGeometryMs": 110.79999995231628,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 9762,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 9762.099999904633,
+        "data": "x",
+        "dispatching": false,
+        "phases": {
+          "dispatch:document-parser": {
+            "calls": 46,
+            "activeMs": 36.10000014305115,
+            "firstStart": 9763.899999856949,
+            "lastEnd": 9800
+          },
+          "dispatch:markdown-core": {
+            "calls": 5,
+            "activeMs": 21.90000009536743,
+            "firstStart": 9764.199999809265,
+            "lastEnd": 9786.099999904633
+          },
+          "dispatch:markdown-with-nesting": {
+            "calls": 5,
+            "activeMs": 35.80000019073486,
+            "firstStart": 9764.199999809265,
+            "lastEnd": 9800
+          },
+          "dispatch:view-observer-clear": {
+            "calls": 3,
+            "activeMs": 0,
+            "firstStart": 9801.299999952316,
+            "lastEnd": 9857.899999856949
+          },
+          "dispatch:view-state": {
+            "calls": 1,
+            "activeMs": 53.09999990463257,
+            "firstStart": 9801.299999952316,
+            "lastEnd": 9854.399999856949
+          },
+          "dispatch:view-plugins": {
+            "calls": 1,
+            "activeMs": 0.2999999523162842,
+            "firstStart": 9854.399999856949,
+            "lastEnd": 9854.699999809265
+          },
+          "dispatch:view-input": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 9854.699999809265,
+            "lastEnd": 9854.699999809265
+          },
+          "dispatch:view-document": {
+            "calls": 1,
+            "activeMs": 3.200000047683716,
+            "firstStart": 9854.699999809265,
+            "lastEnd": 9857.899999856949
+          },
+          "dispatch:view-attributes": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 9857.899999856949,
+            "lastEnd": 9857.899999856949
+          },
+          "dispatch:view-selection": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 9858,
+            "lastEnd": 9858
+          },
+          "deferred:view-plugins": {
+            "calls": 1,
+            "activeMs": 0.09999990463256836,
+            "firstStart": 9871,
+            "lastEnd": 9871.099999904633
+          },
+          "deferred:view-input": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 9871.099999904633,
+            "lastEnd": 9871.099999904633
+          },
+          "deferred:view-observer-clear": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 9871.099999904633,
+            "lastEnd": 9871.099999904633
+          },
+          "deferred:view-attributes": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 9871.099999904633,
+            "lastEnd": 9871.099999904633
+          },
+          "deferred:view-document": {
+            "calls": 1,
+            "activeMs": 0.20000004768371582,
+            "firstStart": 9871.099999904633,
+            "lastEnd": 9871.299999952316
+          }
+        },
+        "updateAt": 9858.199999809265,
+        "head": 39,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 96.19999980926514,
+        "inputToUpdateMs": 96.09999990463257,
+        "stateMs": 38.10000014305115,
+        "viewMs": 56.89999985694885,
+        "updateCalls": 1,
+        "dispatchMs": 95,
+        "dispatchCalls": 1,
+        "keyToRafMs": 109.59999990463257,
+        "keyToGeometryMs": 109.69999980926514,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 9924.099999904633,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 9924.199999809265,
+        "data": "x",
+        "dispatching": false,
+        "phases": {
+          "dispatch:document-parser": {
+            "calls": 46,
+            "activeMs": 33.80000019073486,
+            "firstStart": 9925.699999809265,
+            "lastEnd": 9959.5
+          },
+          "dispatch:markdown-core": {
+            "calls": 5,
+            "activeMs": 21.09999990463257,
+            "firstStart": 9926,
+            "lastEnd": 9947.099999904633
+          },
+          "dispatch:markdown-with-nesting": {
+            "calls": 5,
+            "activeMs": 33.39999985694885,
+            "firstStart": 9926,
+            "lastEnd": 9959.399999856949
+          },
+          "dispatch:view-observer-clear": {
+            "calls": 3,
+            "activeMs": 0,
+            "firstStart": 9960.899999856949,
+            "lastEnd": 10018.299999952316
+          },
+          "dispatch:view-state": {
+            "calls": 1,
+            "activeMs": 54.200000047683716,
+            "firstStart": 9960.899999856949,
+            "lastEnd": 10015.099999904633
+          },
+          "dispatch:view-plugins": {
+            "calls": 1,
+            "activeMs": 0.20000004768371582,
+            "firstStart": 10015.099999904633,
+            "lastEnd": 10015.299999952316
+          },
+          "dispatch:view-input": {
+            "calls": 1,
+            "activeMs": 0.09999990463256836,
+            "firstStart": 10015.299999952316,
+            "lastEnd": 10015.399999856949
+          },
+          "dispatch:view-document": {
+            "calls": 1,
+            "activeMs": 2.9000000953674316,
+            "firstStart": 10015.399999856949,
+            "lastEnd": 10018.299999952316
+          },
+          "dispatch:view-attributes": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 10018.299999952316,
+            "lastEnd": 10018.299999952316
+          },
+          "dispatch:view-selection": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 10018.299999952316,
+            "lastEnd": 10018.299999952316
+          },
+          "deferred:view-plugins": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 10030.899999856949,
+            "lastEnd": 10030.899999856949
+          },
+          "deferred:view-input": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 10030.899999856949,
+            "lastEnd": 10030.899999856949
+          },
+          "deferred:view-observer-clear": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 10030.899999856949,
+            "lastEnd": 10030.899999856949
+          },
+          "deferred:view-attributes": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 10030.899999856949,
+            "lastEnd": 10030.899999856949
+          },
+          "deferred:view-document": {
+            "calls": 1,
+            "activeMs": 0.20000004768371582,
+            "firstStart": 10030.899999856949,
+            "lastEnd": 10031.099999904633
+          }
+        },
+        "updateAt": 10018.599999904633,
+        "head": 40,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 94.5,
+        "inputToUpdateMs": 94.40000009536743,
+        "stateMs": 35.799999952316284,
+        "viewMs": 57.799999952316284,
+        "updateCalls": 1,
+        "dispatchMs": 93.59999990463257,
+        "dispatchCalls": 1,
+        "keyToRafMs": 107.29999995231628,
+        "keyToGeometryMs": 107.40000009536743,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 10094,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 10094.099999904633,
+        "data": "x",
+        "dispatching": false,
+        "phases": {
+          "dispatch:document-parser": {
+            "calls": 46,
+            "activeMs": 31.299999952316284,
+            "firstStart": 10097.5,
+            "lastEnd": 10128.899999856949
+          },
+          "dispatch:markdown-core": {
+            "calls": 5,
+            "activeMs": 14.599999904632568,
+            "firstStart": 10098,
+            "lastEnd": 10112.599999904633
+          },
+          "dispatch:markdown-with-nesting": {
+            "calls": 5,
+            "activeMs": 30.799999952316284,
+            "firstStart": 10098,
+            "lastEnd": 10128.799999952316
+          },
+          "dispatch:view-observer-clear": {
+            "calls": 3,
+            "activeMs": 0,
+            "firstStart": 10130.299999952316,
+            "lastEnd": 10182.5
+          },
+          "dispatch:view-state": {
+            "calls": 1,
+            "activeMs": 49.799999952316284,
+            "firstStart": 10130.299999952316,
+            "lastEnd": 10180.099999904633
+          },
+          "dispatch:view-plugins": {
+            "calls": 1,
+            "activeMs": 0.20000004768371582,
+            "firstStart": 10180.099999904633,
+            "lastEnd": 10180.299999952316
+          },
+          "dispatch:view-input": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 10180.299999952316,
+            "lastEnd": 10180.299999952316
+          },
+          "dispatch:view-document": {
+            "calls": 1,
+            "activeMs": 2.200000047683716,
+            "firstStart": 10180.299999952316,
+            "lastEnd": 10182.5
+          },
+          "dispatch:view-attributes": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 10182.5,
+            "lastEnd": 10182.5
+          },
+          "dispatch:view-selection": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 10182.5,
+            "lastEnd": 10182.5
+          },
+          "deferred:view-plugins": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 10192.899999856949,
+            "lastEnd": 10192.899999856949
+          },
+          "deferred:view-input": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 10192.899999856949,
+            "lastEnd": 10192.899999856949
+          },
+          "deferred:view-observer-clear": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 10193,
+            "lastEnd": 10193
+          },
+          "deferred:view-attributes": {
+            "calls": 1,
+            "activeMs": 0.10000014305114746,
+            "firstStart": 10192.899999856949,
+            "lastEnd": 10193
+          },
+          "deferred:view-document": {
+            "calls": 1,
+            "activeMs": 0.19999980926513672,
+            "firstStart": 10193,
+            "lastEnd": 10193.199999809265
+          }
+        },
+        "updateAt": 10182.699999809265,
+        "head": 41,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 88.69999980926514,
+        "inputToUpdateMs": 88.59999990463257,
+        "stateMs": 34.200000047683716,
+        "viewMs": 52.39999985694885,
+        "updateCalls": 1,
+        "dispatchMs": 86.59999990463257,
+        "dispatchCalls": 1,
+        "keyToRafMs": 99.59999990463257,
+        "keyToGeometryMs": 99.69999980926514,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 10246.5,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 10246.699999809265,
+        "data": "x",
+        "dispatching": false,
+        "phases": {
+          "dispatch:document-parser": {
+            "calls": 46,
+            "activeMs": 39.59999990463257,
+            "firstStart": 10248.299999952316,
+            "lastEnd": 10288
+          },
+          "dispatch:markdown-core": {
+            "calls": 5,
+            "activeMs": 24,
+            "firstStart": 10248.599999904633,
+            "lastEnd": 10272.599999904633
+          },
+          "dispatch:markdown-with-nesting": {
+            "calls": 5,
+            "activeMs": 39.299999952316284,
+            "firstStart": 10248.599999904633,
+            "lastEnd": 10287.899999856949
+          },
+          "dispatch:view-observer-clear": {
+            "calls": 3,
+            "activeMs": 0,
+            "firstStart": 10289.199999809265,
+            "lastEnd": 10345.299999952316
+          },
+          "dispatch:view-state": {
+            "calls": 1,
+            "activeMs": 53.10000014305115,
+            "firstStart": 10289.199999809265,
+            "lastEnd": 10342.299999952316
+          },
+          "dispatch:view-plugins": {
+            "calls": 1,
+            "activeMs": 0.20000004768371582,
+            "firstStart": 10342.299999952316,
+            "lastEnd": 10342.5
+          },
+          "dispatch:view-input": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 10342.5,
+            "lastEnd": 10342.5
+          },
+          "dispatch:view-document": {
+            "calls": 1,
+            "activeMs": 2.799999952316284,
+            "firstStart": 10342.5,
+            "lastEnd": 10345.299999952316
+          },
+          "dispatch:view-attributes": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 10345.299999952316,
+            "lastEnd": 10345.299999952316
+          },
+          "dispatch:view-selection": {
+            "calls": 1,
+            "activeMs": 0.09999990463256836,
+            "firstStart": 10345.299999952316,
+            "lastEnd": 10345.399999856949
+          },
+          "deferred:view-plugins": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 10358.599999904633,
+            "lastEnd": 10358.599999904633
+          },
+          "deferred:view-input": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 10358.599999904633,
+            "lastEnd": 10358.599999904633
+          },
+          "deferred:view-observer-clear": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 10358.699999809265,
+            "lastEnd": 10358.699999809265
+          },
+          "deferred:view-attributes": {
+            "calls": 1,
+            "activeMs": 0.09999990463256836,
+            "firstStart": 10358.599999904633,
+            "lastEnd": 10358.699999809265
+          },
+          "deferred:view-document": {
+            "calls": 1,
+            "activeMs": 0.20000004768371582,
+            "firstStart": 10358.699999809265,
+            "lastEnd": 10358.899999856949
+          }
+        },
+        "updateAt": 10345.5,
+        "head": 42,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 99,
+        "inputToUpdateMs": 98.80000019073486,
+        "stateMs": 41.59999990463257,
+        "viewMs": 56.30000019073486,
+        "updateCalls": 1,
+        "dispatchMs": 97.90000009536743,
+        "dispatchCalls": 1,
+        "keyToRafMs": 112.69999980926514,
+        "keyToGeometryMs": 112.79999995231628,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 10414.799999952316,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 10414.899999856949,
+        "data": "x",
+        "dispatching": false,
+        "phases": {
+          "dispatch:document-parser": {
+            "calls": 46,
+            "activeMs": 35,
+            "firstStart": 10416.799999952316,
+            "lastEnd": 10451.899999856949
+          },
+          "dispatch:markdown-core": {
+            "calls": 5,
+            "activeMs": 22.799999952316284,
+            "firstStart": 10417,
+            "lastEnd": 10439.799999952316
+          },
+          "dispatch:markdown-with-nesting": {
+            "calls": 5,
+            "activeMs": 34.89999985694885,
+            "firstStart": 10417,
+            "lastEnd": 10451.899999856949
+          },
+          "dispatch:view-observer-clear": {
+            "calls": 3,
+            "activeMs": 0.10000014305114746,
+            "firstStart": 10453.099999904633,
+            "lastEnd": 10507
+          },
+          "dispatch:view-state": {
+            "calls": 1,
+            "activeMs": 50.700000047683716,
+            "firstStart": 10453.099999904633,
+            "lastEnd": 10503.799999952316
+          },
+          "dispatch:view-plugins": {
+            "calls": 1,
+            "activeMs": 0.20000004768371582,
+            "firstStart": 10503.799999952316,
+            "lastEnd": 10504
+          },
+          "dispatch:view-input": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 10504,
+            "lastEnd": 10504
+          },
+          "dispatch:view-document": {
+            "calls": 1,
+            "activeMs": 3,
+            "firstStart": 10504,
+            "lastEnd": 10507
+          },
+          "dispatch:view-attributes": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 10507,
+            "lastEnd": 10507
+          },
+          "dispatch:view-selection": {
+            "calls": 1,
+            "activeMs": 0.09999990463256836,
+            "firstStart": 10507,
+            "lastEnd": 10507.099999904633
+          },
+          "deferred:view-plugins": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 10520.199999809265,
+            "lastEnd": 10520.199999809265
+          },
+          "deferred:view-input": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 10520.199999809265,
+            "lastEnd": 10520.199999809265
+          },
+          "deferred:view-observer-clear": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 10520.199999809265,
+            "lastEnd": 10520.199999809265
+          },
+          "deferred:view-attributes": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 10520.199999809265,
+            "lastEnd": 10520.199999809265
+          },
+          "deferred:view-document": {
+            "calls": 1,
+            "activeMs": 0.20000004768371582,
+            "firstStart": 10520.199999809265,
+            "lastEnd": 10520.399999856949
+          }
+        },
+        "updateAt": 10507.199999809265,
+        "head": 43,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 92.39999985694885,
+        "inputToUpdateMs": 92.29999995231628,
+        "stateMs": 37,
+        "viewMs": 54.09999990463257,
+        "updateCalls": 1,
+        "dispatchMs": 91.09999990463257,
+        "dispatchCalls": 1,
+        "keyToRafMs": 105.89999985694885,
+        "keyToGeometryMs": 106.09999990463257,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 10580.5,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 10580.599999904633,
+        "data": "x",
+        "dispatching": false,
+        "phases": {
+          "dispatch:document-parser": {
+            "calls": 46,
+            "activeMs": 38.69999980926514,
+            "firstStart": 10582.5,
+            "lastEnd": 10621.199999809265
+          },
+          "dispatch:markdown-core": {
+            "calls": 5,
+            "activeMs": 22.700000047683716,
+            "firstStart": 10582.799999952316,
+            "lastEnd": 10605.5
+          },
+          "dispatch:markdown-with-nesting": {
+            "calls": 5,
+            "activeMs": 38.39999985694885,
+            "firstStart": 10582.799999952316,
+            "lastEnd": 10621.199999809265
+          },
+          "dispatch:view-observer-clear": {
+            "calls": 3,
+            "activeMs": 0,
+            "firstStart": 10622.399999856949,
+            "lastEnd": 10680.199999809265
+          },
+          "dispatch:view-state": {
+            "calls": 1,
+            "activeMs": 54.700000047683716,
+            "firstStart": 10622.399999856949,
+            "lastEnd": 10677.099999904633
+          },
+          "dispatch:view-plugins": {
+            "calls": 1,
+            "activeMs": 0.20000004768371582,
+            "firstStart": 10677.099999904633,
+            "lastEnd": 10677.299999952316
+          },
+          "dispatch:view-input": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 10677.299999952316,
+            "lastEnd": 10677.299999952316
+          },
+          "dispatch:view-document": {
+            "calls": 1,
+            "activeMs": 2.8999998569488525,
+            "firstStart": 10677.299999952316,
+            "lastEnd": 10680.199999809265
+          },
+          "dispatch:view-attributes": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 10680.199999809265,
+            "lastEnd": 10680.199999809265
+          },
+          "dispatch:view-selection": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 10680.199999809265,
+            "lastEnd": 10680.199999809265
+          },
+          "deferred:view-plugins": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 10691.399999856949,
+            "lastEnd": 10691.399999856949
+          },
+          "deferred:view-input": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 10691.399999856949,
+            "lastEnd": 10691.399999856949
+          },
+          "deferred:view-observer-clear": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 10691.5,
+            "lastEnd": 10691.5
+          },
+          "deferred:view-attributes": {
+            "calls": 1,
+            "activeMs": 0.10000014305114746,
+            "firstStart": 10691.399999856949,
+            "lastEnd": 10691.5
+          },
+          "deferred:view-document": {
+            "calls": 1,
+            "activeMs": 0.09999990463256836,
+            "firstStart": 10691.5,
+            "lastEnd": 10691.599999904633
+          }
+        },
+        "updateAt": 10680.399999856949,
+        "head": 44,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 99.89999985694885,
+        "inputToUpdateMs": 99.79999995231628,
+        "stateMs": 40.59999990463257,
+        "viewMs": 58,
+        "updateCalls": 1,
+        "dispatchMs": 98.59999990463257,
+        "dispatchCalls": 1,
+        "keyToRafMs": 111.29999995231628,
+        "keyToGeometryMs": 111.29999995231628,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 10746,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 10746,
+        "data": "x",
+        "dispatching": false,
+        "phases": {
+          "dispatch:document-parser": {
+            "calls": 46,
+            "activeMs": 34.299999952316284,
+            "firstStart": 10747.599999904633,
+            "lastEnd": 10781.899999856949
+          },
+          "dispatch:markdown-core": {
+            "calls": 5,
+            "activeMs": 20.600000143051147,
+            "firstStart": 10747.899999856949,
+            "lastEnd": 10768.599999904633
+          },
+          "dispatch:markdown-with-nesting": {
+            "calls": 5,
+            "activeMs": 33.90000009536743,
+            "firstStart": 10747.899999856949,
+            "lastEnd": 10781.799999952316
+          },
+          "dispatch:view-observer-clear": {
+            "calls": 3,
+            "activeMs": 0,
+            "firstStart": 10783.199999809265,
+            "lastEnd": 10833.299999952316
+          },
+          "dispatch:view-state": {
+            "calls": 1,
+            "activeMs": 47.700000047683716,
+            "firstStart": 10783.199999809265,
+            "lastEnd": 10830.899999856949
+          },
+          "dispatch:view-plugins": {
+            "calls": 1,
+            "activeMs": 0.20000004768371582,
+            "firstStart": 10830.899999856949,
+            "lastEnd": 10831.099999904633
+          },
+          "dispatch:view-input": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 10831.099999904633,
+            "lastEnd": 10831.099999904633
+          },
+          "dispatch:view-document": {
+            "calls": 1,
+            "activeMs": 2.200000047683716,
+            "firstStart": 10831.099999904633,
+            "lastEnd": 10833.299999952316
+          },
+          "dispatch:view-attributes": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 10833.299999952316,
+            "lastEnd": 10833.299999952316
+          },
+          "dispatch:view-selection": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 10833.399999856949,
+            "lastEnd": 10833.399999856949
+          },
+          "deferred:view-plugins": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 10844.899999856949,
+            "lastEnd": 10844.899999856949
+          },
+          "deferred:view-input": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 10844.899999856949,
+            "lastEnd": 10844.899999856949
+          },
+          "deferred:view-observer-clear": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 10844.899999856949,
+            "lastEnd": 10844.899999856949
+          },
+          "deferred:view-attributes": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 10844.899999856949,
+            "lastEnd": 10844.899999856949
+          },
+          "deferred:view-document": {
+            "calls": 1,
+            "activeMs": 0.20000004768371582,
+            "firstStart": 10844.899999856949,
+            "lastEnd": 10845.099999904633
+          }
+        },
+        "updateAt": 10833.5,
+        "head": 45,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 87.5,
+        "inputToUpdateMs": 87.5,
+        "stateMs": 36.39999985694885,
+        "viewMs": 50.40000009536743,
+        "updateCalls": 1,
+        "dispatchMs": 86.79999995231628,
+        "dispatchCalls": 1,
+        "keyToRafMs": 99.39999985694885,
+        "keyToGeometryMs": 99.39999985694885,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 10889.299999952316,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 10889.299999952316,
+        "data": "x",
+        "dispatching": false,
+        "phases": {
+          "dispatch:document-parser": {
+            "calls": 46,
+            "activeMs": 39.40000009536743,
+            "firstStart": 10890.699999809265,
+            "lastEnd": 10930.099999904633
+          },
+          "dispatch:markdown-core": {
+            "calls": 5,
+            "activeMs": 19.600000143051147,
+            "firstStart": 10890.899999856949,
+            "lastEnd": 10910.5
+          },
+          "dispatch:markdown-with-nesting": {
+            "calls": 5,
+            "activeMs": 39.200000047683716,
+            "firstStart": 10890.899999856949,
+            "lastEnd": 10930.099999904633
+          },
+          "dispatch:view-observer-clear": {
+            "calls": 3,
+            "activeMs": 0,
+            "firstStart": 10931.599999904633,
+            "lastEnd": 10980.599999904633
+          },
+          "dispatch:view-state": {
+            "calls": 1,
+            "activeMs": 47.90000009536743,
+            "firstStart": 10931.599999904633,
+            "lastEnd": 10979.5
+          },
+          "dispatch:view-plugins": {
+            "calls": 1,
+            "activeMs": 0.20000004768371582,
+            "firstStart": 10979.599999904633,
+            "lastEnd": 10979.799999952316
+          },
+          "dispatch:view-input": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 10979.799999952316,
+            "lastEnd": 10979.799999952316
+          },
+          "dispatch:view-document": {
+            "calls": 1,
+            "activeMs": 0.7999999523162842,
+            "firstStart": 10979.799999952316,
+            "lastEnd": 10980.599999904633
+          },
+          "dispatch:view-attributes": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 10980.599999904633,
+            "lastEnd": 10980.599999904633
+          },
+          "dispatch:view-selection": {
+            "calls": 1,
+            "activeMs": 0.09999990463256836,
+            "firstStart": 10980.599999904633,
+            "lastEnd": 10980.699999809265
+          }
+        },
+        "updateAt": 10980.799999952316,
+        "head": 46,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 91.5,
+        "inputToUpdateMs": 91.5,
+        "stateMs": 41.5,
+        "viewMs": 49.200000047683716,
+        "updateCalls": 1,
+        "dispatchMs": 90.70000004768372,
+        "dispatchCalls": 1,
+        "keyToRafMs": 98.39999985694885,
+        "keyToGeometryMs": 98.39999985694885,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 11045.899999856949,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 11046,
+        "data": "x",
+        "dispatching": false,
+        "phases": {
+          "dispatch:document-parser": {
+            "calls": 46,
+            "activeMs": 29.899999856948853,
+            "firstStart": 11047.299999952316,
+            "lastEnd": 11077.199999809265
+          },
+          "dispatch:markdown-core": {
+            "calls": 5,
+            "activeMs": 17.799999952316284,
+            "firstStart": 11047.5,
+            "lastEnd": 11065.299999952316
+          },
+          "dispatch:markdown-with-nesting": {
+            "calls": 5,
+            "activeMs": 29.699999809265137,
+            "firstStart": 11047.5,
+            "lastEnd": 11077.199999809265
+          },
+          "dispatch:view-observer-clear": {
+            "calls": 3,
+            "activeMs": 0,
+            "firstStart": 11078.099999904633,
+            "lastEnd": 11134
+          },
+          "dispatch:view-state": {
+            "calls": 1,
+            "activeMs": 51.90000009536743,
+            "firstStart": 11078.199999809265,
+            "lastEnd": 11130.099999904633
+          },
+          "dispatch:view-plugins": {
+            "calls": 1,
+            "activeMs": 0.2999999523162842,
+            "firstStart": 11130.099999904633,
+            "lastEnd": 11130.399999856949
+          },
+          "dispatch:view-input": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 11130.399999856949,
+            "lastEnd": 11130.399999856949
+          },
+          "dispatch:view-document": {
+            "calls": 1,
+            "activeMs": 3.4000000953674316,
+            "firstStart": 11130.599999904633,
+            "lastEnd": 11134
+          },
+          "dispatch:view-attributes": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 11134,
+            "lastEnd": 11134
+          },
+          "dispatch:view-selection": {
+            "calls": 1,
+            "activeMs": 0.09999990463256836,
+            "firstStart": 11134,
+            "lastEnd": 11134.099999904633
+          },
+          "deferred:view-plugins": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 11149.099999904633,
+            "lastEnd": 11149.099999904633
+          },
+          "deferred:view-input": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 11149.099999904633,
+            "lastEnd": 11149.099999904633
+          },
+          "deferred:view-observer-clear": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 11149.199999809265,
+            "lastEnd": 11149.199999809265
+          },
+          "deferred:view-attributes": {
+            "calls": 1,
+            "activeMs": 0.09999990463256836,
+            "firstStart": 11149.099999904633,
+            "lastEnd": 11149.199999809265
+          },
+          "deferred:view-document": {
+            "calls": 1,
+            "activeMs": 0.3000001907348633,
+            "firstStart": 11149.199999809265,
+            "lastEnd": 11149.5
+          }
+        },
+        "updateAt": 11134.299999952316,
+        "head": 47,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 88.40000009536743,
+        "inputToUpdateMs": 88.29999995231628,
+        "stateMs": 31.40000009536743,
+        "viewMs": 56.200000047683716,
+        "updateCalls": 1,
+        "dispatchMs": 87.60000014305115,
+        "dispatchCalls": 1,
+        "keyToRafMs": 103.90000009536743,
+        "keyToGeometryMs": 103.90000009536743,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 11199.399999856949,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 11199.5,
+        "data": "x",
+        "dispatching": false,
+        "phases": {
+          "dispatch:document-parser": {
+            "calls": 46,
+            "activeMs": 36,
+            "firstStart": 11201.099999904633,
+            "lastEnd": 11237.099999904633
+          },
+          "dispatch:markdown-core": {
+            "calls": 5,
+            "activeMs": 21.300000190734863,
+            "firstStart": 11201.199999809265,
+            "lastEnd": 11222.5
+          },
+          "dispatch:markdown-with-nesting": {
+            "calls": 5,
+            "activeMs": 35.80000019073486,
+            "firstStart": 11201.199999809265,
+            "lastEnd": 11237
+          },
+          "dispatch:view-observer-clear": {
+            "calls": 3,
+            "activeMs": 0,
+            "firstStart": 11238.199999809265,
+            "lastEnd": 11290.799999952316
+          },
+          "dispatch:view-state": {
+            "calls": 1,
+            "activeMs": 48.80000019073486,
+            "firstStart": 11238.199999809265,
+            "lastEnd": 11287
+          },
+          "dispatch:view-plugins": {
+            "calls": 1,
+            "activeMs": 0.2999999523162842,
+            "firstStart": 11287,
+            "lastEnd": 11287.299999952316
+          },
+          "dispatch:view-input": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 11287.299999952316,
+            "lastEnd": 11287.299999952316
+          },
+          "dispatch:view-document": {
+            "calls": 1,
+            "activeMs": 3.4000000953674316,
+            "firstStart": 11287.399999856949,
+            "lastEnd": 11290.799999952316
+          },
+          "dispatch:view-attributes": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 11290.799999952316,
+            "lastEnd": 11290.799999952316
+          },
+          "dispatch:view-selection": {
+            "calls": 1,
+            "activeMs": 0.09999990463256836,
+            "firstStart": 11290.799999952316,
+            "lastEnd": 11290.899999856949
+          },
+          "deferred:view-plugins": {
+            "calls": 1,
+            "activeMs": 0.19999980926513672,
+            "firstStart": 11303.5,
+            "lastEnd": 11303.699999809265
+          },
+          "deferred:view-input": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 11303.699999809265,
+            "lastEnd": 11303.699999809265
+          },
+          "deferred:view-observer-clear": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 11303.699999809265,
+            "lastEnd": 11303.699999809265
+          },
+          "deferred:view-attributes": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 11303.699999809265,
+            "lastEnd": 11303.699999809265
+          },
+          "deferred:view-document": {
+            "calls": 1,
+            "activeMs": 0.3000001907348633,
+            "firstStart": 11303.699999809265,
+            "lastEnd": 11304
+          }
+        },
+        "updateAt": 11291.099999904633,
+        "head": 48,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 91.70000004768372,
+        "inputToUpdateMs": 91.59999990463257,
+        "stateMs": 37.799999952316284,
+        "viewMs": 52.90000009536743,
+        "updateCalls": 1,
+        "dispatchMs": 90.70000004768372,
+        "dispatchCalls": 1,
+        "keyToRafMs": 105,
+        "keyToGeometryMs": 105,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 11364.699999809265,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 11365,
+        "data": "x",
+        "dispatching": false,
+        "phases": {
+          "dispatch:document-parser": {
+            "calls": 46,
+            "activeMs": 30.899999856948853,
+            "firstStart": 11367,
+            "lastEnd": 11397.899999856949
+          },
+          "dispatch:markdown-core": {
+            "calls": 5,
+            "activeMs": 17,
+            "firstStart": 11367.099999904633,
+            "lastEnd": 11384.099999904633
+          },
+          "dispatch:markdown-with-nesting": {
+            "calls": 5,
+            "activeMs": 30.700000047683716,
+            "firstStart": 11367.099999904633,
+            "lastEnd": 11397.799999952316
+          },
+          "dispatch:view-observer-clear": {
+            "calls": 3,
+            "activeMs": 0,
+            "firstStart": 11399.099999904633,
+            "lastEnd": 11440
+          },
+          "dispatch:view-state": {
+            "calls": 1,
+            "activeMs": 39.90000009536743,
+            "firstStart": 11399.199999809265,
+            "lastEnd": 11439.099999904633
+          },
+          "dispatch:view-plugins": {
+            "calls": 1,
+            "activeMs": 0.20000004768371582,
+            "firstStart": 11439.099999904633,
+            "lastEnd": 11439.299999952316
+          },
+          "dispatch:view-input": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 11439.299999952316,
+            "lastEnd": 11439.299999952316
+          },
+          "dispatch:view-document": {
+            "calls": 1,
+            "activeMs": 0.5999999046325684,
+            "firstStart": 11439.299999952316,
+            "lastEnd": 11439.899999856949
+          },
+          "dispatch:view-attributes": {
+            "calls": 1,
+            "activeMs": 0.10000014305114746,
+            "firstStart": 11439.899999856949,
+            "lastEnd": 11440
+          },
+          "dispatch:view-selection": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 11440,
+            "lastEnd": 11440
+          }
+        },
+        "updateAt": 11440.199999809265,
+        "head": 49,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 75.5,
+        "inputToUpdateMs": 75.19999980926514,
+        "stateMs": 32.799999952316284,
+        "viewMs": 41.09999990463257,
+        "updateCalls": 1,
+        "dispatchMs": 73.89999985694885,
+        "dispatchCalls": 1,
+        "keyToRafMs": 81,
+        "keyToGeometryMs": 81,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 11498.599999904633,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 11498.699999809265,
+        "data": "x",
+        "dispatching": false,
+        "phases": {
+          "dispatch:document-parser": {
+            "calls": 46,
+            "activeMs": 33,
+            "firstStart": 11500.199999809265,
+            "lastEnd": 11533.299999952316
+          },
+          "dispatch:markdown-core": {
+            "calls": 5,
+            "activeMs": 20.09999990463257,
+            "firstStart": 11500.399999856949,
+            "lastEnd": 11520.599999904633
+          },
+          "dispatch:markdown-with-nesting": {
+            "calls": 5,
+            "activeMs": 32.799999952316284,
+            "firstStart": 11500.399999856949,
+            "lastEnd": 11533.299999952316
+          },
+          "dispatch:view-observer-clear": {
+            "calls": 3,
+            "activeMs": 0,
+            "firstStart": 11534.5,
+            "lastEnd": 11584.299999952316
+          },
+          "dispatch:view-state": {
+            "calls": 1,
+            "activeMs": 46.59999990463257,
+            "firstStart": 11534.5,
+            "lastEnd": 11581.099999904633
+          },
+          "dispatch:view-plugins": {
+            "calls": 1,
+            "activeMs": 0.20000004768371582,
+            "firstStart": 11581.099999904633,
+            "lastEnd": 11581.299999952316
+          },
+          "dispatch:view-input": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 11581.299999952316,
+            "lastEnd": 11581.299999952316
+          },
+          "dispatch:view-document": {
+            "calls": 1,
+            "activeMs": 2.9000000953674316,
+            "firstStart": 11581.399999856949,
+            "lastEnd": 11584.299999952316
+          },
+          "dispatch:view-attributes": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 11584.299999952316,
+            "lastEnd": 11584.299999952316
+          },
+          "dispatch:view-selection": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 11584.299999952316,
+            "lastEnd": 11584.299999952316
+          },
+          "deferred:view-plugins": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 11597.399999856949,
+            "lastEnd": 11597.399999856949
+          },
+          "deferred:view-input": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 11597.399999856949,
+            "lastEnd": 11597.399999856949
+          },
+          "deferred:view-observer-clear": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 11597.5,
+            "lastEnd": 11597.5
+          },
+          "deferred:view-attributes": {
+            "calls": 1,
+            "activeMs": 0.10000014305114746,
+            "firstStart": 11597.399999856949,
+            "lastEnd": 11597.5
+          },
+          "deferred:view-document": {
+            "calls": 1,
+            "activeMs": 0.19999980926513672,
+            "firstStart": 11597.5,
+            "lastEnd": 11597.699999809265
+          }
+        },
+        "updateAt": 11584.399999856949,
+        "head": 50,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 85.79999995231628,
+        "inputToUpdateMs": 85.70000004768372,
+        "stateMs": 35,
+        "viewMs": 50,
+        "updateCalls": 1,
+        "dispatchMs": 85,
+        "dispatchCalls": 1,
+        "keyToRafMs": 99.20000004768372,
+        "keyToGeometryMs": 99.29999995231628,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 11653.599999904633,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 11653.599999904633,
+        "data": "x",
+        "dispatching": false,
+        "phases": {
+          "dispatch:document-parser": {
+            "calls": 46,
+            "activeMs": 40.799999952316284,
+            "firstStart": 11655.299999952316,
+            "lastEnd": 11696.099999904633
+          },
+          "dispatch:markdown-core": {
+            "calls": 5,
+            "activeMs": 22.09999990463257,
+            "firstStart": 11655.5,
+            "lastEnd": 11677.599999904633
+          },
+          "dispatch:markdown-with-nesting": {
+            "calls": 5,
+            "activeMs": 40.59999990463257,
+            "firstStart": 11655.5,
+            "lastEnd": 11696.099999904633
+          },
+          "dispatch:view-observer-clear": {
+            "calls": 3,
+            "activeMs": 0,
+            "firstStart": 11697.399999856949,
+            "lastEnd": 11753.799999952316
+          },
+          "dispatch:view-state": {
+            "calls": 1,
+            "activeMs": 53.200000047683716,
+            "firstStart": 11697.399999856949,
+            "lastEnd": 11750.599999904633
+          },
+          "dispatch:view-plugins": {
+            "calls": 1,
+            "activeMs": 0.20000004768371582,
+            "firstStart": 11750.599999904633,
+            "lastEnd": 11750.799999952316
+          },
+          "dispatch:view-input": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 11750.799999952316,
+            "lastEnd": 11750.799999952316
+          },
+          "dispatch:view-document": {
+            "calls": 1,
+            "activeMs": 2.8999998569488525,
+            "firstStart": 11750.799999952316,
+            "lastEnd": 11753.699999809265
+          },
+          "dispatch:view-attributes": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 11753.799999952316,
+            "lastEnd": 11753.799999952316
+          },
+          "dispatch:view-selection": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 11753.799999952316,
+            "lastEnd": 11753.799999952316
+          },
+          "deferred:view-plugins": {
+            "calls": 1,
+            "activeMs": 0.09999990463256836,
+            "firstStart": 11767.5,
+            "lastEnd": 11767.599999904633
+          },
+          "deferred:view-input": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 11767.599999904633,
+            "lastEnd": 11767.599999904633
+          },
+          "deferred:view-observer-clear": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 11767.599999904633,
+            "lastEnd": 11767.599999904633
+          },
+          "deferred:view-attributes": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 11767.599999904633,
+            "lastEnd": 11767.599999904633
+          },
+          "deferred:view-document": {
+            "calls": 1,
+            "activeMs": 0.20000004768371582,
+            "firstStart": 11767.599999904633,
+            "lastEnd": 11767.799999952316
+          }
+        },
+        "updateAt": 11753.899999856949,
+        "head": 51,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 100.29999995231628,
+        "inputToUpdateMs": 100.29999995231628,
+        "stateMs": 42.799999952316284,
+        "viewMs": 56.60000014305115,
+        "updateCalls": 1,
+        "dispatchMs": 99.40000009536743,
+        "dispatchCalls": 1,
+        "keyToRafMs": 114.5,
+        "keyToGeometryMs": 114.5,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 11818.5,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 11818.5,
+        "data": "x",
+        "dispatching": false,
+        "phases": {
+          "dispatch:document-parser": {
+            "calls": 46,
+            "activeMs": 35.40000009536743,
+            "firstStart": 11820.099999904633,
+            "lastEnd": 11855.599999904633
+          },
+          "dispatch:markdown-core": {
+            "calls": 5,
+            "activeMs": 23,
+            "firstStart": 11820.299999952316,
+            "lastEnd": 11843.299999952316
+          },
+          "dispatch:markdown-with-nesting": {
+            "calls": 5,
+            "activeMs": 35.200000047683716,
+            "firstStart": 11820.299999952316,
+            "lastEnd": 11855.5
+          },
+          "dispatch:view-observer-clear": {
+            "calls": 3,
+            "activeMs": 0.09999990463256836,
+            "firstStart": 11856.799999952316,
+            "lastEnd": 11911.099999904633
+          },
+          "dispatch:view-state": {
+            "calls": 1,
+            "activeMs": 51.299999952316284,
+            "firstStart": 11856.799999952316,
+            "lastEnd": 11908.099999904633
+          },
+          "dispatch:view-plugins": {
+            "calls": 1,
+            "activeMs": 0.2999999523162842,
+            "firstStart": 11908.099999904633,
+            "lastEnd": 11908.399999856949
+          },
+          "dispatch:view-input": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 11908.399999856949,
+            "lastEnd": 11908.399999856949
+          },
+          "dispatch:view-document": {
+            "calls": 1,
+            "activeMs": 2.6000001430511475,
+            "firstStart": 11908.399999856949,
+            "lastEnd": 11911
+          },
+          "dispatch:view-attributes": {
+            "calls": 1,
+            "activeMs": 0.09999990463256836,
+            "firstStart": 11911,
+            "lastEnd": 11911.099999904633
+          },
+          "dispatch:view-selection": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 11911.099999904633,
+            "lastEnd": 11911.099999904633
+          },
+          "deferred:view-plugins": {
+            "calls": 1,
+            "activeMs": 0.09999990463256836,
+            "firstStart": 11924.099999904633,
+            "lastEnd": 11924.199999809265
+          },
+          "deferred:view-input": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 11924.199999809265,
+            "lastEnd": 11924.199999809265
+          },
+          "deferred:view-observer-clear": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 11924.199999809265,
+            "lastEnd": 11924.199999809265
+          },
+          "deferred:view-attributes": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 11924.199999809265,
+            "lastEnd": 11924.199999809265
+          },
+          "deferred:view-document": {
+            "calls": 1,
+            "activeMs": 0.10000014305114746,
+            "firstStart": 11924.199999809265,
+            "lastEnd": 11924.299999952316
+          }
+        },
+        "updateAt": 11911.099999904633,
+        "head": 52,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 92.59999990463257,
+        "inputToUpdateMs": 92.59999990463257,
+        "stateMs": 37.40000009536743,
+        "viewMs": 54.299999952316284,
+        "updateCalls": 1,
+        "dispatchMs": 91.70000004768372,
+        "dispatchCalls": 1,
+        "keyToRafMs": 106,
+        "keyToGeometryMs": 106,
+        "visible": true,
+        "domContainsInput": true
+      },
+      {
+        "keyAt": 11995.699999809265,
+        "key": "x",
+        "inputType": "insertText",
+        "indexBefore": true,
+        "noteAwareBefore": true,
+        "inputAt": 11995.699999809265,
+        "data": "x",
+        "dispatching": false,
+        "phases": {
+          "dispatch:document-parser": {
+            "calls": 46,
+            "activeMs": 40.299999952316284,
+            "firstStart": 11997.799999952316,
+            "lastEnd": 12038.099999904633
+          },
+          "dispatch:markdown-core": {
+            "calls": 5,
+            "activeMs": 23.200000047683716,
+            "firstStart": 11998.199999809265,
+            "lastEnd": 12021.399999856949
+          },
+          "dispatch:markdown-with-nesting": {
+            "calls": 5,
+            "activeMs": 39.80000019073486,
+            "firstStart": 11998.199999809265,
+            "lastEnd": 12038
+          },
+          "dispatch:view-observer-clear": {
+            "calls": 3,
+            "activeMs": 0,
+            "firstStart": 12039.699999809265,
+            "lastEnd": 12096.299999952316
+          },
+          "dispatch:view-state": {
+            "calls": 1,
+            "activeMs": 52.700000047683716,
+            "firstStart": 12039.799999952316,
+            "lastEnd": 12092.5
+          },
+          "dispatch:view-plugins": {
+            "calls": 1,
+            "activeMs": 0.2999999523162842,
+            "firstStart": 12092.599999904633,
+            "lastEnd": 12092.899999856949
+          },
+          "dispatch:view-input": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 12092.899999856949,
+            "lastEnd": 12092.899999856949
+          },
+          "dispatch:view-document": {
+            "calls": 1,
+            "activeMs": 3.4000000953674316,
+            "firstStart": 12092.899999856949,
+            "lastEnd": 12096.299999952316
+          },
+          "dispatch:view-attributes": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 12096.299999952316,
+            "lastEnd": 12096.299999952316
+          },
+          "dispatch:view-selection": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 12096.299999952316,
+            "lastEnd": 12096.299999952316
+          },
+          "deferred:view-plugins": {
+            "calls": 1,
+            "activeMs": 0.09999990463256836,
+            "firstStart": 12107.599999904633,
+            "lastEnd": 12107.699999809265
+          },
+          "deferred:view-input": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 12107.699999809265,
+            "lastEnd": 12107.699999809265
+          },
+          "deferred:view-observer-clear": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 12107.699999809265,
+            "lastEnd": 12107.699999809265
+          },
+          "deferred:view-attributes": {
+            "calls": 1,
+            "activeMs": 0,
+            "firstStart": 12107.699999809265,
+            "lastEnd": 12107.699999809265
+          },
+          "deferred:view-document": {
+            "calls": 1,
+            "activeMs": 0.3000001907348633,
+            "firstStart": 12107.699999809265,
+            "lastEnd": 12108
+          }
+        },
+        "updateAt": 12096.5,
+        "head": 53,
+        "complete": true,
+        "previewMode": "indexed",
+        "indexAfter": true,
+        "noteAwareAfter": true,
+        "noteCount": {
+          "definitions": 1,
+          "references": 1
+        },
+        "keyToUpdateMs": 100.80000019073486,
+        "inputToUpdateMs": 100.80000019073486,
+        "stateMs": 42.89999985694885,
+        "viewMs": 56.80000019073486,
+        "updateCalls": 1,
+        "dispatchMs": 99.70000004768372,
+        "dispatchCalls": 1,
+        "keyToRafMs": 112.60000014305115,
+        "keyToGeometryMs": 112.60000014305115,
+        "visible": true,
+        "domContainsInput": true
+      }
+    ]
+  }
+}

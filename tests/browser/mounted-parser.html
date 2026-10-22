@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Mounted parser browser gate</title>
+<link rel="stylesheet" href="/src/web/style.css">
+<style>
+body{padding:12px}.panes{display:flex;gap:16px}.surface{width:400px;height:560px;border:1px solid var(--border)}
+.surface>.cm-editor>.cm-scroller>.cm-content{flex:1 1 auto;min-width:0;padding:24px 20px 60px;font-family:system-ui,sans-serif;line-height:1.65}
+.source-mode .cm-content{font-family:ui-monospace,monospace!important}#result{font:11px monospace;max-height:160px;overflow:auto;white-space:pre-wrap}
+</style></head><body>
+<p>Inactive mounted parser: independent native reference and candidate. Comparator and production guards are unchanged.</p>
+<button id="run">Run full browser batch</button><button id="store">Store result</button><span id="stored" role="status"></span>
+<details><summary>Archive a prior batch</summary><textarea id="archive" aria-label="Prior compressed batch" placeholder="Base64 gzip from a prior batch"></textarea></details>
+<div class="panes"><section><p>Native reference</p><div id="baseline" class="surface"></div></section>
+<section><p id="candidate-label">Candidate</p><div id="candidate" class="surface"></div></section></div>
+<pre id="result" role="status">Loading…</pre>
+<script type="module">
+import {Compartment,EditorState,RangeSet} from '@codemirror/state';
+import {Decoration,EditorView,keymap} from '@codemirror/view';
+import {defaultKeymap,history,historyKeymap,undo,redo,undoDepth,redoDepth} from '@codemirror/commands';
+import {ensureSyntaxTree,syntaxTree,syntaxTreeAvailable,language,syntaxHighlighting} from '@codemirror/language';
+import {classHighlighter} from '@lezer/highlight';
+import {markdownLanguage} from '@codemirror/lang-markdown';
+import {languages} from '@codemirror/language-data';
+import {SearchQuery,findNext,setSearchQuery} from '@codemirror/search';
+import {documentLanguage} from '/src/web/document-language.ts';
+import {mountedDocumentLanguage} from '/tests/performance/experiments/point-comparison/mounted-document-language.ts';
+import {livePreview,previewField} from '/src/web/preview.ts';
+import {markdownReturn} from '/src/web/commands.ts';
+import {searchSupport} from '/src/web/navigation.ts';
+import {textDirection} from '/src/web/text-direction.ts';
+import {fromSource,normalize,sourceExtensions,sourceField,savedSource,sourceOffset,lineEnding} from '/src/web/source.ts';
+
+const paragraph='Paragraph **strong** and *inner text* with `code`, 日本語 😀 and עברית. ';
+const common='# Browser layout\r\n\r\n'+paragraph+'[^a]\n\n- List words\r\n\r\n';
+const notes='[^a]: 日本語 **note text**\r\n\rFinal sentinel.\n';
+const resources='| A | B |\n|---|---|\n| Cell | $x^2$ |\n\n'
+  +'Inline <em>semantic HTML</em> text.\n\n<div><p>Block <strong>HTML</strong> text.</p></div>\n\n'
+  +'$$\nx^2 + y^2 = z^2\n$$\n\n```mermaid\ngraph LR\nA[Source] --> B[Preview]\n```\n\n'
+  +'```javascript\nconst value = 1;\n```\n\n';
+const bigBlock='Paragraph words **strong** and *inner text* with 日本語.\n\n';
+const fixtures=[
+  {name:'notes',source:'\uFEFF'+common+Array.from({length:30},(_,i)=>`## Section ${i}\n\n${paragraph.repeat(3)}\n\n`).join('')+notes},
+  {name:'yaml-code',source:'\uFEFF---\r\ntitle: 日本語\r\n---\r\n\r\n'+common+'```javascript\nconst value = 1;\n```\n\n'+notes},
+  {name:'resources',source:'\uFEFF'+common+resources+notes},
+  {name:'large',source:'\uFEFF'+common+bigBlock.repeat(Math.ceil((1048576-common.length-notes.length)/bigBlock.length))+notes},
+];
+const actions=['initial','top','reverse-selection','list-return','undo-return','unicode','undo-unicode','redo-unicode','find','narrow','yaml-insert','undo-yaml','redo-yaml','undo-yaml-final','source','live','end'];
+const originalCompare=RangeSet.compare, results=[], waits=new Set();
+let views=[], modes=[], supports=[], disposed=false, running=false, ready=false, progress;
+const source=view=>savedSource(view.state.field(sourceField));
+const publish=()=>document.querySelector('#result').textContent=JSON.stringify({ready,running,progress,results,comparatorUnchanged:RangeSet.compare===originalCompare});
+function destroyViews(){for(const view of views)view?.destroy();views=[];document.querySelectorAll('.surface').forEach(node=>node.replaceChildren())}
+function dispose(){disposed=true;for(const wait of waits){cancelAnimationFrame(wait.id);clearTimeout(wait.timer);wait.resolve(false)}waits.clear();destroyViews()}
+window.addEventListener('pagehide',dispose,{once:true});
+function frame(deadline){return new Promise(resolve=>{
+  const wait={resolve};waits.add(wait);
+  const finish=ok=>{waits.delete(wait);clearTimeout(wait.timer);resolve(ok)};
+  wait.id=requestAnimationFrame(()=>finish(!disposed&&performance.now()<deadline));
+  wait.timer=setTimeout(()=>{cancelAnimationFrame(wait.id);finish(false)},Math.max(0,deadline-performance.now()));
+})}
+function parseInfo(view){
+  const tree=syntaxTree(view.state),regions=markdownLanguage.findRegions(view.state);
+  const region=regions.length===1?regions[0]:undefined;
+  let node=region&&tree.resolveInner(Math.min(region.to,region.from+1),1);
+  while(node&&node.name!=='Document')node=node.parent;
+  return {outer:tree.length,length:view.state.doc.length,available:syntaxTreeAvailable(view.state,view.state.doc.length),regions,
+    body:node?{from:node.from,to:node.to,length:node.tree?.length}:null,
+    complete:!!region&&region.to===view.state.doc.length&&!!node?.tree&&node.from===region.from&&node.to===region.to&&node.tree.length===region.to-region.from};
+}
+function activity(view){return [...new Set([0,view.state.selection.main.head,view.state.doc.length])].flatMap(pos=>[-1,0,1].map(side=>({pos,side,
+  markdown:markdownLanguage.isActiveAt(view.state,pos,side),wrapper:view.state.facet(language).isActiveAt(view.state,pos,side)})))}
+function metrics(view){
+  const box=view.scrollDOM.getBoundingClientRect(),caret=view.coordsAtPos(view.state.selection.main.head);
+  return {head:view.state.selection.main.head,caret:caret?{top:caret.top-box.top,bottom:caret.bottom-box.top}:null,
+    contentHeight:view.contentHeight,scrollTop:view.scrollDOM.scrollTop,scrollHeight:view.scrollDOM.scrollHeight,clientHeight:view.scrollDOM.clientHeight,
+    clientWidth:view.scrollDOM.clientWidth};
+}
+function resourceState(view){
+  const dom=view.dom, dynamic=[...dom.querySelectorAll('.preview-math,.preview-mermaid,.preview-html,.preview-block-html,.preview-inline-html,.table-math')];
+  const counts={math:dom.querySelectorAll('.preview-math[data-ready="true"] svg').length,
+    mermaid:dom.querySelectorAll('.preview-mermaid[data-ready="true"] svg').length,
+    html:dom.querySelectorAll('.preview-block-html[data-ready="true"]').length,
+    inline:dom.querySelectorAll('.preview-inline-html[data-ready="true"]').length,
+    table:dom.querySelectorAll('.preview-table table').length,
+    tableMath:dom.querySelectorAll('.table-math[data-ready="true"] svg').length};
+  return {counts,ready:dynamic.every(node=>node.dataset.ready==='true')&&!dom.querySelector('.preview-error'),
+    positive:[...dom.querySelectorAll('.preview-widget')].every(node=>node.getBoundingClientRect().height>0)};
+}
+function lineBoxes(view){
+  const map=new Map();
+  for(const node of view.dom.querySelectorAll('.cm-line')){
+    if(node.closest('.editing-cell'))continue;
+    const from=view.posAtDOM(node,0),box=node.getBoundingClientRect(),scroll=view.scrollDOM.getBoundingClientRect();
+    map.set(from,{from,height:box.height,width:box.width,top:box.top-scroll.top,text:node.textContent,
+      highlights:[...node.querySelectorAll('[class*="tok-"]')].map(span=>({classes:span.className,text:span.textContent}))});
+  }
+  return map;
+}
+function widgetBoxes(view){const scroll=view.scrollDOM.getBoundingClientRect();return [...view.dom.querySelectorAll('.preview-widget')].map(node=>{
+  const box=node.getBoundingClientRect();
+  const text=node.querySelector('svg')?[...node.querySelectorAll('svg text,svg title')].map(n=>n.textContent).join('|'):node.textContent;
+  return {from:node.dataset.from,to:node.dataset.to,kind:[...node.classList].filter(c=>c.startsWith('preview-')).sort().join(' '),
+    width:box.width,height:box.height,top:box.top-scroll.top,text};
+})}
+const equal=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
+function patchExpected(expected,from,to,insert){const record=fromSource(expected),start=sourceOffset(record,from),end=sourceOffset(record,to);
+  return savedSource({...record,raw:record.raw.slice(0,start)+insert.replace(/\n/g,lineEnding(record.raw))+record.raw.slice(end)})}
+function jump(position,y='nearest'){for(const view of views){view.focus();view.dispatch({selection:{anchor:position},effects:EditorView.scrollIntoView(position,{y})})}}
+async function check(action,expected,resourceGate=false){
+  const beforeParse=views.map(parseInfo),before=views.map(view=>({source:source(view),history:undoDepth(view.state),redo:redoDepth(view.state)}));
+  for(const view of views){if(!ensureSyntaxTree(view.state,view.state.doc.length,10000))throw Error('Parser readiness deadline');view.dispatch({});}
+  const afterParse=views.map(parseInfo);
+  if(afterParse.some(value=>!value.available||!value.complete))throw Error('Incomplete mounted Markdown coverage');
+  const begin=performance.now(),resourceDeadline=begin+15000;
+  let resourceReady=false;
+  while(!disposed&&await frame(resourceDeadline)){
+    const states=views.map(resourceState);
+    resourceReady=document.fonts.status==='loaded'&&states.every(state=>state.ready&&state.positive)&&(!resourceGate||states.every(state=>Object.values(state.counts).every(count=>count>=1)));
+    if(resourceReady)break;
+  }
+  if(!resourceReady)throw Error('Resource readiness deadline');
+  const beforeScroll=views.map(metrics);
+  // Resource height is now known. Use the same explicit source-position action
+  // before geometry observations; retain the earlier scroll metrics as evidence.
+  for(const view of views)view.dispatch({effects:EditorView.scrollIntoView(view.state.selection.main.head,{y:'center'})});
+  const deadline=performance.now()+2000,samples=[];let transitions=0,stable=false,frames=0;
+  while(!disposed&&await frame(deadline)){
+    const observations=views.map(view=>({metrics:metrics(view),widgets:widgetBoxes(view),lines:[...lineBoxes(view).values()]}));
+    const prior=samples.at(-1),same=prior&&equal(prior.observations,observations);transitions=same?transitions+1:0;frames++;
+    // Lossless encoding keeps every frame, including changing line/widget boxes.
+    if(same)prior.frames++;else samples.push({frames:1,observations});
+    if(frames>=8&&transitions>=4){stable=true;break;}
+  }
+  if(!stable)throw Error('Geometry deadline');
+  const boxes=views.map(lineBoxes),shared=[...boxes[0]].filter(([from])=>boxes[1].has(from));
+  const lineEqual=shared.length>0&&shared.every(([from,box])=>equal(box,boxes[1].get(from)));
+  const decorations=view=>view.state.field(previewField,false)?.decorations||Decoration.none;
+  const record={action,beforeParse,afterParse,beforeScroll,resourceGate,resources:views.map(resourceState),stable,frames,transitions,sampleEncoding:'consecutive-exact',samples,
+    sourceExact:views.every(view=>source(view)===expected),sourceEqual:source(views[0])===source(views[1]),
+    selectionEqual:views[0].state.selection.eq(views[1].state.selection),selection:views.map(view=>view.state.selection.toJSON()),
+    history:views.map(view=>({undo:undoDepth(view.state),redo:redoDepth(view.state)})),
+    unchangedByCheck:views.every((view,i)=>source(view)===before[i].source&&undoDepth(view.state)===before[i].history&&redoDepth(view.state)===before[i].redo),
+    activity:views.map(activity),activityEqual:equal(activity(views[0]),activity(views[1])),
+    decorationsEqual:RangeSet.eq([decorations(views[0])],[decorations(views[1])]),
+    geometryEqual:equal(metrics(views[0]),metrics(views[1])),lines:shared.length,lineEqual,
+    widgets:views.map(widgetBoxes),widgetEqual:equal(widgetBoxes(views[0]),widgetBoxes(views[1])),comparatorUnchanged:RangeSet.compare===originalCompare};
+  if(!record.sourceExact||!record.sourceEqual||!record.selectionEqual||!equal(record.history[0],record.history[1])||!record.unchangedByCheck||
+    !record.activityEqual||!record.decorationsEqual||!record.geometryEqual||!record.lineEqual||!record.widgetEqual||!record.comparatorUnchanged)
+    record.failure='Agreement check failed';
+  return record;
+}
+async function runCase(fixture,control,reverse){
+  destroyViews();modes=[new Compartment(),new Compartment()];supports=[documentLanguage(),control?documentLanguage():mountedDocumentLanguage()];
+  const record={fixture:fixture.name,bytes:new TextEncoder().encode(fixture.source).length,utf16:fixture.source.length,control,reverse,checks:[]};results.push(record);progress={fixture:fixture.name,control,reverse};publish();
+  let expected=fixture.source,unicodeSource,yamlSource;
+  const create=index=>{
+    const parent=document.querySelector(index?'#candidate':'#baseline');parent.style.width='400px';parent.style.height=fixture.name==='resources'?'760px':'560px';parent.classList.remove('source-mode');
+    const raw=fromSource(fixture.source),doc=normalize(raw.raw);
+    const state=EditorState.create({doc,selection:{anchor:doc.length},extensions:[sourceExtensions(raw),history(),supports[index],syntaxHighlighting(classHighlighter),textDirection,EditorView.lineWrapping,
+      modes[index].of(livePreview),keymap.of([{key:'Enter',run:markdownReturn},...defaultKeymap,...historyKeymap]),
+      searchSupport(()=>views[index]),EditorView.contentAttributes.of({'aria-label':index?'Candidate Markdown':'Reference Markdown'})]});
+    views[index]=new EditorView({state,parent});
+  };
+  const step=async(action,resourceGate=false)=>{progress={...progress,action};publish();const value=await check(action,expected,resourceGate);record.checks.push(value);publish();if(value.failure)throw Error(action+': '+value.failure)};
+  try{
+    if(reverse){create(1);create(0)}else{create(0);create(1)}
+    document.querySelector('#candidate-label').textContent=control?'Native full/full control':'Mounted parser candidate';
+    // Keep every resource mounted for the explicit initial readiness check.
+    if(fixture.name==='resources')for(const view of views)view.scrollDOM.scrollTop=0;
+    await step('initial',fixture.name==='resources');
+    jump(0,'start');await step('top');
+    const at=views[0].state.doc.toString().indexOf('Paragraph')+4;
+    for(const view of views){view.focus();view.dispatch({selection:{anchor:at+3,head:at},scrollIntoView:true})}await step('reverse-selection');
+    const list=views[0].state.doc.toString().indexOf('- List words')+'- List words'.length;
+    jump(list);expected=patchExpected(expected,list,list,'\n- ');
+    for(const view of views){view.focus();if(!markdownReturn(view))throw Error('Return command failed')}await step('list-return');
+    for(const view of views){view.focus();if(!undo(view))throw Error('Return Undo failed');view.dispatch({scrollIntoView:true})}expected=fixture.source;await step('undo-return');
+    jump(at);expected=unicodeSource=patchExpected(expected,at,at,'中𠀀e\u0301');
+    for(const view of views){view.focus();view.dispatch({changes:{from:at,insert:'中𠀀e\u0301'},selection:{anchor:at+5},userEvent:'input.type',scrollIntoView:true})}await step('unicode');
+    for(const view of views){view.focus();if(!undo(view))throw Error('Unicode Undo failed');view.dispatch({scrollIntoView:true})}expected=fixture.source;await step('undo-unicode');
+    for(const view of views){view.focus();if(!redo(view))throw Error('Unicode Redo failed');view.dispatch({scrollIntoView:true})}expected=unicodeSource;await step('redo-unicode');
+    for(const view of views){view.focus();view.dispatch({effects:setSearchQuery.of(new SearchQuery({search:'Final sentinel'}))});if(!findNext(view)||view.state.sliceDoc(view.state.selection.main.from,view.state.selection.main.to)!=='Final sentinel')throw Error('Find failed')}await step('find');
+    document.querySelectorAll('.surface').forEach(node=>node.style.width='240px');for(const view of views)view.dispatch({scrollIntoView:true});await step('narrow');
+    const prefix='---\nexperiment: true\n---\n\n';expected=yamlSource=patchExpected(expected,0,0,prefix);
+    for(const view of views){view.focus();view.dispatch({changes:{from:0,insert:prefix},selection:{anchor:0},userEvent:'input.type',scrollIntoView:true})}await step('yaml-insert');
+    for(const view of views){view.focus();if(!undo(view))throw Error('YAML Undo failed');view.dispatch({scrollIntoView:true})}expected=unicodeSource;await step('undo-yaml');
+    for(const view of views){view.focus();if(!redo(view))throw Error('YAML Redo failed');view.dispatch({scrollIntoView:true})}expected=yamlSource;await step('redo-yaml');
+    for(const view of views){view.focus();if(!undo(view))throw Error('Final YAML Undo failed');view.dispatch({scrollIntoView:true})}expected=unicodeSource;await step('undo-yaml-final');
+    for(let i=0;i<2;i++){views[i].focus();views[i].dispatch({effects:modes[i].reconfigure([]),scrollIntoView:true});views[i].dom.parentElement.classList.add('source-mode')}await step('source');
+    for(let i=0;i<2;i++){views[i].focus();views[i].dispatch({effects:modes[i].reconfigure(livePreview),scrollIntoView:true});views[i].dom.parentElement.classList.remove('source-mode')}await step('live');
+    jump(views[0].state.doc.length,'end');await step('end');
+  }catch(error){record.error=String(error);destroyViews()}
+  publish();
+}
+document.querySelector('#run').onclick=async()=>{
+  if(!ready||running)return;running=true;results.length=0;document.querySelector('#run').disabled=true;publish();
+  try{for(const fixture of fixtures)for(const control of [true,false])for(const reverse of [false,true]){
+    if(disposed)return;await runCase(fixture,control,reverse);
+  }}finally{running=false;if(!disposed){progress={done:true};document.querySelector('#run').disabled=false;publish()}}
+};
+document.querySelector('#store').onclick=async()=>{
+  if(running)return;
+  const archive=document.querySelector('#archive').value.trim();
+  try{
+    const response=await fetch('/__mounted_parser_result__',{method:'POST',headers:{'Content-Type':'application/json','x-markdew-browser-result':'mounted-layout-v1'},
+      body:JSON.stringify(archive?{archive}:{batch:JSON.parse(document.querySelector('#result').textContent)})});
+    const text=await response.text();if(!response.ok)throw Error(text);document.querySelector('#stored').textContent=text;
+  }catch(error){document.querySelector('#stored').textContent=String(error)}
+};
+await languages.find(description=>description.name==='JavaScript').load();await document.fonts.ready;ready=true;publish();
+</script></body></html>

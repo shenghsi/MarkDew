@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Heading link navigation check</title>
+<link rel="stylesheet" href="/src/web/style.css">
+<style>body{display:block;margin:24px;font:16px system-ui}#editor{max-width:760px;margin:16px auto;border:1px solid var(--border)}pre#result{white-space:pre-wrap}button{margin:4px}</style></head>
+<body><h1>Heading link navigation check</h1><p>Use Command-click on macOS or Control-click on Windows/Linux. Use Mod-Enter from link source.</p>
+<button id="start">Select link source</button><button id="end">End</button><button id="source">Source mode</button><button id="undo">Undo</button>
+<div id="editor"></div><pre id="result" role="status"></pre>
+<script type="module">
+import {EditorState,Compartment} from '@codemirror/state';
+import {EditorView} from '@codemirror/view';
+import {ensureSyntaxTree} from '@codemirror/language';
+import {history,undo,undoDepth} from '@codemirror/commands';
+import {documentLanguage} from '/src/web/document-language.ts';
+import {livePreview} from '/src/web/preview.ts';
+import {footnoteField} from '/src/web/footnotes.ts';
+import {linkNavigation} from '/src/web/link-navigation.ts';
+import {fromSource,normalize,sourceExtensions,sourceField,savedSource} from '/src/web/source.ts';
+const original='\uFEFF[Unicode heading](#%E6%97%A5%E6%9C%AC%E8%AA%9E-text) and [second heading][duplicate].\r\n\r\n# 日本語 **Text**\r\n\r\nFirst destination.\r\n\r\n## Repeat\r\n\r\nFirst repeat.\r\n\r\n## Repeat\r\n\r\nSecond repeat destination.\r\n\r\n[duplicate]: #repeat-1\r\n\r\n[Missing heading](#missing)\r\n\r\nEnd\n';
+const record=fromSource(original),doc=normalize(record.raw),mode=new Compartment();let sourceMode=false,message='';
+let state=EditorState.create({doc,selection:{anchor:doc.length},extensions:[sourceExtensions(record),history(),documentLanguage(),footnoteField,EditorView.lineWrapping,mode.of(livePreview),linkNavigation(text=>{message=text;report()}),EditorView.updateListener.of(()=>queueMicrotask(report))]});
+if(!ensureSyntaxTree(state,state.doc.length,1000))throw new Error('Incomplete syntax tree');state=state.update({}).state;
+const view=new EditorView({parent:document.querySelector('#editor'),state});
+function report(){document.querySelector('#result').textContent=JSON.stringify({exactOriginal:savedSource(view.state.field(sourceField))===original,history:undoDepth(view.state),sourceMode,selection:view.state.selection.main.head,line:view.state.doc.lineAt(view.state.selection.main.head).text,message},null,2)}
+document.querySelector('#start').onclick=()=>{view.dispatch({selection:{anchor:1}});view.focus();report()};
+document.querySelector('#end').onclick=()=>{view.dispatch({selection:{anchor:view.state.doc.length}});view.focus();report()};
+document.querySelector('#source').onclick=()=>{sourceMode=!sourceMode;view.dispatch({effects:mode.reconfigure(sourceMode?[]:livePreview)});report()};
+document.querySelector('#undo').onclick=()=>{undo(view);report()};report();
+window.addEventListener('pagehide',()=>view.destroy(),{once:true});
+</script></body></html>

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Block HTML export check</title></head>
+<body><p id="result" role="status">Preparing block HTML…</p><button id="capture" disabled>Check PNG</button><main id="paper"></main><img id="png" alt="Captured block HTML PNG" hidden>
+<script type="module">
+import '/src/web/style.css';
+import { EditorState } from '@codemirror/state';
+import { history, undoDepth } from '@codemirror/commands';
+import { documentLanguage } from '/src/web/document-language.ts';
+import { fromSource, normalize, sourceExtensions, sourceField, savedSource } from '/src/web/source.ts';
+import { printView } from '/src/web/print-view.ts';
+import { pngBytes } from '/src/web/png-export.ts';
+const original = '\uFEFF<div lang="ja"><h2>Block HTML export</h2>\r\n'
+  + Array.from({length:18}, (_,i)=>`<p>Paragraph ${i+1}: 日本語😀 <strong>formatted text</strong>.</p>\r\n`).join('')
+  + '<table><tr><th colspan="2">Values</th></tr><tr><td>One</td><td>Two</td></tr></table>\r\n'
+  + '<p title="final">Final paragraph sentinel.</p></div>\r\n';
+const state = EditorState.create({doc:normalize(fromSource(original).raw),extensions:[sourceExtensions(fromSource(original)),history(),documentLanguage()]});
+const projection = printView({state,id:42,path:'/tmp/block.md',title:'Block HTML export'});
+document.querySelector('#paper').append(projection.element);
+const result=document.querySelector('#result'), button=document.querySelector('#capture'), image=document.querySelector('#png');
+let url;
+try {
+  const warnings=await projection.ready;
+  if(warnings.length || projection.element.querySelector('iframe') || !projection.element.querySelector('p[title=final]')) throw new Error('Block projection failed');
+  result.textContent='Ready · complete block HTML in page flow';button.disabled=false;
+} catch(error) { result.textContent='FAIL · '+String(error); }
+button.onclick=async()=>{
+  button.disabled=true;result.textContent='Capturing complete PNG…';
+  try {
+    const paper=projection.element, rectangle=paper.getBoundingClientRect();
+    const first=paper.querySelector('h2').getBoundingClientRect(), last=paper.querySelector('p[title=final]').getBoundingClientRect();
+    const bytes=await pngBytes(paper,new AbortController().signal);
+    if(url)URL.revokeObjectURL(url);url=URL.createObjectURL(new Blob([bytes],{type:'image/png'}));
+    image.src=url;await image.decode();image.hidden=false;
+    const canvas=document.createElement('canvas');canvas.width=image.naturalWidth;canvas.height=image.naturalHeight;
+    const context=canvas.getContext('2d');context.drawImage(image,0,0);
+    function hasInk(bounds){
+      const pixels=context.getImageData(Math.floor(bounds.left-rectangle.left),Math.floor(bounds.top-rectangle.top),Math.ceil(bounds.width),Math.ceil(bounds.height)).data;
+      for(let i=0;i<pixels.length;i+=4)if(pixels[i+3]&&(pixels[i]<220||pixels[i+1]<220||pixels[i+2]<220))return true;
+      return false;
+    }
+    if(canvas.height<=400 || !hasInk(first)||!hasInk(last) || savedSource(state.field(sourceField))!==original || undoDepth(state)!==0)throw new Error('PNG content or source check failed');
+    result.textContent=`PASS · ${canvas.width} × ${canvas.height} PNG · first and final text contain ink · exact source · history 0`;
+  }catch(error){result.textContent='FAIL · '+String(error);}finally{button.disabled=false;}
+};
+window.addEventListener('pagehide',()=>{projection.dispose();if(url)URL.revokeObjectURL(url);},{once:true});
+</script></body></html>

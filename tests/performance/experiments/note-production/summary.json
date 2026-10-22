@@ -1,0 +1,619 @@
+{
+  "baseline": "a8d193f",
+  "samples": 960,
+  "scope": "growing word edit state transaction and dirty comparison; excludes outline, oracle, DOM, native input and screen frame",
+  "routes": [
+    {
+      "bytes": 102400,
+      "note": false,
+      "location": "start",
+      "runs": [
+        {
+          "name": "baseline-first",
+          "median": 1.745,
+          "p95": 4.387,
+          "first": 29.779,
+          "max": 29.779,
+          "indexed": 19,
+          "full": 1,
+          "maxLocalVisits": 3,
+          "maxLocalRanges": 8
+        },
+        {
+          "name": "candidate-first",
+          "median": 1.683,
+          "p95": 4.433,
+          "first": 28.375,
+          "max": 28.375,
+          "indexed": 19,
+          "full": 1,
+          "maxLocalVisits": 3,
+          "maxLocalRanges": 8
+        },
+        {
+          "name": "candidate-repeat",
+          "median": 1.596,
+          "p95": 4.537,
+          "first": 30.058,
+          "max": 30.058,
+          "indexed": 19,
+          "full": 1,
+          "maxLocalVisits": 3,
+          "maxLocalRanges": 8
+        },
+        {
+          "name": "baseline-repeat",
+          "median": 1.752,
+          "p95": 4.465,
+          "first": 25.512,
+          "max": 25.512,
+          "indexed": 19,
+          "full": 1,
+          "maxLocalVisits": 3,
+          "maxLocalRanges": 8
+        }
+      ]
+    },
+    {
+      "bytes": 102400,
+      "note": false,
+      "location": "middle",
+      "runs": [
+        {
+          "name": "baseline-first",
+          "median": 1.411,
+          "p95": 2.343,
+          "first": 10.748,
+          "max": 10.748,
+          "indexed": 19,
+          "full": 1,
+          "maxLocalVisits": 3,
+          "maxLocalRanges": 6
+        },
+        {
+          "name": "candidate-first",
+          "median": 1.452,
+          "p95": 2.287,
+          "first": 10.832,
+          "max": 10.832,
+          "indexed": 19,
+          "full": 1,
+          "maxLocalVisits": 3,
+          "maxLocalRanges": 6
+        },
+        {
+          "name": "candidate-repeat",
+          "median": 1.568,
+          "p95": 3.198,
+          "first": 10.231,
+          "max": 10.231,
+          "indexed": 19,
+          "full": 1,
+          "maxLocalVisits": 3,
+          "maxLocalRanges": 6
+        },
+        {
+          "name": "baseline-repeat",
+          "median": 1.47,
+          "p95": 2.392,
+          "first": 11.595,
+          "max": 11.595,
+          "indexed": 19,
+          "full": 1,
+          "maxLocalVisits": 3,
+          "maxLocalRanges": 6
+        }
+      ]
+    },
+    {
+      "bytes": 102400,
+      "note": false,
+      "location": "end",
+      "runs": [
+        {
+          "name": "baseline-first",
+          "median": 1.231,
+          "p95": 1.483,
+          "first": 1.365,
+          "max": 1.746,
+          "indexed": 20,
+          "full": 0,
+          "maxLocalVisits": 2,
+          "maxLocalRanges": 0
+        },
+        {
+          "name": "candidate-first",
+          "median": 1.295,
+          "p95": 1.901,
+          "first": 1.448,
+          "max": 2.945,
+          "indexed": 20,
+          "full": 0,
+          "maxLocalVisits": 2,
+          "maxLocalRanges": 0
+        },
+        {
+          "name": "candidate-repeat",
+          "median": 1.322,
+          "p95": 1.616,
+          "first": 1.403,
+          "max": 1.741,
+          "indexed": 20,
+          "full": 0,
+          "maxLocalVisits": 2,
+          "maxLocalRanges": 0
+        },
+        {
+          "name": "baseline-repeat",
+          "median": 1.376,
+          "p95": 1.623,
+          "first": 1.445,
+          "max": 1.867,
+          "indexed": 20,
+          "full": 0,
+          "maxLocalVisits": 2,
+          "maxLocalRanges": 0
+        }
+      ]
+    },
+    {
+      "bytes": 102400,
+      "note": true,
+      "location": "start",
+      "runs": [
+        {
+          "name": "baseline-first",
+          "median": 7.704,
+          "p95": 16.302,
+          "first": 16.302,
+          "max": 23.027,
+          "indexed": 0,
+          "full": 20,
+          "maxLocalVisits": 0,
+          "maxLocalRanges": 0
+        },
+        {
+          "name": "candidate-first",
+          "median": 1.719,
+          "p95": 5.42,
+          "first": 23.013,
+          "max": 23.013,
+          "indexed": 19,
+          "full": 1,
+          "maxLocalVisits": 4,
+          "maxLocalRanges": 8
+        },
+        {
+          "name": "candidate-repeat",
+          "median": 1.717,
+          "p95": 4.732,
+          "first": 19.522,
+          "max": 19.522,
+          "indexed": 19,
+          "full": 1,
+          "maxLocalVisits": 4,
+          "maxLocalRanges": 8
+        },
+        {
+          "name": "baseline-repeat",
+          "median": 7.306,
+          "p95": 12.568,
+          "first": 16.308,
+          "max": 16.308,
+          "indexed": 0,
+          "full": 20,
+          "maxLocalVisits": 0,
+          "maxLocalRanges": 0
+        }
+      ]
+    },
+    {
+      "bytes": 102400,
+      "note": true,
+      "location": "middle",
+      "runs": [
+        {
+          "name": "baseline-first",
+          "median": 5.324,
+          "p95": 11.444,
+          "first": 7.403,
+          "max": 11.953,
+          "indexed": 0,
+          "full": 20,
+          "maxLocalVisits": 0,
+          "maxLocalRanges": 0
+        },
+        {
+          "name": "candidate-first",
+          "median": 1.479,
+          "p95": 2.205,
+          "first": 9.149,
+          "max": 9.149,
+          "indexed": 19,
+          "full": 1,
+          "maxLocalVisits": 3,
+          "maxLocalRanges": 6
+        },
+        {
+          "name": "candidate-repeat",
+          "median": 1.422,
+          "p95": 1.574,
+          "first": 10.413,
+          "max": 10.413,
+          "indexed": 19,
+          "full": 1,
+          "maxLocalVisits": 3,
+          "maxLocalRanges": 6
+        },
+        {
+          "name": "baseline-repeat",
+          "median": 6.495,
+          "p95": 12.077,
+          "first": 6.975,
+          "max": 14.234,
+          "indexed": 0,
+          "full": 20,
+          "maxLocalVisits": 0,
+          "maxLocalRanges": 0
+        }
+      ]
+    },
+    {
+      "bytes": 102400,
+      "note": true,
+      "location": "end",
+      "runs": [
+        {
+          "name": "baseline-first",
+          "median": 4.281,
+          "p95": 4.565,
+          "first": 4.827,
+          "max": 4.827,
+          "indexed": 0,
+          "full": 20,
+          "maxLocalVisits": 0,
+          "maxLocalRanges": 0
+        },
+        {
+          "name": "candidate-first",
+          "median": 1.498,
+          "p95": 3.709,
+          "first": 7.344,
+          "max": 7.344,
+          "indexed": 19,
+          "full": 1,
+          "maxLocalVisits": 3,
+          "maxLocalRanges": 6
+        },
+        {
+          "name": "candidate-repeat",
+          "median": 1.36,
+          "p95": 4.146,
+          "first": 7.209,
+          "max": 7.209,
+          "indexed": 19,
+          "full": 1,
+          "maxLocalVisits": 3,
+          "maxLocalRanges": 6
+        },
+        {
+          "name": "baseline-repeat",
+          "median": 4.393,
+          "p95": 4.721,
+          "first": 5.635,
+          "max": 5.635,
+          "indexed": 0,
+          "full": 20,
+          "maxLocalVisits": 0,
+          "maxLocalRanges": 0
+        }
+      ]
+    },
+    {
+      "bytes": 1048576,
+      "note": false,
+      "location": "start",
+      "runs": [
+        {
+          "name": "baseline-first",
+          "median": 11.835,
+          "p95": 25.431,
+          "first": 88.316,
+          "max": 88.316,
+          "indexed": 19,
+          "full": 1,
+          "maxLocalVisits": 3,
+          "maxLocalRanges": 8
+        },
+        {
+          "name": "candidate-first",
+          "median": 12.364,
+          "p95": 25.432,
+          "first": 97.023,
+          "max": 97.023,
+          "indexed": 19,
+          "full": 1,
+          "maxLocalVisits": 3,
+          "maxLocalRanges": 8
+        },
+        {
+          "name": "candidate-repeat",
+          "median": 12.266,
+          "p95": 23.877,
+          "first": 88.856,
+          "max": 88.856,
+          "indexed": 19,
+          "full": 1,
+          "maxLocalVisits": 3,
+          "maxLocalRanges": 8
+        },
+        {
+          "name": "baseline-repeat",
+          "median": 11.908,
+          "p95": 25.68,
+          "first": 96.772,
+          "max": 96.772,
+          "indexed": 19,
+          "full": 1,
+          "maxLocalVisits": 3,
+          "maxLocalRanges": 8
+        }
+      ]
+    },
+    {
+      "bytes": 1048576,
+      "note": false,
+      "location": "middle",
+      "runs": [
+        {
+          "name": "baseline-first",
+          "median": 11.333,
+          "p95": 19.312,
+          "first": 78.494,
+          "max": 78.494,
+          "indexed": 19,
+          "full": 1,
+          "maxLocalVisits": 3,
+          "maxLocalRanges": 6
+        },
+        {
+          "name": "candidate-first",
+          "median": 12.108,
+          "p95": 13.419,
+          "first": 86.555,
+          "max": 86.555,
+          "indexed": 19,
+          "full": 1,
+          "maxLocalVisits": 3,
+          "maxLocalRanges": 6
+        },
+        {
+          "name": "candidate-repeat",
+          "median": 12.262,
+          "p95": 13.529,
+          "first": 86.52,
+          "max": 86.52,
+          "indexed": 19,
+          "full": 1,
+          "maxLocalVisits": 3,
+          "maxLocalRanges": 6
+        },
+        {
+          "name": "baseline-repeat",
+          "median": 12.136,
+          "p95": 20.79,
+          "first": 135.193,
+          "max": 135.193,
+          "indexed": 19,
+          "full": 1,
+          "maxLocalVisits": 3,
+          "maxLocalRanges": 6
+        }
+      ]
+    },
+    {
+      "bytes": 1048576,
+      "note": false,
+      "location": "end",
+      "runs": [
+        {
+          "name": "baseline-first",
+          "median": 11.399,
+          "p95": 36.364,
+          "first": 79.232,
+          "max": 79.232,
+          "indexed": 19,
+          "full": 1,
+          "maxLocalVisits": 3,
+          "maxLocalRanges": 8
+        },
+        {
+          "name": "candidate-first",
+          "median": 12.415,
+          "p95": 35.136,
+          "first": 91.863,
+          "max": 91.863,
+          "indexed": 19,
+          "full": 1,
+          "maxLocalVisits": 3,
+          "maxLocalRanges": 8
+        },
+        {
+          "name": "candidate-repeat",
+          "median": 12.24,
+          "p95": 39.562,
+          "first": 90.754,
+          "max": 90.754,
+          "indexed": 19,
+          "full": 1,
+          "maxLocalVisits": 3,
+          "maxLocalRanges": 8
+        },
+        {
+          "name": "baseline-repeat",
+          "median": 12.019,
+          "p95": 41.52,
+          "first": 79.121,
+          "max": 79.121,
+          "indexed": 19,
+          "full": 1,
+          "maxLocalVisits": 3,
+          "maxLocalRanges": 8
+        }
+      ]
+    },
+    {
+      "bytes": 1048576,
+      "note": true,
+      "location": "start",
+      "runs": [
+        {
+          "name": "baseline-first",
+          "median": 91.892,
+          "p95": 213.977,
+          "first": 147.047,
+          "max": 286.715,
+          "indexed": 0,
+          "full": 20,
+          "maxLocalVisits": 0,
+          "maxLocalRanges": 0
+        },
+        {
+          "name": "candidate-first",
+          "median": 16.541,
+          "p95": 89.257,
+          "first": 116.73,
+          "max": 116.73,
+          "indexed": 19,
+          "full": 1,
+          "maxLocalVisits": 4,
+          "maxLocalRanges": 8
+        },
+        {
+          "name": "candidate-repeat",
+          "median": 16.137,
+          "p95": 36.149,
+          "first": 117.354,
+          "max": 117.354,
+          "indexed": 19,
+          "full": 1,
+          "maxLocalVisits": 4,
+          "maxLocalRanges": 8
+        },
+        {
+          "name": "baseline-repeat",
+          "median": 93.056,
+          "p95": 145.448,
+          "first": 81.073,
+          "max": 286.498,
+          "indexed": 0,
+          "full": 20,
+          "maxLocalVisits": 0,
+          "maxLocalRanges": 0
+        }
+      ]
+    },
+    {
+      "bytes": 1048576,
+      "note": true,
+      "location": "middle",
+      "runs": [
+        {
+          "name": "baseline-first",
+          "median": 67.189,
+          "p95": 181.649,
+          "first": 255.484,
+          "max": 255.484,
+          "indexed": 0,
+          "full": 20,
+          "maxLocalVisits": 0,
+          "maxLocalRanges": 0
+        },
+        {
+          "name": "candidate-first",
+          "median": 16.845,
+          "p95": 22.717,
+          "first": 109.015,
+          "max": 109.015,
+          "indexed": 19,
+          "full": 1,
+          "maxLocalVisits": 3,
+          "maxLocalRanges": 6
+        },
+        {
+          "name": "candidate-repeat",
+          "median": 17.079,
+          "p95": 37.487,
+          "first": 108.874,
+          "max": 108.874,
+          "indexed": 19,
+          "full": 1,
+          "maxLocalVisits": 3,
+          "maxLocalRanges": 6
+        },
+        {
+          "name": "baseline-repeat",
+          "median": 69.789,
+          "p95": 106.99,
+          "first": 91.11,
+          "max": 268.583,
+          "indexed": 0,
+          "full": 20,
+          "maxLocalVisits": 0,
+          "maxLocalRanges": 0
+        }
+      ]
+    },
+    {
+      "bytes": 1048576,
+      "note": true,
+      "location": "end",
+      "runs": [
+        {
+          "name": "baseline-first",
+          "median": 55.049,
+          "p95": 64.185,
+          "first": 109.721,
+          "max": 109.721,
+          "indexed": 0,
+          "full": 20,
+          "maxLocalVisits": 0,
+          "maxLocalRanges": 0
+        },
+        {
+          "name": "candidate-first",
+          "median": 16.212,
+          "p95": 63.321,
+          "first": 109.087,
+          "max": 109.087,
+          "indexed": 19,
+          "full": 1,
+          "maxLocalVisits": 3,
+          "maxLocalRanges": 0
+        },
+        {
+          "name": "candidate-repeat",
+          "median": 17.943,
+          "p95": 64.864,
+          "first": 113.913,
+          "max": 113.913,
+          "indexed": 19,
+          "full": 1,
+          "maxLocalVisits": 3,
+          "maxLocalRanges": 0
+        },
+        {
+          "name": "baseline-repeat",
+          "median": 51.503,
+          "p95": 80.616,
+          "first": 67.758,
+          "max": 103.037,
+          "indexed": 0,
+          "full": 20,
+          "maxLocalVisits": 0,
+          "maxLocalRanges": 0
+        }
+      ]
+    }
+  ]
+}

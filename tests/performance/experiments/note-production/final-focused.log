@@ -1,0 +1,12 @@
+
+ RUN  v3.2.7 /Users/shxi/projects/MarkDew
+
+ ✓ tests/web/note-preview-production.test.ts (6 tests) 6555ms
+   ✓ rejects partial published trees and accepts settled complete trees  3247ms
+   ✓ retains full resource previews after edits and complete-tree settlement  3224ms
+
+ Test Files  1 passed (1)
+      Tests  6 passed (6)
+   Start at  17:00:15
+   Duration  7.17s (transform 94ms, setup 0ms, collect 238ms, tests 6.56s, environment 132ms, prepare 23ms)
+

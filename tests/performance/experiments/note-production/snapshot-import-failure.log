@@ -1,0 +1,36 @@
+
+> markdew-desktop@0.1.0 benchmark:growth
+> node src/web/benchmark.mjs --growth
+
+bend 2.0.36 is available: run bend update
+
+ RUN  v3.2.7 /Users/shxi/projects/MarkDew
+
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/performance/preview-growth.test.ts [ tests/performance/preview-growth.test.ts ]
+Error: Failed to resolve import "./math-renderer" from "tests/performance/experiments/note-production/baseline.ts". Does the file exist?
+  Plugin: vite:import-analysis
+  File: /Users/shxi/projects/MarkDew/tests/performance/experiments/note-production/baseline.ts:136:52
+  146 |      else {
+  147 |        dom.textContent = "Rendering…";
+  148 |        const promise = item.kind === "math" ? import("./math-renderer").then((module) => module.renderMath(item.source...
+      |                                                      ^
+  149 |        cancellations.set(dom, mountResult(dom, promise, () => view.requestMeasure()));
+  150 |      }
+ ❯ TransformPluginContext._formatLog node_modules/vite/dist/node/chunks/config.js:29079:43
+ ❯ TransformPluginContext.error node_modules/vite/dist/node/chunks/config.js:29076:14
+ ❯ normalizeUrl node_modules/vite/dist/node/chunks/config.js:27199:18
+ ❯ node_modules/vite/dist/node/chunks/config.js:27257:32
+ ❯ TransformPluginContext.transform node_modules/vite/dist/node/chunks/config.js:27225:4
+ ❯ EnvironmentPluginContainer.transform node_modules/vite/dist/node/chunks/config.js:28877:14
+ ❯ loadAndTransform node_modules/vite/dist/node/chunks/config.js:22746:26
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  no tests
+   Start at  16:45:53
+   Duration  641ms (transform 101ms, setup 0ms, collect 0ms, tests 0ms, environment 136ms, prepare 36ms)

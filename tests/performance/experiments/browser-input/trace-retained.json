@@ -1,0 +1,1025 @@
+{
+  "mode": "Live preview",
+  "notes": true,
+  "bytes": 1048576,
+  "ready": true,
+  "armed": false,
+  "samples": 20,
+  "completeSamples": 1,
+  "unexpectedUpdates": 0,
+  "failures": [],
+  "treeComplete": false,
+  "previewMode": "full",
+  "keyToUpdateMs": {
+    "median": 74.29999995231628,
+    "p95": 217,
+    "max": 355.2999999523163
+  },
+  "inputToUpdateMs": {
+    "median": 74.19999980926514,
+    "p95": 216.90000009536743,
+    "max": 353.7999999523163
+  },
+  "keyToRafMs": {
+    "median": 90.90000009536743,
+    "p95": 231.40000009536743,
+    "max": 362.89999985694885
+  },
+  "keyToGeometryMs": {
+    "median": 91,
+    "p95": 231.40000009536743,
+    "max": 363.2999999523163
+  },
+  "traceSetup": {
+    "definitions": [
+      {
+        "from": 1048540,
+        "to": 1048554
+      }
+    ]
+  },
+  "dispatchInclusiveMs": {
+    "median": 73.09999990463257,
+    "p95": 215.59999990463257,
+    "max": 347.5
+  },
+  "stateRealizationMs": {
+    "median": 54.40000009536743,
+    "p95": 119.5,
+    "max": 290.90000009536743
+  },
+  "viewUpdateMs": {
+    "median": 16.799999952316284,
+    "p95": 56.5,
+    "max": 161.79999995231628
+  },
+  "checked": {
+    "exactEdited": true,
+    "exactOriginal": true,
+    "historyBefore": 20,
+    "historyAfter": 0,
+    "undoCalls": 20
+  },
+  "raw": [
+    {
+      "keyAt": 1531,
+      "key": "x",
+      "inputType": "insertText",
+      "indexBefore": true,
+      "noteAwareBefore": true,
+      "inputAt": 1532.5,
+      "data": "x",
+      "intervals": [
+        {
+          "name": "source",
+          "start": 1538.8999998569489,
+          "end": 1539.0999999046326
+        },
+        {
+          "name": "footnotes",
+          "start": 1539.3999998569489,
+          "end": 1590.0999999046326
+        },
+        {
+          "name": "preview",
+          "start": 1590.0999999046326,
+          "end": 1829.6999998092651
+        },
+        {
+          "name": "report",
+          "start": 1886.0999999046326,
+          "end": 1886.2999999523163
+        }
+      ],
+      "updateAt": 1886.2999999523163,
+      "head": 34,
+      "complete": true,
+      "previewMode": "full",
+      "indexAfter": false,
+      "noteAwareAfter": false,
+      "keyToUpdateMs": 355.2999999523163,
+      "inputToUpdateMs": 353.7999999523163,
+      "stateMs": 290.90000009536743,
+      "viewMs": 56.5,
+      "updateCalls": 1,
+      "dispatchMs": 347.5,
+      "dispatchCalls": 1,
+      "keyToRafMs": 362.89999985694885,
+      "keyToGeometryMs": 363.2999999523163,
+      "visible": true,
+      "domContainsInput": true
+    },
+    {
+      "keyAt": 1935.5999999046326,
+      "key": "x",
+      "inputType": "insertText",
+      "indexBefore": false,
+      "noteAwareBefore": false,
+      "inputAt": 1935.6999998092651,
+      "data": "x",
+      "intervals": [
+        {
+          "name": "source",
+          "start": 1937,
+          "end": 1937.5
+        },
+        {
+          "name": "footnotes",
+          "start": 1937.5,
+          "end": 1971.2999999523163
+        },
+        {
+          "name": "preview",
+          "start": 1971.2999999523163,
+          "end": 1990.6999998092651
+        },
+        {
+          "name": "report",
+          "start": 2152.5,
+          "end": 2152.5999999046326
+        }
+      ],
+      "updateAt": 2152.5999999046326,
+      "head": 35,
+      "complete": false,
+      "previewMode": "full",
+      "indexAfter": false,
+      "noteAwareAfter": false,
+      "keyToUpdateMs": 217,
+      "inputToUpdateMs": 216.90000009536743,
+      "stateMs": 53.799999952316284,
+      "viewMs": 161.79999995231628,
+      "updateCalls": 1,
+      "dispatchMs": 215.59999990463257,
+      "dispatchCalls": 1,
+      "keyToRafMs": 231.40000009536743,
+      "keyToGeometryMs": 231.40000009536743,
+      "visible": true,
+      "domContainsInput": true
+    },
+    {
+      "keyAt": 2219.899999856949,
+      "key": "x",
+      "inputType": "insertText",
+      "indexBefore": false,
+      "noteAwareBefore": false,
+      "inputAt": 2220,
+      "data": "x",
+      "intervals": [
+        {
+          "name": "source",
+          "start": 2220.699999809265,
+          "end": 2221.0999999046326
+        },
+        {
+          "name": "footnotes",
+          "start": 2221.199999809265,
+          "end": 2250.0999999046326
+        },
+        {
+          "name": "preview",
+          "start": 2250.0999999046326,
+          "end": 2259.7999999523163
+        },
+        {
+          "name": "report",
+          "start": 2262.899999856949,
+          "end": 2262.899999856949
+        }
+      ],
+      "updateAt": 2262.899999856949,
+      "head": 36,
+      "complete": false,
+      "previewMode": "full",
+      "indexAfter": false,
+      "noteAwareAfter": false,
+      "keyToUpdateMs": 43,
+      "inputToUpdateMs": 42.89999985694885,
+      "stateMs": 39.10000014305115,
+      "viewMs": 3.0999999046325684,
+      "updateCalls": 1,
+      "dispatchMs": 42.299999952316284,
+      "dispatchCalls": 1,
+      "keyToRafMs": 45.799999952316284,
+      "keyToGeometryMs": 45.799999952316284,
+      "visible": true,
+      "domContainsInput": true
+    },
+    {
+      "keyAt": 2292,
+      "key": "x",
+      "inputType": "insertText",
+      "indexBefore": false,
+      "noteAwareBefore": false,
+      "inputAt": 2292.0999999046326,
+      "data": "x",
+      "intervals": [
+        {
+          "name": "source",
+          "start": 2293,
+          "end": 2293.399999856949
+        },
+        {
+          "name": "footnotes",
+          "start": 2293.399999856949,
+          "end": 2325.399999856949
+        },
+        {
+          "name": "preview",
+          "start": 2325.399999856949,
+          "end": 2350.5999999046326
+        },
+        {
+          "name": "report",
+          "start": 2359.2999999523163,
+          "end": 2359.5
+        }
+      ],
+      "updateAt": 2359.5,
+      "head": 37,
+      "complete": false,
+      "previewMode": "full",
+      "indexAfter": false,
+      "noteAwareAfter": false,
+      "keyToUpdateMs": 67.5,
+      "inputToUpdateMs": 67.40000009536743,
+      "stateMs": 57.59999990463257,
+      "viewMs": 8.900000095367432,
+      "updateCalls": 1,
+      "dispatchMs": 66.5,
+      "dispatchCalls": 1,
+      "keyToRafMs": 79.19999980926514,
+      "keyToGeometryMs": 79.19999980926514,
+      "visible": true,
+      "domContainsInput": true
+    },
+    {
+      "keyAt": 2412.5,
+      "key": "x",
+      "inputType": "insertText",
+      "indexBefore": false,
+      "noteAwareBefore": false,
+      "inputAt": 2412.699999809265,
+      "data": "x",
+      "intervals": [
+        {
+          "name": "source",
+          "start": 2413.7999999523163,
+          "end": 2414.5
+        },
+        {
+          "name": "footnotes",
+          "start": 2414.5999999046326,
+          "end": 2444.399999856949
+        },
+        {
+          "name": "preview",
+          "start": 2444.5,
+          "end": 2463.7999999523163
+        },
+        {
+          "name": "report",
+          "start": 2478.0999999046326,
+          "end": 2478.2999999523163
+        }
+      ],
+      "updateAt": 2478.2999999523163,
+      "head": 38,
+      "complete": false,
+      "previewMode": "full",
+      "indexAfter": false,
+      "noteAwareAfter": false,
+      "keyToUpdateMs": 65.79999995231628,
+      "inputToUpdateMs": 65.60000014305115,
+      "stateMs": 50,
+      "viewMs": 14.5,
+      "updateCalls": 1,
+      "dispatchMs": 64.5,
+      "dispatchCalls": 1,
+      "keyToRafMs": 81.69999980926514,
+      "keyToGeometryMs": 81.79999995231628,
+      "visible": true,
+      "domContainsInput": true
+    },
+    {
+      "keyAt": 2547,
+      "key": "x",
+      "inputType": "insertText",
+      "indexBefore": false,
+      "noteAwareBefore": false,
+      "inputAt": 2547.199999809265,
+      "data": "x",
+      "intervals": [
+        {
+          "name": "source",
+          "start": 2548.899999856949,
+          "end": 2549.899999856949
+        },
+        {
+          "name": "footnotes",
+          "start": 2550,
+          "end": 2560
+        },
+        {
+          "name": "preview",
+          "start": 2560,
+          "end": 2564.0999999046326
+        },
+        {
+          "name": "report",
+          "start": 2571.0999999046326,
+          "end": 2571.399999856949
+        }
+      ],
+      "updateAt": 2571.399999856949,
+      "head": 39,
+      "complete": false,
+      "previewMode": "full",
+      "indexAfter": false,
+      "noteAwareAfter": false,
+      "keyToUpdateMs": 24.399999856948853,
+      "inputToUpdateMs": 24.200000047683716,
+      "stateMs": 15.399999856948853,
+      "viewMs": 7.200000047683716,
+      "updateCalls": 1,
+      "dispatchMs": 22.59999990463257,
+      "dispatchCalls": 1,
+      "keyToRafMs": 31.5,
+      "keyToGeometryMs": 31.59999990463257,
+      "visible": true,
+      "domContainsInput": true
+    },
+    {
+      "keyAt": 2616.899999856949,
+      "key": "x",
+      "inputType": "insertText",
+      "indexBefore": false,
+      "noteAwareBefore": false,
+      "inputAt": 2617,
+      "data": "x",
+      "intervals": [
+        {
+          "name": "source",
+          "start": 2618.5999999046326,
+          "end": 2619.5
+        },
+        {
+          "name": "footnotes",
+          "start": 2619.5,
+          "end": 2627.699999809265
+        },
+        {
+          "name": "preview",
+          "start": 2627.699999809265,
+          "end": 2632.7999999523163
+        },
+        {
+          "name": "report",
+          "start": 2639,
+          "end": 2639.2999999523163
+        }
+      ],
+      "updateAt": 2639.2999999523163,
+      "head": 40,
+      "complete": false,
+      "previewMode": "full",
+      "indexAfter": false,
+      "noteAwareAfter": false,
+      "keyToUpdateMs": 22.40000009536743,
+      "inputToUpdateMs": 22.299999952316284,
+      "stateMs": 14.299999952316284,
+      "viewMs": 6.5,
+      "updateCalls": 1,
+      "dispatchMs": 20.799999952316284,
+      "dispatchCalls": 1,
+      "keyToRafMs": 28.799999952316284,
+      "keyToGeometryMs": 29,
+      "visible": true,
+      "domContainsInput": true
+    },
+    {
+      "keyAt": 2741.2999999523163,
+      "key": "x",
+      "inputType": "insertText",
+      "indexBefore": false,
+      "noteAwareBefore": false,
+      "inputAt": 2741.2999999523163,
+      "data": "x",
+      "intervals": [
+        {
+          "name": "source",
+          "start": 2742.399999856949,
+          "end": 2742.899999856949
+        },
+        {
+          "name": "footnotes",
+          "start": 2742.899999856949,
+          "end": 2812.399999856949
+        },
+        {
+          "name": "preview",
+          "start": 2812.399999856949,
+          "end": 2861.899999856949
+        },
+        {
+          "name": "report",
+          "start": 2880.699999809265,
+          "end": 2880.7999999523163
+        }
+      ],
+      "updateAt": 2880.7999999523163,
+      "head": 41,
+      "complete": false,
+      "previewMode": "full",
+      "indexAfter": false,
+      "noteAwareAfter": false,
+      "keyToUpdateMs": 139.5,
+      "inputToUpdateMs": 139.5,
+      "stateMs": 119.5,
+      "viewMs": 18.90000009536743,
+      "updateCalls": 1,
+      "dispatchMs": 138.40000009536743,
+      "dispatchCalls": 1,
+      "keyToRafMs": 147.29999995231628,
+      "keyToGeometryMs": 147.39999985694885,
+      "visible": true,
+      "domContainsInput": true
+    },
+    {
+      "keyAt": 2921.0999999046326,
+      "key": "x",
+      "inputType": "insertText",
+      "indexBefore": false,
+      "noteAwareBefore": false,
+      "inputAt": 2921.199999809265,
+      "data": "x",
+      "intervals": [
+        {
+          "name": "source",
+          "start": 2923.2999999523163,
+          "end": 2923.7999999523163
+        },
+        {
+          "name": "footnotes",
+          "start": 2923.899999856949,
+          "end": 2944.199999809265
+        },
+        {
+          "name": "preview",
+          "start": 2944.199999809265,
+          "end": 2979.399999856949
+        },
+        {
+          "name": "report",
+          "start": 2995.5,
+          "end": 2995.699999809265
+        }
+      ],
+      "updateAt": 2995.7999999523163,
+      "head": 42,
+      "complete": false,
+      "previewMode": "full",
+      "indexAfter": false,
+      "noteAwareAfter": false,
+      "keyToUpdateMs": 74.70000004768372,
+      "inputToUpdateMs": 74.60000014305115,
+      "stateMs": 56.09999990463257,
+      "viewMs": 16.40000009536743,
+      "updateCalls": 1,
+      "dispatchMs": 72.5,
+      "dispatchCalls": 1,
+      "keyToRafMs": 82.79999995231628,
+      "keyToGeometryMs": 83,
+      "visible": true,
+      "domContainsInput": true
+    },
+    {
+      "keyAt": 3051.5,
+      "key": "x",
+      "inputType": "insertText",
+      "indexBefore": false,
+      "noteAwareBefore": false,
+      "inputAt": 3051.699999809265,
+      "data": "x",
+      "intervals": [
+        {
+          "name": "source",
+          "start": 3053.399999856949,
+          "end": 3053.7999999523163
+        },
+        {
+          "name": "footnotes",
+          "start": 3053.7999999523163,
+          "end": 3070.5
+        },
+        {
+          "name": "preview",
+          "start": 3070.5,
+          "end": 3101.899999856949
+        },
+        {
+          "name": "report",
+          "start": 3118.5,
+          "end": 3118.5999999046326
+        }
+      ],
+      "updateAt": 3118.5999999046326,
+      "head": 43,
+      "complete": false,
+      "previewMode": "full",
+      "indexAfter": false,
+      "noteAwareAfter": false,
+      "keyToUpdateMs": 67.09999990463257,
+      "inputToUpdateMs": 66.90000009536743,
+      "stateMs": 48.700000047683716,
+      "viewMs": 16.799999952316284,
+      "updateCalls": 1,
+      "dispatchMs": 65.5,
+      "dispatchCalls": 1,
+      "keyToRafMs": 77.19999980926514,
+      "keyToGeometryMs": 77.39999985694885,
+      "visible": true,
+      "domContainsInput": true
+    },
+    {
+      "keyAt": 3164.699999809265,
+      "key": "x",
+      "inputType": "insertText",
+      "indexBefore": false,
+      "noteAwareBefore": false,
+      "inputAt": 3164.7999999523163,
+      "data": "x",
+      "intervals": [
+        {
+          "name": "source",
+          "start": 3166.5999999046326,
+          "end": 3167.2999999523163
+        },
+        {
+          "name": "footnotes",
+          "start": 3167.399999856949,
+          "end": 3186.199999809265
+        },
+        {
+          "name": "preview",
+          "start": 3186.199999809265,
+          "end": 3234.5999999046326
+        },
+        {
+          "name": "report",
+          "start": 3248.0999999046326,
+          "end": 3248.199999809265
+        }
+      ],
+      "updateAt": 3248.2999999523163,
+      "head": 44,
+      "complete": false,
+      "previewMode": "full",
+      "indexAfter": false,
+      "noteAwareAfter": false,
+      "keyToUpdateMs": 83.60000014305115,
+      "inputToUpdateMs": 83.5,
+      "stateMs": 68.19999980926514,
+      "viewMs": 13.600000143051147,
+      "updateCalls": 1,
+      "dispatchMs": 81.79999995231628,
+      "dispatchCalls": 1,
+      "keyToRafMs": 92,
+      "keyToGeometryMs": 92.20000004768372,
+      "visible": true,
+      "domContainsInput": true
+    },
+    {
+      "keyAt": 3294.899999856949,
+      "key": "x",
+      "inputType": "insertText",
+      "indexBefore": false,
+      "noteAwareBefore": false,
+      "inputAt": 3295,
+      "data": "x",
+      "intervals": [
+        {
+          "name": "source",
+          "start": 3296.5,
+          "end": 3297
+        },
+        {
+          "name": "footnotes",
+          "start": 3297,
+          "end": 3314
+        },
+        {
+          "name": "preview",
+          "start": 3314.0999999046326,
+          "end": 3345.399999856949
+        },
+        {
+          "name": "report",
+          "start": 3359.899999856949,
+          "end": 3360
+        }
+      ],
+      "updateAt": 3360,
+      "head": 45,
+      "complete": false,
+      "previewMode": "full",
+      "indexAfter": false,
+      "noteAwareAfter": false,
+      "keyToUpdateMs": 65.10000014305115,
+      "inputToUpdateMs": 65,
+      "stateMs": 49,
+      "viewMs": 14.600000143051147,
+      "updateCalls": 1,
+      "dispatchMs": 63.60000014305115,
+      "dispatchCalls": 1,
+      "keyToRafMs": 74.29999995231628,
+      "keyToGeometryMs": 74.40000009536743,
+      "visible": true,
+      "domContainsInput": true
+    },
+    {
+      "keyAt": 3418.699999809265,
+      "key": "x",
+      "inputType": "insertText",
+      "indexBefore": false,
+      "noteAwareBefore": false,
+      "inputAt": 3418.699999809265,
+      "data": "x",
+      "intervals": [
+        {
+          "name": "source",
+          "start": 3419.399999856949,
+          "end": 3419.7999999523163
+        },
+        {
+          "name": "footnotes",
+          "start": 3419.899999856949,
+          "end": 3452
+        },
+        {
+          "name": "preview",
+          "start": 3452,
+          "end": 3512.2999999523163
+        },
+        {
+          "name": "report",
+          "start": 3543.399999856949,
+          "end": 3543.5999999046326
+        }
+      ],
+      "updateAt": 3543.5999999046326,
+      "head": 46,
+      "complete": false,
+      "previewMode": "full",
+      "indexAfter": false,
+      "noteAwareAfter": false,
+      "keyToUpdateMs": 124.90000009536743,
+      "inputToUpdateMs": 124.90000009536743,
+      "stateMs": 92.90000009536743,
+      "viewMs": 31.399999856948853,
+      "updateCalls": 1,
+      "dispatchMs": 124.29999995231628,
+      "dispatchCalls": 1,
+      "keyToRafMs": 143.60000014305115,
+      "keyToGeometryMs": 143.70000004768372,
+      "visible": true,
+      "domContainsInput": true
+    },
+    {
+      "keyAt": 3618.5,
+      "key": "x",
+      "inputType": "insertText",
+      "indexBefore": false,
+      "noteAwareBefore": false,
+      "inputAt": 3618.5,
+      "data": "x",
+      "intervals": [
+        {
+          "name": "source",
+          "start": 3619.5,
+          "end": 3619.699999809265
+        },
+        {
+          "name": "footnotes",
+          "start": 3619.699999809265,
+          "end": 3652.5
+        },
+        {
+          "name": "preview",
+          "start": 3652.5,
+          "end": 3678.399999856949
+        },
+        {
+          "name": "report",
+          "start": 3698.0999999046326,
+          "end": 3698.2999999523163
+        }
+      ],
+      "updateAt": 3698.2999999523163,
+      "head": 47,
+      "complete": false,
+      "previewMode": "full",
+      "indexAfter": false,
+      "noteAwareAfter": false,
+      "keyToUpdateMs": 79.79999995231628,
+      "inputToUpdateMs": 79.79999995231628,
+      "stateMs": 58.89999985694885,
+      "viewMs": 19.90000009536743,
+      "updateCalls": 1,
+      "dispatchMs": 78.90000009536743,
+      "dispatchCalls": 1,
+      "keyToRafMs": 97.69999980926514,
+      "keyToGeometryMs": 97.69999980926514,
+      "visible": true,
+      "domContainsInput": true
+    },
+    {
+      "keyAt": 3760.5,
+      "key": "x",
+      "inputType": "insertText",
+      "indexBefore": false,
+      "noteAwareBefore": false,
+      "inputAt": 3760.5999999046326,
+      "data": "x",
+      "intervals": [
+        {
+          "name": "source",
+          "start": 3761.5999999046326,
+          "end": 3762.0999999046326
+        },
+        {
+          "name": "footnotes",
+          "start": 3762.199999809265,
+          "end": 3802
+        },
+        {
+          "name": "preview",
+          "start": 3802,
+          "end": 3824.5
+        },
+        {
+          "name": "report",
+          "start": 3846.899999856949,
+          "end": 3847.0999999046326
+        }
+      ],
+      "updateAt": 3847.0999999046326,
+      "head": 48,
+      "complete": false,
+      "previewMode": "full",
+      "indexAfter": false,
+      "noteAwareAfter": false,
+      "keyToUpdateMs": 86.59999990463257,
+      "inputToUpdateMs": 86.5,
+      "stateMs": 63,
+      "viewMs": 22.59999990463257,
+      "updateCalls": 1,
+      "dispatchMs": 85.59999990463257,
+      "dispatchCalls": 1,
+      "keyToRafMs": 104.69999980926514,
+      "keyToGeometryMs": 104.69999980926514,
+      "visible": true,
+      "domContainsInput": true
+    },
+    {
+      "keyAt": 3924.5999999046326,
+      "key": "x",
+      "inputType": "insertText",
+      "indexBefore": false,
+      "noteAwareBefore": false,
+      "inputAt": 3924.699999809265,
+      "data": "x",
+      "intervals": [
+        {
+          "name": "source",
+          "start": 3926.0999999046326,
+          "end": 3927
+        },
+        {
+          "name": "footnotes",
+          "start": 3927.0999999046326,
+          "end": 3960.899999856949
+        },
+        {
+          "name": "preview",
+          "start": 3960.899999856949,
+          "end": 3994.5999999046326
+        },
+        {
+          "name": "report",
+          "start": 4013,
+          "end": 4013.0999999046326
+        }
+      ],
+      "updateAt": 4013.0999999046326,
+      "head": 49,
+      "complete": false,
+      "previewMode": "full",
+      "indexAfter": false,
+      "noteAwareAfter": false,
+      "keyToUpdateMs": 88.5,
+      "inputToUpdateMs": 88.40000009536743,
+      "stateMs": 68.59999990463257,
+      "viewMs": 18.5,
+      "updateCalls": 1,
+      "dispatchMs": 87.09999990463257,
+      "dispatchCalls": 1,
+      "keyToRafMs": 105.5,
+      "keyToGeometryMs": 105.59999990463257,
+      "visible": true,
+      "domContainsInput": true
+    },
+    {
+      "keyAt": 4088.5,
+      "key": "x",
+      "inputType": "insertText",
+      "indexBefore": false,
+      "noteAwareBefore": false,
+      "inputAt": 4088.5,
+      "data": "x",
+      "intervals": [
+        {
+          "name": "source",
+          "start": 4089.399999856949,
+          "end": 4089.699999809265
+        },
+        {
+          "name": "footnotes",
+          "start": 4089.699999809265,
+          "end": 4123.199999809265
+        },
+        {
+          "name": "preview",
+          "start": 4123.199999809265,
+          "end": 4143.099999904633
+        },
+        {
+          "name": "report",
+          "start": 4156.699999809265,
+          "end": 4156.899999856949
+        }
+      ],
+      "updateAt": 4156.899999856949,
+      "head": 50,
+      "complete": false,
+      "previewMode": "full",
+      "indexAfter": false,
+      "noteAwareAfter": false,
+      "keyToUpdateMs": 68.39999985694885,
+      "inputToUpdateMs": 68.39999985694885,
+      "stateMs": 53.89999985694885,
+      "viewMs": 13.800000190734863,
+      "updateCalls": 1,
+      "dispatchMs": 67.70000004768372,
+      "dispatchCalls": 1,
+      "keyToRafMs": 85.79999995231628,
+      "keyToGeometryMs": 85.79999995231628,
+      "visible": true,
+      "domContainsInput": true
+    },
+    {
+      "keyAt": 4227.399999856949,
+      "key": "x",
+      "inputType": "insertText",
+      "indexBefore": false,
+      "noteAwareBefore": false,
+      "inputAt": 4227.5,
+      "data": "x",
+      "intervals": [
+        {
+          "name": "source",
+          "start": 4228.199999809265,
+          "end": 4228.5
+        },
+        {
+          "name": "footnotes",
+          "start": 4228.5,
+          "end": 4260.399999856949
+        },
+        {
+          "name": "preview",
+          "start": 4260.399999856949,
+          "end": 4281.599999904633
+        },
+        {
+          "name": "report",
+          "start": 4301.5,
+          "end": 4301.599999904633
+        }
+      ],
+      "updateAt": 4301.699999809265,
+      "head": 51,
+      "complete": false,
+      "previewMode": "full",
+      "indexAfter": false,
+      "noteAwareAfter": false,
+      "keyToUpdateMs": 74.29999995231628,
+      "inputToUpdateMs": 74.19999980926514,
+      "stateMs": 53.40000009536743,
+      "viewMs": 20.09999990463257,
+      "updateCalls": 1,
+      "dispatchMs": 73.5,
+      "dispatchCalls": 1,
+      "keyToRafMs": 91.29999995231628,
+      "keyToGeometryMs": 91.29999995231628,
+      "visible": true,
+      "domContainsInput": true
+    },
+    {
+      "keyAt": 4370.899999856949,
+      "key": "x",
+      "inputType": "insertText",
+      "indexBefore": false,
+      "noteAwareBefore": false,
+      "inputAt": 4371,
+      "data": "x",
+      "intervals": [
+        {
+          "name": "source",
+          "start": 4371.599999904633,
+          "end": 4372
+        },
+        {
+          "name": "footnotes",
+          "start": 4372,
+          "end": 4404.699999809265
+        },
+        {
+          "name": "preview",
+          "start": 4404.699999809265,
+          "end": 4425.899999856949
+        },
+        {
+          "name": "report",
+          "start": 4444.5,
+          "end": 4444.599999904633
+        }
+      ],
+      "updateAt": 4444.599999904633,
+      "head": 52,
+      "complete": false,
+      "previewMode": "full",
+      "indexAfter": false,
+      "noteAwareAfter": false,
+      "keyToUpdateMs": 73.70000004768372,
+      "inputToUpdateMs": 73.59999990463257,
+      "stateMs": 54.40000009536743,
+      "viewMs": 18.699999809265137,
+      "updateCalls": 1,
+      "dispatchMs": 73.09999990463257,
+      "dispatchCalls": 1,
+      "keyToRafMs": 90.90000009536743,
+      "keyToGeometryMs": 91,
+      "visible": true,
+      "domContainsInput": true
+    },
+    {
+      "keyAt": 4501.899999856949,
+      "key": "x",
+      "inputType": "insertText",
+      "indexBefore": false,
+      "noteAwareBefore": false,
+      "inputAt": 4502,
+      "data": "x",
+      "intervals": [
+        {
+          "name": "source",
+          "start": 4502.899999856949,
+          "end": 4503.399999856949
+        },
+        {
+          "name": "footnotes",
+          "start": 4503.399999856949,
+          "end": 4509.699999809265
+        },
+        {
+          "name": "preview",
+          "start": 4509.699999809265,
+          "end": 4512.099999904633
+        },
+        {
+          "name": "report",
+          "start": 4516.199999809265,
+          "end": 4516.199999809265
+        }
+      ],
+      "updateAt": 4516.199999809265,
+      "head": 53,
+      "complete": false,
+      "previewMode": "full",
+      "indexAfter": false,
+      "noteAwareAfter": false,
+      "keyToUpdateMs": 14.299999952316284,
+      "inputToUpdateMs": 14.199999809265137,
+      "stateMs": 9.299999952316284,
+      "viewMs": 4.099999904632568,
+      "updateCalls": 1,
+      "dispatchMs": 13.399999856948853,
+      "dispatchCalls": 1,
+      "keyToRafMs": 18.100000143051147,
+      "keyToGeometryMs": 18.100000143051147,
+      "visible": true,
+      "domContainsInput": true
+    }
+  ]
+}

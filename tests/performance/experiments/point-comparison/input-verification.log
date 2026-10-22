@@ -1,0 +1,21 @@
+npx vitest run tests/web/browser-comparator-experiment.test.ts
+12 tests pass.
+
+npx tsc --noEmit
+Exit 0. No diagnostics.
+
+bend PROOF.bend
+ALL PROOFS CHECK
+Use --verdict for mathematical validity.
+
+node tests/performance/experiments/point-comparison/verify-input.mjs
+{
+  "acceptedInputs": 160,
+  "exactSourceAndUndo": true,
+  "outerCompleteSamples": [40, 11, 9, 3],
+  "mountedCompleteness": "not recorded",
+  "matchedRoutes": false,
+  "keyToRafP95Ms": [24.799999952316284, 132.79999995231628, 102.89999985694884, 172.79999995231628],
+  "decision": "No stable speed comparison; retain all samples and investigate parser-route loss",
+  "scope": "Standalone static projection, Chrome, Vite development; no production, native or paint claim"
+}

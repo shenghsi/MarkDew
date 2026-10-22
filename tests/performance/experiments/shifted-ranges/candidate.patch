@@ -1,0 +1,23 @@
+diff --git a/src/web/preview.ts b/src/web/preview.ts
+index 9011f57..bdeb345 100644
+--- a/src/web/preview.ts
++++ b/src/web/preview.ts
+@@ -264,10 +264,17 @@ const maxEnvelope = 65536;
+ 
+ function shiftItem(item: Item, offset: number): Item {
+   const span = <T extends { from: number; to: number }>(value: T): T => ({ ...value, from: value.from + offset, to: value.to + offset });
+-  return { ...span(item), ...(item.revealFrom === undefined ? {} : { revealFrom: item.revealFrom + offset }), ...(item.hide ? { hide: item.hide.map(span) } : {}),
++  const shifted = { ...span(item), ...(item.revealFrom === undefined ? {} : { revealFrom: item.revealFrom + offset }), ...(item.hide ? { hide: item.hide.map(span) } : {}),
+     ...(item.replaceFrom === undefined ? {} : { replaceFrom: item.replaceFrom + offset }),
+     ...(item.listMarkers ? { listMarkers: item.listMarkers.map(marker => ({ ...span(marker), ownerFrom: marker.ownerFrom + offset, ownerTo: marker.ownerTo + offset })) } : {}),
+     ...(item.marker ? { marker: { ...span(item.marker), ownerFrom: item.marker.ownerFrom + offset, ownerTo: item.marker.ownerTo + offset } } : {}) };
++  const cached = rangeCache.get(item);
++  // This shift follows exact block-tree and envelope validation. Widgets carry
++  // source coordinates, so the complete cache entry rejects any widget range.
++  if (cached && cached.ranges.every(range => !range.value.spec.widget))
++    rangeCache.set(shifted, { ...cached, lineStart: cached.lineStart < 0 ? -1 : cached.lineStart + offset,
++      ranges: cached.ranges.map(range => range.value.range(range.from + offset, range.to + offset)) });
++  return shifted;
+ }
+ 
+ export function collectCachedPreview(state: EditorState, tree: Tree, imageVersion = 0): Item[] {

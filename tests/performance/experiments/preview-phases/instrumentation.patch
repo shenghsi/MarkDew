@@ -1,0 +1,161 @@
+diff --git a/src/web/preview.ts b/src/web/preview.ts
+index 9011f57..82b1697 100644
+--- a/src/web/preview.ts
++++ b/src/web/preview.ts
+@@ -11,6 +11,8 @@ import { imageDocument, imagePath, imageReader, ImageInfo, mountImage, setImageP
+ import { footnoteField, footnotes, Footnotes, NoteDefinition, overlaps } from './footnotes';
+ import { mountFootnote } from './footnote-renderer';
+ import { physicalLines } from './physical-lines';
++let phaseObserver: ((phase: string, ms: number, calls: number) => void) | undefined;
++export function previewPhaseObserver(observer?: typeof phaseObserver) { phaseObserver = observer; }
+ 
+ type Kind = 'math' | 'mermaid' | 'html' | 'inline-html' | 'table' | 'image' | 'frontmatter' | 'footnote' | 'footnote-definition';
+ interface Item { from: number; to: number; kind?: Kind; source?: string; block?: boolean;
+@@ -271,6 +273,7 @@ function shiftItem(item: Item, offset: number): Item {
+ }
+ 
+ export function collectCachedPreview(state: EditorState, tree: Tree, imageVersion = 0): Item[] {
++  const entered = phaseObserver ? performance.now() : 0;
+   if (tree.topNode.name !== 'Document') return collectPreview(state, tree, imageVersion);
+   const nodes: SyntaxNode[] = [];
+   function visit(node: SyntaxNode): boolean {
+@@ -285,14 +288,19 @@ export function collectCachedPreview(state: EditorState, tree: Tree, imageVersio
+     return true;
+   }
+   if (!visit(tree.topNode)) return collectPreview(state, tree, imageVersion);
++  const traversed = phaseObserver ? performance.now() : 0;
+   const notes = footnotes(state), readImage = previewImageReader(state, tree), lines = physicalLines(state.doc);
+   const blocks: Item[] = [], items: Item[] = [];
++  const context = phaseObserver ? performance.now() : 0;
++  let validation = 0, hit = 0, miss = 0, hits = 0, misses = 0;
+   for (const node of nodes) {
++    const started = phaseObserver ? performance.now() : 0;
+     const key = node.tree!, from = node.from, to = node.to;
+     const start = lines.lineAt(from).from, end = lines.lineAt(to).to;
+     const allowed = end - start <= maxEnvelope && !notes.definitions.some(note => overlaps({ from: start, to: end }, note));
+     const source = allowed ? lines.slice(start, end) : '', prefix = from - start;
+     const previous = allowed ? blockCache.get(key) : undefined;
++    const validated = phaseObserver ? performance.now() : 0; validation += validated - started;
+     if (previous && previous.source === source && previous.prefix === prefix) {
+       const offset = from - previous.from;
+       const current = offset ? { ...previous, from,
+@@ -300,6 +308,7 @@ export function collectCachedPreview(state: EditorState, tree: Tree, imageVersio
+       if (offset) blockCache.set(key, current);
+       for (const item of current.blocks) blocks.push(item);
+       for (const item of current.items) items.push(item);
++      if (phaseObserver) hit += performance.now() - validated; hits++;
+       continue;
+     }
+     const wrapper = new Tree(tree.type, [key], [from], state.doc.length);
+@@ -308,8 +317,19 @@ export function collectCachedPreview(state: EditorState, tree: Tree, imageVersio
+     for (const item of analysis.items) items.push(item);
+     // Do not retain a substring of the complete temporary snapshot in this cache.
+     if (allowed && !analysis.hasImage) blockCache.set(key, { source: state.doc.sliceString(start, end), prefix, from, blocks: analysis.blocks, items: analysis.items });
++    if (phaseObserver) miss += performance.now() - validated; misses++;
+   }
+-  return withFootnotes(state, [...blocks, ...items], notes);
++  const beforeOverlay = phaseObserver ? performance.now() : 0;
++  const result = withFootnotes(state, [...blocks, ...items], notes);
++  if (phaseObserver) {
++    phaseObserver('collection.traversal', traversed - entered, 1);
++    phaseObserver('collection.context', context - traversed, 1);
++    phaseObserver('collection.validation', validation, nodes.length);
++    phaseObserver('collection.hitShiftAppend', hit, hits);
++    phaseObserver('collection.missAnalysis', miss, misses);
++    phaseObserver('collection.overlay', performance.now() - beforeOverlay, 1);
++  }
++  return result;
+ }
+ 
+ interface ItemRanges { selected: boolean; editing: boolean; lineStart: number; ranges: Range<Decoration>[] }
+@@ -318,6 +338,7 @@ interface ItemRanges { selected: boolean; editing: boolean; lineStart: number; r
+ const rangeCache = new WeakMap<Item, ItemRanges>();
+ 
+ export function previewDecorations(state: EditorState, items: Item[], reuse = false): DecorationSet {
++  const entered = phaseObserver ? performance.now() : 0;
+   const ranges: Range<Decoration>[] = [];
+   const replacements: Item[] = [];
+   const revealedHTML = items.filter(item => item.kind === 'inline-html' && selected(state, selectionFrom(item), selectionTo(item)))
+@@ -329,6 +350,7 @@ export function previewDecorations(state: EditorState, items: Item[], reuse = fa
+     return low > 0 && revealedHTML[low - 1].to >= from;
+   };
+   const active = state.field(tableCellField, false);
++  const prepared = phaseObserver ? performance.now() : 0;
+   for (const item of items) {
+     const isSelected = selected(state, selectionFrom(item), selectionTo(item))
+       || !!(!item.kind && item.hide && overlapsRevealedHTML(item.from, item.to));
+@@ -358,6 +380,7 @@ export function previewDecorations(state: EditorState, items: Item[], reuse = fa
+     if (reuse) rangeCache.set(item, { selected: isSelected, editing, lineStart, ranges: ranges.slice(start) });
+   }
+   // A math replacement must not overlap hidden Markdown marks inside its source.
++  const enumerated = phaseObserver ? performance.now() : 0;
+   replacements.sort((a, b) => replacementFrom(a) - replacementFrom(b));
+   const replacementAt = (position: number) => {
+     let low = 0, high = replacements.length;
+@@ -365,7 +388,8 @@ export function previewDecorations(state: EditorState, items: Item[], reuse = fa
+       if (replacementFrom(replacements[middle]) <= position) low = middle + 1; else high = middle; }
+     return low > 0 ? replacements[low - 1] : undefined;
+   };
+-  return Decoration.set(ranges.filter(range => {
++  const sorted = phaseObserver ? performance.now() : 0;
++  const filtered = ranges.filter(range => {
+     const containing = replacementAt(range.from);
+     if (range.value.spec.widget) return !(range.value.spec.widget instanceof MarkerWidget &&
+       containing?.listMarkers?.some(marker => marker.from === range.from && marker.to === range.to));
+@@ -377,7 +401,18 @@ export function previewDecorations(state: EditorState, items: Item[], reuse = fa
+       if (replacement?.kind === 'inline-html' && replacement.quoteDepth && replacement.to >= end) return false;
+     }
+     return true;
+-  }), true);
++  });
++  const suppressed = phaseObserver ? performance.now() : 0;
++  const result = Decoration.set(filtered, true);
++  if (phaseObserver) {
++    const assembled = performance.now();
++    phaseObserver('decoration.prepare', prepared - entered, 1);
++    phaseObserver('decoration.enumeration', enumerated - prepared, items.length);
++    phaseObserver('decoration.replacementSort', sorted - enumerated, replacements.length);
++    phaseObserver('decoration.suppression', suppressed - sorted, ranges.length);
++    phaseObserver('decoration.setSortAssembly', assembled - suppressed, filtered.length);
++  }
++  return result;
+ }
+ 
+ // A replacement and every mark it can suppress must be updated together.
+diff --git a/tests/performance/preview-growth.test.ts b/tests/performance/preview-growth.test.ts
+index a054dba..af75a96 100644
+--- a/tests/performance/preview-growth.test.ts
++++ b/tests/performance/preview-growth.test.ts
+@@ -4,7 +4,7 @@ import { EditorState } from '@codemirror/state';
+ import { history } from '@codemirror/commands';
+ import { ensureSyntaxTree, syntaxTree } from '@codemirror/language';
+ import { documentLanguage } from '../../src/web/document-language';
+-import { collectPreview, livePreview, previewDecorations, previewField } from '../../src/web/preview';
++import { collectPreview, livePreview, previewDecorations, previewField, previewPhaseObserver } from '../../src/web/preview';
+ import { fromSource, sourceExtensions, savedSource, sourceField } from '../../src/web/source';
+ 
+ const samples=20;
+@@ -20,10 +20,14 @@ it.skipIf(process.env.MARKDEW_GROWTH_BENCH!=='1')('measures growing word edits
+       let state=initial,expectedSource=original;
+       let at=(location==='end'?original.lastIndexOf('Paragraph'):original.indexOf('Paragraph',location==='middle'?bytes/2:0))+3;
+       const timings:number[]=[];
++      const stageSamples: Record<string, { ms: number; calls: number }> [] = [];
+       for(let sample=0;sample<samples;sample++) {
++        const stages: Record<string, { ms: number; calls: number }> = {};
++        previewPhaseObserver((phase, ms, calls) => { const prior = stages[phase] || { ms: 0, calls: 0 }; stages[phase] = { ms: prior.ms + ms, calls: prior.calls + calls }; });
+         const insert=sample%2?'中':'Z',start=performance.now();
+         state=state.update({changes:{from:at,insert},selection:{anchor:at+insert.length},userEvent:'input.type'}).state;
+         const dirty=savedSource(state.field(sourceField))!==original;timings.push(performance.now()-start);
++        previewPhaseObserver(); stageSamples.push(stages);
+         expectedSource=expectedSource.slice(0,at)+insert+expectedSource.slice(at);at+=insert.length;
+         expect(dirty).toBe(true);expect(savedSource(state.field(sourceField))).toBe(expectedSource);
+         const actual=state.field(previewField).decorations.iter(),reference=previewDecorations(state,collectPreview(state,syntaxTree(state))).iter();
+@@ -34,7 +38,7 @@ it.skipIf(process.env.MARKDEW_GROWTH_BENCH!=='1')('measures growing word edits
+       }
+       console.log(JSON.stringify({benchmark:'growing-preview-state',date:new Date().toISOString(),node:process.version,platform:process.platform,arch:process.arch,
+         bytes,note,location,samples,units:'ms',scope:'growing word edit state transaction and dirty comparison; excludes outline, oracle, DOM, native input and screen frame',
+-        ...stats(timings),timings:timings.map(value=>+value.toFixed(3))}));
++        ...stats(timings),timings:timings.map(value=>+value.toFixed(3)),stageSamples}));
+     }
+   }
+ },120000);

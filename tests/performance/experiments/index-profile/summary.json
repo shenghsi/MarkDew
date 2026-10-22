@@ -1,0 +1,164 @@
+{
+  "scope": "CPU samples under applyPlainGrowth: plain growing state updates only; excludes setup, footnote routes, fresh oracle, dirty comparison, DOM and unattached GC",
+  "allSampledMs": 23825.25,
+  "plainStateUpdateSampledMs": 1365.583,
+  "stages": [
+    {
+      "name": "language parsing",
+      "sampledMs": 876.707,
+      "percent": 64.2
+    },
+    {
+      "name": "full preview fallback",
+      "sampledMs": 267.664,
+      "percent": 19.6
+    },
+    {
+      "name": "footnote model",
+      "sampledMs": 119.248,
+      "percent": 8.73
+    },
+    {
+      "name": "local preview index",
+      "sampledMs": 70.504,
+      "percent": 5.16
+    },
+    {
+      "name": "other state update",
+      "sampledMs": 15.876,
+      "percent": 1.16
+    },
+    {
+      "name": "source record",
+      "sampledMs": 15.584,
+      "percent": 1.14
+    }
+  ],
+  "self": [
+    {
+      "name": "nextChild @ file:///Users/shxi/projects/MarkDew/node_modules/@lezer/common/dist/index.js:745",
+      "sampledMs": 185,
+      "percent": 13.55
+    },
+    {
+      "name": "balanceRange @ file:///Users/shxi/projects/MarkDew/node_modules/@lezer/common/dist/index.js:1525",
+      "sampledMs": 150.749,
+      "percent": 11.04
+    },
+    {
+      "name": "hasNode @ file:///Users/shxi/projects/MarkDew/node_modules/@lezer/common/dist/index.js:2043",
+      "sampledMs": 109.994,
+      "percent": 8.05
+    },
+    {
+      "name": "sliceString @ file:///Users/shxi/projects/MarkDew/node_modules/@codemirror/state/dist/index.js:271",
+      "sampledMs": 86.083,
+      "percent": 6.3
+    },
+    {
+      "name": "previewDecorations @ file:///Users/shxi/projects/MarkDew/src/web/preview.ts:382",
+      "sampledMs": 69.584,
+      "percent": 5.1
+    },
+    {
+      "name": "parse @ file:///Users/shxi/projects/MarkDew/src/web/footnotes.ts:29",
+      "sampledMs": 66.456,
+      "percent": 4.87
+    },
+    {
+      "name": "startInner @ file:///Users/shxi/projects/MarkDew/node_modules/@lezer/common/dist/index.js:1873",
+      "sampledMs": 59.376,
+      "percent": 4.35
+    },
+    {
+      "name": "addChild @ file:///Users/shxi/projects/MarkDew/node_modules/@lezer/markdown/dist/index.js:21",
+      "sampledMs": 43.211,
+      "percent": 3.16
+    },
+    {
+      "name": "get @ file:///Users/shxi/projects/MarkDew/node_modules/@lezer/common/dist/index.js:142",
+      "sampledMs": 42.917,
+      "percent": 3.14
+    },
+    {
+      "name": "takeNodes @ file:///Users/shxi/projects/MarkDew/node_modules/@lezer/markdown/dist/index.js:1900",
+      "sampledMs": 37.082,
+      "percent": 2.72
+    },
+    {
+      "name": "collectCachedPreview @ file:///Users/shxi/projects/MarkDew/src/web/preview.ts:339",
+      "sampledMs": 36.206,
+      "percent": 2.65
+    },
+    {
+      "name": "prop @ file:///Users/shxi/projects/MarkDew/node_modules/@lezer/common/dist/index.js:204",
+      "sampledMs": 35.374,
+      "percent": 2.59
+    },
+    {
+      "name": "lineInner @ file:///Users/shxi/projects/MarkDew/node_modules/@codemirror/state/dist/index.js:226",
+      "sampledMs": 26.043,
+      "percent": 1.91
+    },
+    {
+      "name": "reuseFragment @ file:///Users/shxi/projects/MarkDew/node_modules/@lezer/markdown/dist/index.js:817",
+      "sampledMs": 24.875,
+      "percent": 1.82
+    },
+    {
+      "name": "Tree @ file:///Users/shxi/projects/MarkDew/node_modules/@lezer/common/dist/index.js:370",
+      "sampledMs": 22,
+      "percent": 1.61
+    },
+    {
+      "name": "nodeSize @ file:///Users/shxi/projects/MarkDew/node_modules/@lezer/common/dist/index.js:1508",
+      "sampledMs": 17.836,
+      "percent": 1.31
+    },
+    {
+      "name": "hasNode @ file:///Users/shxi/projects/MarkDew/node_modules/@lezer/common/dist/index.js:2073",
+      "sampledMs": 16.961,
+      "percent": 1.24
+    },
+    {
+      "name": "atLastNode @ file:///Users/shxi/projects/MarkDew/node_modules/@lezer/common/dist/index.js:1124",
+      "sampledMs": 16.751,
+      "percent": 1.23
+    },
+    {
+      "name": "update @ file:///Users/shxi/projects/MarkDew/src/web/preview.ts:514",
+      "sampledMs": 16.207,
+      "percent": 1.19
+    },
+    {
+      "name": "crlfPositions @ file:///Users/shxi/projects/MarkDew/src/web/source.ts:21",
+      "sampledMs": 13.416,
+      "percent": 0.98
+    },
+    {
+      "name": "moveTo @ file:///Users/shxi/projects/MarkDew/node_modules/@lezer/common/dist/index.js:2029",
+      "sampledMs": 13.168,
+      "percent": 0.96
+    },
+    {
+      "name": "yieldNode @ file:///Users/shxi/projects/MarkDew/node_modules/@lezer/common/dist/index.js:1005",
+      "sampledMs": 12.752,
+      "percent": 0.93
+    },
+    {
+      "name": "of @ file:///Users/shxi/projects/MarkDew/node_modules/@codemirror/state/dist/index.js:3424",
+      "sampledMs": 10.666,
+      "percent": 0.78
+    },
+    {
+      "name": "shiftItem @ file:///Users/shxi/projects/MarkDew/src/web/preview.ts:328",
+      "sampledMs": 10.459,
+      "percent": 0.77
+    },
+    {
+      "name": "makeTree @ file:///Users/shxi/projects/MarkDew/node_modules/@lezer/markdown/dist/index.js:32",
+      "sampledMs": 10.416,
+      "percent": 0.76
+    }
+  ]
+}

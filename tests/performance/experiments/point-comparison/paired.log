@@ -1,0 +1,443 @@
+{
+  "diagnostic": "inactive-positive-point-comparison",
+  "packageVersion": "6.7.6",
+  "sourceSHA256": "cf4ffe7d177bf2c7c5da66c49be0811cc79a29e12cb658238876bbdcef12939c",
+  "node": "v22.23.2",
+  "guard": "minPointSize >= 0 && a.length === 1 && b.length === 1 && a[0].nextLayer.isEmpty && b[0].nextLayer.isEmpty",
+  "counterexamples": [
+    {
+      "name": "shared-point-hides-changed-point-in-other-set",
+      "minimum": -1,
+      "expected": [],
+      "actual": [
+        [
+          "point",
+          12,
+          14,
+          [
+            "old-inside",
+            true,
+            0,
+            0
+          ],
+          [
+            "new-inside",
+            true,
+            0,
+            0
+          ]
+        ]
+      ]
+    },
+    {
+      "name": "shared-point-hides-changed-point-in-other-set",
+      "minimum": 0,
+      "expected": [],
+      "actual": [
+        [
+          "point",
+          12,
+          14,
+          [
+            "old-inside",
+            true,
+            0,
+            0
+          ],
+          [
+            "new-inside",
+            true,
+            0,
+            0
+          ]
+        ]
+      ]
+    },
+    {
+      "name": "shared-point-hides-changed-mark-in-other-set",
+      "minimum": -1,
+      "expected": [],
+      "actual": [
+        [
+          "range",
+          12,
+          14,
+          [
+            [
+              "mark-old",
+              false,
+              0,
+              0
+            ]
+          ],
+          [
+            [
+              "mark-new",
+              false,
+              0,
+              0
+            ]
+          ]
+        ]
+      ]
+    }
+  ],
+  "comparisons": 3496,
+  "eligibleComparisons": 2396,
+  "mismatches": 9,
+  "guardedCounterexamples": [
+    {
+      "name": "touching point with boundary zero",
+      "minimum": 0,
+      "accepted": true,
+      "expected": [
+        [
+          "point",
+          0,
+          0,
+          [
+            "touching",
+            true,
+            -2,
+            -2
+          ],
+          [
+            "boundary-zero",
+            true,
+            -2,
+            -2
+          ]
+        ]
+      ],
+      "actual": [
+        [
+          "point",
+          0,
+          0,
+          null,
+          [
+            "boundary-zero",
+            true,
+            -2,
+            -2
+          ]
+        ]
+      ]
+    },
+    {
+      "name": "touching point with boundary zero",
+      "minimum": 0,
+      "accepted": true,
+      "expected": [
+        [
+          "point",
+          2500,
+          2500,
+          [
+            "touching",
+            true,
+            -2,
+            -2
+          ],
+          [
+            "boundary-zero",
+            true,
+            -2,
+            -2
+          ]
+        ]
+      ],
+      "actual": [
+        [
+          "point",
+          2500,
+          2500,
+          null,
+          [
+            "boundary-zero",
+            true,
+            -2,
+            -2
+          ]
+        ]
+      ]
+    },
+    {
+      "name": "touching point with boundary zero",
+      "minimum": 0,
+      "accepted": true,
+      "expected": [
+        [
+          "point",
+          5000,
+          5000,
+          [
+            "touching",
+            true,
+            -2,
+            -2
+          ],
+          [
+            "boundary-zero",
+            true,
+            -2,
+            -2
+          ]
+        ]
+      ],
+      "actual": [
+        [
+          "point",
+          5000,
+          5000,
+          null,
+          [
+            "boundary-zero",
+            true,
+            -2,
+            -2
+          ]
+        ]
+      ]
+    },
+    {
+      "name": "touching point with boundary zero",
+      "minimum": 0,
+      "accepted": true,
+      "expected": [
+        [
+          "point",
+          0,
+          0,
+          [
+            "touching",
+            true,
+            0,
+            0
+          ],
+          [
+            "boundary-zero",
+            true,
+            0,
+            0
+          ]
+        ]
+      ],
+      "actual": [
+        [
+          "point",
+          0,
+          0,
+          null,
+          [
+            "boundary-zero",
+            true,
+            0,
+            0
+          ]
+        ]
+      ]
+    },
+    {
+      "name": "touching point with boundary zero",
+      "minimum": 0,
+      "accepted": true,
+      "expected": [
+        [
+          "point",
+          2500,
+          2500,
+          [
+            "touching",
+            true,
+            0,
+            0
+          ],
+          [
+            "boundary-zero",
+            true,
+            0,
+            0
+          ]
+        ]
+      ],
+      "actual": [
+        [
+          "point",
+          2500,
+          2500,
+          null,
+          [
+            "boundary-zero",
+            true,
+            0,
+            0
+          ]
+        ]
+      ]
+    },
+    {
+      "name": "touching point with boundary zero",
+      "minimum": 0,
+      "accepted": true,
+      "expected": [
+        [
+          "point",
+          5000,
+          5000,
+          [
+            "touching",
+            true,
+            0,
+            0
+          ],
+          [
+            "boundary-zero",
+            true,
+            0,
+            0
+          ]
+        ]
+      ],
+      "actual": [
+        [
+          "point",
+          5000,
+          5000,
+          null,
+          [
+            "boundary-zero",
+            true,
+            0,
+            0
+          ]
+        ]
+      ]
+    },
+    {
+      "name": "touching point with boundary zero",
+      "minimum": 0,
+      "accepted": true,
+      "expected": [
+        [
+          "point",
+          0,
+          0,
+          [
+            "touching",
+            true,
+            2,
+            2
+          ],
+          [
+            "boundary-zero",
+            true,
+            2,
+            2
+          ]
+        ]
+      ],
+      "actual": [
+        [
+          "point",
+          0,
+          0,
+          null,
+          [
+            "boundary-zero",
+            true,
+            2,
+            2
+          ]
+        ]
+      ]
+    },
+    {
+      "name": "touching point with boundary zero",
+      "minimum": 0,
+      "accepted": true,
+      "expected": [
+        [
+          "point",
+          2500,
+          2500,
+          [
+            "touching",
+            true,
+            2,
+            2
+          ],
+          [
+            "boundary-zero",
+            true,
+            2,
+            2
+          ]
+        ]
+      ],
+      "actual": [
+        [
+          "point",
+          2500,
+          2500,
+          null,
+          [
+            "boundary-zero",
+            true,
+            2,
+            2
+          ]
+        ]
+      ]
+    },
+    {
+      "name": "touching point with boundary zero",
+      "minimum": 0,
+      "accepted": true,
+      "expected": [
+        [
+          "point",
+          5000,
+          5000,
+          [
+            "touching",
+            true,
+            2,
+            2
+          ],
+          [
+            "boundary-zero",
+            true,
+            2,
+            2
+          ]
+        ]
+      ],
+      "actual": [
+        [
+          "point",
+          5000,
+          5000,
+          null,
+          [
+            "boundary-zero",
+            true,
+            2,
+            2
+          ]
+        ]
+      ]
+    }
+  ],
+  "paired": {
+    "exactStreams": 3496,
+    "jumps": 5397,
+    "rangesSkipped": 1324988
+  },
+  "pairedESM": {
+    "exactStreams": 3496,
+    "jumps": 5397,
+    "rangesSkipped": 1324988
+  },
+  "result": "reject independent skip guard; paired candidate retains exact tested streams through both loaders; no app change or speed claim"
+}

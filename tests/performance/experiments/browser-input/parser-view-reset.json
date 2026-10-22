@@ -1,0 +1,35 @@
+{
+  "accepted": false,
+  "reason": "Browser binding replaced; original tab reports reset samples and no terminal source/Undo result",
+  "observation": {
+    "mode": "Live preview",
+    "notes": true,
+    "bytes": 1048576,
+    "ready": true,
+    "armed": false,
+    "setupDispatchMs": 1125.2999999523163,
+    "setupReadyMs": 1032926.600000143,
+    "samples": 0,
+    "completeSamples": 0,
+    "unexpectedUpdates": 0,
+    "failures": [],
+    "treeComplete": true,
+    "previewMode": "full",
+    "keyToUpdateMs": null,
+    "inputToUpdateMs": null,
+    "keyToRafMs": null,
+    "keyToGeometryMs": null,
+    "traceSetup": {
+      "definitions": [
+        {
+          "from": 1048540,
+          "to": 1048554
+        }
+      ]
+    },
+    "dispatchInclusiveMs": null,
+    "stateRealizationMs": null,
+    "viewUpdateMs": null,
+    "raw": []
+  }
+}

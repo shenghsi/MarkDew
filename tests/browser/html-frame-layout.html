@@ -1,0 +1,41 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>HTML frame layout check</title>
+<link rel="stylesheet" href="/src/web/style.css"><style>body{margin:24px}#editor{width:760px;height:700px;border:1px solid #ccc;margin:16px 0}#result{white-space:pre-wrap}button{margin:4px}</style></head>
+<body><h1>HTML frame layout check</h1><button id="check">Check layout</button><button id="width">Change width</button><button id="short">Short content</button><button id="cap">Tall content</button><button id="source">Source mode</button><button id="undo">Undo</button><button id="print">Check print layout</button><button id="png">Check HTML PNG</button><div id="editor"></div><pre id="result" role="status"></pre><div id="paper"></div><div id="png-output"></div>
+<script type="module">
+import {EditorState,Compartment} from '@codemirror/state';
+import {EditorView} from '@codemirror/view';
+import {ensureSyntaxTree} from '@codemirror/language';
+import {history,undo,undoDepth} from '@codemirror/commands';
+import {documentLanguage} from '/src/web/document-language.ts';
+import {livePreview} from '/src/web/preview.ts';
+import {fromSource,normalize,sourceExtensions,sourceField,savedSource} from '/src/web/source.ts';
+import {printView} from '/src/web/print-view.ts';
+import {pngBytes} from '/src/web/png-export.ts';
+const image='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="80" height="35"><rect width="80" height="35" fill="green"/></svg>');
+const html='<div style="color:rgb(110,30,90)"><style>p{margin:16px 0;line-height:1.5}#app{background:red}</style><h2>Styled HTML 日本語😀</h2>'
+ +Array.from({length:24},(_,i)=>'<p>Paragraph '+(i+1)+': '+('Readable 日本語😀 text with complete content. '.repeat(4))+'</p>').join('\r\n')
+ +'<img src="'+image+'"><p id="sentinel">FINAL SENTINEL</p><script>parent.document.body.dataset.htmlAttack="yes"</'+'script></div>';
+const original='\uFEFF'+html+'\r\n\rTail\n',record=fromSource(original),doc=normalize(record.raw),mode=new Compartment();
+let sourceMode=false,projection,printed,pngResult,pngURL;
+const exportController=new AbortController();
+let state=EditorState.create({doc,selection:{anchor:doc.length},extensions:[sourceExtensions(record),history(),documentLanguage(),EditorView.lineWrapping,mode.of(livePreview)]});
+ensureSyntaxTree(state,state.doc.length,1000);state=state.update({}).state;
+const view=new EditorView({parent:document.querySelector('#editor'),state});
+function report(){
+ const frame=view.dom.querySelector('iframe'),body=frame?.contentDocument?.body,sentinel=body?.querySelector('#sentinel'),box=sentinel?.getBoundingClientRect();
+ document.querySelector('#result').textContent=JSON.stringify({exactOriginal:savedSource(view.state.field(sourceField))===original,history:undoDepth(view.state),sourceMode,
+  frameHeight:frame?.getBoundingClientRect().height,bodyHeight:body?.scrollHeight,finalInside:!!box&&box.bottom<=frame.clientHeight,
+  imageLoaded:!!body?.querySelector('img')?.complete,scriptAbsent:!body?.querySelector('script'),attackAbsent:!document.body.dataset.htmlAttack,
+  sandbox:frame?.getAttribute('sandbox'),caption:view.dom.querySelector('.preview-caption')?.textContent,printed,pngResult},null,2);
+}
+function replace(html){view.dispatch({changes:{from:0,to:view.state.doc.length,insert:html+'\n\nTail'},selection:{anchor:html.length+6},userEvent:'input.type'});report()}
+document.querySelector('#check').onclick=report;
+document.querySelector('#width').onclick=()=>{const host=document.querySelector('#editor');host.style.width=host.style.width==='420px'?'760px':'420px';view.requestMeasure();report()};
+document.querySelector('#short').onclick=()=>replace('<div style="color:purple"><p id="sentinel">FINAL SENTINEL</p></div>');
+document.querySelector('#cap').onclick=()=>replace('<div style="height:20000px">Tall source stays available.</div>');
+document.querySelector('#source').onclick=()=>{sourceMode=!sourceMode;view.dispatch({effects:mode.reconfigure(sourceMode?[]:livePreview)});view.focus();report()};
+document.querySelector('#undo').onclick=()=>{undo(view);report()};
+document.querySelector('#print').onclick=async()=>{projection?.dispose();projection=printView({state:view.state,id:0,path:'',title:'HTML print check'});document.querySelector('#paper').append(projection.element);const warnings=await projection.ready;const frame=projection.element.querySelector('iframe');const end=frame?.contentDocument?.querySelector('#sentinel')?.getBoundingClientRect();printed={height:frame?.getBoundingClientRect().height,finalInside:!!end&&end.bottom<=frame.clientHeight,warnings};report()};
+document.querySelector('#png').onclick=async()=>{try{if(!projection)await document.querySelector('#print').onclick();pngResult={preparing:true};report();const bytes=await pngBytes(projection.element,exportController.signal);if(pngURL)URL.revokeObjectURL(pngURL);pngURL=URL.createObjectURL(new Blob([bytes],{type:'image/png'}));const image=new Image();image.alt='Captured styled HTML PNG';image.style.maxWidth='600px';image.src=pngURL;await image.decode();document.querySelector('#png-output').replaceChildren(image);pngResult={bytes:bytes.length,width:image.naturalWidth,height:image.naturalHeight};report()}catch(error){pngResult={error:String(error)};report()}};
+window.addEventListener('pagehide',()=>{exportController.abort();if(pngURL)URL.revokeObjectURL(pngURL);projection?.dispose();view.destroy()},{once:true});report();
+</script></body></html>

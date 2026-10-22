@@ -1,0 +1,16 @@
+npx vitest run tests/web/fallback-observer-experiment.test.ts tests/web/static-preview-experiment.test.ts tests/web/browser-comparator-experiment.test.ts
+20 tests pass.
+
+npx tsc --noEmit
+Exit 0. No diagnostics.
+
+bend PROOF.bend
+ALL PROOFS CHECK
+Use --verdict for mathematical validity.
+
+node tests/performance/experiments/point-comparison/verify-fallback.mjs
+80 inputs. Exact source and Undo pass.
+Original: 7 accepted, 1 parser-incomplete, 32 no-index.
+Paired: 40 accepted.
+Decision: first observed rejection is incomplete published Markdown body.
+Scope: instrumented Chrome development diagnosis; no stable speed gain.

@@ -1,0 +1,23 @@
+diff --git a/tests/performance/preview-growth.test.ts b/tests/performance/preview-growth.test.ts
+--- a/tests/performance/preview-growth.test.ts
++++ b/tests/performance/preview-growth.test.ts
+@@ -8,6 +8,10 @@
+ import { fromSource, sourceExtensions, savedSource, sourceField } from '../../src/web/source';
+ 
+ const samples=20;
++// Temporary profile boundary: state updates only, without setup or fresh oracles.
++function applyPlainGrowth(state:EditorState,at:number,insert:string) {
++  return state.update({changes:{from:at,insert},selection:{anchor:at+insert.length},userEvent:'input.type'}).state;
++}
+ function stats(values:number[]) {const sorted=[...values].sort((a,b)=>a-b);return {median:+((sorted[9]+sorted[10])/2).toFixed(3),p95:+sorted[18].toFixed(3),min:+sorted[0].toFixed(3),max:+sorted[19].toFixed(3)};}
+ it.skipIf(process.env.MARKDEW_GROWTH_BENCH!=='1')('measures growing word edits with exact source and complete decoration checks',async()=>{
+   const block='# Heading\n\nParagraph with **strong text**, `code`, and words.\n\n';
+@@ -23,7 +27,7 @@
+       let indexed=0,full=0;
+       for(let sample=0;sample<samples;sample++) {
+         const insert=sample%2?'中':'Z',start=performance.now();
+-        state=state.update({changes:{from:at,insert},selection:{anchor:at+insert.length},userEvent:'input.type'}).state;
++        state=note?state.update({changes:{from:at,insert},selection:{anchor:at+insert.length},userEvent:'input.type'}).state:applyPlainGrowth(state,at,insert);
+         const dirty=savedSource(state.field(sourceField))!==original;timings.push(performance.now()-start);
+         if(state.field(previewField).mode==='indexed')indexed++;else full++;
+         expectedSource=expectedSource.slice(0,at)+insert+expectedSource.slice(at);at+=insert.length;

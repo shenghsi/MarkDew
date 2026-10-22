@@ -1,0 +1,10 @@
+
+ RUN  v3.2.7 /Users/shxi/projects/MarkDew
+
+ ✓ tests/performance/guarded-nesting.test.ts (5 tests) 51ms
+
+ Test Files  1 passed (1)
+      Tests  5 passed (5)
+   Start at  14:00:17
+   Duration  550ms (transform 111ms, setup 0ms, collect 251ms, tests 51ms, environment 149ms, prepare 22ms)
+

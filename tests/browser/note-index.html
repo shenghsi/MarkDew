@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Footnote index app check</title></head>
+<body><div id="app"></div><div style="position:fixed;bottom:24px;right:16px;max-width:380px;z-index:80;background:var(--paper);color:var(--ink);border:1px solid var(--border);padding:8px;font:12px monospace"><button id="paragraph">Select paragraph word</button><button id="notes">Select document end</button><pre id="evidence" style="max-height:180px;overflow:auto"></pre></div>
+<script type="module">
+import {view} from '/src/web/main.ts';
+import {fromSource,normalize,restoreSource,sourceField,savedSource} from '/src/web/source.ts';
+import {footnotes} from '/src/web/footnotes.ts';
+import {previewField} from '/src/web/preview.ts';
+import {undoDepth} from '@codemirror/commands';
+const original='\uFEFF# Footnotes in the edit surface\r\n\r\nParagraph **words[^图]** and repeat[^图], second[^b].\r\n\r\n'+('# Heading\n\nParagraph with **strong text**, `code`, and words.\n\n'.repeat(1600))+'[^图]: 日本語 **note**\r\n\r\n[^b]: Second note\r\n';
+const record=fromSource(original),doc=normalize(record.raw);
+view.dispatch({changes:{from:0,insert:doc},effects:restoreSource.of(record),selection:{anchor:doc.length}});
+const depth=undoDepth(view.state);
+document.querySelector('#paragraph').onclick=()=>{view.dispatch({selection:{anchor:view.state.doc.toString().indexOf('Paragraph')+3},scrollIntoView:true});view.focus()};
+document.querySelector('#notes').onclick=()=>{view.dispatch({selection:{anchor:view.state.doc.length},scrollIntoView:true});view.focus()};
+function report(){const plan=view.state.field(previewField,false),model=footnotes(view.state);document.querySelector('#evidence').textContent=JSON.stringify({exactOriginal:savedSource(view.state.field(sourceField))===original,history:undoDepth(view.state),initialHistory:depth,mode:plan?.mode??'source',noteAware:!!plan?.noteAware,hasIndex:!!plan?.index,localCounts:plan?.localCounts,head:view.state.selection.main.head,headText:view.state.doc.sliceString(view.state.selection.main.head,view.state.selection.main.head+12),references:model.references.map(note=>({from:note.from,to:note.to,label:note.label,number:note.number})),definitions:model.definitions.map(note=>({from:note.from,to:note.to,label:note.label,number:note.number})),visibleNotes:[...document.querySelectorAll('.preview-footnote')].map(node=>node.getAttribute('aria-label'))},null,2)}
+const timer=setInterval(report,200);report();window.addEventListener('pagehide',()=>{clearInterval(timer);view.destroy()},{once:true});
+</script></body></html>

@@ -1,0 +1,17 @@
+
+ RUN  v3.2.7 /Users/shxi/projects/MarkDew
+
+stdout | tests/performance/preview-index-build.test.ts > measures complete block-index creation separately from edits
+{"benchmark":"preview-index-creation","node":"v22.23.2","platform":"darwin","arch":"arm64","requestedBytes":102400,"note":false,"initialUnits":102438,"blocks":3252,"samples":20,"median":1.643,"p95":2.315,"timings":[2.315,3.249,2.107,1.889,2.015,1.924,1.851,1.592,1.91,1.638,1.628,1.634,1.646,1.639,1.634,1.639,1.828,1.597,1.636,1.639],"units":"ms","scope":"complete index creation on a settled document; excludes parsing, source, decoration building, DOM and native frames; first sample included"}
+{"benchmark":"preview-index-creation","node":"v22.23.2","platform":"darwin","arch":"arm64","requestedBytes":102400,"note":true,"initialUnits":102467,"blocks":0,"samples":20,"median":0.002,"p95":0.002,"timings":[0.005,0.002,0.002,0.002,0.001,0.001,0.001,0.001,0.002,0.002,0.001,0.001,0.001,0.001,0.001,0.002,0.002,0.002,0.002,0.001],"units":"ms","scope":"complete index creation on a settled document; excludes parsing, source, decoration building, DOM and native frames; first sample included"}
+{"benchmark":"preview-index-creation","node":"v22.23.2","platform":"darwin","arch":"arm64","requestedBytes":1048576,"note":false,"initialUnits":1048635,"blocks":33290,"samples":20,"median":23.243,"p95":24.361,"timings":[22.172,23.479,22.548,23.47,22.546,22.818,23.444,23.272,24.361,22.886,24.224,23.07,23.215,23.518,24.29,28.955,22.747,22.724,23.375,22.53],"units":"ms","scope":"complete index creation on a settled document; excludes parsing, source, decoration building, DOM and native frames; first sample included"}
+{"benchmark":"preview-index-creation","node":"v22.23.2","platform":"darwin","arch":"arm64","requestedBytes":1048576,"note":true,"initialUnits":1048664,"blocks":0,"samples":20,"median":0.002,"p95":0.002,"timings":[0.004,0.002,0.002,0.001,0.001,0.001,0.001,0.001,0.001,0.002,0.002,0.002,0.002,0.002,0.002,0.002,0.001,0.001,0.001,0.001],"units":"ms","scope":"complete index creation on a settled document; excludes parsing, source, decoration building, DOM and native frames; first sample included"}
+
+ ✓ tests/performance/preview-index-build.test.ts (1 test) 2251ms
+   ✓ measures complete block-index creation separately from edits  2250ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  13:38:22
+   Duration  2.70s (transform 85ms, setup 0ms, collect 207ms, tests 2.25s, environment 132ms, prepare 23ms)
+

@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Table container controls</title>
+<link rel="stylesheet" href="/src/web/style.css">
+<style>body{display:block;margin:24px;font:16px system-ui}#editor{border:1px solid #888;max-width:900px;margin:16px 0}pre{white-space:pre-wrap}</style></head>
+<body><h1>Table container controls</h1>
+<p>Use row, column, and alignment controls inside the quoted list. Source prefixes and Undo/Redo must remain exact.</p>
+<button id="undo">Undo</button><button id="redo">Redo</button><button id="source">Source mode</button>
+<div id="editor"></div><pre id="result" role="status"></pre>
+<script type="module">
+import {EditorState,Compartment} from '@codemirror/state';
+import {EditorView} from '@codemirror/view';
+import {ensureSyntaxTree} from '@codemirror/language';
+import {history,undo,redo,undoDepth} from '@codemirror/commands';
+import {documentLanguage} from '/src/web/document-language.ts';
+import {livePreview} from '/src/web/preview.ts';
+import {tableEditor,tableCellField} from '/src/web/table.ts';
+import {fromSource,normalize,sourceExtensions,sourceField,savedSource} from '/src/web/source.ts';
+const original='\uFEFF> - | A | B |\r\n>   | :--- | ---: |\r>   | 日本語😀 | x\\|y |\n>   | c | d |\r\n> - Sibling\r\n\r\nEnd\n';
+const record=fromSource(original),doc=normalize(record.raw),mode=new Compartment();let sourceMode=false;
+let state=EditorState.create({doc,selection:{anchor:doc.length},extensions:[sourceExtensions(record),history(),documentLanguage(),EditorView.lineWrapping,mode.of(livePreview),EditorView.updateListener.of(()=>queueMicrotask(report))]});
+if(!ensureSyntaxTree(state,state.doc.length,1000))throw new Error('Incomplete syntax');state=state.update({}).state;
+const view=new EditorView({parent:document.querySelector('#editor'),state});
+function report(){const active=view.state.field(tableCellField,false),controller=tableEditor(view.dom.querySelector('.preview-table'));
+document.querySelector('#result').textContent=JSON.stringify({exactOriginal:savedSource(view.state.field(sourceField))===original,history:undoDepth(view.state),sourceMode,active,child:controller?.child?.state.doc.toString(),source:savedSource(view.state.field(sourceField))},null,2)}
+document.querySelector('#undo').onclick=()=>{undo(view);report()};document.querySelector('#redo').onclick=()=>{redo(view);report()};
+document.querySelector('#source').onclick=()=>{sourceMode=!sourceMode;view.dispatch({effects:mode.reconfigure(sourceMode?[]:livePreview)});report()};
+new MutationObserver(report).observe(view.dom,{childList:true,subtree:true,attributes:true});report();
+window.addEventListener('pagehide',()=>view.destroy(),{once:true});
+</script></body></html>

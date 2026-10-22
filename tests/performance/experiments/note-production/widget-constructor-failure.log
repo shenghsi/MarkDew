@@ -1,0 +1,48 @@
+
+> markdew-desktop@0.1.0 benchmark:growth
+> node src/web/benchmark.mjs --growth
+
+bend 2.0.36 is available: run bend update
+
+ RUN  v3.2.7 /Users/shxi/projects/MarkDew
+
+stdout | tests/performance/preview-growth.test.ts > measures growing word edits with exact source and complete decoration checks
+{"benchmark":"growing-preview-state","date":"2026-10-11T08:48:16.160Z","node":"v22.23.2","platform":"darwin","arch":"arm64","language":"yaml-wrapper","preview":"baseline-a8d193f","bytes":102400,"initialUnits":102400,"resource":"none","resourcePositions":[],"note":false,"location":"start","samples":20,"units":"ms","scope":"growing word edit state transaction and dirty comparison; excludes outline, oracle, DOM, native input and screen frame","indexed":19,"full":1,"publishedLengths":[102401,102402,102403,102404,102405,102406,102407,102408,102409,102410,102411,102412,102413,102414,102415,102416,102417,102418,102419,102420],"bodyBoundaries":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"codeCoverage":[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false],"localVisits":[0,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],"localRanges":[0,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8],"median":1.618,"p95":4.81,"min":1.309,"max":25.375,"timings":[25.375,4.81,3.149,2.476,2.255,2.215,2.02,2.188,2.034,1.635,1.572,1.309,1.367,1.576,1.382,1.455,1.412,1.429,1.602,1.399]}
+
+stdout | tests/performance/preview-growth.test.ts > measures growing word edits with exact source and complete decoration checks
+{"benchmark":"growing-preview-state","date":"2026-10-11T08:48:16.380Z","node":"v22.23.2","platform":"darwin","arch":"arm64","language":"yaml-wrapper","preview":"baseline-a8d193f","bytes":102400,"initialUnits":102400,"resource":"none","resourcePositions":[],"note":false,"location":"middle","samples":20,"units":"ms","scope":"growing word edit state transaction and dirty comparison; excludes outline, oracle, DOM, native input and screen frame","indexed":19,"full":1,"publishedLengths":[102401,102402,102403,102404,102405,102406,102407,102408,102409,102410,102411,102412,102413,102414,102415,102416,102417,102418,102419,102420],"bodyBoundaries":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"codeCoverage":[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false],"localVisits":[0,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],"localRanges":[0,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],"median":1.611,"p95":3.122,"min":1.304,"max":10.543,"timings":[10.543,2.454,1.682,2.069,3.122,1.816,1.625,1.568,1.815,1.698,1.638,1.54,1.598,1.405,1.304,1.536,1.337,1.516,1.365,1.483]}
+
+stdout | tests/performance/preview-growth.test.ts > measures growing word edits with exact source and complete decoration checks
+{"benchmark":"growing-preview-state","date":"2026-10-11T08:48:16.582Z","node":"v22.23.2","platform":"darwin","arch":"arm64","language":"yaml-wrapper","preview":"baseline-a8d193f","bytes":102400,"initialUnits":102400,"resource":"none","resourcePositions":[],"note":false,"location":"end","samples":20,"units":"ms","scope":"growing word edit state transaction and dirty comparison; excludes outline, oracle, DOM, native input and screen frame","indexed":20,"full":0,"publishedLengths":[102401,102402,102403,102404,102405,102406,102407,102408,102409,102410,102411,102412,102413,102414,102415,102416,102417,102418,102419,102420],"bodyBoundaries":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"codeCoverage":[false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false],"localVisits":[2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],"localRanges":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"median":1.358,"p95":1.542,"min":1.189,"max":1.635,"timings":[1.365,1.635,1.445,1.274,1.189,1.36,1.373,1.542,1.46,1.441,1.218,1.409,1.251,1.269,1.356,1.289,1.326,1.275,1.397,1.287]}
+
+ ❯ tests/performance/preview-growth.test.ts (1 test | 1 failed) 965ms
+   × measures growing word edits with exact source and complete decoration checks 964ms
+     → expected false to be true // Object.is equality
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/performance/preview-growth.test.ts > measures growing word edits with exact source and complete decoration checks
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/performance/preview-growth.test.ts:70:68
+     68|         let equal=true;
+     69|         while(actual.value&&reference.value){equal=equal&&actual.from=…
+     70|         expect(equal&&actual.value===null&&reference.value===null).toB…
+       |                                                                    ^
+     71|         await new Promise(resolve=>setTimeout(resolve,0));
+     72|       }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed (1)
+   Start at  16:48:15
+   Duration  1.64s (transform 117ms, setup 0ms, collect 264ms, tests 965ms, environment 137ms, prepare 50ms)
+

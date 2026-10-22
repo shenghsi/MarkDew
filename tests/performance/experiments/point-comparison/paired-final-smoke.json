@@ -1,0 +1,6055 @@
+{
+  "baselineComplete": true,
+  "batchResults": [],
+  "checking": false,
+  "comparator": {
+    "active": false,
+    "calls": {
+      "dispatch": 100,
+      "fallback": 140,
+      "geometry": 86,
+      "other": 0,
+      "paired": 50,
+      "setup": 4
+    },
+    "owned": false,
+    "ownershipLost": false,
+    "phaseStats": {
+      "dispatch": {
+        "jumps": 2398,
+        "rangesSkipped": 594008
+      },
+      "geometry": {
+        "jumps": 3200,
+        "rangesSkipped": 792485
+      },
+      "other": {
+        "jumps": 0,
+        "rangesSkipped": 0
+      },
+      "setup": {
+        "jumps": 0,
+        "rangesSkipped": 0
+      }
+    },
+    "restored": true,
+    "sourceSHA256": "cf4ffe7d177bf2c7c5da66c49be0811cc79a29e12cb658238876bbdcef12939c",
+    "stats": {
+      "jumps": 5996,
+      "rangesSkipped": 1485198
+    },
+    "version": "6.7.6"
+  },
+  "complete": true,
+  "control": false,
+  "editMode": "indexed",
+  "editResults": [
+    {
+      "action": "edit-anchor",
+      "actionStart": {
+        "action": "edit-anchor",
+        "baseline": {
+          "clientHeight": 478,
+          "contentHeight": 1864593.125,
+          "head": 0,
+          "relativeTop": 33.328125,
+          "scrollHeight": 1864593,
+          "scrollTop": 0,
+          "visible": true
+        },
+        "candidate": {
+          "clientHeight": 478,
+          "contentHeight": 1864593.125,
+          "head": 0,
+          "relativeTop": 33.328125,
+          "scrollHeight": 1864593,
+          "scrollTop": 0,
+          "visible": true
+        },
+        "comparator": {
+          "active": true,
+          "calls": {
+            "dispatch": 16,
+            "fallback": 16,
+            "geometry": 0,
+            "other": 0,
+            "paired": 4,
+            "setup": 4
+          },
+          "owned": true,
+          "ownershipLost": false,
+          "phaseStats": {
+            "dispatch": {
+              "jumps": 400,
+              "rangesSkipped": 99060
+            },
+            "geometry": {
+              "jumps": 0,
+              "rangesSkipped": 0
+            },
+            "other": {
+              "jumps": 0,
+              "rangesSkipped": 0
+            },
+            "setup": {
+              "jumps": 0,
+              "rangesSkipped": 0
+            }
+          },
+          "restored": false,
+          "sourceSHA256": "cf4ffe7d177bf2c7c5da66c49be0811cc79a29e12cb658238876bbdcef12939c",
+          "stats": {
+            "jumps": 400,
+            "rangesSkipped": 99060
+          },
+          "version": "6.7.6"
+        }
+      },
+      "attribution": {
+        "baseline": {
+          "height": 1864509.125,
+          "map": {
+            "block": 1,
+            "classes": {
+              "HeightMapBlock": 1,
+              "HeightMapBranch": 66573,
+              "_HeightMapGap": 33272,
+              "_HeightMapText": 33301
+            },
+            "collapsed": 116511,
+            "gap": 33272,
+            "gapLength": 34,
+            "nodes": 133147,
+            "text": 33301
+          },
+          "oracle": {
+            "charWidth": 7.475694444444445,
+            "lineHeight": 28,
+            "lineLength": 51.23269856014863,
+            "lineWrapping": true,
+            "textHeight": 20
+          },
+          "version": "6.43.13"
+        },
+        "candidate": {
+          "height": 1864509.125,
+          "map": {
+            "block": 1,
+            "classes": {
+              "HeightMapBlock": 1,
+              "HeightMapBranch": 66573,
+              "_HeightMapGap": 33272,
+              "_HeightMapText": 33301
+            },
+            "collapsed": 116511,
+            "gap": 33272,
+            "gapLength": 34,
+            "nodes": 133147,
+            "text": 33301
+          },
+          "oracle": {
+            "charWidth": 7.475694444444445,
+            "lineHeight": 28,
+            "lineLength": 51.23269856014863,
+            "lineWrapping": true,
+            "textHeight": 20
+          },
+          "version": "6.43.13"
+        }
+      },
+      "baselineComplete": true,
+      "baselineEstimatedHeight": 1864593.125,
+      "baselineHead": {
+        "clientHeight": 478,
+        "contentHeight": 1864593.125,
+        "head": 22,
+        "relativeTop": 113.625,
+        "scrollHeight": 1864593,
+        "scrollTop": 0,
+        "visible": true
+      },
+      "boxes": [
+        {
+          "baseline": 53.921875,
+          "candidate": 53.921875,
+          "delta": 0,
+          "from": 0,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 18,
+          "textEqual": true
+        },
+        {
+          "baseline": 31.703125,
+          "candidate": 31.703125,
+          "delta": 0,
+          "from": 19,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 59,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 60,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 70,
+          "textEqual": true
+        },
+        {
+          "baseline": 56.28125,
+          "candidate": 56.28125,
+          "delta": 0,
+          "from": 71,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 122,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 123,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 133,
+          "textEqual": true
+        },
+        {
+          "baseline": 56.28125,
+          "candidate": 56.28125,
+          "delta": 0,
+          "from": 134,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 185,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 186,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 196,
+          "textEqual": true
+        },
+        {
+          "baseline": 56.28125,
+          "candidate": 56.28125,
+          "delta": 0,
+          "from": 197,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 248,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 249,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 259,
+          "textEqual": true
+        },
+        {
+          "baseline": 56.28125,
+          "candidate": 56.28125,
+          "delta": 0,
+          "from": 260,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 311,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 312,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 322,
+          "textEqual": true
+        },
+        {
+          "baseline": 56.28125,
+          "candidate": 56.28125,
+          "delta": 0,
+          "from": 323,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 374,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 375,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 385,
+          "textEqual": true
+        },
+        {
+          "baseline": 56.28125,
+          "candidate": 56.28125,
+          "delta": 0,
+          "from": 386,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 437,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 438,
+          "textEqual": true
+        }
+      ],
+      "candidateEstimatedHeight": 1864593.125,
+      "candidateHead": {
+        "clientHeight": 478,
+        "contentHeight": 1864593.125,
+        "head": 22,
+        "relativeTop": 113.625,
+        "scrollHeight": 1864593,
+        "scrollTop": 0,
+        "visible": true
+      },
+      "comparator": {
+        "active": true,
+        "calls": {
+          "dispatch": 25,
+          "fallback": 26,
+          "geometry": 6,
+          "other": 0,
+          "paired": 9,
+          "setup": 4
+        },
+        "owned": true,
+        "ownershipLost": false,
+        "phaseStats": {
+          "dispatch": {
+            "jumps": 400,
+            "rangesSkipped": 99060
+          },
+          "geometry": {
+            "jumps": 400,
+            "rangesSkipped": 99061
+          },
+          "other": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          },
+          "setup": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          }
+        },
+        "restored": false,
+        "sourceSHA256": "cf4ffe7d177bf2c7c5da66c49be0811cc79a29e12cb658238876bbdcef12939c",
+        "stats": {
+          "jumps": 800,
+          "rangesSkipped": 198121
+        },
+        "version": "6.7.6"
+      },
+      "comparatorBeforeGeometry": {
+        "active": true,
+        "calls": {
+          "dispatch": 25,
+          "fallback": 22,
+          "geometry": 0,
+          "other": 0,
+          "paired": 7,
+          "setup": 4
+        },
+        "owned": true,
+        "ownershipLost": false,
+        "phaseStats": {
+          "dispatch": {
+            "jumps": 400,
+            "rangesSkipped": 99060
+          },
+          "geometry": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          },
+          "other": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          },
+          "setup": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          }
+        },
+        "restored": false,
+        "sourceSHA256": "cf4ffe7d177bf2c7c5da66c49be0811cc79a29e12cb658238876bbdcef12939c",
+        "stats": {
+          "jumps": 400,
+          "rangesSkipped": 99060
+        },
+        "version": "6.7.6"
+      },
+      "complete": true,
+      "differences": [],
+      "exactExpected": true,
+      "exactOriginal": true,
+      "fonts": [
+        {
+          "fontFamily": "system-ui, sans-serif",
+          "fontSize": "17px",
+          "lineHeight": "28.05px",
+          "width": 383
+        },
+        {
+          "fontFamily": "system-ui, sans-serif",
+          "fontSize": "17px",
+          "lineHeight": "28.05px",
+          "width": 383
+        }
+      ],
+      "history": 0,
+      "historyUnchangedByCheck": true,
+      "historyUnchangedDuringSettle": true,
+      "maxHeightDelta": 0,
+      "readiness": {
+        "after": "full",
+        "before": "full",
+        "scope": "complete tree publication outside geometry samples"
+      },
+      "selectionEqual": true,
+      "settling": {
+        "deadlineMs": 1200,
+        "minimumFrames": 8,
+        "requiredEqualTransitions": 4,
+        "samples": [
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 22,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 22,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "elapsed": 3.799999952316284
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 22,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 22,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "elapsed": 4.3999998569488525
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 22,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 22,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "elapsed": 17.799999952316284
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 22,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 22,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "elapsed": 46.5
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 22,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 22,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "elapsed": 51
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 22,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 22,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "elapsed": 68.19999980926514
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 22,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 22,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "elapsed": 82.59999990463257
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 22,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 22,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "elapsed": 101.19999980926514
+          }
+        ],
+        "status": "stable",
+        "tolerancePixels": 0.05
+      },
+      "sourceEqual": true,
+      "sourceUnchangedByCheck": true,
+      "sourceUnchangedDuringSettle": true
+    },
+    {
+      "action": "unicode-edit",
+      "actionStart": {
+        "action": "unicode-edit",
+        "baseline": {
+          "clientHeight": 478,
+          "contentHeight": 1864593.125,
+          "head": 22,
+          "relativeTop": 113.625,
+          "scrollHeight": 1864593,
+          "scrollTop": 0,
+          "visible": true
+        },
+        "candidate": {
+          "clientHeight": 478,
+          "contentHeight": 1864593.125,
+          "head": 22,
+          "relativeTop": 113.625,
+          "scrollHeight": 1864593,
+          "scrollTop": 0,
+          "visible": true
+        },
+        "comparator": {
+          "active": true,
+          "calls": {
+            "dispatch": 25,
+            "fallback": 26,
+            "geometry": 6,
+            "other": 0,
+            "paired": 9,
+            "setup": 4
+          },
+          "owned": true,
+          "ownershipLost": false,
+          "phaseStats": {
+            "dispatch": {
+              "jumps": 400,
+              "rangesSkipped": 99060
+            },
+            "geometry": {
+              "jumps": 400,
+              "rangesSkipped": 99061
+            },
+            "other": {
+              "jumps": 0,
+              "rangesSkipped": 0
+            },
+            "setup": {
+              "jumps": 0,
+              "rangesSkipped": 0
+            }
+          },
+          "restored": false,
+          "sourceSHA256": "cf4ffe7d177bf2c7c5da66c49be0811cc79a29e12cb658238876bbdcef12939c",
+          "stats": {
+            "jumps": 800,
+            "rangesSkipped": 198121
+          },
+          "version": "6.7.6"
+        }
+      },
+      "attribution": {
+        "baseline": {
+          "height": 1864509.125,
+          "map": {
+            "block": 1,
+            "classes": {
+              "HeightMapBlock": 1,
+              "HeightMapBranch": 66573,
+              "_HeightMapGap": 33272,
+              "_HeightMapText": 33301
+            },
+            "collapsed": 116511,
+            "gap": 33272,
+            "gapLength": 34,
+            "nodes": 133147,
+            "text": 33301
+          },
+          "oracle": {
+            "charWidth": 7.475694444444445,
+            "lineHeight": 28,
+            "lineLength": 51.23269856014863,
+            "lineWrapping": true,
+            "textHeight": 20
+          },
+          "version": "6.43.13"
+        },
+        "candidate": {
+          "height": 1864509.125,
+          "map": {
+            "block": 1,
+            "classes": {
+              "HeightMapBlock": 1,
+              "HeightMapBranch": 66573,
+              "_HeightMapGap": 33272,
+              "_HeightMapText": 33301
+            },
+            "collapsed": 116511,
+            "gap": 33272,
+            "gapLength": 34,
+            "nodes": 133147,
+            "text": 33301
+          },
+          "oracle": {
+            "charWidth": 7.475694444444445,
+            "lineHeight": 28,
+            "lineLength": 51.23269856014863,
+            "lineWrapping": true,
+            "textHeight": 20
+          },
+          "version": "6.43.13"
+        }
+      },
+      "baselineComplete": true,
+      "baselineEstimatedHeight": 1864593.125,
+      "baselineHead": {
+        "clientHeight": 478,
+        "contentHeight": 1864593.125,
+        "head": 27,
+        "relativeTop": 113.625,
+        "scrollHeight": 1864593,
+        "scrollTop": 0,
+        "visible": true
+      },
+      "boxes": [
+        {
+          "baseline": 53.921875,
+          "candidate": 53.921875,
+          "delta": 0,
+          "from": 0,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 18,
+          "textEqual": true
+        },
+        {
+          "baseline": 31.703125,
+          "candidate": 31.703125,
+          "delta": 0,
+          "from": 19,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 64,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 65,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 75,
+          "textEqual": true
+        },
+        {
+          "baseline": 56.28125,
+          "candidate": 56.28125,
+          "delta": 0,
+          "from": 76,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 127,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 128,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 138,
+          "textEqual": true
+        },
+        {
+          "baseline": 56.28125,
+          "candidate": 56.28125,
+          "delta": 0,
+          "from": 139,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 190,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 191,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 201,
+          "textEqual": true
+        },
+        {
+          "baseline": 56.28125,
+          "candidate": 56.28125,
+          "delta": 0,
+          "from": 202,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 253,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 254,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 264,
+          "textEqual": true
+        },
+        {
+          "baseline": 56.28125,
+          "candidate": 56.28125,
+          "delta": 0,
+          "from": 265,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 316,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 317,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 327,
+          "textEqual": true
+        },
+        {
+          "baseline": 56.28125,
+          "candidate": 56.28125,
+          "delta": 0,
+          "from": 328,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 379,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 380,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 390,
+          "textEqual": true
+        },
+        {
+          "baseline": 56.28125,
+          "candidate": 56.28125,
+          "delta": 0,
+          "from": 391,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 442,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 443,
+          "textEqual": true
+        }
+      ],
+      "callbackControl": {
+        "callbacks": 2,
+        "diagnosticJumps": 398,
+        "diagnosticRangesSkipped": 98705,
+        "equal": true,
+        "scope": "direct comparison outside view dispatch and geometry samples"
+      },
+      "candidateEstimatedHeight": 1864593.125,
+      "candidateHead": {
+        "clientHeight": 478,
+        "contentHeight": 1864593.125,
+        "head": 27,
+        "relativeTop": 113.625,
+        "scrollHeight": 1864593,
+        "scrollTop": 0,
+        "visible": true
+      },
+      "comparator": {
+        "active": true,
+        "calls": {
+          "dispatch": 31,
+          "fallback": 34,
+          "geometry": 12,
+          "other": 0,
+          "paired": 13,
+          "setup": 4
+        },
+        "owned": true,
+        "ownershipLost": false,
+        "phaseStats": {
+          "dispatch": {
+            "jumps": 798,
+            "rangesSkipped": 197765
+          },
+          "geometry": {
+            "jumps": 800,
+            "rangesSkipped": 198121
+          },
+          "other": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          },
+          "setup": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          }
+        },
+        "restored": false,
+        "sourceSHA256": "cf4ffe7d177bf2c7c5da66c49be0811cc79a29e12cb658238876bbdcef12939c",
+        "stats": {
+          "jumps": 1996,
+          "rangesSkipped": 494591
+        },
+        "version": "6.7.6"
+      },
+      "comparatorBeforeGeometry": {
+        "active": true,
+        "calls": {
+          "dispatch": 31,
+          "fallback": 30,
+          "geometry": 6,
+          "other": 0,
+          "paired": 11,
+          "setup": 4
+        },
+        "owned": true,
+        "ownershipLost": false,
+        "phaseStats": {
+          "dispatch": {
+            "jumps": 798,
+            "rangesSkipped": 197765
+          },
+          "geometry": {
+            "jumps": 400,
+            "rangesSkipped": 99061
+          },
+          "other": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          },
+          "setup": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          }
+        },
+        "restored": false,
+        "sourceSHA256": "cf4ffe7d177bf2c7c5da66c49be0811cc79a29e12cb658238876bbdcef12939c",
+        "stats": {
+          "jumps": 1596,
+          "rangesSkipped": 395531
+        },
+        "version": "6.7.6"
+      },
+      "complete": true,
+      "differences": [],
+      "editMode": "indexed",
+      "exactExpected": true,
+      "exactOriginal": false,
+      "fonts": [
+        {
+          "fontFamily": "system-ui, sans-serif",
+          "fontSize": "17px",
+          "lineHeight": "28.05px",
+          "width": 383
+        },
+        {
+          "fontFamily": "system-ui, sans-serif",
+          "fontSize": "17px",
+          "lineHeight": "28.05px",
+          "width": 383
+        }
+      ],
+      "history": 1,
+      "historyUnchangedByCheck": true,
+      "historyUnchangedDuringSettle": true,
+      "maxHeightDelta": 0,
+      "readiness": {
+        "after": "indexed",
+        "before": "indexed",
+        "scope": "complete tree publication outside geometry samples"
+      },
+      "selectionEqual": true,
+      "settling": {
+        "deadlineMs": 1200,
+        "minimumFrames": 8,
+        "requiredEqualTransitions": 4,
+        "samples": [
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 27,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 27,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "elapsed": 7.5
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 27,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 27,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "elapsed": 7.799999952316284
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 27,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 27,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "elapsed": 22.600000143051147
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 27,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 27,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "elapsed": 41.29999995231629
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 27,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 27,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "elapsed": 59.90000009536743
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 27,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 27,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "elapsed": 73.5
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 27,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 27,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "elapsed": 89.5
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 27,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864593.125,
+              "head": 27,
+              "relativeTop": 113.625,
+              "scrollHeight": 1864593,
+              "scrollTop": 0,
+              "visible": true
+            },
+            "elapsed": 108
+          }
+        ],
+        "status": "stable",
+        "tolerancePixels": 0.05
+      },
+      "sourceEqual": true,
+      "sourceUnchangedByCheck": true,
+      "sourceUnchangedDuringSettle": true
+    },
+    {
+      "action": "distant",
+      "actionStart": {
+        "action": "distant",
+        "baseline": {
+          "clientHeight": 478,
+          "contentHeight": 1864593.125,
+          "head": 27,
+          "relativeTop": 113.625,
+          "scrollHeight": 1864593,
+          "scrollTop": 0,
+          "visible": true
+        },
+        "candidate": {
+          "clientHeight": 478,
+          "contentHeight": 1864593.125,
+          "head": 27,
+          "relativeTop": 113.625,
+          "scrollHeight": 1864593,
+          "scrollTop": 0,
+          "visible": true
+        },
+        "comparator": {
+          "active": true,
+          "calls": {
+            "dispatch": 31,
+            "fallback": 34,
+            "geometry": 12,
+            "other": 0,
+            "paired": 13,
+            "setup": 4
+          },
+          "owned": true,
+          "ownershipLost": false,
+          "phaseStats": {
+            "dispatch": {
+              "jumps": 798,
+              "rangesSkipped": 197765
+            },
+            "geometry": {
+              "jumps": 800,
+              "rangesSkipped": 198121
+            },
+            "other": {
+              "jumps": 0,
+              "rangesSkipped": 0
+            },
+            "setup": {
+              "jumps": 0,
+              "rangesSkipped": 0
+            }
+          },
+          "restored": false,
+          "sourceSHA256": "cf4ffe7d177bf2c7c5da66c49be0811cc79a29e12cb658238876bbdcef12939c",
+          "stats": {
+            "jumps": 1996,
+            "rangesSkipped": 494591
+          },
+          "version": "6.7.6"
+        }
+      },
+      "attribution": {
+        "baseline": {
+          "height": 1864848.25,
+          "map": {
+            "block": 0,
+            "classes": {
+              "HeightMapBranch": 66574,
+              "_HeightMapGap": 33255,
+              "_HeightMapText": 33320
+            },
+            "collapsed": 116511,
+            "gap": 33255,
+            "gapLength": 0,
+            "nodes": 133149,
+            "text": 33320
+          },
+          "oracle": {
+            "charWidth": 7.475694444444445,
+            "lineHeight": 28,
+            "lineLength": 51.23269856014863,
+            "lineWrapping": true,
+            "textHeight": 20
+          },
+          "version": "6.43.13"
+        },
+        "candidate": {
+          "height": 1864848.25,
+          "map": {
+            "block": 0,
+            "classes": {
+              "HeightMapBranch": 66574,
+              "_HeightMapGap": 33255,
+              "_HeightMapText": 33320
+            },
+            "collapsed": 116511,
+            "gap": 33255,
+            "gapLength": 0,
+            "nodes": 133149,
+            "text": 33320
+          },
+          "oracle": {
+            "charWidth": 7.475694444444445,
+            "lineHeight": 28,
+            "lineLength": 51.23269856014863,
+            "lineWrapping": true,
+            "textHeight": 20
+          },
+          "version": "6.43.13"
+        }
+      },
+      "baselineComplete": true,
+      "baselineEstimatedHeight": 1864932.25,
+      "baselineHead": {
+        "clientHeight": 478,
+        "contentHeight": 1864932.25,
+        "head": 1048559,
+        "relativeTop": 452.8125,
+        "scrollHeight": 1864933,
+        "scrollTop": 1864368,
+        "visible": true
+      },
+      "boxes": [
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048143,
+          "textEqual": true
+        },
+        {
+          "baseline": 56.28125,
+          "candidate": 56.28125,
+          "delta": 0,
+          "from": 1048144,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048195,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 1048196,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048206,
+          "textEqual": true
+        },
+        {
+          "baseline": 56.28125,
+          "candidate": 56.28125,
+          "delta": 0,
+          "from": 1048207,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048258,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 1048259,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048269,
+          "textEqual": true
+        },
+        {
+          "baseline": 56.28125,
+          "candidate": 56.28125,
+          "delta": 0,
+          "from": 1048270,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048321,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 1048322,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048332,
+          "textEqual": true
+        },
+        {
+          "baseline": 56.28125,
+          "candidate": 56.28125,
+          "delta": 0,
+          "from": 1048333,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048384,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 1048385,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048395,
+          "textEqual": true
+        },
+        {
+          "baseline": 56.28125,
+          "candidate": 56.28125,
+          "delta": 0,
+          "from": 1048396,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048447,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 1048448,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048458,
+          "textEqual": true
+        },
+        {
+          "baseline": 56.28125,
+          "candidate": 56.28125,
+          "delta": 0,
+          "from": 1048459,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048510,
+          "textEqual": true
+        },
+        {
+          "baseline": 56.09375,
+          "candidate": 56.09375,
+          "delta": 0,
+          "from": 1048511,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048545,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048560,
+          "textEqual": true
+        }
+      ],
+      "callbackControl": {
+        "callbacks": 2,
+        "diagnosticJumps": 398,
+        "diagnosticRangesSkipped": 98705,
+        "equal": true,
+        "scope": "direct comparison outside view dispatch and geometry samples"
+      },
+      "candidateEstimatedHeight": 1864932.25,
+      "candidateHead": {
+        "clientHeight": 478,
+        "contentHeight": 1864932.25,
+        "head": 1048559,
+        "relativeTop": 452.8125,
+        "scrollHeight": 1864933,
+        "scrollTop": 1864368,
+        "visible": true
+      },
+      "comparator": {
+        "active": true,
+        "calls": {
+          "dispatch": 43,
+          "fallback": 50,
+          "geometry": 22,
+          "other": 0,
+          "paired": 19,
+          "setup": 4
+        },
+        "owned": true,
+        "ownershipLost": false,
+        "phaseStats": {
+          "dispatch": {
+            "jumps": 1198,
+            "rangesSkipped": 296825
+          },
+          "geometry": {
+            "jumps": 1200,
+            "rangesSkipped": 297181
+          },
+          "other": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          },
+          "setup": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          }
+        },
+        "restored": false,
+        "sourceSHA256": "cf4ffe7d177bf2c7c5da66c49be0811cc79a29e12cb658238876bbdcef12939c",
+        "stats": {
+          "jumps": 2796,
+          "rangesSkipped": 692711
+        },
+        "version": "6.7.6"
+      },
+      "comparatorBeforeGeometry": {
+        "active": true,
+        "calls": {
+          "dispatch": 43,
+          "fallback": 42,
+          "geometry": 12,
+          "other": 0,
+          "paired": 17,
+          "setup": 4
+        },
+        "owned": true,
+        "ownershipLost": false,
+        "phaseStats": {
+          "dispatch": {
+            "jumps": 1198,
+            "rangesSkipped": 296825
+          },
+          "geometry": {
+            "jumps": 800,
+            "rangesSkipped": 198121
+          },
+          "other": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          },
+          "setup": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          }
+        },
+        "restored": false,
+        "sourceSHA256": "cf4ffe7d177bf2c7c5da66c49be0811cc79a29e12cb658238876bbdcef12939c",
+        "stats": {
+          "jumps": 2396,
+          "rangesSkipped": 593651
+        },
+        "version": "6.7.6"
+      },
+      "complete": true,
+      "differences": [],
+      "editMode": "indexed",
+      "exactExpected": true,
+      "exactOriginal": false,
+      "fonts": [
+        {
+          "fontFamily": "system-ui, sans-serif",
+          "fontSize": "17px",
+          "lineHeight": "28.05px",
+          "width": 383
+        },
+        {
+          "fontFamily": "system-ui, sans-serif",
+          "fontSize": "17px",
+          "lineHeight": "28.05px",
+          "width": 383
+        }
+      ],
+      "history": 1,
+      "historyUnchangedByCheck": true,
+      "historyUnchangedDuringSettle": true,
+      "maxHeightDelta": 0,
+      "readiness": {
+        "after": "full",
+        "before": "full",
+        "scope": "complete tree publication outside geometry samples"
+      },
+      "selectionEqual": true,
+      "settling": {
+        "deadlineMs": 1200,
+        "minimumFrames": 8,
+        "requiredEqualTransitions": 4,
+        "samples": [
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 452.8125,
+              "scrollHeight": 1864933,
+              "scrollTop": 1864368,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 452.8125,
+              "scrollHeight": 1864933,
+              "scrollTop": 1864368,
+              "visible": true
+            },
+            "elapsed": 15.599999904632568
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 452.8125,
+              "scrollHeight": 1864933,
+              "scrollTop": 1864368,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 452.8125,
+              "scrollHeight": 1864933,
+              "scrollTop": 1864368,
+              "visible": true
+            },
+            "elapsed": 17.299999952316284
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 452.8125,
+              "scrollHeight": 1864933,
+              "scrollTop": 1864368,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 452.8125,
+              "scrollHeight": 1864933,
+              "scrollTop": 1864368,
+              "visible": true
+            },
+            "elapsed": 31.199999809265137
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 452.8125,
+              "scrollHeight": 1864933,
+              "scrollTop": 1864368,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 452.8125,
+              "scrollHeight": 1864933,
+              "scrollTop": 1864368,
+              "visible": true
+            },
+            "elapsed": 47.89999985694885
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 452.8125,
+              "scrollHeight": 1864933,
+              "scrollTop": 1864368,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 452.8125,
+              "scrollHeight": 1864933,
+              "scrollTop": 1864368,
+              "visible": true
+            },
+            "elapsed": 64.39999985694885
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 452.8125,
+              "scrollHeight": 1864933,
+              "scrollTop": 1864368,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 452.8125,
+              "scrollHeight": 1864933,
+              "scrollTop": 1864368,
+              "visible": true
+            },
+            "elapsed": 81.19999980926514
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 452.8125,
+              "scrollHeight": 1864933,
+              "scrollTop": 1864368,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 452.8125,
+              "scrollHeight": 1864933,
+              "scrollTop": 1864368,
+              "visible": true
+            },
+            "elapsed": 97.79999995231628
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 452.8125,
+              "scrollHeight": 1864933,
+              "scrollTop": 1864368,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 452.8125,
+              "scrollHeight": 1864933,
+              "scrollTop": 1864368,
+              "visible": true
+            },
+            "elapsed": 118.5
+          }
+        ],
+        "status": "stable",
+        "tolerancePixels": 0.05
+      },
+      "sourceEqual": true,
+      "sourceUnchangedByCheck": true,
+      "sourceUnchangedDuringSettle": true
+    },
+    {
+      "action": "narrow",
+      "actionStart": {
+        "action": "width",
+        "baseline": {
+          "clientHeight": 478,
+          "contentHeight": 1864932.25,
+          "head": 1048559,
+          "relativeTop": 452.8125,
+          "scrollHeight": 1864933,
+          "scrollTop": 1864368,
+          "visible": true
+        },
+        "candidate": {
+          "clientHeight": 478,
+          "contentHeight": 1864932.25,
+          "head": 1048559,
+          "relativeTop": 452.8125,
+          "scrollHeight": 1864933,
+          "scrollTop": 1864368,
+          "visible": true
+        },
+        "comparator": {
+          "active": true,
+          "calls": {
+            "dispatch": 43,
+            "fallback": 50,
+            "geometry": 22,
+            "other": 0,
+            "paired": 19,
+            "setup": 4
+          },
+          "owned": true,
+          "ownershipLost": false,
+          "phaseStats": {
+            "dispatch": {
+              "jumps": 1198,
+              "rangesSkipped": 296825
+            },
+            "geometry": {
+              "jumps": 1200,
+              "rangesSkipped": 297181
+            },
+            "other": {
+              "jumps": 0,
+              "rangesSkipped": 0
+            },
+            "setup": {
+              "jumps": 0,
+              "rangesSkipped": 0
+            }
+          },
+          "restored": false,
+          "sourceSHA256": "cf4ffe7d177bf2c7c5da66c49be0811cc79a29e12cb658238876bbdcef12939c",
+          "stats": {
+            "jumps": 2796,
+            "rangesSkipped": 692711
+          },
+          "version": "6.7.6"
+        }
+      },
+      "attribution": {
+        "baseline": {
+          "height": 1865045.234375,
+          "map": {
+            "block": 0,
+            "classes": {
+              "HeightMapBranch": 66574,
+              "_HeightMapGap": 33255,
+              "_HeightMapText": 33320
+            },
+            "collapsed": 116511,
+            "gap": 33255,
+            "gapLength": 0,
+            "nodes": 133149,
+            "text": 33320
+          },
+          "oracle": {
+            "charWidth": 7.475694444444445,
+            "lineHeight": 28.046875,
+            "lineLength": 29.83000464468184,
+            "lineWrapping": true,
+            "textHeight": 20
+          },
+          "version": "6.43.13"
+        },
+        "candidate": {
+          "height": 1865045.234375,
+          "map": {
+            "block": 0,
+            "classes": {
+              "HeightMapBranch": 66574,
+              "_HeightMapGap": 33255,
+              "_HeightMapText": 33320
+            },
+            "collapsed": 116511,
+            "gap": 33255,
+            "gapLength": 0,
+            "nodes": 133149,
+            "text": 33320
+          },
+          "oracle": {
+            "charWidth": 7.475694444444445,
+            "lineHeight": 28.046875,
+            "lineLength": 29.83000464468184,
+            "lineWrapping": true,
+            "textHeight": 20
+          },
+          "version": "6.43.13"
+        }
+      },
+      "baselineComplete": true,
+      "baselineEstimatedHeight": 1865129.234375,
+      "baselineHead": {
+        "clientHeight": 478,
+        "contentHeight": 1865129.234375,
+        "head": 1048559,
+        "relativeTop": 564.140625,
+        "scrollHeight": 1865129,
+        "scrollTop": 1864453,
+        "visible": false
+      },
+      "boxes": [
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048143,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.328125,
+          "candidate": 84.328125,
+          "delta": 0,
+          "from": 1048144,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048195,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 1048196,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048206,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.328125,
+          "candidate": 84.328125,
+          "delta": 0,
+          "from": 1048207,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048258,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 1048259,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048269,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.328125,
+          "candidate": 84.328125,
+          "delta": 0,
+          "from": 1048270,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048321,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 1048322,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048332,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.328125,
+          "candidate": 84.328125,
+          "delta": 0,
+          "from": 1048333,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048384,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 1048385,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048395,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.328125,
+          "candidate": 84.328125,
+          "delta": 0,
+          "from": 1048396,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048447,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 1048448,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048458,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.328125,
+          "candidate": 84.328125,
+          "delta": 0,
+          "from": 1048459,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048510,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.140625,
+          "candidate": 84.140625,
+          "delta": 0,
+          "from": 1048511,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048545,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048560,
+          "textEqual": true
+        }
+      ],
+      "callbackControl": {
+        "callbacks": 2,
+        "diagnosticJumps": 398,
+        "diagnosticRangesSkipped": 98705,
+        "equal": true,
+        "scope": "direct comparison outside view dispatch and geometry samples"
+      },
+      "candidateEstimatedHeight": 1865129.234375,
+      "candidateHead": {
+        "clientHeight": 478,
+        "contentHeight": 1865129.234375,
+        "head": 1048559,
+        "relativeTop": 564.140625,
+        "scrollHeight": 1865129,
+        "scrollTop": 1864453,
+        "visible": false
+      },
+      "comparator": {
+        "active": true,
+        "calls": {
+          "dispatch": 43,
+          "fallback": 58,
+          "geometry": 32,
+          "other": 0,
+          "paired": 21,
+          "setup": 4
+        },
+        "owned": true,
+        "ownershipLost": false,
+        "phaseStats": {
+          "dispatch": {
+            "jumps": 1198,
+            "rangesSkipped": 296825
+          },
+          "geometry": {
+            "jumps": 1600,
+            "rangesSkipped": 396241
+          },
+          "other": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          },
+          "setup": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          }
+        },
+        "restored": false,
+        "sourceSHA256": "cf4ffe7d177bf2c7c5da66c49be0811cc79a29e12cb658238876bbdcef12939c",
+        "stats": {
+          "jumps": 3196,
+          "rangesSkipped": 791771
+        },
+        "version": "6.7.6"
+      },
+      "comparatorBeforeGeometry": {
+        "active": true,
+        "calls": {
+          "dispatch": 43,
+          "fallback": 50,
+          "geometry": 22,
+          "other": 0,
+          "paired": 19,
+          "setup": 4
+        },
+        "owned": true,
+        "ownershipLost": false,
+        "phaseStats": {
+          "dispatch": {
+            "jumps": 1198,
+            "rangesSkipped": 296825
+          },
+          "geometry": {
+            "jumps": 1200,
+            "rangesSkipped": 297181
+          },
+          "other": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          },
+          "setup": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          }
+        },
+        "restored": false,
+        "sourceSHA256": "cf4ffe7d177bf2c7c5da66c49be0811cc79a29e12cb658238876bbdcef12939c",
+        "stats": {
+          "jumps": 2796,
+          "rangesSkipped": 692711
+        },
+        "version": "6.7.6"
+      },
+      "complete": true,
+      "differences": [],
+      "editMode": "indexed",
+      "exactExpected": true,
+      "exactOriginal": false,
+      "fonts": [
+        {
+          "fontFamily": "system-ui, sans-serif",
+          "fontSize": "17px",
+          "lineHeight": "28.05px",
+          "width": 223
+        },
+        {
+          "fontFamily": "system-ui, sans-serif",
+          "fontSize": "17px",
+          "lineHeight": "28.05px",
+          "width": 223
+        }
+      ],
+      "history": 1,
+      "historyUnchangedByCheck": true,
+      "historyUnchangedDuringSettle": true,
+      "maxHeightDelta": 0,
+      "readiness": {
+        "after": "full",
+        "before": "full",
+        "scope": "complete tree publication outside geometry samples"
+      },
+      "selectionEqual": true,
+      "settling": {
+        "deadlineMs": 1200,
+        "minimumFrames": 8,
+        "requiredEqualTransitions": 4,
+        "samples": [
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 649.140625,
+              "scrollHeight": 1865129,
+              "scrollTop": 1864368,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 649.140625,
+              "scrollHeight": 1865129,
+              "scrollTop": 1864368,
+              "visible": false
+            },
+            "elapsed": 6.1000001430511475
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 649.140625,
+              "scrollHeight": 1865129,
+              "scrollTop": 1864368,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 649.140625,
+              "scrollHeight": 1865129,
+              "scrollTop": 1864368,
+              "visible": false
+            },
+            "elapsed": 14
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 649.140625,
+              "scrollHeight": 1865129,
+              "scrollTop": 1864368,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 649.140625,
+              "scrollHeight": 1865129,
+              "scrollTop": 1864368,
+              "visible": false
+            },
+            "elapsed": 32
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 649.140625,
+              "scrollHeight": 1865129,
+              "scrollTop": 1864368,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1864932.25,
+              "head": 1048559,
+              "relativeTop": 649.140625,
+              "scrollHeight": 1865129,
+              "scrollTop": 1864368,
+              "visible": false
+            },
+            "elapsed": 47.10000014305115
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865129.234375,
+              "head": 1048559,
+              "relativeTop": 564.140625,
+              "scrollHeight": 1865129,
+              "scrollTop": 1864453,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865129.234375,
+              "head": 1048559,
+              "relativeTop": 564.140625,
+              "scrollHeight": 1865129,
+              "scrollTop": 1864453,
+              "visible": false
+            },
+            "elapsed": 64
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865129.234375,
+              "head": 1048559,
+              "relativeTop": 564.140625,
+              "scrollHeight": 1865129,
+              "scrollTop": 1864453,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865129.234375,
+              "head": 1048559,
+              "relativeTop": 564.140625,
+              "scrollHeight": 1865129,
+              "scrollTop": 1864453,
+              "visible": false
+            },
+            "elapsed": 80.5
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865129.234375,
+              "head": 1048559,
+              "relativeTop": 564.140625,
+              "scrollHeight": 1865129,
+              "scrollTop": 1864453,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865129.234375,
+              "head": 1048559,
+              "relativeTop": 564.140625,
+              "scrollHeight": 1865129,
+              "scrollTop": 1864453,
+              "visible": false
+            },
+            "elapsed": 99.10000014305116
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865129.234375,
+              "head": 1048559,
+              "relativeTop": 564.140625,
+              "scrollHeight": 1865129,
+              "scrollTop": 1864453,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865129.234375,
+              "head": 1048559,
+              "relativeTop": 564.140625,
+              "scrollHeight": 1865129,
+              "scrollTop": 1864453,
+              "visible": false
+            },
+            "elapsed": 113.60000014305116
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865129.234375,
+              "head": 1048559,
+              "relativeTop": 564.140625,
+              "scrollHeight": 1865129,
+              "scrollTop": 1864453,
+              "visible": false
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865129.234375,
+              "head": 1048559,
+              "relativeTop": 564.140625,
+              "scrollHeight": 1865129,
+              "scrollTop": 1864453,
+              "visible": false
+            },
+            "elapsed": 132.20000004768372
+          }
+        ],
+        "status": "stable",
+        "tolerancePixels": 0.05
+      },
+      "sourceEqual": true,
+      "sourceUnchangedByCheck": true,
+      "sourceUnchangedDuringSettle": true
+    },
+    {
+      "action": "undo",
+      "actionStart": {
+        "action": "undo",
+        "baseline": {
+          "clientHeight": 478,
+          "contentHeight": 1865129.234375,
+          "head": 1048559,
+          "relativeTop": 564.140625,
+          "scrollHeight": 1865129,
+          "scrollTop": 1864453,
+          "visible": false
+        },
+        "candidate": {
+          "clientHeight": 478,
+          "contentHeight": 1865129.234375,
+          "head": 1048559,
+          "relativeTop": 564.140625,
+          "scrollHeight": 1865129,
+          "scrollTop": 1864453,
+          "visible": false
+        },
+        "comparator": {
+          "active": true,
+          "calls": {
+            "dispatch": 43,
+            "fallback": 58,
+            "geometry": 32,
+            "other": 0,
+            "paired": 21,
+            "setup": 4
+          },
+          "owned": true,
+          "ownershipLost": false,
+          "phaseStats": {
+            "dispatch": {
+              "jumps": 1198,
+              "rangesSkipped": 296825
+            },
+            "geometry": {
+              "jumps": 1600,
+              "rangesSkipped": 396241
+            },
+            "other": {
+              "jumps": 0,
+              "rangesSkipped": 0
+            },
+            "setup": {
+              "jumps": 0,
+              "rangesSkipped": 0
+            }
+          },
+          "restored": false,
+          "sourceSHA256": "cf4ffe7d177bf2c7c5da66c49be0811cc79a29e12cb658238876bbdcef12939c",
+          "stats": {
+            "jumps": 3196,
+            "rangesSkipped": 791771
+          },
+          "version": "6.7.6"
+        }
+      },
+      "attribution": {
+        "baseline": {
+          "height": 1865313.328125,
+          "map": {
+            "block": 1,
+            "classes": {
+              "HeightMapBlock": 1,
+              "HeightMapBranch": 66574,
+              "_HeightMapGap": 33255,
+              "_HeightMapText": 33319
+            },
+            "collapsed": 116511,
+            "gap": 33255,
+            "gapLength": 0,
+            "nodes": 133149,
+            "text": 33319
+          },
+          "oracle": {
+            "charWidth": 7.475694444444445,
+            "lineHeight": 28.046875,
+            "lineLength": 29.83000464468184,
+            "lineWrapping": true,
+            "textHeight": 20
+          },
+          "version": "6.43.13"
+        },
+        "candidate": {
+          "height": 1865313.328125,
+          "map": {
+            "block": 1,
+            "classes": {
+              "HeightMapBlock": 1,
+              "HeightMapBranch": 66574,
+              "_HeightMapGap": 33255,
+              "_HeightMapText": 33319
+            },
+            "collapsed": 116511,
+            "gap": 33255,
+            "gapLength": 0,
+            "nodes": 133149,
+            "text": 33319
+          },
+          "oracle": {
+            "charWidth": 7.475694444444445,
+            "lineHeight": 28.046875,
+            "lineLength": 29.83000464468184,
+            "lineWrapping": true,
+            "textHeight": 20
+          },
+          "version": "6.43.13"
+        }
+      },
+      "baselineComplete": true,
+      "baselineEstimatedHeight": 1865397.328125,
+      "baselineHead": {
+        "clientHeight": 478,
+        "contentHeight": 1865397.328125,
+        "head": 22,
+        "relativeTop": 4.96875,
+        "scrollHeight": 1865398,
+        "scrollTop": 105,
+        "visible": true
+      },
+      "boxes": [
+        {
+          "baseline": 53.921875,
+          "candidate": 53.921875,
+          "delta": 0,
+          "from": 0,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 18,
+          "textEqual": true
+        },
+        {
+          "baseline": 59.75,
+          "candidate": 59.75,
+          "delta": 0,
+          "from": 19,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 59,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 60,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 70,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.328125,
+          "candidate": 84.328125,
+          "delta": 0,
+          "from": 71,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 122,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 123,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 133,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.328125,
+          "candidate": 84.328125,
+          "delta": 0,
+          "from": 134,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 185,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 186,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 196,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.328125,
+          "candidate": 84.328125,
+          "delta": 0,
+          "from": 197,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 248,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 249,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 259,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.328125,
+          "candidate": 84.328125,
+          "delta": 0,
+          "from": 260,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 311,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 312,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 322,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.328125,
+          "candidate": 84.328125,
+          "delta": 0,
+          "from": 323,
+          "textEqual": true
+        }
+      ],
+      "callbackControl": {
+        "callbacks": 2,
+        "diagnosticJumps": 398,
+        "diagnosticRangesSkipped": 98705,
+        "equal": true,
+        "scope": "direct comparison outside view dispatch and geometry samples"
+      },
+      "candidateEstimatedHeight": 1865397.328125,
+      "candidateHead": {
+        "clientHeight": 478,
+        "contentHeight": 1865397.328125,
+        "head": 22,
+        "relativeTop": 4.96875,
+        "scrollHeight": 1865398,
+        "scrollTop": 105,
+        "visible": true
+      },
+      "comparator": {
+        "active": true,
+        "calls": {
+          "dispatch": 55,
+          "fallback": 74,
+          "geometry": 42,
+          "other": 0,
+          "paired": 27,
+          "setup": 4
+        },
+        "owned": true,
+        "ownershipLost": false,
+        "phaseStats": {
+          "dispatch": {
+            "jumps": 1598,
+            "rangesSkipped": 395886
+          },
+          "geometry": {
+            "jumps": 2000,
+            "rangesSkipped": 495302
+          },
+          "other": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          },
+          "setup": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          }
+        },
+        "restored": false,
+        "sourceSHA256": "cf4ffe7d177bf2c7c5da66c49be0811cc79a29e12cb658238876bbdcef12939c",
+        "stats": {
+          "jumps": 3996,
+          "rangesSkipped": 989893
+        },
+        "version": "6.7.6"
+      },
+      "comparatorBeforeGeometry": {
+        "active": true,
+        "calls": {
+          "dispatch": 55,
+          "fallback": 66,
+          "geometry": 32,
+          "other": 0,
+          "paired": 25,
+          "setup": 4
+        },
+        "owned": true,
+        "ownershipLost": false,
+        "phaseStats": {
+          "dispatch": {
+            "jumps": 1598,
+            "rangesSkipped": 395886
+          },
+          "geometry": {
+            "jumps": 1600,
+            "rangesSkipped": 396241
+          },
+          "other": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          },
+          "setup": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          }
+        },
+        "restored": false,
+        "sourceSHA256": "cf4ffe7d177bf2c7c5da66c49be0811cc79a29e12cb658238876bbdcef12939c",
+        "stats": {
+          "jumps": 3596,
+          "rangesSkipped": 890832
+        },
+        "version": "6.7.6"
+      },
+      "complete": true,
+      "differences": [],
+      "editMode": "indexed",
+      "exactExpected": true,
+      "exactOriginal": true,
+      "fonts": [
+        {
+          "fontFamily": "system-ui, sans-serif",
+          "fontSize": "17px",
+          "lineHeight": "28.05px",
+          "width": 223
+        },
+        {
+          "fontFamily": "system-ui, sans-serif",
+          "fontSize": "17px",
+          "lineHeight": "28.05px",
+          "width": 223
+        }
+      ],
+      "history": 0,
+      "historyUnchangedByCheck": true,
+      "historyUnchangedDuringSettle": true,
+      "maxHeightDelta": 0,
+      "readiness": {
+        "after": "full",
+        "before": "full",
+        "scope": "complete tree publication outside geometry samples"
+      },
+      "selectionEqual": true,
+      "settling": {
+        "deadlineMs": 1200,
+        "minimumFrames": 8,
+        "requiredEqualTransitions": 4,
+        "samples": [
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865397.328125,
+              "head": 22,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865398,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865397.328125,
+              "head": 22,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865398,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 19.40000009536743
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865397.328125,
+              "head": 22,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865398,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865397.328125,
+              "head": 22,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865398,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 21.100000143051147
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865397.328125,
+              "head": 22,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865398,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865397.328125,
+              "head": 22,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865398,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 34.799999952316284
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865397.328125,
+              "head": 22,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865398,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865397.328125,
+              "head": 22,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865398,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 52.10000014305115
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865397.328125,
+              "head": 22,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865398,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865397.328125,
+              "head": 22,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865398,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 70.70000004768372
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865397.328125,
+              "head": 22,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865398,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865397.328125,
+              "head": 22,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865398,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 84.90000009536743
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865397.328125,
+              "head": 22,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865398,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865397.328125,
+              "head": 22,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865398,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 102
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865397.328125,
+              "head": 22,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865398,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865397.328125,
+              "head": 22,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865398,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 120.40000009536745
+          }
+        ],
+        "status": "stable",
+        "tolerancePixels": 0.05
+      },
+      "sourceEqual": true,
+      "sourceUnchangedByCheck": true,
+      "sourceUnchangedDuringSettle": true
+    },
+    {
+      "action": "redo",
+      "actionStart": {
+        "action": "redo",
+        "baseline": {
+          "clientHeight": 478,
+          "contentHeight": 1865397.328125,
+          "head": 22,
+          "relativeTop": 4.96875,
+          "scrollHeight": 1865398,
+          "scrollTop": 105,
+          "visible": true
+        },
+        "candidate": {
+          "clientHeight": 478,
+          "contentHeight": 1865397.328125,
+          "head": 22,
+          "relativeTop": 4.96875,
+          "scrollHeight": 1865398,
+          "scrollTop": 105,
+          "visible": true
+        },
+        "comparator": {
+          "active": true,
+          "calls": {
+            "dispatch": 55,
+            "fallback": 74,
+            "geometry": 42,
+            "other": 0,
+            "paired": 27,
+            "setup": 4
+          },
+          "owned": true,
+          "ownershipLost": false,
+          "phaseStats": {
+            "dispatch": {
+              "jumps": 1598,
+              "rangesSkipped": 395886
+            },
+            "geometry": {
+              "jumps": 2000,
+              "rangesSkipped": 495302
+            },
+            "other": {
+              "jumps": 0,
+              "rangesSkipped": 0
+            },
+            "setup": {
+              "jumps": 0,
+              "rangesSkipped": 0
+            }
+          },
+          "restored": false,
+          "sourceSHA256": "cf4ffe7d177bf2c7c5da66c49be0811cc79a29e12cb658238876bbdcef12939c",
+          "stats": {
+            "jumps": 3996,
+            "rangesSkipped": 989893
+          },
+          "version": "6.7.6"
+        }
+      },
+      "attribution": {
+        "baseline": {
+          "height": 1865341.546875,
+          "map": {
+            "block": 1,
+            "classes": {
+              "HeightMapBlock": 1,
+              "HeightMapBranch": 66574,
+              "_HeightMapGap": 33255,
+              "_HeightMapText": 33319
+            },
+            "collapsed": 116511,
+            "gap": 33255,
+            "gapLength": 0,
+            "nodes": 133149,
+            "text": 33319
+          },
+          "oracle": {
+            "charWidth": 7.475694444444445,
+            "lineHeight": 28,
+            "lineLength": 29.83000464468184,
+            "lineWrapping": true,
+            "textHeight": 20
+          },
+          "version": "6.43.13"
+        },
+        "candidate": {
+          "height": 1865341.546875,
+          "map": {
+            "block": 1,
+            "classes": {
+              "HeightMapBlock": 1,
+              "HeightMapBranch": 66574,
+              "_HeightMapGap": 33255,
+              "_HeightMapText": 33319
+            },
+            "collapsed": 116511,
+            "gap": 33255,
+            "gapLength": 0,
+            "nodes": 133149,
+            "text": 33319
+          },
+          "oracle": {
+            "charWidth": 7.475694444444445,
+            "lineHeight": 28,
+            "lineLength": 29.83000464468184,
+            "lineWrapping": true,
+            "textHeight": 20
+          },
+          "version": "6.43.13"
+        }
+      },
+      "baselineComplete": true,
+      "baselineEstimatedHeight": 1865425.546875,
+      "baselineHead": {
+        "clientHeight": 478,
+        "contentHeight": 1865425.546875,
+        "head": 27,
+        "relativeTop": 4.96875,
+        "scrollHeight": 1865426,
+        "scrollTop": 105,
+        "visible": true
+      },
+      "boxes": [
+        {
+          "baseline": 53.921875,
+          "candidate": 53.921875,
+          "delta": 0,
+          "from": 0,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 18,
+          "textEqual": true
+        },
+        {
+          "baseline": 87.796875,
+          "candidate": 87.796875,
+          "delta": 0,
+          "from": 19,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 64,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 65,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 75,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.328125,
+          "candidate": 84.328125,
+          "delta": 0,
+          "from": 76,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 127,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 128,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 138,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.328125,
+          "candidate": 84.328125,
+          "delta": 0,
+          "from": 139,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 190,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 191,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 201,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.328125,
+          "candidate": 84.328125,
+          "delta": 0,
+          "from": 202,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 253,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 254,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 264,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.328125,
+          "candidate": 84.328125,
+          "delta": 0,
+          "from": 265,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 316,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 317,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 327,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.328125,
+          "candidate": 84.328125,
+          "delta": 0,
+          "from": 328,
+          "textEqual": true
+        }
+      ],
+      "callbackControl": {
+        "callbacks": 2,
+        "diagnosticJumps": 398,
+        "diagnosticRangesSkipped": 98705,
+        "equal": true,
+        "scope": "direct comparison outside view dispatch and geometry samples"
+      },
+      "candidateEstimatedHeight": 1865425.546875,
+      "candidateHead": {
+        "clientHeight": 478,
+        "contentHeight": 1865425.546875,
+        "head": 27,
+        "relativeTop": 4.96875,
+        "scrollHeight": 1865426,
+        "scrollTop": 105,
+        "visible": true
+      },
+      "comparator": {
+        "active": true,
+        "calls": {
+          "dispatch": 67,
+          "fallback": 90,
+          "geometry": 52,
+          "other": 0,
+          "paired": 33,
+          "setup": 4
+        },
+        "owned": true,
+        "ownershipLost": false,
+        "phaseStats": {
+          "dispatch": {
+            "jumps": 1998,
+            "rangesSkipped": 494947
+          },
+          "geometry": {
+            "jumps": 2400,
+            "rangesSkipped": 594363
+          },
+          "other": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          },
+          "setup": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          }
+        },
+        "restored": false,
+        "sourceSHA256": "cf4ffe7d177bf2c7c5da66c49be0811cc79a29e12cb658238876bbdcef12939c",
+        "stats": {
+          "jumps": 4796,
+          "rangesSkipped": 1188015
+        },
+        "version": "6.7.6"
+      },
+      "comparatorBeforeGeometry": {
+        "active": true,
+        "calls": {
+          "dispatch": 67,
+          "fallback": 82,
+          "geometry": 42,
+          "other": 0,
+          "paired": 31,
+          "setup": 4
+        },
+        "owned": true,
+        "ownershipLost": false,
+        "phaseStats": {
+          "dispatch": {
+            "jumps": 1998,
+            "rangesSkipped": 494947
+          },
+          "geometry": {
+            "jumps": 2000,
+            "rangesSkipped": 495302
+          },
+          "other": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          },
+          "setup": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          }
+        },
+        "restored": false,
+        "sourceSHA256": "cf4ffe7d177bf2c7c5da66c49be0811cc79a29e12cb658238876bbdcef12939c",
+        "stats": {
+          "jumps": 4396,
+          "rangesSkipped": 1088954
+        },
+        "version": "6.7.6"
+      },
+      "complete": true,
+      "differences": [],
+      "editMode": "indexed",
+      "exactExpected": true,
+      "exactOriginal": false,
+      "fonts": [
+        {
+          "fontFamily": "system-ui, sans-serif",
+          "fontSize": "17px",
+          "lineHeight": "28.05px",
+          "width": 223
+        },
+        {
+          "fontFamily": "system-ui, sans-serif",
+          "fontSize": "17px",
+          "lineHeight": "28.05px",
+          "width": 223
+        }
+      ],
+      "history": 1,
+      "historyUnchangedByCheck": true,
+      "historyUnchangedDuringSettle": true,
+      "maxHeightDelta": 0,
+      "readiness": {
+        "after": "full",
+        "before": "full",
+        "scope": "complete tree publication outside geometry samples"
+      },
+      "selectionEqual": true,
+      "settling": {
+        "deadlineMs": 1200,
+        "minimumFrames": 8,
+        "requiredEqualTransitions": 4,
+        "samples": [
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 51.40000009536743
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 57.20000004768371
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 73.80000019073486
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 90.60000014305116
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 107.30000019073486
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 122
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 140.60000014305115
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 4.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 105,
+              "visible": true
+            },
+            "elapsed": 155.5
+          }
+        ],
+        "status": "stable",
+        "tolerancePixels": 0.05
+      },
+      "sourceEqual": true,
+      "sourceUnchangedByCheck": true,
+      "sourceUnchangedDuringSettle": true
+    },
+    {
+      "action": "source",
+      "actionStart": {
+        "action": "source-mode",
+        "baseline": {
+          "clientHeight": 478,
+          "contentHeight": 1865425.546875,
+          "head": 27,
+          "relativeTop": 4.96875,
+          "scrollHeight": 1865426,
+          "scrollTop": 105,
+          "visible": true
+        },
+        "candidate": {
+          "clientHeight": 478,
+          "contentHeight": 1865425.546875,
+          "head": 27,
+          "relativeTop": 4.96875,
+          "scrollHeight": 1865426,
+          "scrollTop": 105,
+          "visible": true
+        },
+        "comparator": {
+          "active": true,
+          "calls": {
+            "dispatch": 67,
+            "fallback": 90,
+            "geometry": 52,
+            "other": 0,
+            "paired": 33,
+            "setup": 4
+          },
+          "owned": true,
+          "ownershipLost": false,
+          "phaseStats": {
+            "dispatch": {
+              "jumps": 1998,
+              "rangesSkipped": 494947
+            },
+            "geometry": {
+              "jumps": 2400,
+              "rangesSkipped": 594363
+            },
+            "other": {
+              "jumps": 0,
+              "rangesSkipped": 0
+            },
+            "setup": {
+              "jumps": 0,
+              "rangesSkipped": 0
+            }
+          },
+          "restored": false,
+          "sourceSHA256": "cf4ffe7d177bf2c7c5da66c49be0811cc79a29e12cb658238876bbdcef12939c",
+          "stats": {
+            "jumps": 4796,
+            "rangesSkipped": 1188015
+          },
+          "version": "6.7.6"
+        }
+      },
+      "attribution": {
+        "baseline": {
+          "height": 1865281.578125,
+          "map": {
+            "block": 0,
+            "classes": {
+              "HeightMapBranch": 66574,
+              "_HeightMapGap": 33256,
+              "_HeightMapText": 33319
+            },
+            "collapsed": 0,
+            "gap": 33256,
+            "gapLength": 14,
+            "nodes": 133149,
+            "text": 33319
+          },
+          "oracle": {
+            "charWidth": 10.235294117647058,
+            "lineHeight": 28.046875,
+            "lineLength": 21.78735632183908,
+            "lineWrapping": true,
+            "textHeight": 20
+          },
+          "version": "6.43.13"
+        },
+        "candidate": {
+          "height": 1865281.578125,
+          "map": {
+            "block": 0,
+            "classes": {
+              "HeightMapBranch": 66574,
+              "_HeightMapGap": 33256,
+              "_HeightMapText": 33319
+            },
+            "collapsed": 0,
+            "gap": 33256,
+            "gapLength": 14,
+            "nodes": 133149,
+            "text": 33319
+          },
+          "oracle": {
+            "charWidth": 10.235294117647058,
+            "lineHeight": 28.046875,
+            "lineLength": 21.78735632183908,
+            "lineWrapping": true,
+            "textHeight": 20
+          },
+          "version": "6.43.13"
+        }
+      },
+      "baselineComplete": true,
+      "baselineEstimatedHeight": 1865365.578125,
+      "baselineHead": {
+        "clientHeight": 478,
+        "contentHeight": 1865365.578125,
+        "head": 27,
+        "relativeTop": 5.09375,
+        "scrollHeight": 1865366,
+        "scrollTop": 79,
+        "visible": true
+      },
+      "boxes": [
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 0,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 18,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.140625,
+          "candidate": 84.140625,
+          "delta": 0,
+          "from": 19,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 64,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 65,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 75,
+          "textEqual": true
+        },
+        {
+          "baseline": 112.1875,
+          "candidate": 112.1875,
+          "delta": 0,
+          "from": 76,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 127,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 128,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 138,
+          "textEqual": true
+        },
+        {
+          "baseline": 112.1875,
+          "candidate": 112.1875,
+          "delta": 0,
+          "from": 139,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 190,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 191,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 201,
+          "textEqual": true
+        },
+        {
+          "baseline": 112.1875,
+          "candidate": 112.1875,
+          "delta": 0,
+          "from": 202,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 253,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 254,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 264,
+          "textEqual": true
+        },
+        {
+          "baseline": 112.1875,
+          "candidate": 112.1875,
+          "delta": 0,
+          "from": 265,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 316,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 317,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 327,
+          "textEqual": true
+        },
+        {
+          "baseline": 112.1875,
+          "candidate": 112.1875,
+          "delta": 0,
+          "from": 328,
+          "textEqual": true
+        }
+      ],
+      "callbackControl": {
+        "callbacks": 2,
+        "diagnosticJumps": 398,
+        "diagnosticRangesSkipped": 98705,
+        "equal": true,
+        "scope": "direct comparison outside view dispatch and geometry samples"
+      },
+      "candidateEstimatedHeight": 1865365.578125,
+      "candidateHead": {
+        "clientHeight": 478,
+        "contentHeight": 1865365.578125,
+        "head": 27,
+        "relativeTop": 5.09375,
+        "scrollHeight": 1865366,
+        "scrollTop": 79,
+        "visible": true
+      },
+      "comparator": {
+        "active": true,
+        "calls": {
+          "dispatch": 79,
+          "fallback": 106,
+          "geometry": 62,
+          "other": 0,
+          "paired": 39,
+          "setup": 4
+        },
+        "owned": true,
+        "ownershipLost": false,
+        "phaseStats": {
+          "dispatch": {
+            "jumps": 1998,
+            "rangesSkipped": 494947
+          },
+          "geometry": {
+            "jumps": 2400,
+            "rangesSkipped": 594363
+          },
+          "other": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          },
+          "setup": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          }
+        },
+        "restored": false,
+        "sourceSHA256": "cf4ffe7d177bf2c7c5da66c49be0811cc79a29e12cb658238876bbdcef12939c",
+        "stats": {
+          "jumps": 4796,
+          "rangesSkipped": 1188015
+        },
+        "version": "6.7.6"
+      },
+      "comparatorBeforeGeometry": {
+        "active": true,
+        "calls": {
+          "dispatch": 79,
+          "fallback": 98,
+          "geometry": 52,
+          "other": 0,
+          "paired": 37,
+          "setup": 4
+        },
+        "owned": true,
+        "ownershipLost": false,
+        "phaseStats": {
+          "dispatch": {
+            "jumps": 1998,
+            "rangesSkipped": 494947
+          },
+          "geometry": {
+            "jumps": 2400,
+            "rangesSkipped": 594363
+          },
+          "other": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          },
+          "setup": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          }
+        },
+        "restored": false,
+        "sourceSHA256": "cf4ffe7d177bf2c7c5da66c49be0811cc79a29e12cb658238876bbdcef12939c",
+        "stats": {
+          "jumps": 4796,
+          "rangesSkipped": 1188015
+        },
+        "version": "6.7.6"
+      },
+      "complete": true,
+      "differences": [],
+      "editMode": "indexed",
+      "exactExpected": true,
+      "exactOriginal": false,
+      "fonts": [
+        {
+          "fontFamily": "ui-monospace, monospace",
+          "fontSize": "17px",
+          "lineHeight": "28.05px",
+          "width": 223
+        },
+        {
+          "fontFamily": "ui-monospace, monospace",
+          "fontSize": "17px",
+          "lineHeight": "28.05px",
+          "width": 223
+        }
+      ],
+      "history": 1,
+      "historyUnchangedByCheck": true,
+      "historyUnchangedDuringSettle": true,
+      "maxHeightDelta": 0,
+      "readiness": {
+        "after": "source",
+        "before": "source",
+        "scope": "complete tree publication outside geometry samples"
+      },
+      "selectionEqual": true,
+      "settling": {
+        "deadlineMs": 1200,
+        "minimumFrames": 8,
+        "requiredEqualTransitions": 4,
+        "samples": [
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865365.578125,
+              "head": 27,
+              "relativeTop": 5.09375,
+              "scrollHeight": 1865366,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865365.578125,
+              "head": 27,
+              "relativeTop": 5.09375,
+              "scrollHeight": 1865366,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "elapsed": 19.800000190734863
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865365.578125,
+              "head": 27,
+              "relativeTop": 5.09375,
+              "scrollHeight": 1865366,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865365.578125,
+              "head": 27,
+              "relativeTop": 5.09375,
+              "scrollHeight": 1865366,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "elapsed": 25.90000009536743
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865365.578125,
+              "head": 27,
+              "relativeTop": 5.09375,
+              "scrollHeight": 1865366,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865365.578125,
+              "head": 27,
+              "relativeTop": 5.09375,
+              "scrollHeight": 1865366,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "elapsed": 42.40000009536743
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865365.578125,
+              "head": 27,
+              "relativeTop": 5.09375,
+              "scrollHeight": 1865366,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865365.578125,
+              "head": 27,
+              "relativeTop": 5.09375,
+              "scrollHeight": 1865366,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "elapsed": 61.10000014305115
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865365.578125,
+              "head": 27,
+              "relativeTop": 5.09375,
+              "scrollHeight": 1865366,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865365.578125,
+              "head": 27,
+              "relativeTop": 5.09375,
+              "scrollHeight": 1865366,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "elapsed": 75.80000019073486
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865365.578125,
+              "head": 27,
+              "relativeTop": 5.09375,
+              "scrollHeight": 1865366,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865365.578125,
+              "head": 27,
+              "relativeTop": 5.09375,
+              "scrollHeight": 1865366,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "elapsed": 92.40000009536745
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865365.578125,
+              "head": 27,
+              "relativeTop": 5.09375,
+              "scrollHeight": 1865366,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865365.578125,
+              "head": 27,
+              "relativeTop": 5.09375,
+              "scrollHeight": 1865366,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "elapsed": 109.20000004768372
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865365.578125,
+              "head": 27,
+              "relativeTop": 5.09375,
+              "scrollHeight": 1865366,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865365.578125,
+              "head": 27,
+              "relativeTop": 5.09375,
+              "scrollHeight": 1865366,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "elapsed": 125.60000014305116
+          }
+        ],
+        "status": "stable",
+        "tolerancePixels": 0.05
+      },
+      "sourceEqual": true,
+      "sourceUnchangedByCheck": true,
+      "sourceUnchangedDuringSettle": true
+    },
+    {
+      "action": "live",
+      "actionStart": {
+        "action": "source-mode",
+        "baseline": {
+          "clientHeight": 478,
+          "contentHeight": 1865365.578125,
+          "head": 27,
+          "relativeTop": 5.09375,
+          "scrollHeight": 1865366,
+          "scrollTop": 79,
+          "visible": true
+        },
+        "candidate": {
+          "clientHeight": 478,
+          "contentHeight": 1865365.578125,
+          "head": 27,
+          "relativeTop": 5.09375,
+          "scrollHeight": 1865366,
+          "scrollTop": 79,
+          "visible": true
+        },
+        "comparator": {
+          "active": true,
+          "calls": {
+            "dispatch": 79,
+            "fallback": 106,
+            "geometry": 62,
+            "other": 0,
+            "paired": 39,
+            "setup": 4
+          },
+          "owned": true,
+          "ownershipLost": false,
+          "phaseStats": {
+            "dispatch": {
+              "jumps": 1998,
+              "rangesSkipped": 494947
+            },
+            "geometry": {
+              "jumps": 2400,
+              "rangesSkipped": 594363
+            },
+            "other": {
+              "jumps": 0,
+              "rangesSkipped": 0
+            },
+            "setup": {
+              "jumps": 0,
+              "rangesSkipped": 0
+            }
+          },
+          "restored": false,
+          "sourceSHA256": "cf4ffe7d177bf2c7c5da66c49be0811cc79a29e12cb658238876bbdcef12939c",
+          "stats": {
+            "jumps": 4796,
+            "rangesSkipped": 1188015
+          },
+          "version": "6.7.6"
+        }
+      },
+      "attribution": {
+        "baseline": {
+          "height": 1865341.546875,
+          "map": {
+            "block": 1,
+            "classes": {
+              "HeightMapBlock": 1,
+              "HeightMapBranch": 66574,
+              "_HeightMapGap": 33255,
+              "_HeightMapText": 33319
+            },
+            "collapsed": 116511,
+            "gap": 33255,
+            "gapLength": 0,
+            "nodes": 133149,
+            "text": 33319
+          },
+          "oracle": {
+            "charWidth": 10.235294117647058,
+            "lineHeight": 28.046875,
+            "lineLength": 21.78735632183908,
+            "lineWrapping": true,
+            "textHeight": 20
+          },
+          "version": "6.43.13"
+        },
+        "candidate": {
+          "height": 1865341.546875,
+          "map": {
+            "block": 1,
+            "classes": {
+              "HeightMapBlock": 1,
+              "HeightMapBranch": 66574,
+              "_HeightMapGap": 33255,
+              "_HeightMapText": 33319
+            },
+            "collapsed": 116511,
+            "gap": 33255,
+            "gapLength": 0,
+            "nodes": 133149,
+            "text": 33319
+          },
+          "oracle": {
+            "charWidth": 10.235294117647058,
+            "lineHeight": 28.046875,
+            "lineLength": 21.78735632183908,
+            "lineWrapping": true,
+            "textHeight": 20
+          },
+          "version": "6.43.13"
+        }
+      },
+      "baselineComplete": true,
+      "baselineEstimatedHeight": 1865425.546875,
+      "baselineHead": {
+        "clientHeight": 478,
+        "contentHeight": 1865425.546875,
+        "head": 27,
+        "relativeTop": 30.96875,
+        "scrollHeight": 1865426,
+        "scrollTop": 79,
+        "visible": true
+      },
+      "boxes": [
+        {
+          "baseline": 53.921875,
+          "candidate": 53.921875,
+          "delta": 0,
+          "from": 0,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 18,
+          "textEqual": true
+        },
+        {
+          "baseline": 87.796875,
+          "candidate": 87.796875,
+          "delta": 0,
+          "from": 19,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 64,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 65,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 75,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.328125,
+          "candidate": 84.328125,
+          "delta": 0,
+          "from": 76,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 127,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 128,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 138,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.328125,
+          "candidate": 84.328125,
+          "delta": 0,
+          "from": 139,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 190,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 191,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 201,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.328125,
+          "candidate": 84.328125,
+          "delta": 0,
+          "from": 202,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 253,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 254,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 264,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.328125,
+          "candidate": 84.328125,
+          "delta": 0,
+          "from": 265,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 316,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 317,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 327,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.328125,
+          "candidate": 84.328125,
+          "delta": 0,
+          "from": 328,
+          "textEqual": true
+        }
+      ],
+      "callbackControl": {
+        "callbacks": 2,
+        "diagnosticJumps": 398,
+        "diagnosticRangesSkipped": 98705,
+        "equal": true,
+        "scope": "direct comparison outside view dispatch and geometry samples"
+      },
+      "candidateEstimatedHeight": 1865425.546875,
+      "candidateHead": {
+        "clientHeight": 478,
+        "contentHeight": 1865425.546875,
+        "head": 27,
+        "relativeTop": 30.96875,
+        "scrollHeight": 1865426,
+        "scrollTop": 79,
+        "visible": true
+      },
+      "comparator": {
+        "active": true,
+        "calls": {
+          "dispatch": 91,
+          "fallback": 122,
+          "geometry": 72,
+          "other": 0,
+          "paired": 45,
+          "setup": 4
+        },
+        "owned": true,
+        "ownershipLost": false,
+        "phaseStats": {
+          "dispatch": {
+            "jumps": 2398,
+            "rangesSkipped": 594008
+          },
+          "geometry": {
+            "jumps": 2800,
+            "rangesSkipped": 693424
+          },
+          "other": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          },
+          "setup": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          }
+        },
+        "restored": false,
+        "sourceSHA256": "cf4ffe7d177bf2c7c5da66c49be0811cc79a29e12cb658238876bbdcef12939c",
+        "stats": {
+          "jumps": 5596,
+          "rangesSkipped": 1386137
+        },
+        "version": "6.7.6"
+      },
+      "comparatorBeforeGeometry": {
+        "active": true,
+        "calls": {
+          "dispatch": 91,
+          "fallback": 114,
+          "geometry": 62,
+          "other": 0,
+          "paired": 43,
+          "setup": 4
+        },
+        "owned": true,
+        "ownershipLost": false,
+        "phaseStats": {
+          "dispatch": {
+            "jumps": 2398,
+            "rangesSkipped": 594008
+          },
+          "geometry": {
+            "jumps": 2400,
+            "rangesSkipped": 594363
+          },
+          "other": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          },
+          "setup": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          }
+        },
+        "restored": false,
+        "sourceSHA256": "cf4ffe7d177bf2c7c5da66c49be0811cc79a29e12cb658238876bbdcef12939c",
+        "stats": {
+          "jumps": 5196,
+          "rangesSkipped": 1287076
+        },
+        "version": "6.7.6"
+      },
+      "complete": true,
+      "differences": [],
+      "editMode": "indexed",
+      "exactExpected": true,
+      "exactOriginal": false,
+      "fonts": [
+        {
+          "fontFamily": "system-ui, sans-serif",
+          "fontSize": "17px",
+          "lineHeight": "28.05px",
+          "width": 223
+        },
+        {
+          "fontFamily": "system-ui, sans-serif",
+          "fontSize": "17px",
+          "lineHeight": "28.05px",
+          "width": 223
+        }
+      ],
+      "history": 1,
+      "historyUnchangedByCheck": true,
+      "historyUnchangedDuringSettle": true,
+      "maxHeightDelta": 0,
+      "readiness": {
+        "after": "full",
+        "before": "full",
+        "scope": "complete tree publication outside geometry samples"
+      },
+      "selectionEqual": true,
+      "settling": {
+        "deadlineMs": 1200,
+        "minimumFrames": 8,
+        "requiredEqualTransitions": 4,
+        "samples": [
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 30.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 30.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "elapsed": 16.800000190734863
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 30.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 30.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "elapsed": 28.600000143051147
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 30.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 30.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "elapsed": 45.20000004768371
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 30.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 30.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "elapsed": 61.80000019073486
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 30.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 30.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "elapsed": 78.60000014305115
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 30.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 30.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "elapsed": 95.60000014305116
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 30.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 30.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "elapsed": 111.90000009536745
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 30.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865425.546875,
+              "head": 27,
+              "relativeTop": 30.96875,
+              "scrollHeight": 1865426,
+              "scrollTop": 79,
+              "visible": true
+            },
+            "elapsed": 130.5
+          }
+        ],
+        "status": "stable",
+        "tolerancePixels": 0.05
+      },
+      "sourceEqual": true,
+      "sourceUnchangedByCheck": true,
+      "sourceUnchangedDuringSettle": true
+    },
+    {
+      "action": "end",
+      "actionStart": {
+        "action": "jump",
+        "baseline": {
+          "clientHeight": 478,
+          "contentHeight": 1865425.546875,
+          "head": 27,
+          "relativeTop": 30.96875,
+          "scrollHeight": 1865426,
+          "scrollTop": 79,
+          "visible": true
+        },
+        "candidate": {
+          "clientHeight": 478,
+          "contentHeight": 1865425.546875,
+          "head": 27,
+          "relativeTop": 30.96875,
+          "scrollHeight": 1865426,
+          "scrollTop": 79,
+          "visible": true
+        },
+        "comparator": {
+          "active": true,
+          "calls": {
+            "dispatch": 91,
+            "fallback": 122,
+            "geometry": 72,
+            "other": 0,
+            "paired": 45,
+            "setup": 4
+          },
+          "owned": true,
+          "ownershipLost": false,
+          "phaseStats": {
+            "dispatch": {
+              "jumps": 2398,
+              "rangesSkipped": 594008
+            },
+            "geometry": {
+              "jumps": 2800,
+              "rangesSkipped": 693424
+            },
+            "other": {
+              "jumps": 0,
+              "rangesSkipped": 0
+            },
+            "setup": {
+              "jumps": 0,
+              "rangesSkipped": 0
+            }
+          },
+          "restored": false,
+          "sourceSHA256": "cf4ffe7d177bf2c7c5da66c49be0811cc79a29e12cb658238876bbdcef12939c",
+          "stats": {
+            "jumps": 5596,
+            "rangesSkipped": 1386137
+          },
+          "version": "6.7.6"
+        }
+      },
+      "attribution": {
+        "baseline": {
+          "height": 1865319.046875,
+          "map": {
+            "block": 1,
+            "classes": {
+              "HeightMapBlock": 1,
+              "HeightMapBranch": 66574,
+              "_HeightMapGap": 33255,
+              "_HeightMapText": 33319
+            },
+            "collapsed": 116511,
+            "gap": 33255,
+            "gapLength": 0,
+            "nodes": 133149,
+            "text": 33319
+          },
+          "oracle": {
+            "charWidth": 7.475694444444445,
+            "lineHeight": 28,
+            "lineLength": 29.83000464468184,
+            "lineWrapping": true,
+            "textHeight": 20
+          },
+          "version": "6.43.13"
+        },
+        "candidate": {
+          "height": 1865319.046875,
+          "map": {
+            "block": 1,
+            "classes": {
+              "HeightMapBlock": 1,
+              "HeightMapBranch": 66574,
+              "_HeightMapGap": 33255,
+              "_HeightMapText": 33319
+            },
+            "collapsed": 116511,
+            "gap": 33255,
+            "gapLength": 0,
+            "nodes": 133149,
+            "text": 33319
+          },
+          "oracle": {
+            "charWidth": 7.475694444444445,
+            "lineHeight": 28,
+            "lineLength": 29.83000464468184,
+            "lineWrapping": true,
+            "textHeight": 20
+          },
+          "version": "6.43.13"
+        }
+      },
+      "baselineComplete": true,
+      "baselineEstimatedHeight": 1865403.046875,
+      "baselineHead": {
+        "clientHeight": 478,
+        "contentHeight": 1865403.046875,
+        "head": 1048560,
+        "relativeTop": 453.109375,
+        "scrollHeight": 1865427,
+        "scrollTop": 1864890,
+        "visible": true
+      },
+      "boxes": [
+        {
+          "baseline": 84.328125,
+          "candidate": 84.328125,
+          "delta": 0,
+          "from": 1048207,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048258,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 1048259,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048269,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.328125,
+          "candidate": 84.328125,
+          "delta": 0,
+          "from": 1048270,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048321,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 1048322,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048332,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.328125,
+          "candidate": 84.328125,
+          "delta": 0,
+          "from": 1048333,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048384,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 1048385,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048395,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.328125,
+          "candidate": 84.328125,
+          "delta": 0,
+          "from": 1048396,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048447,
+          "textEqual": true
+        },
+        {
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0,
+          "from": 1048448,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048458,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.328125,
+          "candidate": 84.328125,
+          "delta": 0,
+          "from": 1048459,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048510,
+          "textEqual": true
+        },
+        {
+          "baseline": 84.140625,
+          "candidate": 84.140625,
+          "delta": 0,
+          "from": 1048511,
+          "textEqual": true
+        },
+        {
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0,
+          "from": 1048560,
+          "textEqual": true
+        }
+      ],
+      "callbackControl": {
+        "callbacks": 2,
+        "diagnosticJumps": 398,
+        "diagnosticRangesSkipped": 98705,
+        "equal": true,
+        "scope": "direct comparison outside view dispatch and geometry samples"
+      },
+      "candidateEstimatedHeight": 1865403.046875,
+      "candidateHead": {
+        "clientHeight": 478,
+        "contentHeight": 1865403.046875,
+        "head": 1048560,
+        "relativeTop": 453.109375,
+        "scrollHeight": 1865427,
+        "scrollTop": 1864890,
+        "visible": true
+      },
+      "comparator": {
+        "active": true,
+        "calls": {
+          "dispatch": 100,
+          "fallback": 140,
+          "geometry": 86,
+          "other": 0,
+          "paired": 50,
+          "setup": 4
+        },
+        "owned": true,
+        "ownershipLost": false,
+        "phaseStats": {
+          "dispatch": {
+            "jumps": 2398,
+            "rangesSkipped": 594008
+          },
+          "geometry": {
+            "jumps": 3200,
+            "rangesSkipped": 792485
+          },
+          "other": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          },
+          "setup": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          }
+        },
+        "restored": false,
+        "sourceSHA256": "cf4ffe7d177bf2c7c5da66c49be0811cc79a29e12cb658238876bbdcef12939c",
+        "stats": {
+          "jumps": 5996,
+          "rangesSkipped": 1485198
+        },
+        "version": "6.7.6"
+      },
+      "comparatorBeforeGeometry": {
+        "active": true,
+        "calls": {
+          "dispatch": 100,
+          "fallback": 128,
+          "geometry": 72,
+          "other": 0,
+          "paired": 48,
+          "setup": 4
+        },
+        "owned": true,
+        "ownershipLost": false,
+        "phaseStats": {
+          "dispatch": {
+            "jumps": 2398,
+            "rangesSkipped": 594008
+          },
+          "geometry": {
+            "jumps": 2800,
+            "rangesSkipped": 693424
+          },
+          "other": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          },
+          "setup": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          }
+        },
+        "restored": false,
+        "sourceSHA256": "cf4ffe7d177bf2c7c5da66c49be0811cc79a29e12cb658238876bbdcef12939c",
+        "stats": {
+          "jumps": 5596,
+          "rangesSkipped": 1386137
+        },
+        "version": "6.7.6"
+      },
+      "complete": true,
+      "differences": [],
+      "editMode": "indexed",
+      "exactExpected": true,
+      "exactOriginal": false,
+      "fonts": [
+        {
+          "fontFamily": "system-ui, sans-serif",
+          "fontSize": "17px",
+          "lineHeight": "28.05px",
+          "width": 223
+        },
+        {
+          "fontFamily": "system-ui, sans-serif",
+          "fontSize": "17px",
+          "lineHeight": "28.05px",
+          "width": 223
+        }
+      ],
+      "history": 1,
+      "historyUnchangedByCheck": true,
+      "historyUnchangedDuringSettle": true,
+      "maxHeightDelta": 0,
+      "readiness": {
+        "after": "full",
+        "before": "full",
+        "scope": "complete tree publication outside geometry samples"
+      },
+      "selectionEqual": true,
+      "settling": {
+        "deadlineMs": 1200,
+        "minimumFrames": 8,
+        "requiredEqualTransitions": 4,
+        "samples": [
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865403.046875,
+              "head": 1048560,
+              "relativeTop": 453.109375,
+              "scrollHeight": 1865427,
+              "scrollTop": 1864890,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865403.046875,
+              "head": 1048560,
+              "relativeTop": 453.109375,
+              "scrollHeight": 1865427,
+              "scrollTop": 1864890,
+              "visible": true
+            },
+            "elapsed": 30.299999952316284
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865403.046875,
+              "head": 1048560,
+              "relativeTop": 453.109375,
+              "scrollHeight": 1865427,
+              "scrollTop": 1864890,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865403.046875,
+              "head": 1048560,
+              "relativeTop": 453.109375,
+              "scrollHeight": 1865427,
+              "scrollTop": 1864890,
+              "visible": true
+            },
+            "elapsed": 32.09999990463257
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865403.046875,
+              "head": 1048560,
+              "relativeTop": 453.109375,
+              "scrollHeight": 1865427,
+              "scrollTop": 1864890,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865403.046875,
+              "head": 1048560,
+              "relativeTop": 453.109375,
+              "scrollHeight": 1865427,
+              "scrollTop": 1864890,
+              "visible": true
+            },
+            "elapsed": 42.5
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865403.046875,
+              "head": 1048560,
+              "relativeTop": 453.109375,
+              "scrollHeight": 1865427,
+              "scrollTop": 1864890,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865403.046875,
+              "head": 1048560,
+              "relativeTop": 453.109375,
+              "scrollHeight": 1865427,
+              "scrollTop": 1864890,
+              "visible": true
+            },
+            "elapsed": 59.40000009536743
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865403.046875,
+              "head": 1048560,
+              "relativeTop": 453.109375,
+              "scrollHeight": 1865427,
+              "scrollTop": 1864890,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865403.046875,
+              "head": 1048560,
+              "relativeTop": 453.109375,
+              "scrollHeight": 1865427,
+              "scrollTop": 1864890,
+              "visible": true
+            },
+            "elapsed": 76.90000009536743
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865403.046875,
+              "head": 1048560,
+              "relativeTop": 453.109375,
+              "scrollHeight": 1865427,
+              "scrollTop": 1864890,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865403.046875,
+              "head": 1048560,
+              "relativeTop": 453.109375,
+              "scrollHeight": 1865427,
+              "scrollTop": 1864890,
+              "visible": true
+            },
+            "elapsed": 92.70000004768372
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865403.046875,
+              "head": 1048560,
+              "relativeTop": 453.109375,
+              "scrollHeight": 1865427,
+              "scrollTop": 1864890,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865403.046875,
+              "head": 1048560,
+              "relativeTop": 453.109375,
+              "scrollHeight": 1865427,
+              "scrollTop": 1864890,
+              "visible": true
+            },
+            "elapsed": 110.20000004768372
+          },
+          {
+            "baseline": {
+              "clientHeight": 478,
+              "contentHeight": 1865403.046875,
+              "head": 1048560,
+              "relativeTop": 453.109375,
+              "scrollHeight": 1865427,
+              "scrollTop": 1864890,
+              "visible": true
+            },
+            "candidate": {
+              "clientHeight": 478,
+              "contentHeight": 1865403.046875,
+              "head": 1048560,
+              "relativeTop": 453.109375,
+              "scrollHeight": 1865427,
+              "scrollTop": 1864890,
+              "visible": true
+            },
+            "elapsed": 126.09999990463255
+          }
+        ],
+        "status": "stable",
+        "tolerancePixels": 0.05
+      },
+      "sourceEqual": true,
+      "sourceUnchangedByCheck": true,
+      "sourceUnchangedDuringSettle": true
+    }
+  ],
+  "exactOriginal": false,
+  "head": 1048560,
+  "history": 1,
+  "indexed": true,
+  "lastCheck": {
+    "actionStart": {
+      "action": "jump",
+      "baseline": {
+        "clientHeight": 478,
+        "contentHeight": 1865425.546875,
+        "head": 27,
+        "relativeTop": 30.96875,
+        "scrollHeight": 1865426,
+        "scrollTop": 79,
+        "visible": true
+      },
+      "candidate": {
+        "clientHeight": 478,
+        "contentHeight": 1865425.546875,
+        "head": 27,
+        "relativeTop": 30.96875,
+        "scrollHeight": 1865426,
+        "scrollTop": 79,
+        "visible": true
+      },
+      "comparator": {
+        "active": true,
+        "calls": {
+          "dispatch": 91,
+          "fallback": 122,
+          "geometry": 72,
+          "other": 0,
+          "paired": 45,
+          "setup": 4
+        },
+        "owned": true,
+        "ownershipLost": false,
+        "phaseStats": {
+          "dispatch": {
+            "jumps": 2398,
+            "rangesSkipped": 594008
+          },
+          "geometry": {
+            "jumps": 2800,
+            "rangesSkipped": 693424
+          },
+          "other": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          },
+          "setup": {
+            "jumps": 0,
+            "rangesSkipped": 0
+          }
+        },
+        "restored": false,
+        "sourceSHA256": "cf4ffe7d177bf2c7c5da66c49be0811cc79a29e12cb658238876bbdcef12939c",
+        "stats": {
+          "jumps": 5596,
+          "rangesSkipped": 1386137
+        },
+        "version": "6.7.6"
+      }
+    },
+    "attribution": {
+      "baseline": {
+        "height": 1865319.046875,
+        "map": {
+          "block": 1,
+          "classes": {
+            "HeightMapBlock": 1,
+            "HeightMapBranch": 66574,
+            "_HeightMapGap": 33255,
+            "_HeightMapText": 33319
+          },
+          "collapsed": 116511,
+          "gap": 33255,
+          "gapLength": 0,
+          "nodes": 133149,
+          "text": 33319
+        },
+        "oracle": {
+          "charWidth": 7.475694444444445,
+          "lineHeight": 28,
+          "lineLength": 29.83000464468184,
+          "lineWrapping": true,
+          "textHeight": 20
+        },
+        "version": "6.43.13"
+      },
+      "candidate": {
+        "height": 1865319.046875,
+        "map": {
+          "block": 1,
+          "classes": {
+            "HeightMapBlock": 1,
+            "HeightMapBranch": 66574,
+            "_HeightMapGap": 33255,
+            "_HeightMapText": 33319
+          },
+          "collapsed": 116511,
+          "gap": 33255,
+          "gapLength": 0,
+          "nodes": 133149,
+          "text": 33319
+        },
+        "oracle": {
+          "charWidth": 7.475694444444445,
+          "lineHeight": 28,
+          "lineLength": 29.83000464468184,
+          "lineWrapping": true,
+          "textHeight": 20
+        },
+        "version": "6.43.13"
+      }
+    },
+    "baselineComplete": true,
+    "baselineEstimatedHeight": 1865403.046875,
+    "baselineHead": {
+      "clientHeight": 478,
+      "contentHeight": 1865403.046875,
+      "head": 1048560,
+      "relativeTop": 453.109375,
+      "scrollHeight": 1865427,
+      "scrollTop": 1864890,
+      "visible": true
+    },
+    "boxes": [
+      {
+        "baseline": 84.328125,
+        "candidate": 84.328125,
+        "delta": 0,
+        "from": 1048207,
+        "textEqual": true
+      },
+      {
+        "baseline": 28.046875,
+        "candidate": 28.046875,
+        "delta": 0,
+        "from": 1048258,
+        "textEqual": true
+      },
+      {
+        "baseline": 47.59375,
+        "candidate": 47.59375,
+        "delta": 0,
+        "from": 1048259,
+        "textEqual": true
+      },
+      {
+        "baseline": 28.046875,
+        "candidate": 28.046875,
+        "delta": 0,
+        "from": 1048269,
+        "textEqual": true
+      },
+      {
+        "baseline": 84.328125,
+        "candidate": 84.328125,
+        "delta": 0,
+        "from": 1048270,
+        "textEqual": true
+      },
+      {
+        "baseline": 28.046875,
+        "candidate": 28.046875,
+        "delta": 0,
+        "from": 1048321,
+        "textEqual": true
+      },
+      {
+        "baseline": 47.59375,
+        "candidate": 47.59375,
+        "delta": 0,
+        "from": 1048322,
+        "textEqual": true
+      },
+      {
+        "baseline": 28.046875,
+        "candidate": 28.046875,
+        "delta": 0,
+        "from": 1048332,
+        "textEqual": true
+      },
+      {
+        "baseline": 84.328125,
+        "candidate": 84.328125,
+        "delta": 0,
+        "from": 1048333,
+        "textEqual": true
+      },
+      {
+        "baseline": 28.046875,
+        "candidate": 28.046875,
+        "delta": 0,
+        "from": 1048384,
+        "textEqual": true
+      },
+      {
+        "baseline": 47.59375,
+        "candidate": 47.59375,
+        "delta": 0,
+        "from": 1048385,
+        "textEqual": true
+      },
+      {
+        "baseline": 28.046875,
+        "candidate": 28.046875,
+        "delta": 0,
+        "from": 1048395,
+        "textEqual": true
+      },
+      {
+        "baseline": 84.328125,
+        "candidate": 84.328125,
+        "delta": 0,
+        "from": 1048396,
+        "textEqual": true
+      },
+      {
+        "baseline": 28.046875,
+        "candidate": 28.046875,
+        "delta": 0,
+        "from": 1048447,
+        "textEqual": true
+      },
+      {
+        "baseline": 47.59375,
+        "candidate": 47.59375,
+        "delta": 0,
+        "from": 1048448,
+        "textEqual": true
+      },
+      {
+        "baseline": 28.046875,
+        "candidate": 28.046875,
+        "delta": 0,
+        "from": 1048458,
+        "textEqual": true
+      },
+      {
+        "baseline": 84.328125,
+        "candidate": 84.328125,
+        "delta": 0,
+        "from": 1048459,
+        "textEqual": true
+      },
+      {
+        "baseline": 28.046875,
+        "candidate": 28.046875,
+        "delta": 0,
+        "from": 1048510,
+        "textEqual": true
+      },
+      {
+        "baseline": 84.140625,
+        "candidate": 84.140625,
+        "delta": 0,
+        "from": 1048511,
+        "textEqual": true
+      },
+      {
+        "baseline": 28.046875,
+        "candidate": 28.046875,
+        "delta": 0,
+        "from": 1048560,
+        "textEqual": true
+      }
+    ],
+    "callbackControl": {
+      "callbacks": 2,
+      "diagnosticJumps": 398,
+      "diagnosticRangesSkipped": 98705,
+      "equal": true,
+      "scope": "direct comparison outside view dispatch and geometry samples"
+    },
+    "candidateEstimatedHeight": 1865403.046875,
+    "candidateHead": {
+      "clientHeight": 478,
+      "contentHeight": 1865403.046875,
+      "head": 1048560,
+      "relativeTop": 453.109375,
+      "scrollHeight": 1865427,
+      "scrollTop": 1864890,
+      "visible": true
+    },
+    "comparator": {
+      "active": true,
+      "calls": {
+        "dispatch": 100,
+        "fallback": 140,
+        "geometry": 86,
+        "other": 0,
+        "paired": 50,
+        "setup": 4
+      },
+      "owned": true,
+      "ownershipLost": false,
+      "phaseStats": {
+        "dispatch": {
+          "jumps": 2398,
+          "rangesSkipped": 594008
+        },
+        "geometry": {
+          "jumps": 3200,
+          "rangesSkipped": 792485
+        },
+        "other": {
+          "jumps": 0,
+          "rangesSkipped": 0
+        },
+        "setup": {
+          "jumps": 0,
+          "rangesSkipped": 0
+        }
+      },
+      "restored": false,
+      "sourceSHA256": "cf4ffe7d177bf2c7c5da66c49be0811cc79a29e12cb658238876bbdcef12939c",
+      "stats": {
+        "jumps": 5996,
+        "rangesSkipped": 1485198
+      },
+      "version": "6.7.6"
+    },
+    "comparatorBeforeGeometry": {
+      "active": true,
+      "calls": {
+        "dispatch": 100,
+        "fallback": 128,
+        "geometry": 72,
+        "other": 0,
+        "paired": 48,
+        "setup": 4
+      },
+      "owned": true,
+      "ownershipLost": false,
+      "phaseStats": {
+        "dispatch": {
+          "jumps": 2398,
+          "rangesSkipped": 594008
+        },
+        "geometry": {
+          "jumps": 2800,
+          "rangesSkipped": 693424
+        },
+        "other": {
+          "jumps": 0,
+          "rangesSkipped": 0
+        },
+        "setup": {
+          "jumps": 0,
+          "rangesSkipped": 0
+        }
+      },
+      "restored": false,
+      "sourceSHA256": "cf4ffe7d177bf2c7c5da66c49be0811cc79a29e12cb658238876bbdcef12939c",
+      "stats": {
+        "jumps": 5596,
+        "rangesSkipped": 1386137
+      },
+      "version": "6.7.6"
+    },
+    "complete": true,
+    "differences": [],
+    "editMode": "indexed",
+    "exactExpected": true,
+    "exactOriginal": false,
+    "fonts": [
+      {
+        "fontFamily": "system-ui, sans-serif",
+        "fontSize": "17px",
+        "lineHeight": "28.05px",
+        "width": 223
+      },
+      {
+        "fontFamily": "system-ui, sans-serif",
+        "fontSize": "17px",
+        "lineHeight": "28.05px",
+        "width": 223
+      }
+    ],
+    "history": 1,
+    "historyUnchangedByCheck": true,
+    "historyUnchangedDuringSettle": true,
+    "maxHeightDelta": 0,
+    "readiness": {
+      "after": "full",
+      "before": "full",
+      "scope": "complete tree publication outside geometry samples"
+    },
+    "selectionEqual": true,
+    "settling": {
+      "deadlineMs": 1200,
+      "minimumFrames": 8,
+      "requiredEqualTransitions": 4,
+      "samples": [
+        {
+          "baseline": {
+            "clientHeight": 478,
+            "contentHeight": 1865403.046875,
+            "head": 1048560,
+            "relativeTop": 453.109375,
+            "scrollHeight": 1865427,
+            "scrollTop": 1864890,
+            "visible": true
+          },
+          "candidate": {
+            "clientHeight": 478,
+            "contentHeight": 1865403.046875,
+            "head": 1048560,
+            "relativeTop": 453.109375,
+            "scrollHeight": 1865427,
+            "scrollTop": 1864890,
+            "visible": true
+          },
+          "elapsed": 30.299999952316284
+        },
+        {
+          "baseline": {
+            "clientHeight": 478,
+            "contentHeight": 1865403.046875,
+            "head": 1048560,
+            "relativeTop": 453.109375,
+            "scrollHeight": 1865427,
+            "scrollTop": 1864890,
+            "visible": true
+          },
+          "candidate": {
+            "clientHeight": 478,
+            "contentHeight": 1865403.046875,
+            "head": 1048560,
+            "relativeTop": 453.109375,
+            "scrollHeight": 1865427,
+            "scrollTop": 1864890,
+            "visible": true
+          },
+          "elapsed": 32.09999990463257
+        },
+        {
+          "baseline": {
+            "clientHeight": 478,
+            "contentHeight": 1865403.046875,
+            "head": 1048560,
+            "relativeTop": 453.109375,
+            "scrollHeight": 1865427,
+            "scrollTop": 1864890,
+            "visible": true
+          },
+          "candidate": {
+            "clientHeight": 478,
+            "contentHeight": 1865403.046875,
+            "head": 1048560,
+            "relativeTop": 453.109375,
+            "scrollHeight": 1865427,
+            "scrollTop": 1864890,
+            "visible": true
+          },
+          "elapsed": 42.5
+        },
+        {
+          "baseline": {
+            "clientHeight": 478,
+            "contentHeight": 1865403.046875,
+            "head": 1048560,
+            "relativeTop": 453.109375,
+            "scrollHeight": 1865427,
+            "scrollTop": 1864890,
+            "visible": true
+          },
+          "candidate": {
+            "clientHeight": 478,
+            "contentHeight": 1865403.046875,
+            "head": 1048560,
+            "relativeTop": 453.109375,
+            "scrollHeight": 1865427,
+            "scrollTop": 1864890,
+            "visible": true
+          },
+          "elapsed": 59.40000009536743
+        },
+        {
+          "baseline": {
+            "clientHeight": 478,
+            "contentHeight": 1865403.046875,
+            "head": 1048560,
+            "relativeTop": 453.109375,
+            "scrollHeight": 1865427,
+            "scrollTop": 1864890,
+            "visible": true
+          },
+          "candidate": {
+            "clientHeight": 478,
+            "contentHeight": 1865403.046875,
+            "head": 1048560,
+            "relativeTop": 453.109375,
+            "scrollHeight": 1865427,
+            "scrollTop": 1864890,
+            "visible": true
+          },
+          "elapsed": 76.90000009536743
+        },
+        {
+          "baseline": {
+            "clientHeight": 478,
+            "contentHeight": 1865403.046875,
+            "head": 1048560,
+            "relativeTop": 453.109375,
+            "scrollHeight": 1865427,
+            "scrollTop": 1864890,
+            "visible": true
+          },
+          "candidate": {
+            "clientHeight": 478,
+            "contentHeight": 1865403.046875,
+            "head": 1048560,
+            "relativeTop": 453.109375,
+            "scrollHeight": 1865427,
+            "scrollTop": 1864890,
+            "visible": true
+          },
+          "elapsed": 92.70000004768372
+        },
+        {
+          "baseline": {
+            "clientHeight": 478,
+            "contentHeight": 1865403.046875,
+            "head": 1048560,
+            "relativeTop": 453.109375,
+            "scrollHeight": 1865427,
+            "scrollTop": 1864890,
+            "visible": true
+          },
+          "candidate": {
+            "clientHeight": 478,
+            "contentHeight": 1865403.046875,
+            "head": 1048560,
+            "relativeTop": 453.109375,
+            "scrollHeight": 1865427,
+            "scrollTop": 1864890,
+            "visible": true
+          },
+          "elapsed": 110.20000004768372
+        },
+        {
+          "baseline": {
+            "clientHeight": 478,
+            "contentHeight": 1865403.046875,
+            "head": 1048560,
+            "relativeTop": 453.109375,
+            "scrollHeight": 1865427,
+            "scrollTop": 1864890,
+            "visible": true
+          },
+          "candidate": {
+            "clientHeight": 478,
+            "contentHeight": 1865403.046875,
+            "head": 1048560,
+            "relativeTop": 453.109375,
+            "scrollHeight": 1865427,
+            "scrollTop": 1864890,
+            "visible": true
+          },
+          "elapsed": 126.09999990463255
+        }
+      ],
+      "status": "stable",
+      "tolerancePixels": 0.05
+    },
+    "sourceEqual": true,
+    "sourceUnchangedByCheck": true,
+    "sourceUnchangedDuringSettle": true
+  },
+  "narrow": true,
+  "pairedRequested": true,
+  "pointRanges": 99861,
+  "ready": true,
+  "reverse": false,
+  "sourceEqual": true,
+  "sourceMode": false,
+  "visibleRanges": [
+    {
+      "from": 1048207,
+      "to": 1048560
+    }
+  ]
+}

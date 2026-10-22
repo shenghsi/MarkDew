@@ -1,0 +1,16 @@
+node tests/performance/experiments/point-comparison/verify-static-layout.mjs --paired
+{
+  "navigationChecks": 80,
+  "editChecks": 36,
+  "geometry": "exact",
+  "comparator": "inactive paired browser wrapper",
+  "scope": "static projection with complete trees; no input, latency, memory or native acceptance claim"
+}
+
+npx tsc --noEmit
+Exit 0. No diagnostics.
+
+bend PROOF.bend
+ALL PROOFS CHECK
+Use --verdict for mathematical validity.
+bend 2.0.36 is available: run bend update

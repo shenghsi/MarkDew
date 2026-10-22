@@ -1,0 +1,13 @@
+
+ RUN  v3.2.7 /Users/shxi/projects/MarkDew
+
+stdout | tests/web/viewport-marks-experiment.test.ts > keeps hidden-first precedence and outside decorations in the actual view facet
+{"diagnostic":"viewport-mark-precedence","staticFirst":[{"from":18,"to":19,"rank":1,"spec":{},"active":[]}],"hiddenFirst":[{"from":18,"to":19,"rank":0,"spec":{},"active":[{"class":"md-strong"}]}],"joined":[{"from":18,"to":19,"rank":0,"spec":{},"active":[{"class":"md-strong"}]}],"full":[{"from":18,"to":19,"rank":0,"spec":{},"active":[{"class":"md-strong"}]}]}
+
+ ✓ tests/web/viewport-marks-experiment.test.ts (6 tests) 131ms
+
+ Test Files  1 passed (1)
+      Tests  6 passed (6)
+   Start at  23:35:00
+   Duration  733ms (transform 106ms, setup 0ms, collect 250ms, tests 131ms, environment 146ms, prepare 34ms)
+

@@ -1,0 +1,29 @@
+
+ RUN  v3.2.7 /Users/shxi/projects/MarkDew
+
+ ❯ tests/performance/parser-wrapper.test.ts (1 test | 1 failed) 10024ms
+   × compares metadata-free package trees and complete decorations 10023ms
+     → Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/performance/parser-wrapper.test.ts > compares metadata-free package trees and complete decorations
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ tests/performance/parser-wrapper.test.ts:12:51
+     10| 
+     11| // Experiment only. Direct Markdown has no opening-metadata support.
+     12| it.skipIf(process.env.MARKDEW_WRAPPER_CHECK!=='1')('compares metadata…
+       |                                                   ^
+     13|   const fixtures=[
+     14|     '# Heading\n\nParagraph **strong** and `code`.\n\n---\n\nNext.\n',
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed (1)
+   Start at  13:54:45
+   Duration  10.59s (transform 88ms, setup 0ms, collect 227ms, tests 10.02s, environment 200ms, prepare 22ms)
+

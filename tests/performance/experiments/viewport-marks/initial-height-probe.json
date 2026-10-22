@@ -1,0 +1,164 @@
+{
+  "accepted": false,
+  "reason": "lineBlockAt includes unrendered estimated lines; this probe is not an actual DOM-height comparison",
+  "observation": {
+    "ready": true,
+    "sourceMode": false,
+    "narrow": false,
+    "sourceEqual": true,
+    "exactOriginal": true,
+    "history": 0,
+    "head": 0,
+    "source": "﻿# Layout **heading**\r\n\r\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. [^a].\n\n*Owner start\nOwner continuation 0 with words.\nOwner continuation 1 with words.\nOwner continuation 2 with words.\nOwner continuation 3 with words.\nOwner continuation 4 with words.\nOwner continuation 5 with words.\nOwner continuation 6 with words.\nOwner continuation 7 with words.\nOwner continuation 8 with words.\nOwner continuation 9 with words.\nOwner continuation 10 with words.\nOwner continuation 11 with words.\nOwner continuation 12 with words.\nOwner continuation 13 with words.\nOwner continuation 14 with words.\nOwner continuation 15 with words.\nOwner continuation 16 with words.\nOwner continuation 17 with words.\nOwner continuation 18 with words.\nOwner continuation 19 with words.\nOwner continuation 20 with words.\nOwner continuation 21 with words.\nOwner continuation 22 with words.\nOwner continuation 23 with words.\nOwner continuation 24 with words.\nOwner continuation 25 with words.\nOwner continuation 26 with words.\nOwner continuation 27 with words.\nOwner continuation 28 with words.\nOwner continuation 29 with words.\nOwner end*\r\n\r\n## Section 0\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 1\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 2\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 3\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 4\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 5\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 6\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 7\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 8\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 9\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 10\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 11\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 12\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 13\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 14\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 15\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 16\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 17\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 18\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 19\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 20\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 21\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 22\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 23\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 24\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 25\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 26\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 27\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 28\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 29\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 30\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 31\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 32\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 33\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 34\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 35\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 36\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 37\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 38\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 39\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 40\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 41\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 42\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 43\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n## Section 44\n\nParagraph **outer *inner text* strong words** and `inline code` with 日本語 and עברית. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. Wrapped words **bold** and *italic*. \n\n[^a]: 日本語 **note**\r\n\rEnd paragraph.\n",
+    "complete": true,
+    "visibleRanges": [
+      {
+        "from": 0,
+        "to": 878
+      }
+    ],
+    "hiddenRanges": 29,
+    "lastCheck": {
+      "differences": [],
+      "boxes": [
+        {
+          "from": 0,
+          "baseline": 47.59375,
+          "candidate": 47.59375,
+          "delta": 0
+        },
+        {
+          "from": 21,
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0
+        },
+        {
+          "from": 22,
+          "baseline": 172.125,
+          "candidate": 172.125,
+          "delta": 0
+        },
+        {
+          "from": 297,
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0
+        },
+        {
+          "from": 298,
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0
+        },
+        {
+          "from": 311,
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0
+        },
+        {
+          "from": 344,
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0
+        },
+        {
+          "from": 377,
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0
+        },
+        {
+          "from": 410,
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0
+        },
+        {
+          "from": 443,
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0
+        },
+        {
+          "from": 476,
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0
+        },
+        {
+          "from": 509,
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0
+        },
+        {
+          "from": 542,
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0
+        },
+        {
+          "from": 575,
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0
+        },
+        {
+          "from": 608,
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0
+        },
+        {
+          "from": 641,
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0
+        },
+        {
+          "from": 675,
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0
+        },
+        {
+          "from": 709,
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0
+        },
+        {
+          "from": 743,
+          "baseline": 28.046875,
+          "candidate": 28.046875,
+          "delta": 0
+        },
+        {
+          "from": 777,
+          "baseline": 33.325659458174904,
+          "candidate": 28.046875,
+          "delta": 5.278784458174904
+        },
+        {
+          "from": 811,
+          "baseline": 33.325659458174904,
+          "candidate": 28.046875,
+          "delta": 5.278784458174904
+        },
+        {
+          "from": 845,
+          "baseline": 33.325659458174904,
+          "candidate": 28.046875,
+          "delta": 5.278784458174904
+        }
+      ],
+      "maxHeightDelta": 5.278784458174904,
+      "sourceEqual": true,
+      "sourceUnchangedByCheck": true,
+      "baselineHeight": 11650.515625,
+      "candidateHeight": 11089.578125
+    }
+  }
+}

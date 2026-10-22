@@ -1,7 +1,23 @@
-# Native and generated Bend outputs
+# Old native build outputs
 /native-paragraph
-/*.gpu
+/live-paragraph
 /*.js.map
-
+__pycache__
 # macOS metadata
 .DS_Store
+node_modules/
+dist/
+/frontend-manifest.json
+/desktop-package/
+src/desktop/target/
+src/desktop/gen/
+/*.png
+.learnings/
+/APP_SAVE_EXPERIMENT.md
+/FILE_OPEN_CONTRACT.md
+/LIST_CONTINUATION.md
+/NEW_FILE_OBSERVATION.md
+/PACKAGE_BUILD.md
+/PACKAGE_EVALUATION.md
+/SAVE_AS_EXPERIMENT.md
+/SPACING_FEATURE_HANDOFF.md

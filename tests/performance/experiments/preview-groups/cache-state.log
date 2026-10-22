@@ -1,0 +1,97 @@
+
+> markdew-desktop@0.1.0 benchmark:web
+> node src/web/benchmark.mjs
+
+
+ RUN  v3.2.7 /Users/shxi/projects/MarkDew
+
+stdout | tests/performance/editor.test.ts > measures settled editor-state updates without DOM layout or native input
+{"benchmark":"editor-state","date":"2026-10-04T18:56:01.465Z","node":"v22.22.3","platform":"darwin","arch":"arm64","samples":20,"units":"ms","scope":"state transaction, dirty comparison, and outline collection; no DOM, native IPC, layout, or screen frame"}
+{"bytes":102400,"route":"source-record","setupMs":1.058}
+
+stdout | tests/performance/editor.test.ts > measures settled editor-state updates without DOM layout or native input
+{"bytes":102400,"route":"source-record","location":"start","median":0.049,"p95":0.237,"min":0.022,"max":0.802,"stages":{"update":{"median":0.046,"p95":0.234,"min":0.019,"max":0.754},"dirty":{"median":0.003,"p95":0.004,"min":0.002,"max":0.048},"outline":{"median":0,"p95":0,"min":0,"max":0}}}
+
+stdout | tests/performance/editor.test.ts > measures settled editor-state updates without DOM layout or native input
+{"bytes":102400,"route":"source-record","location":"middle","median":0.024,"p95":0.051,"min":0.019,"max":0.056,"stages":{"update":{"median":0.02,"p95":0.047,"min":0.016,"max":0.051},"dirty":{"median":0.003,"p95":0.004,"min":0.003,"max":0.004},"outline":{"median":0,"p95":0,"min":0,"max":0}}}
+
+stdout | tests/performance/editor.test.ts > measures settled editor-state updates without DOM layout or native input
+{"bytes":102400,"route":"source-record","location":"end","median":0.02,"p95":0.025,"min":0.017,"max":0.034,"stages":{"update":{"median":0.015,"p95":0.02,"min":0.013,"max":0.029},"dirty":{"median":0.004,"p95":0.005,"min":0.004,"max":0.005},"outline":{"median":0,"p95":0,"min":0,"max":0}}}
+{"bytes":102400,"route":"source-mode","setupMs":49.566}
+
+stdout | tests/performance/editor.test.ts > measures settled editor-state updates without DOM layout or native input
+{"bytes":102400,"route":"source-mode","location":"start","median":1.746,"p95":6.809,"min":1.506,"max":9.755,"stages":{"update":{"median":1.239,"p95":4.496,"min":1.021,"max":6.032},"dirty":{"median":0.004,"p95":0.005,"min":0.002,"max":0.01},"outline":{"median":0.491,"p95":2.591,"min":0.472,"max":3.719}}}
+
+stdout | tests/performance/editor.test.ts > measures settled editor-state updates without DOM layout or native input
+{"bytes":102400,"route":"source-mode","location":"middle","median":1.614,"p95":3.708,"min":1.533,"max":4.12,"stages":{"update":{"median":1.137,"p95":2.934,"min":1.039,"max":3.298},"dirty":{"median":0.005,"p95":0.007,"min":0.004,"max":0.008},"outline":{"median":0.478,"p95":0.767,"min":0.467,"max":0.814}}}
+
+stdout | tests/performance/editor.test.ts > measures settled editor-state updates without DOM layout or native input
+{"bytes":102400,"route":"source-mode","location":"end","median":1.524,"p95":1.891,"min":1.463,"max":3.102,"stages":{"update":{"median":1.045,"p95":1.409,"min":0.995,"max":2.288},"dirty":{"median":0.005,"p95":0.006,"min":0.005,"max":0.006},"outline":{"median":0.471,"p95":0.491,"min":0.46,"max":0.808}}}
+{"bytes":102400,"route":"live-preview","setupMs":54.512}
+
+stdout | tests/performance/editor.test.ts > measures settled editor-state updates without DOM layout or native input
+{"bytes":102400,"route":"live-preview","location":"start","median":3.572,"p95":9.039,"min":3.261,"max":14.102,"stages":{"update":{"median":3.035,"p95":8.391,"min":2.775,"max":13.342},"dirty":{"median":0.004,"p95":0.006,"min":0.003,"max":0.006},"outline":{"median":0.499,"p95":0.643,"min":0.475,"max":0.754}}}
+
+stdout | tests/performance/editor.test.ts > measures settled editor-state updates without DOM layout or native input
+{"bytes":102400,"route":"live-preview","location":"middle","median":3.592,"p95":5.271,"min":3.34,"max":5.272,"stages":{"update":{"median":3.095,"p95":4.731,"min":2.84,"max":4.746},"dirty":{"median":0.006,"p95":0.006,"min":0.005,"max":0.007},"outline":{"median":0.496,"p95":0.523,"min":0.48,"max":0.577}}}
+
+stdout | tests/performance/editor.test.ts > measures settled editor-state updates without DOM layout or native input
+{"bytes":102400,"route":"live-preview","location":"end","median":3.368,"p95":4.019,"min":3.181,"max":4.323,"stages":{"update":{"median":2.857,"p95":3.503,"min":2.689,"max":3.827},"dirty":{"median":0.006,"p95":0.007,"min":0.005,"max":0.008},"outline":{"median":0.49,"p95":0.512,"min":0.48,"max":0.552}}}
+{"bytes":102400,"route":"live-preview-note","setupMs":155.776}
+
+stdout | tests/performance/editor.test.ts > measures settled editor-state updates without DOM layout or native input
+{"bytes":102400,"route":"live-preview-note","location":"start","median":4.046,"p95":11.011,"min":3.359,"max":15.91,"stages":{"update":{"median":3.499,"p95":10.014,"min":2.847,"max":12.62},"dirty":{"median":0.004,"p95":0.008,"min":0.003,"max":0.014},"outline":{"median":0.539,"p95":1.057,"min":0.499,"max":3.276}}}
+
+stdout | tests/performance/editor.test.ts > measures settled editor-state updates without DOM layout or native input
+{"bytes":102400,"route":"live-preview-note","location":"middle","median":82.607,"p95":122.004,"min":81.323,"max":123.107,"stages":{"update":{"median":81.91,"p95":121.097,"min":80.766,"max":122.222},"dirty":{"median":0.008,"p95":0.017,"min":0.007,"max":0.025},"outline":{"median":0.551,"p95":0.884,"min":0.525,"max":0.892}}}
+
+stdout | tests/performance/editor.test.ts > measures settled editor-state updates without DOM layout or native input
+{"bytes":102400,"route":"live-preview-note","location":"end","median":82.324,"p95":119.322,"min":81.069,"max":119.532,"stages":{"update":{"median":81.653,"p95":117.821,"min":80.525,"max":118.392},"dirty":{"median":0.009,"p95":0.011,"min":0.008,"max":0.024},"outline":{"median":0.547,"p95":0.921,"min":0.524,"max":1.701}}}
+{"bytes":1048576,"route":"source-record","setupMs":2.122}
+
+stdout | tests/performance/editor.test.ts > measures settled editor-state updates without DOM layout or native input
+{"bytes":1048576,"route":"source-record","location":"start","median":0.105,"p95":0.161,"min":0.095,"max":1.067,"stages":{"update":{"median":0.03,"p95":0.049,"min":0.026,"max":0.064},"dirty":{"median":0.076,"p95":0.097,"min":0.067,"max":1.04},"outline":{"median":0,"p95":0,"min":0,"max":0}}}
+
+stdout | tests/performance/editor.test.ts > measures settled editor-state updates without DOM layout or native input
+{"bytes":1048576,"route":"source-record","location":"middle","median":0.122,"p95":0.504,"min":0.108,"max":0.652,"stages":{"update":{"median":0.028,"p95":0.039,"min":0.016,"max":0.044},"dirty":{"median":0.093,"p95":0.476,"min":0.081,"max":0.623},"outline":{"median":0,"p95":0,"min":0,"max":0}}}
+
+stdout | tests/performance/editor.test.ts > measures settled editor-state updates without DOM layout or native input
+{"bytes":1048576,"route":"source-record","location":"end","median":0.14,"p95":0.3,"min":0.116,"max":0.416,"stages":{"update":{"median":0.032,"p95":0.061,"min":0.029,"max":0.093},"dirty":{"median":0.107,"p95":0.206,"min":0.086,"max":0.386},"outline":{"median":0,"p95":0,"min":0,"max":0.001}}}
+{"bytes":1048576,"route":"source-mode","setupMs":145.314}
+
+stdout | tests/performance/editor.test.ts > measures settled editor-state updates without DOM layout or native input
+{"bytes":1048576,"route":"source-mode","location":"start","median":18.909,"p95":21.853,"min":18.553,"max":22.721,"stages":{"update":{"median":11.968,"p95":13.029,"min":11.698,"max":13.68},"dirty":{"median":0.092,"p95":0.129,"min":0.077,"max":0.14},"outline":{"median":6.828,"p95":8.746,"min":6.548,"max":8.957}}}
+
+stdout | tests/performance/editor.test.ts > measures settled editor-state updates without DOM layout or native input
+{"bytes":1048576,"route":"source-mode","location":"middle","median":18.98,"p95":20.579,"min":18.321,"max":30.607,"stages":{"update":{"median":12.022,"p95":13.275,"min":11.584,"max":19.247},"dirty":{"median":0.102,"p95":0.116,"min":0.092,"max":0.135},"outline":{"median":6.866,"p95":8.228,"min":6.513,"max":11.254}}}
+
+stdout | tests/performance/editor.test.ts > measures settled editor-state updates without DOM layout or native input
+{"bytes":1048576,"route":"source-mode","location":"end","median":19.331,"p95":19.791,"min":18.501,"max":19.796,"stages":{"update":{"median":12.15,"p95":12.479,"min":11.77,"max":12.494},"dirty":{"median":0.117,"p95":0.153,"min":0.1,"max":0.154},"outline":{"median":6.957,"p95":7.392,"min":6.584,"max":7.559}}}
+{"bytes":1048576,"route":"live-preview","setupMs":285.848}
+
+stdout | tests/performance/editor.test.ts > measures settled editor-state updates without DOM layout or native input
+{"bytes":1048576,"route":"live-preview","location":"start","median":46.07,"p95":48.921,"min":44.464,"max":62.265,"stages":{"update":{"median":39.253,"p95":41.64,"min":37.56,"max":54.83},"dirty":{"median":0.112,"p95":0.158,"min":0.09,"max":0.196},"outline":{"median":6.742,"p95":7.179,"min":5.517,"max":7.277}}}
+
+stdout | tests/performance/editor.test.ts > measures settled editor-state updates without DOM layout or native input
+{"bytes":1048576,"route":"live-preview","location":"middle","median":46.551,"p95":48.816,"min":43.543,"max":96.183,"stages":{"update":{"median":39.693,"p95":42.449,"min":36.952,"max":87.988},"dirty":{"median":0.121,"p95":0.173,"min":0.106,"max":0.174},"outline":{"median":6.697,"p95":7.322,"min":5.757,"max":8.022}}}
+
+stdout | tests/performance/editor.test.ts > measures settled editor-state updates without DOM layout or native input
+{"bytes":1048576,"route":"live-preview","location":"end","median":46.159,"p95":50.925,"min":44.338,"max":77.525,"stages":{"update":{"median":39.436,"p95":43.95,"min":37.61,"max":67.821},"dirty":{"median":0.13,"p95":0.168,"min":0.117,"max":0.24},"outline":{"median":6.836,"p95":7.255,"min":5.748,"max":9.574}}}
+{"bytes":1048576,"route":"live-preview-note","setupMs":1230.079}
+
+stdout | tests/performance/editor.test.ts > measures settled editor-state updates without DOM layout or native input
+{"bytes":1048576,"route":"live-preview-note","location":"start","median":50.32,"p95":52.122,"min":49.121,"max":55.726,"stages":{"update":{"median":42.467,"p95":44.571,"min":41.793,"max":45.759},"dirty":{"median":0.094,"p95":0.128,"min":0.082,"max":0.199},"outline":{"median":7.571,"p95":7.947,"min":7.208,"max":9.871}}}
+
+stdout | tests/performance/editor.test.ts > measures settled editor-state updates without DOM layout or native input
+{"bytes":1048576,"route":"live-preview-note","location":"middle","median":49.198,"p95":55.848,"min":48.568,"max":112.742,"stages":{"update":{"median":41.717,"p95":48.194,"min":41.141,"max":103.463},"dirty":{"median":0.113,"p95":0.16,"min":0.096,"max":0.162},"outline":{"median":7.513,"p95":8.331,"min":7.151,"max":9.165}}}
+
+stdout | tests/performance/editor.test.ts > measures settled editor-state updates without DOM layout or native input
+{"bytes":1048576,"route":"live-preview-note","location":"end","median":50.283,"p95":51.626,"min":49.319,"max":89.679,"stages":{"update":{"median":42.487,"p95":43.832,"min":41.881,"max":80.781},"dirty":{"median":0.128,"p95":0.171,"min":0.108,"max":0.173},"outline":{"median":7.62,"p95":8.189,"min":7.171,"max":8.77}}}
+
+ ✓ tests/performance/editor.test.ts (5 tests | 4 skipped) 13769ms
+   ✓ measures settled editor-state updates without DOM layout or native input  13768ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed | 4 skipped (5)
+   Start at  02:56:00
+   Duration  14.33s (transform 89ms, setup 0ms, collect 223ms, tests 13.77s, environment 129ms, prepare 38ms)

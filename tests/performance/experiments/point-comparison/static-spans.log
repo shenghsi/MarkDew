@@ -1,0 +1,10 @@
+
+ RUN  v3.2.7 /Users/shxi/projects/MarkDew
+
+ ✓ tests/web/static-point-projection.test.ts (1 test) 116ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  23:45:53
+   Duration  772ms (transform 134ms, setup 0ms, collect 316ms, tests 116ms, environment 143ms, prepare 28ms)
+

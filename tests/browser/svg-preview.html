@@ -1,0 +1,40 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Local SVG image check</title>
+<link rel="stylesheet" href="/src/web/style.css">
+<style>body{display:block;margin:24px;background:white;color:#222;font:16px system-ui}#editor{border:1px solid #888;margin:16px 0;padding:12px}.preview-image img,.table-image img{max-width:240px}pre{white-space:pre-wrap}button{margin:4px}</style>
+<h1>Local SVG image check</h1>
+<p>This check uses a test host read and copy. SVG must draw as an image, retain exact Markdown source, and remain editable.</p>
+<div id="bar"><button id="source">Source mode</button><button id="image">Image</button><button id="undo">Undo</button><button id="redo">Redo</button><button id="print">Print preview</button><button id="close">Close print</button><button id="check">Check pixels</button></div>
+<div id="editor"></div><p id="status" role="status"></p><pre id="result"></pre><div id="paper"></div>
+<script type="module">
+import {EditorState,Compartment} from '@codemirror/state';
+import {EditorView} from '@codemirror/view';
+import {history,undo,redo,undoDepth} from '@codemirror/commands';
+import {mockIPC,clearMocks} from '@tauri-apps/api/mocks';
+import {documentLanguage} from '/src/web/document-language.ts';
+import {livePreview} from '/src/web/preview.ts';
+import {imageBasePath,imagePath,imageDocument} from '/src/web/images.ts';
+import {copyImageAsset} from '/src/web/image-assets.ts';
+import {linkControls} from '/src/web/link-controls.ts';
+import {linkVersion} from '/src/web/links.ts';
+import {printView} from '/src/web/print-view.ts';
+import {fromSource,normalize,sourceExtensions,sourceField,savedSource} from '/src/web/source.ts';
+const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 100"><defs><linearGradient id="g"><stop stop-color="#126dd1"/><stop offset="1" stop-color="#36bda5"/></linearGradient><rect id="tile" width="240" height="100" rx="16"/></defs><style>.tile{fill:url(#g)}.label{fill:white;font:24px sans-serif}</style><use class="tile" href="#tile"/><text class="label" x="30" y="59">SVG 图 😀</text><script>document.body.textContent="BAD"</'+'script></svg>';
+const raw=new TextEncoder().encode(svg);let copies=0,copyExact=false,pixels,projection,sourceMode=false;
+window.isTauri=true;
+mockIPC((command,args)=>{if(command==='read_image')return args.destination==='invalid.svg'?new TextEncoder().encode('<svg>').buffer:raw.buffer;if(command==='copy_image'){copies++;copyExact=args instanceof Uint8Array&&args.every((v,i)=>v===raw[i])&&args.length===raw.length;return 'doc.assets/image.svg'}throw new Error(command)});
+const original='\uFEFF# Local SVG\r\n\r\n![Drawing](drawing.svg)\r\n\r\n| Vector |\r\n| - |\r\n| ![Cell](drawing.svg) |\r\n\r\n![Invalid](invalid.svg)\r\n\rEnd';
+const record=fromSource(original),doc=normalize(record.raw),mode=new Compartment();
+const view=new EditorView({parent:document.querySelector('#editor'),state:EditorState.create({doc,selection:{anchor:doc.length},extensions:[sourceExtensions(record),history(),documentLanguage(),linkVersion,imageBasePath.of('/tmp/doc.md'),imagePath,imageDocument.of(7),mode.of(livePreview),EditorView.updateListener.of(()=>queueMicrotask(report))]})});
+function report(){document.querySelector('#result').textContent=JSON.stringify({exactOriginal:savedSource(view.state.field(sourceField))===original,history:undoDepth(view.state),images:Array.from(view.dom.querySelectorAll('.preview-image img,.table-image img'),i=>({alt:i.alt,width:i.naturalWidth,height:i.naturalHeight})),inlineSvg:view.dom.querySelectorAll('svg').length,copies,copyExact,pixels},null,2)}
+const open=linkControls(view,document.querySelector('#bar'),message=>{document.querySelector('#status').textContent=message;report()},'image',async()=>'/tmp/drawing.svg',{available:()=>true,copy:(path,current)=>copyImageAsset(view,path,current,()=>false)});
+document.querySelector('#image').onclick=open;
+document.querySelector('#source').onclick=()=>{sourceMode=!sourceMode;view.dispatch({effects:mode.reconfigure(sourceMode?[]:livePreview)});report()};
+document.querySelector('#undo').onclick=()=>{undo(view);report()};document.querySelector('#redo').onclick=()=>{redo(view);report()};
+document.querySelector('#print').onclick=async()=>{projection?.dispose();projection=printView({state:view.state,id:7,path:'/tmp/doc.md',title:'SVG'});document.querySelector('#paper').replaceChildren(projection.element);await projection.ready;report()};
+document.querySelector('#close').onclick=()=>{projection?.dispose();document.querySelector('#paper').replaceChildren()};
+document.querySelector('#check').onclick=()=>{const img=view.dom.querySelector('.preview-image img');if(img?.complete&&img.naturalWidth){const canvas=document.createElement('canvas');canvas.width=img.naturalWidth;canvas.height=img.naturalHeight;const ctx=canvas.getContext('2d');ctx.drawImage(img,0,0);pixels=Array.from(ctx.getImageData(10,40,1,1).data)}report()};
+new MutationObserver(report).observe(view.dom,{childList:true,subtree:true,attributes:true});view.dom.addEventListener('load',report,true);report();
+window.addEventListener('pagehide',()=>{projection?.dispose();view.destroy();clearMocks();delete window.isTauri},{once:true});
+</script>

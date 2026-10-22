@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>File sidebar check</title></head>
+<body><div id="app"><div class="document-bar"><div class="document-pane-controls"><button id="files-toggle" aria-pressed="true">Files</button><button id="undo">Undo</button><button id="redo">Redo</button></div><span id="document-title">TARGET.md</span><div class="document-view-controls"><button id="source" aria-pressed="false">Source</button><select id="theme" aria-label="Theme"><option value="light">Light</option><option value="dark">Dark</option></select></div></div><div class="workspace"><aside id="files" aria-label="Files"></aside><main id="editor"></main></div><footer class="document-status"><span id="status" role="status">Test folder service. No native files are read.</span></footer></div>
+<script type="module">
+import '/src/web/style.css';
+import {fileSidebar} from '/src/web/file-sidebar.ts';
+import {EditorState,Compartment} from '@codemirror/state';
+import {EditorView} from '@codemirror/view';
+import {history,undoDepth,undo,redo} from '@codemirror/commands';
+import {documentLanguage} from '/src/web/document-language.ts';
+import {livePreview} from '/src/web/preview.ts';
+import {fromSource,sourceExtensions,sourceField,savedSource} from '/src/web/source.ts';
+import {sidebarSize} from '/src/web/sidebar-size.ts';
+const original='# MarkDew Product Target\n\n## Product statement\n\nTypora is the reference for the user experience and Markdown feature set.\nDevelopment milestones must move toward that complete writing experience.\n\nMarkDew is a native Markdown editor for focused writing. It shows the formatted document in the edit surface.\n\n## Input\n\n日本語😀\n'+Array.from({length:35},(_,i)=>`\nParagraph ${i+1}. The source record remains the primary document.\n`).join('');
+const display=new Compartment();
+const view=new EditorView({parent:document.querySelector('#editor'),state:EditorState.create({doc:original,selection:{anchor:original.length},extensions:[sourceExtensions(fromSource(original)),documentLanguage(),history(),display.of(livePreview),EditorView.lineWrapping]})});
+const pane=document.querySelector('#files'),status=document.querySelector('#status');
+const sizing=sidebarSize(document.querySelector('.workspace'),[{element:pane,button:document.querySelector('#files-toggle')}],{width:250,widthChanged(){}},()=>!view.compositionStarted,()=>{},()=>view.requestMeasure());
+const report=()=>{status.textContent=`Exact source: ${savedSource(view.state.field(sourceField))===original}; history: ${undoDepth(view.state)}`;};
+const folderRoot=new URLSearchParams(location.search).has('long-root')?'/test/MarkDew project with a long folder name 日本語':'/test/MarkDew';
+const sidebar=fileSidebar(pane,{allowed:()=>!view.compositionStarted,choose:async()=>folderRoot,read:async(path)=>({entries:path.endsWith('/notes')?[{name:'日本語😀.md',path:path+'/日本語😀.md',directory:false}]:[{name:'notes',path:path+'/notes',directory:true},{name:'TARGET.md',path:path+'/TARGET.md',directory:false},{name:'A long document filename that needs horizontal scrolling.md',path:path+'/long.md',directory:false},...Array.from({length:55},(_,i)=>({name:`Document-${String(i+1).padStart(2,'0')}.md`,path:path+`/Document-${i+1}.md`,directory:false}))],warnings:[]}),open:path=>{sidebar.select(path);status.textContent=`Selected ${path}; exact source: ${savedSource(view.state.field(sourceField))===original}; history: ${undoDepth(view.state)}`;}});
+document.querySelector('#files-toggle').onclick=event=>{pane.hidden=!pane.hidden;event.currentTarget.setAttribute('aria-pressed',String(!pane.hidden));sizing.refresh();view.requestMeasure();};
+window.addEventListener('pagehide',()=>{sizing.dispose();sidebar.dispose();view.destroy()},{once:true});
+document.querySelector('#undo').onclick=()=>{undo(view);report();};
+document.querySelector('#redo').onclick=()=>{redo(view);report();};
+document.querySelector('#source').onclick=event=>{const source=event.currentTarget.getAttribute('aria-pressed')!=='true';event.currentTarget.setAttribute('aria-pressed',String(source));document.querySelector('#editor').classList.toggle('source-mode',source);view.dispatch({effects:display.reconfigure(source?[]:livePreview)});report();};
+document.querySelector('#theme').onchange=event=>{document.documentElement.dataset.theme=event.currentTarget.value;view.requestMeasure();};
+</script></body></html>

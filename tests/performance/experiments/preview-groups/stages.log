@@ -1,0 +1,16 @@
+
+ RUN  v3.2.7 /Users/shxi/projects/MarkDew
+
+stdout | tests/performance/editor.test.ts > measures edit-decoration stages with a full construction reference
+{"benchmark":"edit-decoration-stages","date":"2026-10-04T18:52:21.702Z","node":"v22.22.3","platform":"darwin","arch":"arm64","bytes":102400,"samples":20,"units":"ms","scope":"standalone decoration mapping and group update; excludes parser, collection, DOM, input and screen frames","groups":{"median":5.127,"p95":13.193,"min":4.669,"max":30.188},"mapping":{"median":0.015,"p95":0.091,"min":0.012,"max":0.124},"correspondence":{"median":0.874,"p95":1.935,"min":0.842,"max":4.28},"rebuild":{"median":0.065,"p95":0.486,"min":0.05,"max":0.63},"total":{"median":6.088,"p95":15.395,"min":5.885,"max":32.849}}
+
+stdout | tests/performance/editor.test.ts > measures edit-decoration stages with a full construction reference
+{"benchmark":"edit-decoration-stages","date":"2026-10-04T18:52:46.916Z","node":"v22.22.3","platform":"darwin","arch":"arm64","bytes":1048576,"samples":20,"units":"ms","scope":"standalone decoration mapping and group update; excludes parser, collection, DOM, input and screen frames","groups":{"median":61.046,"p95":72.686,"min":57.078,"max":107.116},"mapping":{"median":0.055,"p95":0.061,"min":0.052,"max":0.204},"correspondence":{"median":13.841,"p95":14.844,"min":12.452,"max":17.095},"rebuild":{"median":0.444,"p95":0.64,"min":0.427,"max":2.051},"total":{"median":75.333,"p95":88.083,"min":71.518,"max":121.534}}
+
+ ✓ tests/performance/editor.test.ts (5 tests | 4 skipped) 27823ms
+   ✓ measures edit-decoration stages with a full construction reference  27823ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed | 4 skipped (5)
+   Start at  02:52:18
+   Duration  28.38s (transform 88ms, setup 0ms, collect 223ms, tests 27.82s, environment 130ms, prepare 32ms)
