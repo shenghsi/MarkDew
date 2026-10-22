@@ -42,6 +42,23 @@ The editor preserves indentation and fence characters. After closing, live previ
 When the cursor is in a code block in rendered mode and the code block contains no code, the Backspace command deletes the complete block.
 In source code mode, the command does not delete the code block and keeps standard text deletion.
 
+Right click in the edit surface opens the editor menu, in the layout of Typora.
+A right click outside the selection first moves the caret there. The top row has
+Cut, Copy, Paste, and Delete; Cut, Copy, and Delete need a selection. Copy / Paste
+As has Copy as Markdown (source text), Copy as HTML Code (HTML text), Copy without
+Theme Styling (HTML and plain text flavors), Copy as Plain Text, and Paste as
+Plain Text. The next rows have Bold, Italic, Inline Code, Link, Quote, Ordered
+List, Bullet List, and Task List. Quote and list buttons toggle the marker on every
+selected line, and they refuse code, equation, table, HTML, and front matter blocks.
+Paragraph has Heading 1 to 6 and Paragraph, with a check mark at the current level.
+Insert has Image, Footnotes, Link Reference, Horizontal Line, Table, Code Fences,
+Math Block, Table of Contents, YAML Front Matter, Paragraph (before), and Paragraph
+(after). Table of Contents is a static list of heading links at the cursor block;
+it does not update when headings change. The keyboard owns the menu while it is
+open: arrows, Enter, and Escape. Mod-T, Mod-Shift-K, and Mod-Shift-M insert a
+table, code fences, and a math block. Table cells keep their own menu.
+Paste uses the system clipboard text; it does not read pasted images.
+
 An equation block is a top-level pair of lines that hold only `$$`. The parser
 extension MathBlock keeps blank lines inside it. A lone `$$` with no closing line
 stays a paragraph. Live preview shows a rendered equation, or Empty equation

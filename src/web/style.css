@@ -1447,3 +1447,19 @@ button[aria-pressed="true"], #outline .outline-content button:hover, #outline:no
 .update-notice-status:empty {
   display: none;
 }
+
+.editor-context-menu { position: fixed; z-index: 1000; min-width: 224px; padding: 6px 0; box-sizing: border-box; background: var(--paper); color: var(--ink); border: 1px solid var(--border); border-radius: 6px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15); font: 13px system-ui, sans-serif; user-select: none; }
+.editor-context-menu.submenu { position: absolute; top: -7px; left: 100%; display: none; min-width: 232px; }
+.editor-context-menu .menu-item.open > .submenu { display: block; }
+.editor-context-menu .menu-item { position: relative; display: flex; align-items: center; gap: 8px; padding: 6px 14px 6px 8px; cursor: default; }
+.editor-context-menu .menu-item:hover, .editor-context-menu .menu-item.focus, .editor-context-menu .menu-item.open { background: var(--surface); }
+.editor-context-menu .menu-item.disabled { color: var(--muted); opacity: .55; }
+.editor-context-menu .menu-check { width: 14px; text-align: center; }
+.editor-context-menu .menu-label { flex: 1; }
+.editor-context-menu .menu-tail { color: var(--muted); font-size: 12px; margin-left: 24px; }
+.editor-context-menu .menu-separator { height: 1px; margin: 5px 0; background: var(--border); }
+.editor-context-menu .menu-icons { display: flex; gap: 6px; padding: 3px 10px; }
+.editor-context-menu .menu-icons button { flex: 1; display: inline-flex; align-items: center; justify-content: center; height: 28px; padding: 0; border: 1px solid var(--border); border-radius: 4px; background: var(--paper); color: var(--ink); font: 14px Georgia, serif; cursor: default; }
+.editor-context-menu .menu-icons button:hover:not(:disabled), .editor-context-menu .menu-icons button.focus { background: var(--surface); }
+.editor-context-menu .menu-icons button:disabled { color: var(--muted); opacity: .45; }
+.editor-context-menu .menu-glyph { font: 12px ui-monospace, Menlo, Consolas, monospace; }

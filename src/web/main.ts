@@ -17,6 +17,7 @@ import { find, guardedSearchKeymap, outline, refreshOutline, searchSupport } fro
 import { format, Format } from './formatting';
 import { insertTable } from './table-insert';
 import { codeBlock } from './code-block-command';
+import { editorMenu } from './editor-menu';
 import { linkControls } from './link-controls';
 import { linkVersion } from './links';
 import { headingTarget, linkNavigation } from './link-navigation';
@@ -265,7 +266,10 @@ const report = () => { active().state = view.state; status.textContent = `${tabN
   renderTabs(); sidebar?.select(active().path); syncMenuChecks(); };
 function applyFormat(kind: Format) { const reason = format(view, kind); if (reason) status.textContent = reason; return true; }
 function footnoteCommand(command: typeof insertFootnote) { const reason = command(view); if (reason) status.textContent = reason; return true; }
+function blockCommand(command: (view: EditorView) => string | null) { const reason = command(view); if (reason) status.textContent = reason; return true; }
 const formattingKeys = [
+  { key: 'Mod-t', run: () => blockCommand(insertTable) }, { key: 'Mod-Shift-k', run: () => blockCommand(codeBlock) },
+  { key: 'Mod-Shift-m', run: () => blockCommand(target => codeBlock(target, 'math')) },
   { key: 'Mod-b', run: () => applyFormat('bold') }, { key: 'Mod-i', run: () => applyFormat('italic') },
   { key: 'Mod-Shift-c', run: () => applyFormat('code') },
   ...Array.from({ length: 6 }, (_, index) => ({ key: `Mod-Alt-${index + 1}`, run: () => applyFormat(`h${index + 1}` as Format) })),
@@ -424,6 +428,9 @@ const openImageControls = linkControls(view, tools, message => { status.textCont
 } : undefined);
 imageButton.addEventListener('mousedown', event => event.preventDefault());
 imageButton.addEventListener('click', openImageControls);
+const disposeEditorMenu = editorMenu(view, { allowed: () => pageActive && !busy && !composing() && !document.querySelector('.print-dialog'),
+  report: message => { status.textContent = message; }, openLink: () => { openLinkControls(); }, openImage: () => { openImageControls(); } });
+window.addEventListener('pagehide', disposeEditorMenu, { once: true });
 linkButton.addEventListener('mousedown', event => event.preventDefault());
 linkButton.addEventListener('click', openLinkControls);
 
