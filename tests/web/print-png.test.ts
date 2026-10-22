@@ -16,7 +16,7 @@ it('keeps the prepared PNG preview and releases its URL when the picker is cance
   vi.mocked(exportPNG).mockImplementation(async (_paper, _title, current, _dispatched, _effects, prepared) => {
     signal = current; prepared!(new Uint8Array([1,2,3])); return new Promise(resolve => { finish = resolve; });
   });
-  await showPrintView(snapshot()); document.querySelector<HTMLButtonElement>('#export-png')!.click();
+  await showPrintView(snapshot(), { mode: 'png' });
   expect(document.querySelector<HTMLImageElement>('.png-preview img')!.src).toBe('blob:png-preview');
   document.querySelector<HTMLButtonElement>('.print-controls button:last-child')!.click();
   expect(signal.aborted).toBe(true); expect(revoke).toHaveBeenCalledWith('blob:png-preview');
@@ -27,7 +27,7 @@ it('keeps the dialog open after dispatch and reports confirmation failure before
   vi.mocked(exportPNG).mockImplementation(async (_paper, _title, _signal, dispatched) => {
     dispatched(); return new Promise((_resolve, failure) => { reject = failure; });
   });
-  await showPrintView(snapshot()); document.querySelector<HTMLButtonElement>('#export-png')!.click();
+  await showPrintView(snapshot(), { mode: 'png' });
   const close = document.querySelector<HTMLButtonElement>('.print-controls button:last-child')!; expect(close.disabled).toBe(true);
   document.querySelector('dialog')!.dispatchEvent(new Event('cancel', { cancelable: true })); expect(document.querySelector('dialog')).not.toBeNull();
   reject(new Error('PNG was published, but confirmation failed'));

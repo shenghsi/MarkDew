@@ -63,4 +63,5 @@ it('releases the request after a load failure so a later successful load can ope
   reject(new Error('Print tools unavailable'));await vi.waitFor(()=>expect(document.querySelector('#status')!.textContent).toContain('Cannot load print tools:'));
   const show=vi.fn(async()=>{});vi.doMock('../../src/web/print-view',()=>({showPrintView:show}));
   print();await vi.waitFor(()=>expect(show).toHaveBeenCalledTimes(1));expect(source()).toBe(before);
+  expect(show).toHaveBeenCalledWith(expect.objectContaining({id:expect.any(Number)}),{mode:'print',writePdf:undefined});
 });

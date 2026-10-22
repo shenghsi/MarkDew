@@ -120,10 +120,10 @@ it('prints HTML blocks inside Markdown lists and quotes without clipping frames'
   expect(projection.element.querySelector('iframe')).toBeNull();
 });
 
-it('permits PNG export for supported block HTML in the Print modal', async () => {
+it('permits PNG export for supported block HTML', async () => {
   const original = '\uFEFF<div><h2>Heading</h2><p>日本語😀</p></div>\r\n', captured = snapshot(original);
-  await showPrintView(captured);
-  expect(document.querySelector<HTMLButtonElement>('#export-png')!.disabled).toBe(false);
+  await showPrintView(captured, { mode: 'png' });
+  expect(document.querySelector<HTMLButtonElement>('.print-png')).not.toBeNull();
   expect(document.querySelector('.print-warnings')!.textContent).toBe('');
   expect(document.querySelector('.print-paper h2')!.textContent).toBe('Heading');
   expect(document.querySelector('.print-paper iframe')).toBeNull();
@@ -270,9 +270,35 @@ it('permits PNG and Print for supported inline HTML without an HTML-frame warnin
   const original = '\uFEFFPress <kbd>Enter</kbd> and <b>$x^2$</b>.\r\n', captured = snapshot(original);
   await showPrintView(captured);
   expect(document.querySelector('.print-warnings')!.textContent).toBe('');
-  expect(document.querySelector<HTMLButtonElement>('#export-png')!.disabled).toBe(false);
-  expect(document.querySelector<HTMLButtonElement>('.print-controls button')!.disabled).toBe(false);
+  expect(document.querySelector('.print-png')).toBeNull();
+  expect(document.querySelector<HTMLButtonElement>('.print-system')!.disabled).toBe(false);
   expect(document.querySelector('.print-paper iframe')).toBeNull();
   expect(document.querySelector('.print-paper kbd')!.textContent).toBe('Enter');
   expect(savedSource(captured.state.field(sourceField))).toBe(original); expect(undoDepth(captured.state)).toBe(0);
+});
+
+it('offers only the system print dialog in Print, because the desktop app exports from the Export menu', async () => {
+  await showPrintView(snapshot('# Print'));
+  expect(Array.from(document.querySelectorAll('.print-controls button'), button => button.textContent)).toEqual(['Print…', 'Close']);
+  expect(document.querySelector('.print-hint')!.textContent).not.toContain('Save as PDF');
+});
+it('writes the PDF after the pages are ready and keeps the dialog until the file is written', async () => {
+  let finish!: () => void;
+  const writePdf = vi.fn(() => new Promise<void>(resolve => { finish = resolve; }));
+  const pending = showPrintView(snapshot('# PDF\n\n$x^2$'), { mode: 'pdf', writePdf });
+  expect(writePdf).not.toHaveBeenCalled();
+  expect(document.querySelector('.print-system, .print-png')).toBeNull();
+  await vi.waitFor(() => expect(writePdf).toHaveBeenCalledTimes(1));
+  const close = document.querySelector<HTMLButtonElement>('.print-controls button:last-child')!;
+  expect(close.disabled).toBe(true); expect(document.querySelector('[role=status]')!.textContent).toContain('Saving PDF');
+  document.querySelector('dialog')!.dispatchEvent(new Event('cancel', { cancelable: true })); close.click();
+  expect(document.querySelector('.print-dialog')).not.toBeNull();
+  finish(); await pending;
+  expect(close.disabled).toBe(false); expect(document.querySelector('[role=status]')!.textContent).toBe('Writing.md — PDF exported.');
+  close.click(); expect(document.querySelector('.print-dialog')).toBeNull();
+});
+it('reports a PDF that cannot be written and then permits Close', async () => {
+  await showPrintView(snapshot('# PDF'), { mode: 'pdf', writePdf: async () => { throw new Error('The print engine wrote no PDF.'); } });
+  expect(document.querySelector('[role=status]')!.textContent).toBe('Cannot export PDF: The print engine wrote no PDF.');
+  expect(document.querySelector<HTMLButtonElement>('.print-controls button:last-child')!.disabled).toBe(false);
 });

@@ -19,6 +19,7 @@ mod local_links;
 mod menu;
 mod open_requests;
 mod pandoc;
+mod pdf;
 mod web_links;
 use documents::{with_document, Document, Documents};
 mod quit;
@@ -1383,6 +1384,7 @@ fn main() {
             pandoc::pandoc_check,
             pandoc::pandoc_export,
             pandoc::pandoc_import,
+            pdf::export_pdf,
             update_menu_state,
             record_closed_file,
             add_recent_file,

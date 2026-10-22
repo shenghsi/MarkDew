@@ -83,7 +83,7 @@ The host supplies one File and one Edit menu. Upstream default submenu titles
 File and Edit are matched because those package IDs are generated. Other App,
 View, Window, and Help entries retain their upstream objects and order. Linux
 gets File before Edit when the default has no File. File exposes New, Open,
-Save, Save As, Close Document, and Print / PDF. Close Window and platform Quit
+Save, Save As, Close Document, and Print. Close Window and platform Quit
 remain predefined actions and retain existing renderer/host guards. Custom
 Undo/Redo events use CodeMirror history instead of native undo actions. Cut,
 Copy, Paste, and Select All remain predefined. Custom commands have no native

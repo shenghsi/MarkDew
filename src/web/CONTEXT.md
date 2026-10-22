@@ -15,6 +15,11 @@ recorded and retry at the next start.
 
 # Desktop editor language
 
+Print… opens the system print dialog. Export → PDF… asks for a file name, then the host (pdf.rs) prints the
+open print pages to that file with the WebView's own print engine (WebKit on macOS and Linux, WebView2 on
+Windows), with no system dialog. It writes through a temporary file, allows one export at a time (10 minute limit), and the
+dialog cannot close until the file is written. Export → Image (PNG)… exports the same pages as a PNG.
+
 MarkDew v1.0.0 delivers the full desktop writing experience. Tools offers
 Settings and About MarkDew dialogs. Settings configures editor maximum line width
 from 650 to 1200 pixels or 100 percent full width. Double-clicking the title bar
@@ -55,7 +60,7 @@ Import and Export use an installed Pandoc; MarkDew never bundles it (its GPL lic
 MarkDew's). The host (pandoc.rs) finds Pandoc from the path in Settings, Export, else PATH and common
 folders (~/bin, /usr/local/bin, Homebrew, Windows install folders), and starts it with fixed arguments and
 no shell. File, Export has HTML, HTML (without styles), Word, OpenOffice, RTF, Epub, LaTeX, Media Wiki,
-reStructuredText, Textile, and OPML, plus PDF / Image (the Print dialog), Export with Previous, Export
+reStructuredText, Textile, and OPML, plus PDF and Image (PNG), Export with Previous, Export
 and Overwrite with Previous, and Export Settings. An export reads the editor text (so unsaved edits
 export), asks for the file, resolves images from the document's folder, and writes through a temporary
 file, so a failed run keeps an existing file. Pandoc reads a mermaid block as plain code, so for formats that hold pictures (HTML, Word, OpenOffice, RTF,
@@ -1531,7 +1536,7 @@ not measure native input, DOM layout, memory, or a screen frame; the 16 ms produ
 target remains unmet. The optional Unicode benchmark compares source-mode state
 updates with separate fresh parses. It does not use native composition events.
 
-Print / PDF opens a separate complete-document projection from the captured
+Print…, Export → PDF and Export → Image open a separate complete-document projection from the captured
 editor state, document ID, path, and title. It does not use the virtualized editor
 DOM. Source, history, selection, baselines, and recovery remain unchanged.
 The app captures these fields before loading the print module. The shared inline

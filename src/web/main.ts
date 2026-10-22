@@ -41,7 +41,7 @@ import { imageDrops } from './image-drop';
 import { copyImageAsset } from './image-assets';
 import { clipboardImageControls, droppedImageControls } from './clipboard-assets';
 import { toolsPanel } from './tools-panel';
-import { fileSidebar, getParentDir, isPathInsideFolder } from './file-sidebar';
+import { fileSidebar, getParentDir, getSeparator, isPathInsideFolder } from './file-sidebar';
 import { wordCount } from './word-count';
 import { nativeMenu } from './native-menu';
 import { openRequests, OpenBatch } from './open-requests';
@@ -444,23 +444,33 @@ window.addEventListener('pagehide', disposeTools, { once: true });
 const closeDocument = document.createElement('button'); closeDocument.textContent = 'Close document'; closeDocument.id = 'close-document';
 closeDocument.addEventListener('click', () => { void operation(() => closeTab(active().id), true); }); header.append(closeDocument);
 window.addEventListener('pagehide', () => tabBar.destroy(), { once: true });
-const printButton = document.createElement('button'); printButton.id = 'print'; printButton.textContent = 'Print / PDF';
+const printButton = document.createElement('button'); printButton.id = 'print'; printButton.textContent = 'Print…';
 document.querySelector('header')!.append(printButton);
-printButton.addEventListener('click', () => {
-  if (document.querySelector('.print-dialog')) return;
+// Print, Export → PDF and Export → Image open the same print pages. PDF asks for its file first.
+function openPrintView(mode: 'print' | 'png' | 'pdf') {
+  if (printButton.disabled || document.querySelector('.print-dialog')) return;
   void operation(async () => {
     const tab = active();
     const captured: PrintSnapshot = { state: view.state, id: tab.id, path: tab.path, title: tabName(tab) };
+    let writePdf: (() => Promise<void>) | undefined;
+    if (mode === 'pdf') {
+      const folder = startFolder();
+      const name = `${captured.title.replace(/\.(?:md|markdown|txt)$/i, '') || 'Untitled'}.pdf`;
+      const path = await save({ defaultPath: folder ? `${folder}${/[\\/]$/.test(folder) ? '' : getSeparator(folder)}${name}` : name, filters: [{ name: 'PDF', extensions: ['pdf'] }] });
+      if (!path) return;
+      writePdf = () => invoke('export_pdf', { path });
+    }
     status.textContent = 'Loading print tools…';
     let tools: typeof import('./print-view');
     try { tools = await import('./print-view'); }
     catch (reason) { throw new Error(`Cannot load print tools: ${String(reason)}`); }
     if (!pageActive || terminating) return;
-    if (composing()) { status.textContent = 'Finish text input, then repeat Print / PDF.'; return; }
+    if (composing()) { status.textContent = 'Finish text input, then try again.'; return; }
     report();
-    await tools.showPrintView(captured);
+    await tools.showPrintView(captured, { mode, writePdf });
   });
-});
+}
+printButton.addEventListener('click', () => openPrintView('print'));
 report();
 const openLinkControls = linkControls(view, tools, message => { status.textContent = message; });
 const codeBlockButton = document.createElement('button'); codeBlockButton.textContent = 'Code Block'; codeBlockButton.id = 'code-block'; formatBar.append(codeBlockButton);
@@ -1031,7 +1041,7 @@ if (isTauri()) {
   });
   const menuDispatch = (command: string): boolean => {
     if (command === 'import') { void operation(() => exchange.importFile(), true); return true; }
-    if (command === 'export-pdf') { document.querySelector<HTMLButtonElement>('#print')?.click(); return true; }
+    if (command === 'export-pdf' || command === 'export-png') { openPrintView(command === 'export-pdf' ? 'pdf' : 'png'); return true; }
     if (command === 'export-settings') { showSettingsDialog({ onMeasure: () => view.requestMeasure(), category: 'export' }); return true; }
     if (command === 'export-previous' || command === 'export-overwrite') {
       void operation(() => exchange.exportPrevious(command === 'export-overwrite'), true); return true;

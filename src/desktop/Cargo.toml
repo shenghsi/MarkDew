@@ -23,6 +23,18 @@ fontdb = { version = "0.24", default-features = false, features = ["fs", "memmap
 
 [target.'cfg(target_os = "linux")'.dependencies]
 gtk = "0.18"
+webkit2gtk = { version = "=2.0.2", features = ["v2_38"] }
+
+[target.'cfg(windows)'.dependencies]
+webview2-com = "0.39"
+windows = "0.62"
+
+# Export → PDF prints the WebView to a file. The versions match wry's, so the types are the same.
+[target.'cfg(target_os = "macos")'.dependencies]
+objc2 = "0.6.4"
+objc2-foundation = { version = "0.3.2", default-features = false, features = ["std", "NSDictionary", "NSString", "NSURL"] }
+objc2-app-kit = { version = "0.3.2", default-features = false, features = ["std", "NSPrintInfo", "NSPrintOperation", "NSResponder", "NSView", "NSWindow"] }
+objc2-web-kit = { version = "0.3.2", default-features = false, features = ["std", "objc2-app-kit", "WKWebView"] }
 
 [target.'cfg(unix)'.dependencies]
 libc = "0.2"

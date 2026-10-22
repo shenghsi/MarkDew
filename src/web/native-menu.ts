@@ -8,7 +8,7 @@ const commands = new Set([
   'toggle-sidebar', 'toggle-outline', 'source-mode',
   'theme-system', 'theme-light', 'theme-dark',
   'settings', 'about',
-  'import', 'export-pdf', 'export-html', 'export-html-plain', 'export-docx', 'export-odt', 'export-rtf', 'export-epub',
+  'import', 'export-pdf', 'export-png', 'export-html', 'export-html-plain', 'export-docx', 'export-odt', 'export-rtf', 'export-epub',
   'export-latex', 'export-mediawiki', 'export-rst', 'export-textile', 'export-opml',
   'export-previous', 'export-overwrite', 'export-settings'
 ]);

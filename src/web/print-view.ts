@@ -204,15 +204,27 @@ export function printView(snapshot: PrintSnapshot, renderers: Renderers = defaul
   return { element, ready, snapshot: captured, dispose() { alive = false; for (const dispose of disposers) dispose(); element.remove(); } };
 }
 
-export async function showPrintView(snapshot: PrintSnapshot) {
+// print: the system print dialog. png and pdf: Export → Image and Export → PDF, which write a file from
+// the same pages. The browser has no Export menu, so its print dialog also offers the PNG.
+export type PrintMode = 'print' | 'png' | 'pdf';
+export interface PrintOptions { mode?: PrintMode; writePdf?: () => Promise<void> }
+
+export async function showPrintView(snapshot: PrintSnapshot, options: PrintOptions = {}) {
+  const mode = options.mode ?? 'print';
   const projection = printView(snapshot);
-  const dialog = document.createElement('dialog'); dialog.className = 'print-dialog'; dialog.setAttribute('aria-label', 'Print document');
+  const dialog = document.createElement('dialog'); dialog.className = 'print-dialog';
+  dialog.setAttribute('aria-label', mode === 'print' ? 'Print document' : mode === 'pdf' ? 'Export PDF' : 'Export PNG');
   const controls = document.createElement('div'); controls.className = 'print-controls';
   const label = document.createElement('span'); label.textContent = `${snapshot.title} — Preparing document…`; label.setAttribute('role', 'status');
-  const print = document.createElement('button'); print.textContent = 'Print…'; print.disabled = true;
-  const png = document.createElement('button'); png.textContent = 'Export PNG…'; png.disabled = true; png.id = 'export-png';
-  const close = document.createElement('button'); close.textContent = 'Close'; controls.append(label, print, png, close);
-  const hint = document.createElement('p'); hint.className = 'print-hint'; hint.textContent = 'Use the system print dialog to select paper or Save as PDF, where available. HTTPS images load from their servers.';
+  const print = mode === 'print' ? document.createElement('button') : undefined;
+  if (print) { print.textContent = 'Print…'; print.disabled = true; print.className = 'print-system'; }
+  const png = mode === 'png' || (mode === 'print' && !isTauri()) ? document.createElement('button') : undefined;
+  if (png) { png.textContent = 'Export PNG…'; png.disabled = true; png.className = 'print-png'; }
+  const close = document.createElement('button'); close.textContent = 'Close';
+  controls.append(...[label, print, png, close].filter((item): item is HTMLElement => !!item));
+  const hint = document.createElement('p'); hint.className = 'print-hint';
+  hint.textContent = mode === 'pdf' ? 'MarkDew writes the PDF with the pages shown here. HTTPS images load from their servers.'
+    : `Use the system print dialog to select the printer and paper${isTauri() ? '' : ', or Save as PDF where available'}. HTTPS images load from their servers.`;
   const errors = document.createElement('ul'); errors.className = 'print-warnings';
   const pngPreview = document.createElement('details'); pngPreview.className = 'png-preview'; pngPreview.hidden = true;
   const previewLabel = document.createElement('summary'); previewLabel.textContent = 'PNG preview'; pngPreview.append(previewLabel);
@@ -226,12 +238,12 @@ export async function showPrintView(snapshot: PrintSnapshot) {
   close.onclick = () => { if (!writing) cleanup(); }; dialog.addEventListener('cancel', event => { event.preventDefault(); if (!writing) cleanup(); });
   window.addEventListener('pagehide', cleanup, { once: true });
   try { dialog.showModal(); } catch (error) { cleanup(); throw error; }
-  print.onclick = () => {
+  if (print) print.onclick = () => {
     try { window.print(); } catch (reason) { label.textContent = `Cannot open the print dialog: ${String(reason)}`; }
   };
-  png.onclick = () => {
+  if (png) png.onclick = () => {
     if (pngBusy || closed) return;
-    pngBusy = true; png.disabled = true; print.disabled = true; label.textContent = `${snapshot.title} — Preparing PNG…`;
+    pngBusy = true; png.disabled = true; if (print) print.disabled = true; label.textContent = `${snapshot.title} — Preparing PNG…`;
     void exportPNG(projection.element, projection.snapshot.title, exportSignal.signal, () => {
       writing = true; close.disabled = true; label.textContent = `${snapshot.title} — Saving PNG…`;
     }, undefined, bytes => {
@@ -241,10 +253,10 @@ export async function showPrintView(snapshot: PrintSnapshot) {
       pngPreview.replaceChildren(previewLabel, image); pngPreview.hidden = false;
     }).then(saved => { if (!closed) label.textContent = saved ? `${snapshot.title} — ${isTauri() ? 'PNG exported.' : 'PNG prepared; download requested.'}` : `${snapshot.title} — Export canceled.`; },
       reason => { if (!closed) label.textContent = `Cannot export PNG: ${String(reason)}`; }).finally(() => {
-        writing = false; pngBusy = false; if (!closed) { close.disabled = false; png.disabled = false; print.disabled = false; }
+        writing = false; pngBusy = false; if (!closed) { close.disabled = false; png.disabled = false; if (print) print.disabled = false; }
       });
   };
-  dialog.addEventListener('keydown', event => {
+  if (print) dialog.addEventListener('keydown', event => {
     if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'p') {
       event.preventDefault(); if (!print.disabled) print.click();
     }
@@ -253,6 +265,18 @@ export async function showPrintView(snapshot: PrintSnapshot) {
   if (closed) return;
   for (const warning of warnings) { const item = document.createElement('li'); item.textContent = warning; errors.append(item); }
   label.textContent = `${snapshot.title}${warnings.length ? ' — Check the warnings before printing.' : ' — Ready to print.'}`;
-  print.textContent = warnings.length ? 'Print with warnings…' : 'Print…'; print.disabled = false;
-  png.textContent = warnings.length ? 'Export PNG with warnings…' : 'Export PNG…'; png.disabled = false;
+  if (print) { print.textContent = warnings.length ? 'Print with warnings…' : 'Print…'; print.disabled = false; }
+  if (png) { png.textContent = warnings.length ? 'Export PNG with warnings…' : 'Export PNG…'; png.disabled = false; }
+  if (mode === 'png') png!.click();
+  if (mode === 'pdf') {
+    // The PDF is made from these pages, so the dialog stays open and Close waits until the file is written.
+    writing = true; close.disabled = true; label.textContent = `${snapshot.title} — Saving PDF…`;
+    try {
+      await document.fonts?.ready; if (closed) return;
+      await options.writePdf?.();
+      if (!closed) label.textContent = `${snapshot.title} — PDF exported${warnings.length ? ' with warnings' : ''}.`;
+    } catch (reason) {
+      if (!closed) label.textContent = `Cannot export PDF: ${reason instanceof Error ? reason.message : String(reason)}`;
+    } finally { writing = false; if (!closed) { close.disabled = false; close.focus(); } }
+  }
 }
