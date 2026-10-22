@@ -1472,5 +1472,5 @@ button[aria-pressed="true"], #outline .outline-content button:hover, #outline:no
 #empty-document h2 { margin: 0; font-size: 1.3em; font-weight: 600; color: var(--ink); }
 #empty-document p { margin: 0 0 8px; }
 .empty-document-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
-body.no-document #editor { display: none; }
+body.no-document #app #editor { display: none; }
 body.no-document #word-count, body.no-document #document-title { display: none; }
