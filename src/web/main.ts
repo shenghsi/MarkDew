@@ -460,7 +460,7 @@ function openPrintView(mode: 'print' | 'png' | 'pdf') {
       if (!path) return;
       writePdf = () => invoke('export_pdf', { path });
     }
-    status.textContent = 'Loading print tools…';
+    if (mode === 'print') notify('Preparing to print…'); else status.textContent = 'Loading print tools…';
     let tools: typeof import('./print-view');
     try { tools = await import('./print-view'); }
     catch (reason) { throw new Error(`Cannot load print tools: ${String(reason)}`); }

@@ -7,10 +7,13 @@ import { documentLanguage } from '../../src/web/document-language';
 import { fromSource, normalize, savedSource, sourceExtensions, sourceField } from '../../src/web/source';
 import { printView, showPrintView, PrintSnapshot } from '../../src/web/print-view';
 import { rasterHeader } from './raster-fixtures';
-vi.mock('@tauri-apps/api/core', () => ({ invoke: vi.fn(), isTauri: () => true }));
+const host = vi.hoisted(() => ({ tauri: true }));
+vi.mock('@tauri-apps/api/core', () => ({ invoke: vi.fn(), isTauri: () => host.tauri }));
 Object.defineProperty(HTMLDialogElement.prototype, 'showModal', { configurable: true, writable: true, value() { this.setAttribute('open', ''); } });
+Object.defineProperty(HTMLDialogElement.prototype, 'show', { configurable: true, writable: true, value() { this.setAttribute('open', ''); } });
+Object.defineProperty(HTMLDialogElement.prototype, 'close', { configurable: true, writable: true, value() { this.removeAttribute('open'); } });
 const projections: ReturnType<typeof printView>[] = [];
-afterEach(() => { for (const projection of projections.splice(0)) projection.dispose(); window.dispatchEvent(new Event('pagehide')); document.body.replaceChildren(); vi.restoreAllMocks(); vi.unstubAllGlobals(); vi.mocked(invoke).mockReset(); vi.useRealTimers(); });
+afterEach(() => { for (const projection of projections.splice(0)) projection.dispose(); window.dispatchEvent(new Event('pagehide')); document.body.replaceChildren(); vi.restoreAllMocks(); vi.unstubAllGlobals(); vi.mocked(invoke).mockReset(); vi.useRealTimers(); host.tauri = true; });
 function snapshot(source: string): PrintSnapshot {
   const record = fromSource(source);
   return { state: EditorState.create({ doc: normalize(record.raw), extensions: [sourceExtensions(record), history(), documentLanguage()] }),
@@ -258,6 +261,7 @@ it('loads diagrams as isolated SVG images and releases URLs on load error, timeo
   expect(await slow.ready).toHaveLength(1); expect(revoke).toHaveBeenCalledTimes(3); expect(slow.element.querySelector('img')).toBeNull();
 });
 it('enables Print only after the snapshot is ready and cleans up the modal', async () => {
+  host.tauri = false; // the browser keeps the preview window
   const show = vi.spyOn(HTMLDialogElement.prototype, 'showModal').mockImplementation(function (this: HTMLDialogElement) { this.setAttribute('open', ''); });
   const print = vi.spyOn(window, 'print').mockImplementation(() => {});
   const pending = showPrintView(snapshot('$x^2$'));
@@ -267,20 +271,52 @@ it('enables Print only after the snapshot is ready and cleans up the modal', asy
   expect(document.querySelector('.print-dialog')).toBeNull(); expect(show).toHaveBeenCalledTimes(1);
 });
 it('permits PNG and Print for supported inline HTML without an HTML-frame warning', async () => {
-  const original = '\uFEFFPress <kbd>Enter</kbd> and <b>$x^2$</b>.\r\n', captured = snapshot(original);
-  await showPrintView(captured);
-  expect(document.querySelector('.print-warnings')!.textContent).toBe('');
-  expect(document.querySelector('.print-png')).toBeNull();
-  expect(document.querySelector<HTMLButtonElement>('.print-system')!.disabled).toBe(false);
-  expect(document.querySelector('.print-paper iframe')).toBeNull();
-  expect(document.querySelector('.print-paper kbd')!.textContent).toBe('Enter');
+  const original = '\uFEFFPress <kbd>Enter</kbd> and <b>$x^2$</b>.\r\n', captured = snapshot(original), projection = create(captured);
+  expect(await projection.ready).toEqual([]);
+  expect(projection.element.querySelector('iframe')).toBeNull();
+  expect(projection.element.querySelector('kbd')!.textContent).toBe('Enter');
   expect(savedSource(captured.state.field(sourceField))).toBe(original); expect(undoDepth(captured.state)).toBe(0);
 });
 
-it('offers only the system print dialog in Print, because the desktop app exports from the Export menu', async () => {
+const bigImage = () => vi.mocked(invoke).mockResolvedValue(rasterHeader('png', 16385, 1).buffer);
+const mac = () => vi.stubGlobal('navigator', Object.create(navigator, { platform: { value: 'MacIntel' } }));
+it('opens the system print dialog at once on macOS through the host, then removes the pages', async () => {
+  mac(); const print = vi.spyOn(window, 'print').mockImplementation(() => {});
+  let finish!: () => void;
+  vi.mocked(invoke).mockImplementation(() => new Promise<void>(resolve => { finish = resolve; }));
+  const pending = showPrintView(snapshot('# Print\n\n$x^2$'));
+  // The pages exist for the print, but the preview window is hidden and not modal.
+  expect(document.querySelector('.print-dialog')!.classList.contains('print-direct')).toBe(true);
+  await vi.waitFor(() => expect(vi.mocked(invoke)).toHaveBeenCalledExactlyOnceWith('print_page'));
+  expect(print).not.toHaveBeenCalled(); expect(document.querySelector('.print-dialog .print-paper')).not.toBeNull();
+  finish(); await pending;
+  expect(document.querySelector('.print-dialog')).toBeNull();
+});
+it('keeps the preview window and its Print button where the web view prints from the page', async () => {
+  const print = vi.spyOn(window, 'print').mockImplementation(() => {});
   await showPrintView(snapshot('# Print'));
+  expect(print).not.toHaveBeenCalled(); expect(vi.mocked(invoke)).not.toHaveBeenCalled();
+  expect(document.querySelector('.print-dialog')!.classList.contains('print-direct')).toBe(false);
   expect(Array.from(document.querySelectorAll('.print-controls button'), button => button.textContent)).toEqual(['Print…', 'Close']);
   expect(document.querySelector('.print-hint')!.textContent).not.toContain('Save as PDF');
+  document.querySelector<HTMLButtonElement>('.print-system')!.click(); expect(print).toHaveBeenCalledTimes(1);
+});
+it('keeps the preview window for a warning on macOS, and prints from its button', async () => {
+  mac(); bigImage(); vi.mocked(invoke).mockImplementation(async (command: string) => command === 'print_page' ? undefined : rasterHeader('png', 16385, 1).buffer as never);
+  await showPrintView({ ...snapshot('![Large](picture.png)\n'), title: 'Writing.md' });
+  expect(vi.mocked(invoke)).not.toHaveBeenCalledWith('print_page');
+  const dialog = document.querySelector('.print-dialog')!; expect(dialog.classList.contains('print-direct')).toBe(false);
+  expect(Array.from(document.querySelectorAll('.print-controls button'), button => button.textContent)).toEqual(['Print with warnings…', 'Close']);
+  expect(document.querySelector('.print-warnings')!.textContent).toContain('Large');
+  document.querySelector<HTMLButtonElement>('.print-system')!.click(); await vi.waitFor(() => expect(vi.mocked(invoke)).toHaveBeenCalledWith('print_page'));
+  document.querySelector<HTMLButtonElement>('.print-controls button:last-child')!.click(); expect(document.querySelector('.print-dialog')).toBeNull();
+});
+it('shows the message and the preview window when the print call fails', async () => {
+  mac();
+  vi.mocked(invoke).mockRejectedValue('Printing is not available.');
+  await showPrintView(snapshot('# Print'));
+  expect(document.querySelector('.print-dialog')).not.toBeNull();
+  expect(document.querySelector('[role=status]')!.textContent).toContain('Cannot open the print dialog: Printing is not available.');
 });
 it('writes the PDF after the pages are ready and keeps the dialog until the file is written', async () => {
   let finish!: () => void;

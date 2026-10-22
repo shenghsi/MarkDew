@@ -458,6 +458,21 @@ async fn list_fonts() -> Result<Vec<String>, String> {
         .map_err(|error| error.to_string())
 }
 
+// The macOS web view ignores window.print(). Its own print call opens the system print dialog and returns
+// when the dialog closes. Other web views print from the page, so they never call this.
+#[tauri::command]
+async fn print_page(window: tauri::WebviewWindow) -> Result<(), String> {
+    #[cfg(target_os = "macos")]
+    {
+        window.print().map_err(|error| error.to_string())
+    }
+    #[cfg(not(target_os = "macos"))]
+    {
+        let _ = window;
+        Err("This web view prints from the page.".into())
+    }
+}
+
 // WebKitGTK sends an image-only paste to the page with empty clipboard data, so the page cannot read a
 // copied image. On Linux the host reads the clipboard image and returns it as PNG bytes (empty when the
 // clipboard holds no image). The other web views give the page the image in the paste event.
@@ -1380,6 +1395,7 @@ fn main() {
             delete_path,
             canonical_path,
             read_clipboard_image,
+            print_page,
             list_fonts,
             pandoc::pandoc_check,
             pandoc::pandoc_export,

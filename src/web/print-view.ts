@@ -18,7 +18,7 @@ import { mountHTMLFrame } from './html-frame';
 import { mountImage, shortDestination } from './images';
 import './print.css';
 import { exportPNG } from './png-export';
-import { isTauri } from '@tauri-apps/api/core';
+import { invoke, isTauri } from '@tauri-apps/api/core';
 import { blockHTML, inlineHTML } from './inline-html';
 
 export interface PrintSnapshot {
@@ -209,10 +209,23 @@ export function printView(snapshot: PrintSnapshot, renderers: Renderers = defaul
 export type PrintMode = 'print' | 'png' | 'pdf';
 export interface PrintOptions { mode?: PrintMode; writePdf?: () => Promise<void> }
 
+// The macOS web view ignores window.print(). The host prints it with the web view's own call, which opens
+// the system print dialog and returns when that dialog closes. Other web views print from the page.
+const hostPrints = () => isTauri() && /Mac/.test(navigator.platform);
+const systemPrint = (): Promise<void> => {
+  if (hostPrints()) return invoke<void>('print_page');
+  try { window.print(); return Promise.resolve(); } catch (error) { return Promise.reject(error); }
+};
+
 export async function showPrintView(snapshot: PrintSnapshot, options: PrintOptions = {}) {
   const mode = options.mode ?? 'print';
+  // On macOS, Print goes straight to the system print dialog. The pages are built out of sight, and the preview
+  // window only shows when something needs a look (a warning). The host call returns when the dialog closes, so
+  // the pages can be removed at the right time. Other web views send no reliable end of printing (WebKitGTK sends
+  // no afterprint event), so there the preview window stays and its Print… button opens the system dialog.
+  const direct = mode === 'print' && hostPrints();
   const projection = printView(snapshot);
-  const dialog = document.createElement('dialog'); dialog.className = 'print-dialog';
+  const dialog = document.createElement('dialog'); dialog.className = direct ? 'print-dialog print-direct' : 'print-dialog';
   dialog.setAttribute('aria-label', mode === 'print' ? 'Print document' : mode === 'pdf' ? 'Export PDF' : 'Export PNG');
   const controls = document.createElement('div'); controls.className = 'print-controls';
   const label = document.createElement('span'); label.textContent = `${snapshot.title} — Preparing document…`; label.setAttribute('role', 'status');
@@ -237,9 +250,9 @@ export async function showPrintView(snapshot: PrintSnapshot, options: PrintOptio
   const cleanup = () => { if (closed) return; closed = true; exportSignal.abort(); if (pngURL) URL.revokeObjectURL(pngURL); projection.dispose(); dialog.remove(); window.removeEventListener('pagehide', cleanup); if (previousFocus instanceof HTMLElement && previousFocus.isConnected) previousFocus.focus(); };
   close.onclick = () => { if (!writing) cleanup(); }; dialog.addEventListener('cancel', event => { event.preventDefault(); if (!writing) cleanup(); });
   window.addEventListener('pagehide', cleanup, { once: true });
-  try { dialog.showModal(); } catch (error) { cleanup(); throw error; }
+  try { if (direct) dialog.show(); else dialog.showModal(); } catch (error) { cleanup(); throw error; }
   if (print) print.onclick = () => {
-    try { window.print(); } catch (reason) { label.textContent = `Cannot open the print dialog: ${String(reason)}`; }
+    systemPrint().catch(reason => { label.textContent = `Cannot open the print dialog: ${reason instanceof Error ? reason.message : String(reason)}`; });
   };
   if (png) png.onclick = () => {
     if (pngBusy || closed) return;
@@ -265,6 +278,18 @@ export async function showPrintView(snapshot: PrintSnapshot, options: PrintOptio
   if (closed) return;
   for (const warning of warnings) { const item = document.createElement('li'); item.textContent = warning; errors.append(item); }
   label.textContent = `${snapshot.title}${warnings.length ? ' — Check the warnings before printing.' : ' — Ready to print.'}`;
+  if (direct && !warnings.length) {
+    try {
+      await document.fonts?.ready; if (closed) return;
+      await systemPrint();
+    } catch (reason) {
+      label.textContent = `Cannot open the print dialog: ${reason instanceof Error ? reason.message : String(reason)}`;
+      dialog.classList.remove('print-direct'); dialog.close(); try { dialog.showModal(); } catch { cleanup(); }
+      return;
+    }
+    cleanup(); return;
+  }
+  if (direct) { dialog.classList.remove('print-direct'); dialog.close(); try { dialog.showModal(); } catch (error) { cleanup(); throw error; } }
   if (print) { print.textContent = warnings.length ? 'Print with warnings…' : 'Print…'; print.disabled = false; }
   if (png) { png.textContent = warnings.length ? 'Export PNG with warnings…' : 'Export PNG…'; png.disabled = false; }
   if (mode === 'png') png!.click();

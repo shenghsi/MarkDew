@@ -40,3 +40,5 @@
   .print-dialog::backdrop, .print-controls, .print-hint, .print-warnings, .png-preview { display: none; }
   .print-paper { width: auto; max-width: none; margin: 0; padding: 0; }
 }
+
+@media screen { .print-dialog.print-direct { opacity: 0; pointer-events: none; } }

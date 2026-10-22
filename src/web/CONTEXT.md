@@ -56,6 +56,13 @@ with the canonical spelling of every open tab (canonical_path), and ignores case
 A link in a parent folder, or a different case, so no longer makes a second tab. The sidebar, Open File,
 links, drops, and menu requests all use this check. Rename finds its tab the same way, before the rename.
 
+Print on macOS goes straight to the system print dialog: the pages are built out of sight, and the host
+command print_page (the web view's own print call, which opens the dialog and returns when it closes)
+prints them, because the macOS web view ignores window.print(). The pages are removed when the call
+returns, or kept in the preview window if a warning needs a look. On Linux and Windows, Print keeps the
+preview window, and its Print... button calls window.print(): WebKitGTK sends no afterprint event, so the
+end of printing cannot be known there. Browser mode is unchanged. The macOS path has no native check yet.
+
 Import and Export use an installed Pandoc; MarkDew never bundles it (its GPL license stays apart from
 MarkDew's). The host (pandoc.rs) finds Pandoc from the path in Settings, Export, else PATH and common
 folders (~/bin, /usr/local/bin, Homebrew, Windows install folders), and starts it with fixed arguments and
