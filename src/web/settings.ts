@@ -884,7 +884,7 @@ export function showSettingsDialog(options?: {
       checkUpdatesBtn.disabled = true;
       updateStatus.textContent = t('general.checking_updates', storage);
       try {
-        const result = await checkAppUpdates('1.0.0');
+        const result = await checkAppUpdates(__APP_VERSION__);
         if (result.status === 'up-to-date') {
           updateStatus.textContent = t('general.up_to_date', storage);
           checkUpdatesBtn.disabled = false;
@@ -1125,7 +1125,7 @@ export function showAboutDialog(): HTMLElement {
 
   const version = document.createElement('div');
   version.className = 'about-version';
-  version.textContent = 'Version 1.0.0';
+  version.textContent = `Version ${__APP_VERSION__}`;
 
   const tagline = document.createElement('p');
   tagline.className = 'about-tagline';
@@ -1154,7 +1154,7 @@ export function showAboutDialog(): HTMLElement {
     checkBtn.disabled = true;
     statusMsg.textContent = 'Checking for updates...';
     try {
-      const result = await checkAppUpdates('1.0.0');
+      const result = await checkAppUpdates(__APP_VERSION__);
       if (result.status === 'up-to-date') {
         statusMsg.textContent = 'MarkDew is up to date.';
         checkBtn.disabled = false;
