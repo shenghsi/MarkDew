@@ -27,3 +27,19 @@ it('refuses a result that is not a PNG data URL', async () => {
     expect(result.failed).toBe(1); expect(result.drawn).toBe(0); expect(result.markdown).toBe('```mermaid\nA\n```');
   }
 });
+
+it('gives a drawn PNG its resolution, so other programs show it at its real size', async () => {
+  const { withResolution } = await import('../../src/web/diagram-images');
+  const { deflateSync, crc32 } = await import('node:zlib');
+  const chunk = (type: string, data: Buffer) => {
+    const body = Buffer.concat([Buffer.from(type, 'latin1'), data]), out = Buffer.alloc(body.length + 8);
+    out.writeUInt32BE(data.length, 0); body.copy(out, 4); out.writeUInt32BE(crc32(body), body.length + 4); return out;
+  };
+  const header = Buffer.alloc(13); header.writeUInt32BE(1, 0); header.writeUInt32BE(1, 4); header[8] = 8; header[9] = 2;
+  const source = Buffer.concat([Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]), chunk('IHDR', header),
+    chunk('IDAT', deflateSync(Buffer.from([0, 255, 255, 255]))), chunk('IEND', Buffer.alloc(0))]);
+  const result = Buffer.from(withResolution(`data:image/png;base64,${source.toString('base64')}`, 192).split(',')[1], 'base64');
+  expect(result.subarray(33, 54)).toEqual(chunk('pHYs', Buffer.from([0, 0, 0x1d, 0x87, 0, 0, 0x1d, 0x87, 1])));
+  expect(Buffer.concat([result.subarray(0, 33), result.subarray(54)])).toEqual(source);
+  expect(withResolution('data:image/png;base64,iVBORw0KGgo=', 192)).toBe('data:image/png;base64,iVBORw0KGgo=');
+});

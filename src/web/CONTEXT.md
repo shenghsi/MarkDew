@@ -60,7 +60,7 @@ and Overwrite with Previous, and Export Settings. An export reads the editor tex
 export), asks for the file, resolves images from the document's folder, and writes through a temporary
 file, so a failed run keeps an existing file. Pandoc reads a mermaid block as plain code, so for formats that hold pictures (HTML, Word, OpenOffice, RTF,
 Epub, LaTeX) the renderer first draws each diagram with the preview renderer, as a PNG at twice its size
-on white, and puts it in the Markdown as an image; a diagram that cannot be drawn stays as code and the
+on white, marked 192 DPI so other programs show it at its real size, and puts it in the Markdown as an image; a diagram that cannot be drawn stays as code and the
 notice says so. Text formats keep the code. LaTeX writes embedded pictures to <name>_media beside the
 file. Raw HTML blocks (tables with merged cells, lists) and <br> inside table cells go through a small
 Lua filter, because Pandoc drops raw HTML in every format except HTML; without Lua in Pandoc the export

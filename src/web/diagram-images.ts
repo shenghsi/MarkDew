@@ -55,8 +55,36 @@ export async function svgToPng(svg: string): Promise<string> {
     const context = canvas.getContext('2d'); if (!context) throw new Error('The browser cannot create an image canvas.');
     context.fillStyle = '#ffffff'; context.fillRect(0, 0, pixelsWide, pixelsHigh);
     context.drawImage(image, 0, 0, pixelsWide, pixelsHigh);
-    return canvas.toDataURL('image/png');
+    return withResolution(canvas.toDataURL('image/png'), 96 * scale);
   } finally { URL.revokeObjectURL(url); }
+}
+
+const crcTable = Array.from({ length: 256 }, (_, n) => {
+  let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
+  return c >>> 0;
+});
+const crc32 = (bytes: Uint8Array) => {
+  let c = 0xffffffff; for (const byte of bytes) c = crcTable[(c ^ byte) & 0xff] ^ (c >>> 8);
+  return (c ^ 0xffffffff) >>> 0;
+};
+
+// A canvas PNG has no resolution, so Pandoc reads it as 72 DPI and makes the twice-size picture too large
+// (OpenOffice puts it off the page). A pHYs chunk after the header gives the real size: 96 DPI times the scale.
+export function withResolution(dataUrl: string, dpi: number): string {
+  const prefix = 'data:image/png;base64,';
+  if (!dataUrl.startsWith(prefix)) return dataUrl;
+  const png = Uint8Array.from(atob(dataUrl.slice(prefix.length)), char => char.charCodeAt(0));
+  const headerEnd = 8 + 25; // signature, then the IHDR chunk
+  if (png.length < headerEnd || String.fromCharCode(...png.subarray(12, 16)) !== 'IHDR') return dataUrl;
+  const chunk = new Uint8Array(21), view = new DataView(chunk.buffer);
+  const perMetre = Math.round(dpi / 0.0254);
+  view.setUint32(0, 9); chunk.set([0x70, 0x48, 0x59, 0x73], 4); // length, "pHYs"
+  view.setUint32(8, perMetre); view.setUint32(12, perMetre); chunk[16] = 1; // unit: metre
+  view.setUint32(17, crc32(chunk.subarray(4, 17)));
+  const result = new Uint8Array(png.length + chunk.length);
+  result.set(png.subarray(0, headerEnd)); result.set(chunk, headerEnd); result.set(png.subarray(headerEnd), headerEnd + chunk.length);
+  let binary = ''; for (let i = 0; i < result.length; i += 0x8000) binary += String.fromCharCode(...result.subarray(i, i + 0x8000));
+  return prefix + btoa(binary);
 }
 
 export const diagramPng = async (source: string) => svgToPng(await renderDiagram(source, 'print'));
