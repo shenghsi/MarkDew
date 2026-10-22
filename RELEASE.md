@@ -1,10 +1,13 @@
-# MarkDew v1.0.0
+# MarkDew v1.1.0
 
-This is the first release of MarkDew. The app was named MarkBend through v1.0.10 in the former repository, [shenghsi/MarkBend](https://github.com/shenghsi/MarkBend). The version number starts again at 1.0.0. The app has no Bend compiler.
+## What is new
 
-- MarkDew has a new name, a new update signing key, and a new repository.
-- **Users of MarkBend must install MarkDew manually once.** MarkBend cannot update to MarkDew, because the update key and the update address are new.
-- Later releases can use the in-app updater.
+- **Print and export:** Print… opens the system print dialog. Export → PDF… saves a PDF file directly, with no dialog. Export → Image (PNG)… saves the pages as a picture.
+- **Import and export through Pandoc:** Import reads Word, OpenOffice, RTF, Epub, LaTeX, Media Wiki, reStructuredText, Textile, OPML, and HTML. Export writes HTML, Word, OpenOffice, RTF, Epub, LaTeX, and other formats. MarkDew needs a Pandoc that you install yourself.
+- **Mermaid diagrams in exports:** Each diagram is drawn as a picture at its real size, including in OpenOffice files.
+- **Editor:** Tab and Shift-Tab nest list items. A right-click editor menu, horizontal rules, equation blocks, font and image settings, an empty state with no open file, and Open dialogs that start in the current folder.
+- **Fixes:** One tab for each file, even when the path has a link or a different letter case. Deleting a file closes its tab.
+- The PDF export on Windows and Linux builds in CI but has no native acceptance check yet.
 
 ## In-app updates
 
