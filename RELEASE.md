@@ -1,13 +1,10 @@
-# MarkDew v1.0.10
+# MarkDew v1.0.0
 
-This release removes the Bend compiler from the app, the build, and CI.
+This is the first release of MarkDew. The app was named MarkBend through v1.0.10 in the former repository, [shenghsi/MarkBend](https://github.com/shenghsi/MarkBend). The version number starts again at 1.0.0. The app has no Bend compiler.
 
-- Return in a flat list item or an ordinary line now uses a TypeScript command. It gives the same results as the earlier Bend command, and it plans the edit from the current line only, so Return in a large document no longer waits for a full document scan.
-- One case changes: Return at the end of a list item below a line such as ```` ```a`b ```` now continues the list. Markdown does not read that line as a code fence, and the preview already showed it as a paragraph.
-- The About dialog no longer names the Bend proof engine.
-- The earlier Bend core, laws, proofs, and checks are on the `bend-core` branch.
-
-v1.0.9 moved the native Bend adapter experiments out of the main source tree. v1.0.8 added automatic update checks at startup, at most once every 24 hours.
+- MarkDew has a new name, a new update signing key, and a new repository.
+- **Users of MarkBend must install MarkDew manually once.** MarkBend cannot update to MarkDew, because the update key and the update address are new.
+- Later releases can use the in-app updater.
 
 ## In-app updates
 
@@ -15,8 +12,6 @@ v1.0.9 moved the native Bend adapter experiments out of the main source tree. v1
 - The app downloads the update, checks its signature, installs it, and restarts. Download progress is shown in the app.
 - Linux DEB updates open the system password dialog. MarkDew does not collect or store the password. Cancel keeps the app open.
 - Save all documents and close other MarkDew windows before you install an update. A failed update keeps the app open and permits a retry.
-
-**Users on v1.0.5 or earlier must install v1.0.7 manually once.** Later releases can use the in-app updater.
 
 Packages include macOS Apple Silicon and Intel DMG disk images, a Linux x64 DEB
 package, and a Windows x64 NSIS installer. The release also includes install
