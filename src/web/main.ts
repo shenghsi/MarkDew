@@ -287,6 +287,25 @@ const report = () => { active().state = view.state; status.textContent = `${tabN
   renderTabs(); sidebar?.select(active().path); syncMenuChecks(); };
 // File dialogs start in the folder of the current file, or else in the open project folder.
 const startFolder = () => active().path ? getParentDir(active().path) : layout.folder || undefined;
+// One file, one tab. The Files list keeps the path it was opened with and tabs keep the host's canonical path,
+// so compare canonical spellings (and ignore case where the file system does).
+const canonicalCache = new Map<string, string>();
+async function canonicalOf(path: string): Promise<string> {
+  if (!path || !isTauri()) return path;
+  const known = canonicalCache.get(path); if (known) return known;
+  const resolved = await invoke<string>('canonical_path', { path }).catch(() => path);
+  const value = typeof resolved === 'string' && resolved ? resolved : path;
+  if (canonicalCache.size > 256) canonicalCache.clear();
+  canonicalCache.set(path, value); return value;
+}
+const foldCase = typeof navigator !== 'undefined' && /Win|Mac/.test(navigator.platform);
+const pathKey = (path: string) => foldCase ? path.toLowerCase() : path;
+async function tabFor(path: string): Promise<DocumentTab | undefined> {
+  const exact = tabs.all.find(tab => tab.path === path); if (exact) return exact;
+  const target = pathKey(await canonicalOf(path));
+  for (const tab of tabs.all) if (tab.path && pathKey(await canonicalOf(tab.path)) === target) return tab;
+  return undefined;
+}
 const insideDeleted = (path: string, deleted: string[]) => deleted.some(target => path === target || path.startsWith(target + '/') || path.startsWith(target + '\\'));
 // Tabs keep the host's canonical path; the Files list keeps the path it was opened with. Match both spellings.
 const deletionPaths = async (path: string) => [path, await invoke<string>('canonical_path', { path }).catch(() => path)];
@@ -715,7 +734,7 @@ document.querySelector('#open')!.addEventListener('click', () => void operation(
   await handleOpenFile(selected);
 }, true));
 async function handleOpenFile(selected: string) {
-  const existing = tabs.all.find(tab => tab.path === selected);
+  const existing = await tabFor(selected);
   if (existing) {
     existing.preview = false;
     switchTab(existing.id, true);
@@ -742,7 +761,7 @@ async function handleOpenFile(selected: string) {
   return loaded;
 }
 async function loadFile(selected: string) {
-  const existing = tabs.all.find(tab => tab.path === selected);
+  const existing = await tabFor(selected);
   if (existing) {
     existing.preview = false;
     switchTab(existing.id, true);
@@ -767,7 +786,7 @@ const nativeOpen = isTauri() ? openRequests(
         const outside: string[] = [];
         for (const path of paths) {
           if (!pageActive || composing()) return;
-          const existing = tabs.all.find(tab => tab.path === path);
+          const existing = await tabFor(path);
           if (existing) {
             if (!switchTab(existing.id, true)) return;
             sidebar?.select(path);
@@ -794,7 +813,7 @@ const nativeOpen = isTauri() ? openRequests(
 
       for (const path of paths) {
         if (!pageActive || composing()) return;
-        const existing = tabs.all.find(tab => tab.path === path);
+        const existing = await tabFor(path);
         if (existing) {
           if (!switchTab(existing.id, true)) return;
         } else if (!await loadFile(path)) return;
@@ -812,7 +831,7 @@ async function openDocumentLink(destination: string, fragment?: string) {
   });
   if (!pageActive || active() !== origin || origin.path !== path || view.state.doc !== doc ||
     view.state.field(sourceField) !== record || view.state.selection !== selection || composing()) return;
-  const existing = resolved.path === resolved.origin ? origin : tabs.all.find(tab => tab.path === resolved.path);
+  const existing = resolved.path === resolved.origin ? origin : await tabFor(resolved.path);
   if (existing) { if (!switchTab(existing.id, true)) return; }
   else {
     const loaded = await loadFile(resolved.path);
@@ -849,7 +868,7 @@ function initSidebar(initialRoot: string, deferRead: boolean) {
       return selected;
     },
     open: (path, options) => { void operation(async () => {
-      const existing = tabs.all.find(tab => tab.path === path);
+      const existing = await tabFor(path);
       if (existing) {
         if (options?.preview === false) { existing.preview = false; renderTabs(); }
         switchTab(existing.id, true);
@@ -876,10 +895,12 @@ function initSidebar(initialRoot: string, deferRead: boolean) {
       return await invoke<string>('create_file', { parent, name });
     },
     renameFile: async (oldPath: string, newPath: string) => {
+      // Find the tab first: after the rename the old path no longer resolves.
+      const openTab = await tabFor(oldPath);
       await invoke('rename_file', { oldPath, newPath });
-      const openTab = tabs.all.find(tab => tab.path === oldPath);
+      canonicalCache.clear();
       if (openTab) {
-        openTab.path = newPath;
+        openTab.path = await canonicalOf(newPath);
         if (openTab === active()) {
           fileTransition();
         }
@@ -900,6 +921,7 @@ function initSidebar(initialRoot: string, deferRead: boolean) {
       const paths = await deletionPaths(targetPath);
       let failure = '';
       await invoke('delete_path', { path: targetPath });
+      canonicalCache.clear();
       active().state = view.state;
       for (const tab of tabs.all.filter(other => other.path && insideDeleted(other.path, paths))) {
         // The file is gone and the user confirmed. Close its tab without the discard question,

@@ -42,6 +42,15 @@ The editor preserves indentation and fence characters. After closing, live previ
 When the cursor is in a code block in rendered mode and the code block contains no code, the Backspace command deletes the complete block.
 In source code mode, the command does not delete the code block and keeps standard text deletion.
 
+The editor draws no cursor layer, so the browser caret is its cursor. The caret stays transparent until
+the editor is active: the user clicks in it, types, or moves the selection. A file that opens, or a
+programmatic focus, shows no blinking caret. tests/browser/cursor-hidden.html checks this in Chrome.
+
+Each file opens in one tab. Before it opens a path, the app compares the canonical spelling of that path
+with the canonical spelling of every open tab (canonical_path), and ignores case on Windows and macOS.
+A link in a parent folder, or a different case, so no longer makes a second tab. The sidebar, Open File,
+links, drops, and menu requests all use this check. Rename finds its tab the same way, before the rename.
+
 Open File and Open Folder, from the toolbar, the menu bar, or the sidebar, start their dialog in the
 folder of the current file. With no current file, they start in the
 open project folder. With neither, the system chooses the folder.

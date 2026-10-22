@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Cursor visibility check</title>
+<div id="app"></div>
+<pre id="result">running</pre>
+<script type="module">
+import '/src/web/main.ts';
+const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+await wait(800);
+const info = label => {
+  const editor = document.querySelector('#editor'), cm = editor.querySelector('.cm-editor'), content = editor.querySelector('.cm-content');
+  const layer = editor.querySelector('.cm-cursorLayer'), cursor = editor.querySelector('.cm-cursor');
+  return {label, outerActive: editor.classList.contains('editor-active'), innerActive: cm.classList.contains('editor-active'),
+    focused: document.activeElement === content, layerDisplay: layer ? getComputedStyle(layer).display : 'none-in-dom',
+    cursorDisplay: cursor ? getComputedStyle(cursor).display : 'none-in-dom', caretColor: getComputedStyle(content).caretColor,
+    hasSelection: !!getSelection().rangeCount && content.contains(getSelection().anchorNode)};
+};
+const out = [info('boot')];
+document.querySelector('#new').click(); await wait(500);
+out.push(info('after new tab'));
+document.querySelector('#editor .cm-content').focus(); await wait(200);
+out.push(info('after programmatic focus'));
+window.view.dispatch({ selection: { anchor: 0 } }); await wait(200);
+out.push(info('after selection change'));
+out.ok = out[2].focused && out[2].caretColor === 'rgba(0, 0, 0, 0)' && out[3].caretColor === 'rgb(0, 0, 0)' && out[1].caretColor === 'rgba(0, 0, 0, 0)';
+document.querySelector('#result').textContent = JSON.stringify({ ok: out.ok, steps: out.map(o => [o.label, o.focused, o.innerActive, o.caretColor]) });
+</script>
+</html>

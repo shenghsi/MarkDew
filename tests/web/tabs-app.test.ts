@@ -346,3 +346,20 @@ it('starts the Open Folder dialog from the menu in the folder of the current fil
   mocks.menu!({ payload: 'open' }); await vi.waitFor(() => expect(mocks.open).toHaveBeenCalledTimes(1));
   expect(mocks.open.mock.calls[0][0]).toMatchObject({ defaultPath: '/tmp' });
 });
+
+it('opens each file in one tab, matching a linked spelling of the same path', async () => {
+  await boot();
+  const base = mocks.invoke.getMockImplementation()!;
+  mocks.invoke.mockImplementation(async (command: string, args?: any) =>
+    command === 'canonical_path' ? args.path.replace(/^\/link\//, '/tmp/') : base(command, args));
+  mocks.open.mockResolvedValue('/link/first.md');
+  click('open'); await vi.waitFor(() => expect(mocks.open).toHaveBeenCalledTimes(1));
+  await new Promise(resolve => setTimeout(resolve, 300)); // A wrongly opened second tab needs time to appear.
+  expect(app!.tabs.all).toHaveLength(1); expect(app!.tabs.active.id).toBe(4);
+  expect(calls('open_document')).toHaveLength(0); expect(calls('create_document')).toHaveLength(0);
+  // A different file still opens normally.
+  mocks.open.mockResolvedValue('/tmp/other.md');
+  click('open'); await vi.waitFor(() => expect(mocks.open).toHaveBeenCalledTimes(2));
+  await vi.waitFor(() => expect(app!.tabs.all).toHaveLength(2));
+  expect(app!.tabs.active.path).toBe('/tmp/other.md');
+});

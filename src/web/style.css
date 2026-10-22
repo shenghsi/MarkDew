@@ -620,6 +620,8 @@ header, .format-bar, .link-controls, #outline { border-color: var(--border); }
 #editor:not(.editor-active) .cm-cursorLayer {
   display: none !important;
 }
+/* The editor draws no cursor layer, so the browser caret is the cursor. Keep it hidden until the user clicks or types. */
+#editor > .cm-editor:not(.editor-active) > .cm-scroller > .cm-content { caret-color: transparent !important; }
 .cm-selectionBackground, .cm-focused .cm-selectionBackground { background: var(--selected) !important; }
 .cm-content ::selection { background: var(--selected); }
 .cm-activeLine { background: transparent; }
