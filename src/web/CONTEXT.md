@@ -51,6 +51,26 @@ with the canonical spelling of every open tab (canonical_path), and ignores case
 A link in a parent folder, or a different case, so no longer makes a second tab. The sidebar, Open File,
 links, drops, and menu requests all use this check. Rename finds its tab the same way, before the rename.
 
+Import and Export use an installed Pandoc; MarkDew never bundles it (its GPL license stays apart from
+MarkDew's). The host (pandoc.rs) finds Pandoc from the path in Settings, Export, else PATH and common
+folders (~/bin, /usr/local/bin, Homebrew, Windows install folders), and starts it with fixed arguments and
+no shell. File, Export has HTML, HTML (without styles), Word, OpenOffice, RTF, Epub, LaTeX, Media Wiki,
+reStructuredText, Textile, and OPML, plus PDF / Image (the Print dialog), Export with Previous, Export
+and Overwrite with Previous, and Export Settings. An export reads the editor text (so unsaved edits
+export), asks for the file, resolves images from the document's folder, and writes through a temporary
+file, so a failed run keeps an existing file. Pandoc reads a mermaid block as plain code, so for formats that hold pictures (HTML, Word, OpenOffice, RTF,
+Epub, LaTeX) the renderer first draws each diagram with the preview renderer, as a PNG at twice its size
+on white, and puts it in the Markdown as an image; a diagram that cannot be drawn stays as code and the
+notice says so. Text formats keep the code. LaTeX writes embedded pictures to <name>_media beside the
+file. Raw HTML blocks (tables with merged cells, lists) and <br> inside table cells go through a small
+Lua filter, because Pandoc drops raw HTML in every format except HTML; without Lua in Pandoc the export
+runs without the filter. HTML includes a small style sheet and embeds images;
+HTML (without styles) has none. Import reads docx, odt, rtf, epub, tex, wiki, rst, textile, opml, and
+html, asks for a Markdown file name, writes images to <name>.assets/media, and opens the result in a
+tab. Readers that can open other named files (LaTeX, reStructuredText, MediaWiki, HTML, Textile, OPML)
+run in Pandoc's sandbox. The Markdown it writes has no raw HTML and uses $math$. Results and errors show
+as the visible notice. Export and Import are unavailable in the browser, and Export needs an open file.
+
 Pasted images default to Copy beside document in the desktop app; the browser can only embed. Copy that
 nobody chose falls back to embedding when the document has no saved path or its save is uncertain,
 so a paste never fails for that reason. An explicit Copy choice still reports it. Dropped images keep

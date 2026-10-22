@@ -18,6 +18,7 @@ mod images;
 mod local_links;
 mod menu;
 mod open_requests;
+mod pandoc;
 mod web_links;
 use documents::{with_document, Document, Documents};
 mod quit;
@@ -1379,6 +1380,9 @@ fn main() {
             canonical_path,
             read_clipboard_image,
             list_fonts,
+            pandoc::pandoc_check,
+            pandoc::pandoc_export,
+            pandoc::pandoc_import,
             update_menu_state,
             record_closed_file,
             add_recent_file,

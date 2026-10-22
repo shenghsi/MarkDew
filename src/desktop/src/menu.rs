@@ -173,6 +173,22 @@ const COMMANDS: &[(&str, &str, &str)] = &[
         "close-document",
     ),
     ("markdew-print", "Print / PDF…", "print"),
+    ("markdew-import", "Import…", "import"),
+    ("markdew-export-pdf", "PDF / Image…", "export-pdf"),
+    ("markdew-export-html", "HTML", "export-html"),
+    ("markdew-export-html-plain", "HTML (without styles)", "export-html-plain"),
+    ("markdew-export-docx", "Word (.docx)", "export-docx"),
+    ("markdew-export-odt", "OpenOffice", "export-odt"),
+    ("markdew-export-rtf", "RTF", "export-rtf"),
+    ("markdew-export-epub", "Epub", "export-epub"),
+    ("markdew-export-latex", "LaTeX", "export-latex"),
+    ("markdew-export-mediawiki", "Media Wiki", "export-mediawiki"),
+    ("markdew-export-rst", "reStructuredText", "export-rst"),
+    ("markdew-export-textile", "Textile", "export-textile"),
+    ("markdew-export-opml", "OPML", "export-opml"),
+    ("markdew-export-previous", "Export with Previous", "export-previous"),
+    ("markdew-export-overwrite", "Export and Overwrite with Previous", "export-overwrite"),
+    ("markdew-export-settings", "Export Settings…", "export-settings"),
     ("markdew-undo", "Undo", "undo"),
     ("markdew-redo", "Redo", "redo"),
     ("markdew-find", "Find…", "find"),
@@ -213,6 +229,11 @@ fn item<R: Runtime>(app: &AppHandle<R>, index: usize) -> tauri::Result<MenuItem<
     let (id, label, _) = COMMANDS[index];
     // WebView shortcuts remain the sole accelerator owner.
     MenuItem::with_id(app, id, label, true, None::<&str>)
+}
+
+fn item_by_id<R: Runtime>(app: &AppHandle<R>, id: &str) -> tauri::Result<MenuItem<R>> {
+    let index = COMMANDS.iter().position(|entry| entry.0 == id).unwrap();
+    item(app, index)
 }
 
 fn item_by_cmd<R: Runtime>(app: &AppHandle<R>, cmd: &str) -> tauri::Result<MenuItem<R>> {
@@ -281,6 +302,23 @@ pub fn translate_menu_id(id: &str, lang: &str) -> Option<&'static str> {
         "markdew-save-as" => Some(if is_zh { "另存为…" } else { "Save As…" }),
         "markdew-close-document" => Some(if is_zh { "关闭文档" } else { "Close Document" }),
         "markdew-print" => Some(if is_zh { "打印 / PDF…" } else { "Print / PDF…" }),
+        "markdew-export" => Some(if is_zh { "导出" } else { "Export" }),
+        "markdew-import" => Some(if is_zh { "导入…" } else { "Import…" }),
+        "markdew-export-pdf" => Some(if is_zh { "PDF / 图片…" } else { "PDF / Image…" }),
+        "markdew-export-html" => Some(if is_zh { "HTML" } else { "HTML" }),
+        "markdew-export-html-plain" => Some(if is_zh { "HTML（无样式）" } else { "HTML (without styles)" }),
+        "markdew-export-docx" => Some(if is_zh { "Word (.docx)" } else { "Word (.docx)" }),
+        "markdew-export-odt" => Some(if is_zh { "OpenOffice" } else { "OpenOffice" }),
+        "markdew-export-rtf" => Some(if is_zh { "RTF" } else { "RTF" }),
+        "markdew-export-epub" => Some(if is_zh { "Epub" } else { "Epub" }),
+        "markdew-export-latex" => Some(if is_zh { "LaTeX" } else { "LaTeX" }),
+        "markdew-export-mediawiki" => Some(if is_zh { "Media Wiki" } else { "Media Wiki" }),
+        "markdew-export-rst" => Some(if is_zh { "reStructuredText" } else { "reStructuredText" }),
+        "markdew-export-textile" => Some(if is_zh { "Textile" } else { "Textile" }),
+        "markdew-export-opml" => Some(if is_zh { "OPML" } else { "OPML" }),
+        "markdew-export-previous" => Some(if is_zh { "按上次设置导出" } else { "Export with Previous" }),
+        "markdew-export-overwrite" => Some(if is_zh { "按上次设置导出并覆盖" } else { "Export and Overwrite with Previous" }),
+        "markdew-export-settings" => Some(if is_zh { "导出设置…" } else { "Export Settings…" }),
         "markdew-undo" => Some(if is_zh { "撤销" } else { "Undo" }),
         "markdew-redo" => Some(if is_zh { "重做" } else { "Redo" }),
         "markdew-find" => Some(if is_zh { "查找…" } else { "Find…" }),
@@ -472,6 +510,33 @@ pub fn build<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<Menu<R>> {
     };
     populate_recent_submenu(app, &recent, &recent_items)?;
 
+    let export = Submenu::with_id_and_items(
+        app,
+        "markdew-export",
+        "Export",
+        true,
+        &[
+            &item_by_id(app, "markdew-export-pdf")?,
+            &item_by_id(app, "markdew-export-html")?,
+            &item_by_id(app, "markdew-export-html-plain")?,
+            &PredefinedMenuItem::separator(app)?,
+            &item_by_id(app, "markdew-export-docx")?,
+            &item_by_id(app, "markdew-export-odt")?,
+            &item_by_id(app, "markdew-export-rtf")?,
+            &item_by_id(app, "markdew-export-epub")?,
+            &item_by_id(app, "markdew-export-latex")?,
+            &item_by_id(app, "markdew-export-mediawiki")?,
+            &item_by_id(app, "markdew-export-rst")?,
+            &item_by_id(app, "markdew-export-textile")?,
+            &item_by_id(app, "markdew-export-opml")?,
+            &PredefinedMenuItem::separator(app)?,
+            &item_by_id(app, "markdew-export-previous")?,
+            &item_by_id(app, "markdew-export-overwrite")?,
+            &PredefinedMenuItem::separator(app)?,
+            &item_by_id(app, "markdew-export-settings")?,
+        ],
+    )?;
+
     let file = Submenu::with_id_and_items(
         app,
         "markdew-file",
@@ -486,6 +551,9 @@ pub fn build<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<Menu<R>> {
             &item_by_cmd(app, "save")?,
             &item_by_cmd(app, "save-as")?,
             &item_by_cmd(app, "close-document")?,
+            &PredefinedMenuItem::separator(app)?,
+            &item_by_cmd(app, "import")?,
+            &export,
             &PredefinedMenuItem::separator(app)?,
             &item_by_cmd(app, "print")?,
             #[cfg(not(target_os = "macos"))]

@@ -8,6 +8,7 @@ import {
 } from './diagram-settings';
 import { layoutPreferences, SidebarChoice } from './layout-preferences';
 import { applyFonts, FONT_KEYS, installedFonts } from './font-settings';
+import { PANDOC_PATH_KEY } from './pandoc-exchange';
 import {
   t,
   getCurrentLanguage,
@@ -244,6 +245,7 @@ function createSelectControl(
 export function showSettingsDialog(options?: {
   onMeasure?: () => void;
   storage?: Storage;
+  category?: string;
 }): HTMLElement {
   if (activeSettingsModal && activeSettingsModal.isConnected) {
     const focusTarget = activeSettingsModal.querySelector<HTMLElement>('button, input, select');
@@ -418,7 +420,54 @@ export function showSettingsDialog(options?: {
   renderEmptyNotice(panels.get('markdown')!);
 
   // Populate Panel: Export (Notice)
-  renderEmptyNotice(panels.get('export')!);
+  {
+    // Export and Import use an installed Pandoc. The path stays empty for automatic detection.
+    const exportPanel = panels.get('export')!;
+    const section = document.createElement('section');
+    section.className = 'settings-section';
+    const heading = document.createElement('h3');
+    heading.className = 'settings-section-title';
+    heading.textContent = t('export.pandoc', storage);
+    const desc = document.createElement('p');
+    desc.className = 'settings-desc';
+    desc.textContent = t('export.pandoc_desc', storage);
+    const row = document.createElement('div');
+    row.className = 'settings-pandoc-row';
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'settings-text-input';
+    input.dataset.key = PANDOC_PATH_KEY;
+    input.placeholder = t('export.pandoc_auto', storage);
+    input.setAttribute('aria-label', t('export.pandoc', storage));
+    input.spellcheck = false;
+    try { input.value = storage.getItem(PANDOC_PATH_KEY) || ''; } catch { /* Detect Pandoc automatically. */ }
+    const result = document.createElement('p');
+    result.className = 'settings-desc settings-pandoc-result';
+    result.setAttribute('role', 'status');
+    const check = document.createElement('button');
+    check.type = 'button';
+    check.className = 'settings-button';
+    check.textContent = t('export.pandoc_check', storage);
+    input.addEventListener('change', () => {
+      const value = input.value.trim();
+      try { if (value) storage.setItem(PANDOC_PATH_KEY, value); else storage.removeItem(PANDOC_PATH_KEY); } catch { /* This launch keeps the path. */ }
+      result.textContent = '';
+    });
+    check.addEventListener('click', async () => {
+      input.dispatchEvent(new Event('change'));
+      result.textContent = t('export.pandoc_checking', storage);
+      try {
+        if (!isTauri()) throw new Error(t('export.pandoc_desktop', storage));
+        const info = await invoke<{ path: string; version: string }>('pandoc_check', { pandoc: input.value.trim() || null });
+        result.textContent = t('export.pandoc_found', { version: info.version, path: info.path }, storage);
+      } catch (error) {
+        result.textContent = typeof error === 'object' && error && 'message' in error ? String(error.message) : String(error);
+      }
+    });
+    row.append(input, check);
+    section.append(heading, desc, row, result);
+    exportPanel.append(section);
+  }
 
   // Populate Panel: Image (Pasted & Dropped transfer modes)
   const imagePanel = panels.get('image')!;
@@ -933,7 +982,7 @@ export function showSettingsDialog(options?: {
   }
 
   // Set default active category to "General"
-  setActiveCategory('general');
+  setActiveCategory(options?.category && CATEGORIES.some(cat => cat.id === options.category) ? options.category : 'general');
 
   // Search input filtering behavior
   searchInput.addEventListener('input', () => {

@@ -323,3 +323,19 @@ it('applies a Writing Size change through the writing surface control, not the p
   expect(surface.style.getPropertyValue('--writing-scale')).toBe('1.5'); expect(select.value).toBe('150');
   expect(storage.getItem('markdew.writing-size')).toBe('150');
 });
+
+it('keeps the Pandoc path in the Export page, and opens that page when asked', async () => {
+  document.body.innerHTML = '';
+  const data: Record<string, string> = {};
+  const storage = { getItem: (key: string) => data[key] ?? null, setItem: (key: string, value: string) => { data[key] = value; }, removeItem: (key: string) => { delete data[key]; } } as Storage;
+  showSettingsDialog({ storage, category: 'export' });
+  expect(document.querySelector('#tab-export')!.getAttribute('aria-selected')).toBe('true');
+  const input = document.querySelector<HTMLInputElement>('input[data-key="markdew.pandoc-path"]')!;
+  input.value = ' /opt/pandoc/bin/pandoc '; input.dispatchEvent(new Event('change'));
+  expect(data['markdew.pandoc-path']).toBe('/opt/pandoc/bin/pandoc');
+  document.querySelector<HTMLButtonElement>('.settings-pandoc-row button')!.click();
+  await vi.waitFor(() => expect(document.querySelector('.settings-pandoc-result')!.textContent).toBe('Open the desktop app to use Pandoc.'));
+  input.value = ''; input.dispatchEvent(new Event('change'));
+  expect(data['markdew.pandoc-path']).toBeUndefined();
+  document.querySelector<HTMLElement>('.modal-backdrop')?.remove();
+});

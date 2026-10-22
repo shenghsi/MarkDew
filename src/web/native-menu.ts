@@ -7,7 +7,10 @@ const commands = new Set([
   'bold', 'italic', 'code', 'strike', 'link',
   'toggle-sidebar', 'toggle-outline', 'source-mode',
   'theme-system', 'theme-light', 'theme-dark',
-  'settings', 'about'
+  'settings', 'about',
+  'import', 'export-pdf', 'export-html', 'export-html-plain', 'export-docx', 'export-odt', 'export-rtf', 'export-epub',
+  'export-latex', 'export-mediawiki', 'export-rst', 'export-textile', 'export-opml',
+  'export-previous', 'export-overwrite', 'export-settings'
 ]);
 
 // Menu input uses the same button handlers and guards as the document tools.

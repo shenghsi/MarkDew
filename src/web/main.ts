@@ -20,6 +20,7 @@ import { codeBlock } from './code-block-command';
 import { editorMenu } from './editor-menu';
 import { listTab } from './list-indent';
 import { collapseDataUris } from './data-uri-collapse';
+import { pandocExchange } from './pandoc-exchange';
 import { linkControls } from './link-controls';
 import { linkVersion } from './links';
 import { headingTarget, linkNavigation } from './link-navigation';
@@ -1024,7 +1025,18 @@ if (isTauri()) {
 document.querySelector('#undo')!.addEventListener('click', () => { tableHistoryCommand(view, undo); });
 document.querySelector('#redo')!.addEventListener('click', () => { tableHistoryCommand(view, redo); });
 if (isTauri()) {
+  const exchange = pandocExchange({
+    document: () => ({ id: active().id, path: active().path, name: tabName(active()), markdown: text() }),
+    invoke, save, open, notify, openFile: path => handleOpenFile(path), startFolder,
+  });
   const menuDispatch = (command: string): boolean => {
+    if (command === 'import') { void operation(() => exchange.importFile(), true); return true; }
+    if (command === 'export-pdf') { document.querySelector<HTMLButtonElement>('#print')?.click(); return true; }
+    if (command === 'export-settings') { showSettingsDialog({ onMeasure: () => view.requestMeasure(), category: 'export' }); return true; }
+    if (command === 'export-previous' || command === 'export-overwrite') {
+      void operation(() => exchange.exportPrevious(command === 'export-overwrite'), true); return true;
+    }
+    if (command.startsWith('export-')) { void operation(() => exchange.exportAs(command.slice('export-'.length)), true); return true; }
     if (['bold', 'italic', 'strike', 'code', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'paragraph'].includes(command)) {
       applyFormat(command as Format);
       view.focus();
@@ -1098,7 +1110,7 @@ if (isTauri()) {
   const dispose = nativeMenu(document, callback => getCurrentWindow().listen('markdew-document-command', callback),
     command => pageActive && !busy && !composing() && !document.querySelector('.print-dialog') &&
       (!isModalOpen() || command === 'settings' || command === 'about') &&
-      (!noDocument() || ['new', 'open', 'open-folder', 'toggle-sidebar', 'toggle-outline', 'settings', 'about'].includes(command) || command.startsWith('theme-')) &&
+      (!noDocument() || ['new', 'open', 'open-folder', 'toggle-sidebar', 'toggle-outline', 'settings', 'about', 'import', 'export-settings'].includes(command) || command.startsWith('theme-')) &&
       (!['undo', 'redo'].includes(command) ||
       !(document.activeElement instanceof HTMLInputElement || document.activeElement instanceof HTMLTextAreaElement)),
     message => { status.textContent = message; }, menuDispatch);

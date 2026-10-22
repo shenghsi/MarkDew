@@ -156,6 +156,15 @@ export const translations = {
     'empty.new': 'New File',
     'empty.open': 'Open File…',
 
+    // Export
+    'export.pandoc': 'Pandoc',
+    'export.pandoc_desc': 'File, Export and Import use Pandoc to convert Word, OpenOffice, RTF, Epub, LaTeX and other formats. Install it from pandoc.org. Leave the path empty to find it automatically.',
+    'export.pandoc_auto': 'Detected automatically',
+    'export.pandoc_check': 'Check',
+    'export.pandoc_checking': 'Checking…',
+    'export.pandoc_found': 'Pandoc {version} found at {path}',
+    'export.pandoc_desktop': 'Open the desktop app to use Pandoc.',
+
     // Editor Context Menu
     'menu.cut': 'Cut',
     'menu.copy': 'Copy',
@@ -346,6 +355,15 @@ export const translations = {
     'empty.hint': '在侧边栏中选择一个文件，或新建一个。',
     'empty.new': '新建文件',
     'empty.open': '打开文件…',
+
+    // Export
+    'export.pandoc': 'Pandoc',
+    'export.pandoc_desc': '“文件 → 导出/导入”使用 Pandoc 转换 Word、OpenOffice、RTF、Epub、LaTeX 等格式。请从 pandoc.org 安装。路径留空则自动查找。',
+    'export.pandoc_auto': '自动检测',
+    'export.pandoc_check': '检查',
+    'export.pandoc_checking': '正在检查…',
+    'export.pandoc_found': '已找到 Pandoc {version}，位置：{path}',
+    'export.pandoc_desktop': '请在桌面应用中使用 Pandoc。',
 
     // Editor Context Menu
     'menu.cut': '剪切',

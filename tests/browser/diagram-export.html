@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Diagram image check</title>
+<pre id="result">running</pre>
+<script type="module">
+import { embedDiagrams, mermaidBlocks } from '/src/web/diagram-images.ts';
+import { renderDiagram } from '/src/web/renderers.ts';
+const markdown = '# Doc\n\n```mermaid\nflowchart LR\n  A[Start] --> B{Choice}\n  B -->|yes| C[Done]\n  B -->|no| D[Retry]\n```\n\ntext\n\n````md\n```mermaid\nnot a diagram\n```\n````\n\n```mermaid\nthis is not valid mermaid ???\n```\n';
+const out = { blocks: mermaidBlocks(markdown).length };
+const svg = await renderDiagram('flowchart LR\n A-->B', 'print');
+out.svgRoot = svg.slice(0, svg.indexOf('>') + 1).slice(0, 300);
+const result = await embedDiagrams(markdown);
+out.drawn = result.drawn; out.failed = result.failed;
+const match = /!\[Mermaid diagram\]\((data:image\/png;base64,[^)]+)\)/.exec(result.markdown);
+if (match) {
+  const image = new Image(); await new Promise(resolve => { image.onload = resolve; image.src = match[1]; });
+  out.png = [image.naturalWidth, image.naturalHeight];
+  const canvas = document.createElement('canvas'); canvas.width = image.naturalWidth; canvas.height = image.naturalHeight;
+  const context = canvas.getContext('2d'); context.drawImage(image, 0, 0);
+  const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data; let dark = 0, white = 0;
+  for (let i = 0; i < pixels.length; i += 4) { if (pixels[i] < 128 && pixels[i + 3] > 200) dark++; if (pixels[i] > 250 && pixels[i + 1] > 250 && pixels[i + 2] > 250) white++; }
+  out.dark = dark; out.white = white;
+}
+out.keptCode = result.markdown.includes('this is not valid mermaid') && result.markdown.includes('not a diagram');
+out.ok = out.blocks === 2 && out.drawn === 1 && out.failed === 1 && !!out.png && out.dark > 200 && out.white > out.dark && out.keptCode;
+document.querySelector('#result').textContent = JSON.stringify(out);
+</script>
+</html>

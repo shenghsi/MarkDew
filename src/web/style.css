@@ -1481,3 +1481,6 @@ body.no-document #word-count, body.no-document #document-title { display: none; 
 .toast-notice[hidden] { display: none; }
 
 .cm-data-collapsed { display: inline-block; vertical-align: baseline; padding: 0 6px; border: 1px solid var(--border); border-radius: 4px; background: var(--surface); color: var(--muted); font: .8em var(--code-font, ui-monospace, Menlo, Consolas, monospace); cursor: default; }
+.settings-pandoc-row { display: flex; gap: 8px; align-items: center; }
+.settings-pandoc-row .settings-text-input { flex: 1; min-width: 0; padding: 6px 8px; border: 1px solid var(--border); border-radius: 5px; background: var(--paper); color: var(--ink); font: 13px var(--code-font, ui-monospace, Menlo, Consolas, monospace); }
+.settings-pandoc-result { min-height: 1.4em; margin-top: 6px; overflow-wrap: anywhere; }

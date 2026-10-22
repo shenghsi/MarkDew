@@ -374,3 +374,29 @@ it('shows image messages as a visible notice, not only in the hidden status line
   expect(toast.hidden).toBe(false); expect(toast.textContent).toBe('Paste one PNG, JPEG, GIF, or WebP image.');
   expect(document.querySelector('#status')!.textContent).toBe(toast.textContent);
 });
+
+it('exports through Pandoc from the File menu, and imports into a Markdown file', async () => {
+  await boot(); await vi.waitFor(() => expect(mocks.menu).toBeDefined());
+  const base = mocks.invoke.getMockImplementation()!;
+  mocks.invoke.mockImplementation(async (command: string, args?: any) =>
+    command === 'pandoc_export' || command === 'pandoc_import' ? args.output : base(command, args));
+  mocks.save.mockResolvedValue('/tmp/first.docx');
+  mocks.menu!({ payload: 'export-docx' });
+  await vi.waitFor(() => expect(calls('pandoc_export')).toHaveLength(1));
+  expect(mocks.save.mock.calls[0][0]).toMatchObject({ defaultPath: '/tmp/first.docx', filters: [{ name: 'Word', extensions: ['docx'] }] });
+  expect(calls('pandoc_export')[0][1]).toMatchObject({ format: 'docx', title: 'first', output: '/tmp/first.docx', base: '/tmp', pandoc: null });
+  expect(calls('pandoc_export')[0][1].markdown).toContain('日本語😀');
+  await vi.waitFor(() => expect(document.querySelector('.toast-notice')!.textContent).toBe('Exported to /tmp/first.docx'));
+  // Export with Previous asks again with the same format; Overwrite does not ask.
+  await new Promise(resolve => setTimeout(resolve, 300));
+  mocks.save.mockClear(); mocks.menu!({ payload: 'export-overwrite' });
+  await vi.waitFor(() => expect(calls('pandoc_export')).toHaveLength(2));
+  expect(mocks.save).not.toHaveBeenCalled(); expect(calls('pandoc_export')[1][1]).toMatchObject({ format: 'docx', output: '/tmp/first.docx' });
+  // Import: choose a Word file, then the Markdown destination.
+  await new Promise(resolve => setTimeout(resolve, 300));
+  mocks.open.mockResolvedValue('/tmp/Report.docx'); mocks.save.mockResolvedValue('/tmp/Report.md');
+  mocks.menu!({ payload: 'import' });
+  await vi.waitFor(() => expect(calls('pandoc_import')).toHaveLength(1));
+  expect(calls('pandoc_import')[0][1]).toMatchObject({ source: '/tmp/Report.docx', output: '/tmp/Report.md', pandoc: null });
+  await vi.waitFor(() => expect(app!.tabs.all.some(tab => tab.path === '/tmp/Report.md')).toBe(true));
+});
