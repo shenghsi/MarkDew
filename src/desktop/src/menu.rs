@@ -350,7 +350,9 @@ pub fn translate_menu_id(id: &str, lang: &str) -> Option<&'static str> {
     }
 }
 
-fn update_items_language<R: Runtime>(items: Vec<MenuItemKind<R>>, lang: &str) -> tauri::Result<()> {
+type Relabels = Vec<(String, String)>;
+
+fn update_items_language<R: Runtime>(items: Vec<MenuItemKind<R>>, lang: &str, relabels: &mut Relabels) -> tauri::Result<()> {
     for item in items {
         match item {
             MenuItemKind::MenuItem(ref mi) => {
@@ -359,21 +361,30 @@ fn update_items_language<R: Runtime>(items: Vec<MenuItemKind<R>>, lang: &str) ->
                     continue;
                 }
                 if let Some(text) = translate_menu_id(id, lang) {
+                    relabels.push((mi.text().unwrap_or_default(), text.to_string()));
                     let _ = mi.set_text(text);
                 }
             }
             MenuItemKind::Submenu(ref sub) => {
                 let id = sub.id().as_ref();
-                if let Some(text) = translate_menu_id(id, lang) {
+                // Window and Help come from the platform default menu, so their IDs are generated.
+                let default_title = match sub.text().unwrap_or_default().as_str() {
+                    "Window" | "窗口" => Some(if is_chinese_language(lang) { "窗口" } else { "Window" }),
+                    "Help" | "帮助" => Some(if is_chinese_language(lang) { "帮助" } else { "Help" }),
+                    _ => None,
+                };
+                if let Some(text) = translate_menu_id(id, lang).or(default_title) {
+                    relabels.push((sub.text().unwrap_or_default(), text.to_string()));
                     let _ = sub.set_text(text);
                 }
                 if let Ok(children) = sub.items() {
-                    let _ = update_items_language(children, lang);
+                    let _ = update_items_language(children, lang, relabels);
                 }
             }
             MenuItemKind::Check(ref check) => {
                 let id = check.id().as_ref();
                 if let Some(text) = translate_menu_id(id, lang) {
+                    relabels.push((check.text().unwrap_or_default(), text.to_string()));
                     let _ = check.set_text(text);
                 }
             }
@@ -383,6 +394,7 @@ fn update_items_language<R: Runtime>(items: Vec<MenuItemKind<R>>, lang: &str) ->
                     continue;
                 }
                 if let Some(text) = translate_menu_id(id, lang) {
+                    relabels.push((icon.text().unwrap_or_default(), text.to_string()));
                     let _ = icon.set_text(text);
                 }
             }
@@ -392,13 +404,52 @@ fn update_items_language<R: Runtime>(items: Vec<MenuItemKind<R>>, lang: &str) ->
     Ok(())
 }
 
+// muda builds GTK submenu and icon titles as a box holding a label. Its set_text calls
+// GtkMenuItem::set_label, which ignores a box child, so those titles keep the old language.
+// Each label inside a menu bar is therefore set directly, matched by its previous text.
+#[cfg(target_os = "linux")]
+fn relabel_gtk_menu_bars<R: Runtime>(app: &AppHandle<R>, relabels: &Relabels) {
+    use gtk::prelude::*;
+
+    fn walk(widget: &gtk::Widget, in_menu_bar: bool, relabels: &Relabels) {
+        let in_menu_bar = in_menu_bar || widget.is::<gtk::MenuBar>();
+        if in_menu_bar {
+            if let Some(label) = widget.downcast_ref::<gtk::Label>() {
+                let current = label.text();
+                if let Some((_, new)) = relabels.iter().find(|(old, new)| old.as_str() == current.as_str() && old != new) {
+                    label.set_text_with_mnemonic(new);
+                }
+            }
+            if let Some(item) = widget.downcast_ref::<gtk::MenuItem>() {
+                if let Some(submenu) = item.submenu() {
+                    walk(submenu.upcast_ref(), true, relabels);
+                }
+            }
+        }
+        if let Some(container) = widget.downcast_ref::<gtk::Container>() {
+            for child in container.children() {
+                walk(&child, in_menu_bar, relabels);
+            }
+        }
+    }
+
+    for window in app.webview_windows().values() {
+        if let Ok(gtk_window) = window.gtk_window() {
+            walk(gtk_window.upcast_ref(), false, relabels);
+        }
+    }
+}
+
 pub fn update_menu_language<R: Runtime>(app: &AppHandle<R>, lang: &str) -> tauri::Result<()> {
     if let Ok(mut lock) = CURRENT_MENU_LANG.write() {
         *lock = lang.to_string();
     }
     if let Some(menu) = app.menu() {
         if let Ok(items) = menu.items() {
-            update_items_language(items, lang)?;
+            let mut relabels = Relabels::new();
+            update_items_language(items, lang, &mut relabels)?;
+            #[cfg(target_os = "linux")]
+            relabel_gtk_menu_bars(app, &relabels);
         }
     }
     Ok(())
