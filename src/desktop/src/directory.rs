@@ -235,7 +235,7 @@ mod tests {
         let names: Vec<_> = found
             .paths
             .iter()
-            .map(|p| Path::new(p).strip_prefix(root.path()).unwrap().to_str().unwrap().to_owned())
+            .map(|p| Path::new(p).strip_prefix(root.path()).unwrap().to_str().unwrap().replace('\\', "/"))
             .collect();
         assert_eq!(names, ["notes/b.TXT", "notes/deep/c.markdown", "top.md", "日本語/d.md"]);
         assert!(!found.incomplete);
