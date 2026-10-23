@@ -1,10 +1,10 @@
-# MarkDew v1.1.2
+# MarkDew v1.1.3
 
 ## What is new
 
-- **New:** Open Quickly is now on Ctrl+P. Print is now on Alt+Shift+P.
-- **Fix:** On macOS, Print opens the system print dialog directly.
-- Everything in v1.1.1 is included: the correct version in About, print and export (PDF, PNG), import and export through Pandoc, Mermaid diagrams in exports, list nesting with Tab, the right-click editor menu, and the font and image settings.
+- **Fix:** On Linux, the menu bar now follows the language you choose in Settings.
+- **New:** A Simplified Chinese README.
+- Everything in v1.1.2 is included: Open Quickly on Ctrl+P, Print on Alt+Shift+P, the macOS print dialog, the correct version in About, print and export (PDF, PNG), import and export through Pandoc, Mermaid diagrams in exports, list nesting with Tab, the right-click editor menu, and the font and image settings.
 - The PDF export on Windows and Linux builds in CI but has no native acceptance check yet.
 
 ## In-app updates
