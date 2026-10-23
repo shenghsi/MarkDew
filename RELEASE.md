@@ -1,9 +1,10 @@
-# MarkDew v1.1.1
+# MarkDew v1.1.2
 
 ## What is new
 
-- **Fix:** In v1.1.0, About showed "Version 1.0.0". It now shows the real version. The update check was not affected.
-- Everything in v1.1.0 is included: print and export (PDF, PNG), import and export through Pandoc, Mermaid diagrams in exports, list nesting with Tab, the right-click editor menu, and the font and image settings.
+- **New:** Open Quickly is now on Ctrl+P. Print is now on Alt+Shift+P.
+- **Fix:** On macOS, Print opens the system print dialog directly.
+- Everything in v1.1.1 is included: the correct version in About, print and export (PDF, PNG), import and export through Pandoc, Mermaid diagrams in exports, list nesting with Tab, the right-click editor menu, and the font and image settings.
 - The PDF export on Windows and Linux builds in CI but has no native acceptance check yet.
 
 ## In-app updates
