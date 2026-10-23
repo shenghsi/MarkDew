@@ -12,11 +12,26 @@ export function fileShortcuts(
   const start = (event: CompositionEvent) => { if (event.target) active.add(event.target); };
   const end = (event: CompositionEvent) => { if (event.target) active.delete(event.target); };
   const key = (event: KeyboardEvent) => {
-    if (event.defaultPrevented || event.altKey) return;
+    if (event.defaultPrevented) return;
+    // Alt+Shift+P prints, as in Typora. Use the physical key: Alt changes the character a layout types.
+    const altPrint = event.altKey && event.shiftKey && !event.ctrlKey && !event.metaKey && event.code === 'KeyP';
+    if (event.altKey && !altPrint) return;
     const name = event.key.toLowerCase();
     const isSlash = !event.shiftKey && (name === '/' || event.code === 'Slash') && (event.metaKey || event.ctrlKey);
     const isComma = !event.shiftKey && (name === ',' || event.code === 'Comma') && (event.metaKey || event.ctrlKey);
     const isMod = mac ? (!event.metaKey || event.ctrlKey) : (!event.ctrlKey || event.metaKey);
+    // Print: Alt+Shift+P, as in Typora. It opens the print pages through the Print button, which is disabled with
+    // no file open. A Settings dialog or text input blocks it, and an open print page keeps the key.
+    if (altPrint) {
+      const button = root.getElementById('print') as HTMLButtonElement | null;
+      if (!button?.isConnected || button.disabled || root.querySelector('.print-dialog')) return;
+      event.preventDefault();
+      event.stopPropagation();
+      if (event.repeat || event.isComposing || composing() || modalOpen()
+        || [...active].some(target => target instanceof Node && target.isConnected)) return;
+      button.click();
+      return;
+    }
     if (!isSlash && !isComma && isMod) return;
 
     const isF = !event.shiftKey && name === 'f';
@@ -44,14 +59,18 @@ export function fileShortcuts(
 
     const id = !event.shiftKey && name === 'n' ? 'new' : !event.shiftKey && name === 'o' ? 'open'
       : event.shiftKey && name === 's' ? 'save-as'
+      : !event.shiftKey && name === 'p' ? 'open-quickly'
       : isSlash ? 'source'
       : isComma ? 'settings' : undefined;
     if (!id) return;
+    // An open print page keeps Ctrl+P: it prints the page itself.
+    if (id === 'open-quickly' && root.querySelector('.print-dialog')) return;
     const button = root.getElementById(id) as HTMLButtonElement | null;
     if (!button?.isConnected || button.disabled) return;
     event.preventDefault();
     event.stopPropagation();
     if (event.repeat || event.isComposing || composing() || [...active].some(target => target instanceof Node && target.isConnected)) return;
+    if (id === 'open-quickly' && modalOpen()) return;
     button.click();
   };
   root.addEventListener('compositionstart', start, true);

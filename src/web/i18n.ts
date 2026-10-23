@@ -165,6 +165,15 @@ export const translations = {
     'export.pandoc_found': 'Pandoc {version} found at {path}',
     'export.pandoc_desktop': 'Open the desktop app to use Pandoc.',
 
+    // Open Quickly
+    'quick.label': 'Open Quickly',
+    'quick.placeholder': 'Type a file name to open…',
+    'quick.loading': 'Loading files…',
+    'quick.none': 'No matching files.',
+    'quick.more': 'Showing {shown} of {total} matching files. Type more to narrow the list.',
+    'quick.incomplete': 'The folder is large, so this list is not complete.',
+    'quick.no_folder': 'Open a folder first (File, Open Folder) to search its files.',
+
     // Editor Context Menu
     'menu.cut': 'Cut',
     'menu.copy': 'Copy',
@@ -364,6 +373,15 @@ export const translations = {
     'export.pandoc_checking': '正在检查…',
     'export.pandoc_found': '已找到 Pandoc {version}，位置：{path}',
     'export.pandoc_desktop': '请在桌面应用中使用 Pandoc。',
+
+    // Open Quickly
+    'quick.label': '快速打开',
+    'quick.placeholder': '输入文件名以打开…',
+    'quick.loading': '正在加载文件…',
+    'quick.none': '没有匹配的文件。',
+    'quick.more': '显示 {total} 个匹配文件中的 {shown} 个。继续输入以缩小范围。',
+    'quick.incomplete': '文件夹过大，此列表不完整。',
+    'quick.no_folder': '请先打开一个文件夹（文件 → 打开文件夹）以搜索其中的文件。',
 
     // Editor Context Menu
     'menu.cut': '剪切',

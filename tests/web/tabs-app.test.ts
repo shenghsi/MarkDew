@@ -400,3 +400,27 @@ it('exports through Pandoc from the File menu, and imports into a Markdown file'
   expect(calls('pandoc_import')[0][1]).toMatchObject({ source: '/tmp/Report.docx', output: '/tmp/Report.md', pandoc: null });
   await vi.waitFor(() => expect(app!.tabs.all.some(tab => tab.path === '/tmp/Report.md')).toBe(true));
 });
+
+it('opens Open Quickly with Ctrl+P and from the File menu, searches the folder, and opens the chosen file', async () => {
+  await boot(); await vi.waitFor(() => expect(mocks.menu).toBeDefined());
+  const base = mocks.invoke.getMockImplementation()!;
+  mocks.invoke.mockImplementation(async (command: string, args?: any) =>
+    command === 'list_project_files' ? { paths: ['/tmp/first.md', '/tmp/other.md', '/tmp/sub/third.txt'], incomplete: false } : base(command, args));
+  const mac = /Mac|iPhone|iPad|iPod/.test(navigator.platform);
+  const press = () => app!.view.contentDOM.dispatchEvent(new KeyboardEvent('keydown', { key: 'p', code: 'KeyP', ctrlKey: !mac, metaKey: mac, bubbles: true, cancelable: true }));
+  press();
+  await vi.waitFor(() => expect(document.querySelectorAll('.quick-open-list li')).toHaveLength(3));
+  expect(calls('list_project_files')).toHaveLength(1); expect(calls('list_project_files')[0][1].path).toMatch(/^\/tmp$|^\/initial|^\//);
+  // Open files come first; typing narrows the list; Escape closes and returns to the editor.
+  expect(document.querySelector('.quick-open-list li .quick-open-name')!.textContent).toBe('first.md');
+  document.querySelector<HTMLInputElement>('.quick-open-input')!.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
+  expect(document.querySelector('.quick-open')).toBeNull();
+  mocks.menu!({ payload: 'open-quickly' });
+  await vi.waitFor(() => expect(document.querySelector('.quick-open-input')).not.toBeNull());
+  await vi.waitFor(() => expect(document.querySelectorAll('.quick-open-list li')).toHaveLength(3));
+  const input = document.querySelector<HTMLInputElement>('.quick-open-input')!;
+  input.value = 'other'; input.dispatchEvent(new Event('input', { bubbles: true }));
+  input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
+  await vi.waitFor(() => expect(app!.tabs.all.some(tab => tab.path === '/tmp/other.md')).toBe(true));
+  expect(document.querySelector('.quick-open')).toBeNull();
+});

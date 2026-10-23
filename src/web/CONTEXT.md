@@ -63,6 +63,20 @@ returns, or kept in the preview window if a warning needs a look. On Linux and W
 preview window, and its Print... button calls window.print(): WebKitGTK sends no afterprint event, so the
 end of printing cannot be known there. Browser mode is unchanged. The macOS path has no native check yet.
 
+Print has one keyboard shortcut, Alt+Shift+P (Typora's). It clicks the Print button, so it shares the button's
+guards: it does nothing with no file open, during text composition or key repeat, or while Settings is open.
+It uses the physical P key, because Alt changes the character a Mac layout types. An open print page ignores
+it. Ctrl+P (Cmd+P on a Mac) is Open Quickly, as in Typora, VS Code, and Sublime Text. The native menu has no
+accelerators; the shortcuts live in file-shortcuts.ts and work in the desktop app.
+Open Quickly (File, Open Quickly, or Ctrl+P) opens a small search box over the editor. The host command
+list_project_files scans the project folder (the open folder, else the folder of the current file) for
+Markdown and text files in sub-folders; it skips links, hidden folders, node_modules, target, dist, and build,
+and stops at 5000 files or 12 levels. Typing narrows the list: every word must match, a match in the file name
+ranks above one in the folder path, and letters in order also match ("bpl" finds beta-plan.md). Open files rank
+first. Up and Down choose, Enter opens through the same guarded route as the sidebar (an open file just gets
+its tab), and Escape or a click outside closes it. With no project folder, the searched folder becomes it. An
+open print page keeps Ctrl+P for itself and prints the page.
+
 Import and Export use an installed Pandoc; MarkDew never bundles it (its GPL license stays apart from
 MarkDew's). The host (pandoc.rs) finds Pandoc from the path in Settings, Export, else PATH and common
 folders (~/bin, /usr/local/bin, Homebrew, Windows install folders), and starts it with fixed arguments and

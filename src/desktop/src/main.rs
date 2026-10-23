@@ -187,6 +187,13 @@ async fn list_directory(path: String) -> Result<directory::Listing, String> {
 }
 
 #[tauri::command]
+async fn list_project_files(path: String) -> Result<directory::Files, String> {
+    tauri::async_runtime::spawn_blocking(move || directory::find_files(&PathBuf::from(path)))
+        .await
+        .map_err(|e| e.to_string())?
+}
+
+#[tauri::command]
 async fn save_png(request: tauri::ipc::Request<'_>) -> Result<(), String> {
     let path = request
         .headers()
@@ -1386,6 +1393,7 @@ fn main() {
             resolve_document_link,
             open_web_link,
             list_directory,
+            list_project_files,
             open_folder_window,
             take_initial_folder,
             take_initial_file,

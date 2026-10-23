@@ -1484,3 +1484,14 @@ body.no-document #word-count, body.no-document #document-title { display: none; 
 .settings-pandoc-row { display: flex; gap: 8px; align-items: center; }
 .settings-pandoc-row .settings-text-input { flex: 1; min-width: 0; padding: 6px 8px; border: 1px solid var(--border); border-radius: 5px; background: var(--paper); color: var(--ink); font: 13px var(--code-font, ui-monospace, Menlo, Consolas, monospace); }
 .settings-pandoc-result { min-height: 1.4em; margin-top: 6px; overflow-wrap: anywhere; }
+
+.quick-open-backdrop { position: fixed; inset: 0; z-index: 80; display: flex; justify-content: center; align-items: flex-start; padding-top: 12vh; background: rgba(0, 0, 0, 0.25); }
+.quick-open { width: min(620px, calc(100vw - 32px)); max-height: 70vh; display: flex; flex-direction: column; background: var(--paper); color: var(--ink); border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3); font: 14px system-ui, sans-serif; overflow: hidden; }
+.quick-open-input { padding: 12px 14px; border: 0; border-bottom: 1px solid var(--border); background: transparent; color: inherit; font: inherit; font-size: 15px; outline: none; }
+.quick-open-list { list-style: none; margin: 0; padding: 4px; overflow-y: auto; min-height: 0; }
+.quick-open-list li { display: flex; align-items: baseline; gap: 10px; padding: 6px 10px; border-radius: 5px; cursor: default; }
+.quick-open-list li.active { background: var(--selected); }
+.quick-open-name { white-space: nowrap; }
+.quick-open-folder { color: var(--muted); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; direction: rtl; text-align: left; }
+.quick-open-note { padding: 6px 14px; color: var(--muted); font-size: 12px; border-top: 1px solid var(--border); min-height: 1.4em; }
+.quick-open-note:empty { display: none; }

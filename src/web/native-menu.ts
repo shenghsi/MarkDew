@@ -2,7 +2,7 @@ type Register = (handler: (event: { payload: unknown }) => void) => Promise<() =
 export type MenuDispatcher = (command: string) => boolean;
 
 const commands = new Set([
-  'new', 'open', 'open-folder', 'save', 'save-as', 'close-document', 'print', 'undo', 'redo', 'find',
+  'new', 'open', 'open-folder', 'open-quickly', 'save', 'save-as', 'close-document', 'print', 'undo', 'redo', 'find',
   'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'paragraph', 'table', 'code-block', 'quote',
   'bold', 'italic', 'code', 'strike', 'link',
   'toggle-sidebar', 'toggle-outline', 'source-mode',

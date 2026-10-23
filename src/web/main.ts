@@ -21,6 +21,7 @@ import { editorMenu } from './editor-menu';
 import { listTab } from './list-indent';
 import { collapseDataUris } from './data-uri-collapse';
 import { pandocExchange } from './pandoc-exchange';
+import { quickFiles, quickOpen } from './quick-open';
 import { linkControls } from './link-controls';
 import { linkVersion } from './links';
 import { headingTarget, linkNavigation } from './link-navigation';
@@ -444,6 +445,33 @@ window.addEventListener('pagehide', disposeTools, { once: true });
 const closeDocument = document.createElement('button'); closeDocument.textContent = 'Close document'; closeDocument.id = 'close-document';
 closeDocument.addEventListener('click', () => { void operation(() => closeTab(active().id), true); }); header.append(closeDocument);
 window.addEventListener('pagehide', () => tabBar.destroy(), { once: true });
+// Open Quickly (Ctrl+P) searches the project folder; with no folder it searches the folder of the current file.
+let quickRoot = '';
+const quick = quickOpen({
+  list: async () => {
+    const root = quickRoot = layout.folder || (active().path ? getParentDir(active().path) : '');
+    if (!root) return t('quick.no_folder');
+    if (!isTauri()) return 'Open Quickly needs the desktop app.';
+    const found = await invoke<{ paths: string[]; incomplete: boolean }>('list_project_files', { path: root });
+    return { files: quickFiles(root, found.paths), incomplete: found.incomplete };
+  },
+  open: path => {
+    void operation(async () => {
+      // With no project folder, the folder that was searched becomes it, not the folder of the chosen file.
+      if (!layout.folder && quickRoot) { layout.folderChanged(quickRoot); initSidebar(quickRoot, false); showSidebarView('files'); }
+      await handleOpenFile(path);
+    }, true);
+  },
+  restoreFocus: () => { if (!noDocument()) view.focus(); },
+  opened: () => tabs.all.map(tab => tab.path).filter(Boolean),
+});
+const quickButton = document.createElement('button'); quickButton.id = 'open-quickly'; quickButton.textContent = 'Open Quickly…';
+document.querySelector('header')!.append(quickButton);
+quickButton.addEventListener('click', () => {
+  if (busy || composing()) { status.textContent = 'Finish the file command or text input, then use Open Quickly.'; return; }
+  void quick.show().catch(error => notify(`Open Quickly failed. ${String(error)}`));
+});
+window.addEventListener('pagehide', () => quick.close(), { once: true });
 const printButton = document.createElement('button'); printButton.id = 'print'; printButton.textContent = 'Print…';
 document.querySelector('header')!.append(printButton);
 // Print, Export → PDF and Export → Image open the same print pages. PDF asks for its file first.
@@ -1120,7 +1148,7 @@ if (isTauri()) {
   const dispose = nativeMenu(document, callback => getCurrentWindow().listen('markdew-document-command', callback),
     command => pageActive && !busy && !composing() && !document.querySelector('.print-dialog') &&
       (!isModalOpen() || command === 'settings' || command === 'about') &&
-      (!noDocument() || ['new', 'open', 'open-folder', 'toggle-sidebar', 'toggle-outline', 'settings', 'about', 'import', 'export-settings'].includes(command) || command.startsWith('theme-')) &&
+      (!noDocument() || ['new', 'open', 'open-folder', 'toggle-sidebar', 'toggle-outline', 'settings', 'about', 'import', 'export-settings', 'open-quickly'].includes(command) || command.startsWith('theme-')) &&
       (!['undo', 'redo'].includes(command) ||
       !(document.activeElement instanceof HTMLInputElement || document.activeElement instanceof HTMLTextAreaElement)),
     message => { status.textContent = message; }, menuDispatch);

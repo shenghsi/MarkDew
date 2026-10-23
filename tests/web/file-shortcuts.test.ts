@@ -84,3 +84,61 @@ it.each([true, false])('intercepts Ctrl+F and routes find for opened document (m
   dispose();
 });
 
+
+it.each([true, false])('prints with Alt+Shift+P only, and not while blocked (mac=%s)', mac => {
+  document.body.innerHTML = '<button id="print">Print</button><input id="field">';
+  const clicks = vi.fn(), button = document.querySelector<HTMLButtonElement>('#print')!;
+  button.addEventListener('click', () => clicks('print'));
+  let composing = false, modal = false;
+  const dispose = fileShortcuts(document, mac, () => composing, () => modal);
+  const field = document.querySelector<HTMLInputElement>('#field')!;
+  const press = (init: KeyboardEventInit) => {
+    const event = new KeyboardEvent('keydown', { bubbles: true, cancelable: true, ...init });
+    field.dispatchEvent(event); return event.defaultPrevented;
+  };
+  const mod = { metaKey: mac, ctrlKey: !mac };
+  expect(press({ key: 'P', code: 'KeyP', altKey: true, shiftKey: true })).toBe(true);
+  // A Mac types a different character for Alt+Shift+P. The physical key still counts.
+  expect(press({ key: '∏', code: 'KeyP', altKey: true, shiftKey: true })).toBe(true);
+  expect(clicks).toHaveBeenCalledTimes(2); clicks.mockClear();
+  // Ctrl+P is Open Quickly, not Print. Other combinations do not print either.
+  for (const init of [{ key: 'p', code: 'KeyP', ...mod }, { key: 'p', code: 'KeyP' }, { key: 'P', code: 'KeyP', shiftKey: true, ...mod },
+    { key: 'p', code: 'KeyP', altKey: true }, { key: 'p', code: 'KeyP', altKey: true, ...mod }, { key: 'P', code: 'KeyP', shiftKey: true }])
+    expect(press(init)).toBe(false);
+  expect(clicks).not.toHaveBeenCalled();
+  const alt = { key: 'P', code: 'KeyP', altKey: true, shiftKey: true };
+  expect(press({ ...alt, repeat: true })).toBe(true);
+  composing = true; expect(press(alt)).toBe(true); composing = false;
+  modal = true; expect(press(alt)).toBe(true); modal = false;
+  const page = document.createElement('div'); page.className = 'print-dialog'; document.body.append(page);
+  expect(press(alt)).toBe(false); page.remove();
+  field.dispatchEvent(new CompositionEvent('compositionstart', { bubbles: true }));
+  expect(press(alt)).toBe(true); field.dispatchEvent(new CompositionEvent('compositionend', { bubbles: true }));
+  expect(clicks).not.toHaveBeenCalled();
+  button.disabled = true; expect(press(alt)).toBe(false);
+  button.disabled = false; expect(press(alt)).toBe(true); expect(clicks).toHaveBeenCalledTimes(1);
+  dispose(); expect(press(alt)).toBe(false);
+});
+
+it.each([true, false])('opens Open Quickly with Mod+P and leaves Ctrl+P to an open print page or Settings (mac=%s)', mac => {
+  document.body.innerHTML = '<button id="open-quickly">Open Quickly</button><input id="field">';
+  const clicks = vi.fn(), button = document.querySelector<HTMLButtonElement>('#open-quickly')!;
+  button.addEventListener('click', () => clicks('quick'));
+  let composing = false, modal = false;
+  const dispose = fileShortcuts(document, mac, () => composing, () => modal);
+  const field = document.querySelector<HTMLInputElement>('#field')!;
+  const press = (init: KeyboardEventInit) => {
+    const event = new KeyboardEvent('keydown', { bubbles: true, cancelable: true, ...init });
+    field.dispatchEvent(event); return event.defaultPrevented;
+  };
+  const ctrlP = { key: 'p', code: 'KeyP', metaKey: mac, ctrlKey: !mac };
+  expect(press(ctrlP)).toBe(true); expect(clicks).toHaveBeenCalledTimes(1); clicks.mockClear();
+  for (const init of [{ key: 'p', code: 'KeyP' }, { ...ctrlP, shiftKey: true }, { ...ctrlP, altKey: true }]) expect(press(init)).toBe(false);
+  expect(press({ ...ctrlP, repeat: true })).toBe(true); composing = true; expect(press(ctrlP)).toBe(true); composing = false;
+  modal = true; expect(press(ctrlP)).toBe(true); modal = false;
+  const page = document.createElement('div'); page.className = 'print-dialog'; document.body.append(page);
+  expect(press(ctrlP)).toBe(false); page.remove();
+  expect(clicks).not.toHaveBeenCalled();
+  button.disabled = true; expect(press(ctrlP)).toBe(false); button.disabled = false;
+  dispose(); expect(press(ctrlP)).toBe(false);
+});
