@@ -1,5 +1,7 @@
 # MarkDew
 
+English | [简体中文](README.zh-CN.md)
+
 MarkDew is a Markdown editor for the desktop. It shows a live preview and keeps
 the Markdown source one click away.
 
