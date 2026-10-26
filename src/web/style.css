@@ -791,7 +791,7 @@ button[aria-pressed="true"], #outline .outline-content button:hover, #outline:no
 .sidebar-divider[hidden] { display: none; }
 .sidebar-divider:hover, .sidebar-divider.resizing { background: var(--selected); }
 .sidebar-divider:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
-#app #editor > .cm-editor > .cm-scroller > .cm-content { flex: 1 1 auto; min-width: 0; max-width: var(--editor-max-width, 860px); margin-inline: auto; padding: 42px 36px calc(35vh + 60px); font-family: var(--writing-font, "Open Sans", "Clear Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"); line-height: 1.65; }
+#app #editor > .cm-editor > .cm-scroller > .cm-content { flex: 1 1 auto; min-width: 0; max-width: var(--editor-max-width, 860px); margin-inline: auto; padding: 42px 36px calc(35vh + 60px); font-family: var(--writing-font, "Open Sans", "Clear Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, "PingFang SC", "Noto Sans CJK SC", "Source Han Sans SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif, "Apple Color Emoji", "Segoe UI Emoji"); line-height: 1.65; }
 #app #editor.source-mode > .cm-editor > .cm-scroller > .cm-content { font-family: var(--code-font, ui-monospace, Menlo, Consolas, monospace); }
 #app .cm-line { margin: 0; }
 #app .preview-inline-html h1 { font-size: 2.25em; font-weight: bold; border-bottom: 1px solid var(--border); padding-top: 1rem; padding-bottom: 0.3em; margin: 0; }

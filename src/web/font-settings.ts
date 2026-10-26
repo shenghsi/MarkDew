@@ -2,8 +2,9 @@ import { invoke, isTauri } from '@tauri-apps/api/core';
 
 export const FONT_KEYS = { TEXT: 'markdew.writing-font', CODE: 'markdew.code-font' } as const;
 // The stacks the app uses when no font is chosen. A chosen font goes first and these stay behind it,
-// so characters the chosen font lacks (CJK, emoji) still show.
-export const TEXT_STACK = '"Open Sans", "Clear Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"';
+// so characters the chosen font lacks (CJK, emoji) still show. The Simplified Chinese fonts keep
+// CJK punctuation such as 、 in its Simplified Chinese form, whatever the page language is.
+export const TEXT_STACK = '"Open Sans", "Clear Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, "PingFang SC", "Noto Sans CJK SC", "Source Han Sans SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif, "Apple Color Emoji", "Segoe UI Emoji"';
 export const CODE_STACK = 'ui-monospace, Menlo, Consolas, monospace';
 
 const quote = (family: string) => `"${family.replace(/["\\\u0000-\u001f]/g, '')}"`;
