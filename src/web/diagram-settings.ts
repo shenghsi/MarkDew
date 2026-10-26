@@ -16,7 +16,7 @@ export const DIAGRAM_FONTS = ['sans', 'serif', 'mono'] as const;
 export const DIAGRAM_FONT_SIZES = ['12', '14', '16', '18'] as const;
 export const DIAGRAM_RADII = ['0', '4', '10'] as const;
 export const DIAGRAM_PADDINGS = ['4', '10', '20'] as const;
-export const DIAGRAM_MAX_HEIGHTS = ['400', '600', '800', 'none'] as const;
+export const DIAGRAM_MAX_HEIGHTS = ['300', '400', '500', '600', '800', '1000', '1200', '1600', 'none'] as const;
 
 export interface DiagramSettings {
   palette: (typeof DIAGRAM_PALETTES)[number];
