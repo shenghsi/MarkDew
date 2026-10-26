@@ -1,10 +1,9 @@
-# MarkDew v1.2.0
+# MarkDew v1.2.1
 
 ## What is new
 
-- **New:** Mermaid diagrams use the Mermaid default palette again: lavender boxes with purple borders, as in versions before v1.1.0. It is now the default palette. Follow theme, Classic, Warm, and Cool stay available in Settings > Appearance.
-- **New:** A Box colors setting for Mermaid flowcharts. By shape gives each kind of box its own color: start and end, decision, data, input and output, circle, preparation, and flag. Colors set in the diagram with style or classDef still win.
-- Everything in v1.1.3 is included: the Linux menu bar language, the Simplified Chinese README, Open Quickly on Ctrl+P, Print on Alt+Shift+P, the macOS print dialog, the correct version in About, print and export (PDF, PNG), import and export through Pandoc, Mermaid diagrams in exports, list nesting with Tab, the right-click editor menu, and the font and image settings.
+- **Fix:** Chinese punctuation such as 顿号 (、) now draws in the Simplified Chinese form in the editor, whatever the page language is.
+- Everything in v1.2.0 is included: the Mermaid default palette (now the default) and the Box colors setting for flowcharts, the Linux menu bar language, the Simplified Chinese README, Open Quickly on Ctrl+P, Print on Alt+Shift+P, the macOS print dialog, the correct version in About, print and export (PDF, PNG), import and export through Pandoc, Mermaid diagrams in exports, list nesting with Tab, the right-click editor menu, and the font and image settings.
 - The PDF export on Windows and Linux builds in CI but has no native acceptance check yet.
 
 ## In-app updates
