@@ -13,7 +13,7 @@ import type { Element, Nodes } from 'hast';
 import type { Text } from '@codemirror/state';
 import type { Heading, Paragraph } from 'mdast';
 import GithubSlugger from 'github-slugger';
-import { diagramRenderOptions, diagramSvgStyle, getDiagramSettings } from './diagram-settings';
+import { colorBoxesByShape, diagramRenderOptions, diagramSvgStyle, getDiagramSettings } from './diagram-settings';
 import { toString } from 'mdast-util-to-string';
 
 const markdown = new MarkdownIt({ html: true, linkify: false });
@@ -171,7 +171,7 @@ export async function renderDiagram(source: string, target: 'screen' | 'print' =
   const settings = getDiagramSettings();
   const { svg } = await renderAsync(source, { links: false, images: false, ...diagramRenderOptions(settings) });
   // Pele's root SVG carries an inline style; the chosen colors and radius go in front of it.
-  const styled = svg.replace(/^(<svg\b[^>]*?\sstyle=")/, `$1${diagramSvgStyle(settings, target)}`);
+  const styled = colorBoxesByShape(svg.replace(/^(<svg\b[^>]*?\sstyle=")/, `$1${diagramSvgStyle(settings, target)}`), settings, target);
   return DOMPurify.sanitize(styled, { USE_PROFILES: { svg: true, svgFilters: true },
     FORBID_TAGS: ['a', 'foreignObject'], FORBID_ATTR: ['href', 'xlink:href'] });
 }

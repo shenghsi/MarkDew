@@ -34,3 +34,26 @@ test('the SVG carries palette and radius; print maps Follow theme to Classic', a
   expect(await renderDiagram('flowchart LR\nA-->B', 'screen')).toContain('--pele-radius:10px');
   localStorage.clear();
 });
+
+test('Mermaid default carries the mermaid.js colors', async () => {
+  const { renderDiagram } = await import('../../src/web/renderers');
+  localStorage.setItem(DIAGRAM_KEYS.PALETTE, 'mermaid');
+  const svg = await renderDiagram('flowchart LR\nA-->B', 'print');
+  expect(svg).toContain('--pele-surface:#ececff'); expect(svg).toContain('--pele-border:#9370db');
+  localStorage.clear();
+});
+
+test('By shape colors each box kind and keeps author styles', async () => {
+  const { renderDiagram } = await import('../../src/web/renderers');
+  const source = 'flowchart LR\nA[a]-->B{b}-->C[(c)]\nstyle C fill:#f00';
+  expect(await renderDiagram(source, 'print')).not.toContain('--_s:#fff3cd');
+  localStorage.setItem(DIAGRAM_KEYS.BOX_COLORS, 'shape');
+  const print = await renderDiagram(source, 'print');
+  expect(print).toMatch(/pele-shape-diam"[^>]*style="--_s:#fff3cd;--_b:#c9a227"/);
+  expect(print).toMatch(/pele-shape-cyl"[^>]*style="--_s:#dcebfa/);
+  expect(print).not.toMatch(/pele-shape-rect"[^>]*style=/);
+  expect(print).toContain('fill:#f00');
+  localStorage.setItem(DIAGRAM_KEYS.PALETTE, 'app');
+  expect(await renderDiagram(source, 'screen')).toContain('--_s:var(--diagram-decision-fill,#fff3cd)');
+  localStorage.clear();
+});

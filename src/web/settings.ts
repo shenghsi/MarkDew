@@ -3,7 +3,7 @@ import { invoke, isTauri } from '@tauri-apps/api/core';
 import { setTheme, ThemeChoice } from './theme';
 import { checkAppUpdates, installAppUpdate, UpdateInfo } from './updater';
 import {
-  DIAGRAM_KEYS, DIAGRAM_PALETTES, DIAGRAM_FONTS, DIAGRAM_FONT_SIZES, DIAGRAM_RADII, DIAGRAM_PADDINGS,
+  DIAGRAM_KEYS, DIAGRAM_PALETTES, DIAGRAM_BOX_COLORS, DIAGRAM_FONTS, DIAGRAM_FONT_SIZES, DIAGRAM_RADII, DIAGRAM_PADDINGS,
   DIAGRAM_MAX_HEIGHTS, DEFAULT_DIAGRAM_SETTINGS, getDiagramSettings, applyDiagramStyle,
 } from './diagram-settings';
 import { layoutPreferences, SidebarChoice } from './layout-preferences';
@@ -773,6 +773,8 @@ export function showSettingsDialog(options?: {
       { title: t('appearance.diagram_colors', storage), rows: [
         [t('appearance.diagram_palette', storage), DIAGRAM_KEYS.PALETTE,
           choices(DIAGRAM_PALETTES, value => t(`appearance.diagram_palette_${value}` as const, storage)), d.palette],
+        [t('appearance.diagram_box_colors', storage), DIAGRAM_KEYS.BOX_COLORS,
+          choices(DIAGRAM_BOX_COLORS, value => t(`appearance.diagram_box_colors_${value}` as const, storage)), d.boxColors],
       ] },
       { title: t('appearance.diagram_text', storage), rows: [
         [t('appearance.diagram_font', storage), DIAGRAM_KEYS.FONT,

@@ -648,6 +648,12 @@ button[aria-pressed="true"], #outline .outline-content button:hover, #outline:no
 :root[data-diagram-palette="app"] .preview-mermaid:not(.preview-error) {
   --pele-bg: var(--paper); --pele-fg: var(--ink); --pele-muted: var(--muted); --pele-line: var(--muted);
   --pele-surface: var(--surface); --pele-surface-alt: var(--selected); --pele-border: var(--border); --pele-accent: var(--accent); }
+/* Dark box colors for By shape with Follow theme; light values are the fallbacks in the SVG. */
+:root[data-theme="dark"] .preview-mermaid {
+  --diagram-terminal-fill: #1f3a24; --diagram-terminal-border: #5fae66; --diagram-decision-fill: #3d3418; --diagram-decision-border: #c9a227;
+  --diagram-data-fill: #1b2f45; --diagram-data-border: #5b95d0; --diagram-io-fill: #40281a; --diagram-io-border: #d7834a;
+  --diagram-circle-fill: #2e2440; --diagram-circle-border: #9b7bd0; --diagram-prep-fill: #173634; --diagram-prep-border: #4fb0a6;
+  --diagram-flag-fill: #3d1f22; --diagram-flag-border: #d06b6b; }
 .tok-keyword, .tok-operator, .tok-typeName { color: var(--keyword); }
 .tok-string, .tok-string2 { color: var(--string); }
 .tok-number, .tok-bool, .tok-atom { color: var(--number); }

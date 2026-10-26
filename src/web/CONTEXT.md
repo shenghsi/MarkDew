@@ -1292,7 +1292,7 @@ palette without editor transactions or state replacement. Active outer and cell
 composition, selection, source record, and history stay intact. The preference
 is local to the app; unavailable storage does not prevent theme changes.
 System follows the operating-system color preference. Code tokens use palette
-classes. Isolated HTML retains a light canvas for authored colors. Mermaid diagrams use Pele and follow the app theme by default.
+classes. Isolated HTML retains a light canvas for authored colors. Mermaid diagrams use Pele and use the Mermaid default palette by default.
 
 Return uses the flat-list Return command for flat list items and ordinary text.
 It plans the edit from the current line only. Applying the edit still maps
@@ -1653,6 +1653,11 @@ frontend build, and Bend proof pass.
 When the caret is on a line in live preview mode, the editor reveals the line in source code mode and shows the caret. When the user clicks non-interactive space outside the editor region, clicks the title bar, or the editor loses focus, the editor deactivates immediately, suppresses the caret, and rerenders the line in live preview mode. Interactive controls, including sidebar files, folders, tabs, and toolbar buttons, preserve their standard click sequences and actions without interruption. Clicking into the editor restores active editing and reveals source code mode for the selected line.
 
 
-Mermaid diagram settings in Appearance control palette, font, font size, corner
+Mermaid diagram settings in Appearance control palette, box colors, font, font size, corner
 radius, padding, and maximum height. Fixed palettes and corner radius travel
 inside the SVG for print output. The app palette uses Classic for print output.
+Palettes are Follow theme, Mermaid default (the mermaid.js default theme from before Pele,
+and the default palette), Classic, Warm, and Cool. Box colors is One color or By shape. By shape gives each kind of
+flowchart box its own fill and border: start and end (rounded, stadium), decision (diamond),
+data (cylinder), input and output (parallelogram, trapezoid), circle, preparation (hexagon),
+and flag. Other boxes keep the palette color. Author style and classDef colors still win.
