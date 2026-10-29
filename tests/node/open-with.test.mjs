@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync, existsSync, mkdtempSync, rmSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { resolve, join } from 'node:path';
 import { spawnSync } from 'node:child_process';
@@ -40,5 +40,26 @@ test('NSIS compiles both actual installer hooks', { skip: !available && process.
     const result = spawnSync(compiler, [`${prefix}DHOOK=${hook}`, `${prefix}DOUTPUT=${output}`, resolve('tests/node/open-with.nsi')], { encoding: 'utf8' });
     assert.equal(result.status, 0, `${result.stdout}\n${result.stderr}`);
     assert.ok(existsSync(output));
+  } finally { rmSync(directory, { recursive: true, force: true }); }
+});
+
+test('Linux desktop entry accepts file arguments and advertises Markdown MIME aliases', () => {
+  const config = JSON.parse(readFileSync('src/desktop/tauri.conf.json', 'utf8'));
+  const path = resolve('src/desktop', config.bundle.linux.deb.desktopTemplate);
+  const template = readFileSync(path, 'utf8');
+  const rendered = template.replaceAll('{{name}}', 'MarkDew').replaceAll('{{exec}}', 'markdew-desktop').replaceAll('{{icon}}', 'markdew-desktop');
+  assert.match(rendered, /^Exec=markdew-desktop %F$/m);
+  assert.match(rendered, /^Type=Application$/m);
+  assert.match(rendered, /^MimeType=text\/markdown;text\/x-markdown;text\/plain;$/m);
+  assert.doesNotMatch(rendered, /^(Hidden|NoDisplay)=true$/m);
+  assert.doesNotMatch(rendered, /xdg-mime default/);
+  const validator = spawnSync('desktop-file-validate', ['--version'], { encoding: 'utf8' });
+  if (validator.error?.code === 'ENOENT') return;
+  const directory = mkdtempSync(join(tmpdir(), 'markdew-desktop-entry-'));
+  try {
+    const desktop = join(directory, 'MarkDew.desktop');
+    writeFileSync(desktop, rendered);
+    const result = spawnSync('desktop-file-validate', [desktop], { encoding: 'utf8' });
+    assert.equal(result.status, 0, `${result.stdout}\n${result.stderr}`);
   } finally { rmSync(directory, { recursive: true, force: true }); }
 });

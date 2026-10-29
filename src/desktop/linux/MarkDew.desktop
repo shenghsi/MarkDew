@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Name={{name}}
+GenericName=Markdown Editor
+Comment=Edit Markdown and text documents
+Exec={{exec}} %F
+TryExec=markdew-desktop
+Icon={{icon}}
+Terminal=false
+StartupWMClass=markdew-desktop
+Categories=Utility;TextEditor;
+MimeType=text/markdown;text/x-markdown;text/plain;
+Keywords=Markdown;Text;Editor;

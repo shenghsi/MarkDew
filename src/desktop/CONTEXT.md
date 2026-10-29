@@ -223,3 +223,11 @@ directory; Windows directory durability is not claimed. Failure after publicatio
 reports that the exported file exists or may have changed and needs inspection.
 Existing Markdown and other files are never replaced by this effect. Native Save
 dialog, WKWebView capture, and supported-platform export checks remain open.
+
+Linux DEB uses linux/MarkDew.desktop as its desktop entry template. Exec includes
+%F so desktop file managers identify the app as a file handler and pass each
+selected path as a separate argument. It advertises text/markdown,
+text/x-markdown, and text/plain without changing the user's default editor.
+The package name is mark-dew; the executable is markdew-desktop. A desktop entry
+without a file argument can be registered for MIME types but still omitted from
+Open With by file managers that require file-handler support.

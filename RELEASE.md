@@ -1,6 +1,8 @@
-# MarkDew v1.2.2
+# MarkDew v1.2.3
 
 ## What is new
+
+- Linux Open With lists MarkDew for Markdown and text files. The desktop entry now accepts file arguments and includes the text/x-markdown MIME alias.
 
 - HTML table cells stay formatted during live editing. Paragraphs, bold text, and merged cells remain visible without HTML markup.
 - Insert HTML tables from the editor's right-click menu under Insert.
