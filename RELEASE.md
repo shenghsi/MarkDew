@@ -1,10 +1,14 @@
-# MarkDew v1.2.1
+# MarkDew v1.2.2
 
 ## What is new
 
-- **Fix:** Chinese punctuation such as 顿号 (、) now draws in the Simplified Chinese form in the editor, whatever the page language is.
-- Everything in v1.2.0 is included: the Mermaid default palette (now the default) and the Box colors setting for flowcharts, the Linux menu bar language, the Simplified Chinese README, Open Quickly on Ctrl+P, Print on Alt+Shift+P, the macOS print dialog, the correct version in About, print and export (PDF, PNG), import and export through Pandoc, Mermaid diagrams in exports, list nesting with Tab, the right-click editor menu, and the font and image settings.
-- The PDF export on Windows and Linux builds in CI but has no native acceptance check yet.
+- HTML table cells stay formatted during live editing. Paragraphs, bold text, and merged cells remain visible without HTML markup.
+- Insert HTML tables from the editor's right-click menu under Insert.
+- Right-click an HTML table cell to insert or delete rows and columns, align content, merge cells, or split ordinary and merged cells into rows or columns.
+- HTML tables use the same resize grid and toolbar icons as Markdown tables. The toolbar has table size, alignment, and delete controls. Empty columns have a minimum width.
+- Table controls hide when you click elsewhere. Undo and Redo shortcuts work inside formatted HTML table cells.
+- Markdown table cells wrap text during live editing. Single tildes stay literal; double tildes still apply strikethrough.
+- Mermaid diagrams have more maximum-height options.
 
 ## In-app updates
 
