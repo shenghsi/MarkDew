@@ -181,7 +181,7 @@ it('shows floating toolbar on table cell left click and supports resize popover'
   const resizeBtn = floatingBar.querySelector<HTMLButtonElement>('.table-bar-resize')!;
   resizeBtn.click();
 
-  const popover = tableWidget.querySelector<HTMLElement>('.table-resize-popover')!;
+  const popover = document.querySelector<HTMLElement>('.table-resize-popover')!;
   expect(popover).not.toBeNull();
   const boxes = popover.querySelectorAll('.table-resize-box');
   expect(boxes.length).toBe(60); // 6 cols x 10 rows
@@ -196,7 +196,7 @@ it('shows floating toolbar on table cell left click and supports resize popover'
   box3x3.click();
 
   // Popover should close
-  expect(tableWidget.querySelector('.table-resize-popover')).toBeNull();
+  expect(document.querySelector('.table-resize-popover')).toBeNull();
 });
 
 it('locks row heights and retains fixed table layout across cell switches', async () => {
