@@ -1502,21 +1502,6 @@ body.no-document #word-count, body.no-document #document-title { display: none; 
 .quick-open-note { padding: 6px 14px; color: var(--muted); font-size: 12px; border-top: 1px solid var(--border); min-height: 1.4em; }
 .quick-open-note:empty { display: none; }
 
-.html-table-cell-editor {
-  display: block;
-  width: 100%;
-  min-width: 6em;
-  min-height: 4em;
-  box-sizing: border-box;
-  resize: vertical;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-  font: inherit;
-  color: var(--ink);
-  background: var(--surface);
-  border: 1px solid var(--accent);
-}
-
 .preview-block-html-body { overflow-x: auto; }
 .preview-block-html-body table { width: 100%; }
 .preview-block-html-body th, .preview-block-html-body td {
@@ -1537,8 +1522,8 @@ body.no-document #word-count, body.no-document #document-title { display: none; 
   border-radius: 4px;
   background: var(--surface);
 }
-.html-table-toolbar select { font: inherit; color: var(--ink); background: var(--surface); max-width: 100%; }
-.preview-block-html-body .html-table-selected-cell { outline: 2px solid var(--accent); outline-offset: -2px; }
+.html-table-toolbar button { font: inherit; color: var(--ink); background: var(--surface); max-width: 100%; }
+.preview-block-html-body [contenteditable="true"] { outline: none; }
 
 /* Show controls for the selected HTML table. */
 .html-table-toolbar {
@@ -1550,3 +1535,20 @@ body.no-document #word-count, body.no-document #document-title { display: none; 
   opacity: 1;
   pointer-events: auto;
 }
+.html-table-toolbar { justify-content: space-between; position: relative; }
+.html-table-size {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 0 4px 12px #0002;
+}
+.html-table-size input { width: 4em; }

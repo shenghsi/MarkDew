@@ -167,3 +167,14 @@ it('does not open the menu when commands are blocked', () => {
   v.contentDOM.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true }));
   expect(document.querySelector('.editor-context-menu')).toBeNull();
 });
+
+it('inserts an HTML table through the Insert context submenu', () => {
+  const v = editor('Paragraph'); vi.spyOn(v, 'posAtCoords').mockReturnValue(null);
+  const reports: string[] = [];
+  const dispose = editorMenu(v, { allowed: () => true, report: message => reports.push(message), openLink() {}, openImage() {} });
+  v.contentDOM.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true }));
+  const item = Array.from(document.querySelectorAll<HTMLElement>('.menu-item')).find(node => node.querySelector(':scope > .menu-label')?.textContent === 'HTML table');
+  expect(item).toBeDefined(); item!.click();
+  expect(text()).toContain('Paragraph\n\n<table>'); expect(reports).toEqual([]);
+  undo(v); expect(text()).toBe('Paragraph'); dispose();
+});

@@ -6,11 +6,11 @@ export const htmlTableCommands = [
   ['split', 'Split cell'], ['align-left', 'Align left'], ['align-center', 'Align center'],
   ['align-right', 'Align right'], ['delete-table', 'Delete table'],
 ] as const;
-export type HTMLTableCommand = typeof htmlTableCommands[number][0];
+export type HTMLTableCommand = typeof htmlTableCommands[number][0] | 'align-table-left' | 'align-table-center' | 'align-table-right';
 interface Cell { element: HTMLTableCellElement; row: number; column: number; height: number; width: number }
 
 // Work on an inert copy of authored HTML, never on the sanitized preview.
-export function changeHTMLTable(source: string, tableIndex: number, cellIndex: number, command: HTMLTableCommand): string | undefined {
+export function changeHTMLTable(source: string, tableIndex: number, cellIndex: number, command: HTMLTableCommand, boundary?: number): string | undefined {
   const template = document.createElement('template'); template.innerHTML = source;
   const table = template.content.querySelectorAll('table')[tableIndex];
   if (!table || table.querySelector('table')) return;
@@ -33,7 +33,8 @@ export function changeHTMLTable(source: string, tableIndex: number, cellIndex: n
   const selected = cells[cellIndex], columns = Math.max(...grid.map(row => row.length));
   if (!selected || columns > 1000 || grid.some(row => row.length !== columns || Array.from({ length: columns }, (_, c) => row[c]).some(cell => !cell))) return;
   const fresh = (row: number, column: number, tag = 'td'): Cell => ({ element: document.createElement(tag) as HTMLTableCellElement, row, column, width: 1, height: 1 });
-  if (command.startsWith('align-')) selected.element.setAttribute('align', command.slice(6));
+  if (command.startsWith('align-table-')) cells.forEach(cell => cell.element.setAttribute('align', command.slice(12)));
+  else if (command.startsWith('align-')) selected.element.setAttribute('align', command.slice(6));
   else if (command === 'merge-right' || command === 'merge-down') {
     const right = command === 'merge-right';
     const other = grid[right ? selected.row : selected.row + selected.height]?.[right ? selected.column + selected.width : selected.column];
@@ -51,7 +52,8 @@ export function changeHTMLTable(source: string, tableIndex: number, cellIndex: n
     selected.width = selected.height = 1;
   } else {
     const vertical = command.includes('row'), deleting = command.startsWith('delete');
-    const position = vertical ? selected.row + (command === 'row-below' ? selected.height : 0) : selected.column + (command === 'column-right' ? selected.width : 0);
+    const position = boundary ?? (vertical ? selected.row + (command === 'row-below' ? selected.height : 0) : selected.column + (command === 'column-right' ? selected.width : 0));
+    if (position < 0 || position > (vertical ? rows.length : columns) - (deleting ? 1 : 0)) return;
     if (deleting && (vertical ? rows.length : columns) <= 1) return;
     const axis = vertical ? 'row' : 'column', span = vertical ? 'height' : 'width';
     for (const cell of [...cells]) {
@@ -84,4 +86,39 @@ export function changeHTMLTable(source: string, tableIndex: number, cellIndex: n
     rows[cell.row].append(cell.element);
   }
   return template.innerHTML;
+}
+
+
+export function htmlTableSize(source: string, index: number) {
+  const template = document.createElement('template'); template.innerHTML = source;
+  const table = template.content.querySelectorAll('table')[index];
+  if (!table || table.querySelector('table')) return;
+  const grid: boolean[][] = [];
+  for (const [r, row] of Array.from(table.rows).entries()) {
+    grid[r] ||= []; let c = 0;
+    for (const cell of Array.from(row.cells)) {
+      while (grid[r][c]) c++;
+      for (let y = r; y < r + cell.rowSpan; y++) for (let x = c; x < c + cell.colSpan; x++) {
+        grid[y] ||= []; grid[y][x] = true;
+      }
+      c += cell.colSpan;
+    }
+  }
+  return { rows: table.rows.length, columns: Math.max(0, ...grid.map(row => row.length)) };
+}
+
+export function resizeHTMLTable(source: string, index: number, rows: number, columns: number) {
+  if (![rows, columns].every(value => Number.isSafeInteger(value) && value >= 1 && value <= 50)) return;
+  const size = htmlTableSize(source, index); if (!size) return;
+  let next: string | undefined = source;
+  for (const [axis, target] of [['rows', rows], ['columns', columns]] as const) {
+    let count = size[axis];
+    while (count !== target && next !== undefined) {
+      const growing = count < target;
+      const command = axis === 'rows' ? (growing ? 'row-below' : 'delete-row') : (growing ? 'column-right' : 'delete-column');
+      next = changeHTMLTable(next, index, 0, command, growing ? count : count - 1);
+      count += growing ? 1 : -1;
+    }
+  }
+  return next;
 }

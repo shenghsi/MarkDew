@@ -1662,28 +1662,32 @@ flowchart box its own fill and border: start and end (rounded, stadium), decisio
 data (cylinder), input and output (parallelogram, trapezoid), circle, preparation (hexagon),
 and flag. Other boxes keep the palette color. Author style and classDef colors still win.
 
-Supported block HTML tables permit cell content editing in live preview. Click a
-cell to open a text area with that cell's inner HTML. Leaving the cell or pressing
-Ctrl+Enter (Cmd+Enter on macOS) applies the change; Escape cancels it. Source
-locations preserve surrounding tags, attributes, and merged cells. Read-only,
-isolated previews, container-prefixed blocks, and cells without explicit closing
-tags retain source editing. The HTML caption still opens the complete source.
+Supported block HTML tables permit formatted cell editing in live preview. Clicking
+a cell retains its rendered contents, fonts, paragraphs, and table dimensions.
+HTML markup is not shown in the cell editor. Leaving the cell or pressing
+Ctrl+Enter (Cmd+Enter on macOS) applies the change; Escape cancels it. Unchanged
+cells preserve their exact authored source. Changed cell content is sanitized,
+and surrounding cell tags, attributes, and merged cells retain their source.
+Pasting inserts plain text. The HTML caption still opens the complete source.
+Read-only cells cannot be changed. Isolated previews, container-prefixed blocks,
+and cells without explicit closing tags retain source editing.
 
-HTML table controls show an HTML table label and a Table operations menu above
-supported tables. Click a cell to select it. The menu inserts or deletes rows
-and columns, aligns cell content, merges with the right or lower cell when edges
-match within one row group, splits a merged cell into unit cells, and deletes a
-table. A split keeps content in the first cell. Merge joins content with a line
-break. Structural commands use an inert copy of authored HTML and one editor
-transaction, so Undo restores the exact source. HTML serialization can normalize
-source spelling and whitespace. Cell-only edits still retain exact surrounding
-source. Nested or irregular tables do not support structural commands. Empty
-cells have a minimum width of 5em, and tables fill the available preview width.
-The HTML table label and operations menu appear after a cell in the table is
-clicked. Selecting a cell in another HTML table hides the previous controls.
-Keyboard focus within the toolbar also shows the controls. The toolbar keeps
-its space while hidden so the table does not move when controls appear.
-HTML table controls clear their selected-cell state when the user clicks outside
-that table and its toolbar, including outside the editor. Markdown table editing
-also ends on outside clicks; detached context menus and resize controls stay
-usable. These handlers do not prevent the clicked control's normal action.
+Right-click a cell for row and column insertion or deletion, cell alignment,
+merge right or down when edges match within a row group, and split. A split
+keeps content in the first cell; merge joins content with a line break. Pending
+cell changes and structural operations form one Undo step. Structural commands
+use an inert copy of authored HTML and can normalize its source formatting.
+Nested or irregular tables do not support structural commands. Empty cells have
+a minimum width of 5em, and tables fill the available preview width.
+
+The HTML table toolbar uses the Markdown table icons. Resize table and whole-table
+alignment are on the left. The HTML table label and Delete table
+are on the right. Resize
+accepts 1 to 50 rows and columns and adjusts spans at changed boundaries. The
+toolbar appears after a cell is clicked and hides when the user clicks outside
+the table, toolbar, and active menu. Its reserved space prevents movement.
+Markdown table editing also ends on outside clicks; detached context menus and
+resize controls stay usable. Outside-click handlers preserve normal actions.
+Right-click in the editor, Insert, HTML table inserts a table with two columns,
+one header row, and two body rows after the complete current block. It preserves
+selected text and supports exact source Undo.

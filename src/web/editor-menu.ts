@@ -2,7 +2,7 @@ import { EditorView } from '@codemirror/view';
 import { showMenu, type MenuEntry } from './context-menu';
 import { format, type Format } from './formatting';
 import { codeBlock } from './code-block-command';
-import { insertTable } from './table-insert';
+import { insertTable, insertHTMLTable } from './table-insert';
 import { insertFootnote } from './footnote-commands';
 import { copySelection, cutSelection, deleteSelection, pasteText } from './copy-as';
 import { currentFormat, insertFrontMatter, insertHorizontalLine, insertLinkReference, insertParagraph,
@@ -85,6 +85,7 @@ export function editorMenu(view: EditorView, host: EditorMenuHost): () => void {
         { type: 'item', label: t('menu.link_reference'), run: run(() => insertLinkReference(view)) },
         { type: 'item', label: t('menu.horizontal_line'), run: run(() => insertHorizontalLine(view)) },
         { type: 'item', label: t('menu.table'), shortcut: keys('Mod+T'), run: run(() => insertTable(view)) },
+        { type: 'item', label: t('menu.html_table'), run: run(() => insertHTMLTable(view)) },
         { type: 'item', label: t('menu.code_fences'), shortcut: keys('Mod+Shift+K'), run: run(() => codeBlock(view)) },
         { type: 'item', label: t('menu.math_block'), shortcut: keys('Mod+Shift+M'), run: run(() => codeBlock(view, 'math')) },
         { type: 'item', label: t('menu.toc'), run: run(() => insertTableOfContents(view)) },

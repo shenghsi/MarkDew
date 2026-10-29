@@ -70,3 +70,15 @@ it('rejects metadata, composition, locks and final filters without changing inpu
     expect(view.state.selection.eq(selection)).toBe(true); expect(undoDepth(view.state)).toBe(0); expect(view.hasFocus).toBe(true);
   }
 });
+
+it('inserts an HTML table after a complete block with exact Undo', async () => {
+  const { insertHTMLTable } = await import('../../src/web/table-insert');
+  for (const original of ['', '# Heading', '> quote', '- item', '```\ncode\n```']) {
+    const source = create(original, original.length);
+    expect(insertHTMLTable(view)).toBeNull();
+    expect(source()).toContain('<table>'); expect(source()).toContain('<td></td>');
+    expect(source().startsWith(original)).toBe(true);
+    expect(view.state.selection.main.from).toBe(view.state.doc.length);
+    undo(view); expect(source()).toBe(original);
+  }
+});

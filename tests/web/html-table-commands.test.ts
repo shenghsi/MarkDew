@@ -39,3 +39,21 @@ it('aligns cells and deletes only the selected table', () => {
   expect(table(changeHTMLTable(source, 0, 0, 'align-center')!).rows[0].cells[0].getAttribute('align')).toBe('center');
   expect(changeHTMLTable(source + '<p>Keep</p>', 0, 0, 'delete-table')).toBe('<p>Keep</p>');
 });
+
+it('resizes a merged table and preserves its content and attributes', async () => {
+  const { resizeHTMLTable, htmlTableSize } = await import('../../src/web/html-table-commands');
+  const merged = changeHTMLTable(source, 0, 0, 'merge-down')!;
+  const grown = resizeHTMLTable(merged, 0, 3, 3)!;
+  expect(htmlTableSize(grown, 0)).toEqual({ rows: 3, columns: 3 });
+  expect(table(grown).title).toBe('test');
+  expect(table(grown).rows[0].cells[0].rowSpan).toBe(2);
+  const smaller = resizeHTMLTable(grown, 0, 1, 1)!;
+  expect(htmlTableSize(smaller, 0)).toEqual({ rows: 1, columns: 1 });
+  expect(table(smaller).textContent).toBe('AC');
+  expect(resizeHTMLTable(source, 0, 0, 2)).toBeUndefined();
+  expect(resizeHTMLTable(source, 0, 51, 2)).toBeUndefined();
+});
+it('applies table alignment to all cells', () => {
+  const aligned = table(changeHTMLTable(source, 0, 0, 'align-table-center')!);
+  expect(Array.from(aligned.querySelectorAll('td')).every(cell => cell.getAttribute('align') === 'center')).toBe(true);
+});

@@ -11,7 +11,11 @@ import { tableCellEffect, tableCellField, tableEditor } from './table';
 
 const template = '| Column 1 | Column 2 |\n| --- | --- |\n| | |\n| | |';
 
-export function insertTable(view: EditorView): string | null {
+const htmlTemplate = '<table>\n  <thead><tr><th>Column 1</th><th>Column 2</th></tr></thead>\n  <tbody>\n    <tr><td></td><td></td></tr>\n    <tr><td></td><td></td></tr>\n  </tbody>\n</table>';
+export const insertHTMLTable = (view: EditorView) => insertTable(view, 'html');
+
+export function insertTable(view: EditorView, kind: 'markdown' | 'html' = 'markdown'): string | null {
+  const content = kind === 'html' ? htmlTemplate : template;
   const reason = editGuard(view); if (reason) return reason;
   const state = view.state, selection = state.selection.main;
   if (footnoteSource(state, selection.from, selection.to)) return 'Move outside footnote source before you insert a table.';
@@ -28,12 +32,23 @@ export function insertTable(view: EditorView): string | null {
   const left = at === 0 || before.endsWith('\n\n') ? '' : before.endsWith('\n') ? '\n' : '\n\n';
   const right = state.doc.sliceString(at, Math.min(state.doc.length, at + 2));
   const tail = right.startsWith('\n\n') ? '' : right.startsWith('\n') ? '\n' : '\n\n';
-  const changes = { from: at, insert: left + template + tail };
+  const changes = { from: at, insert: left + content + tail };
   const draft = state.update({ changes });
   if (JSON.stringify(draft.changes.toJSON()) !== JSON.stringify(state.changes(changes).toJSON()))
     return 'The table insertion was not accepted.';
-  const from = at + left.length, to = from + template.length;
+  const from = at + left.length, to = from + content.length;
   const parsed = ensureSyntaxTree(draft.state, draft.state.doc.length, 100);
+  if (kind === 'html') {
+    const block = parsed && outerBlocks(parsed).find(node => node.name === 'HTMLBlock' && node.from === from && node.to === to);
+    if (!block) return 'This position cannot contain an HTML table.';
+    const retained = outerBlocks(parsed!);
+    if (original.some(node => !retained.some(next => next.name === node.name &&
+      next.from === draft.changes.mapPos(node.from, 1) && next.to === draft.changes.mapPos(node.to, -1) &&
+      next.parent?.name === node.parent?.name))) return 'This insertion would change another Markdown block.';
+    view.dispatch({ changes, selection: EditorSelection.cursor(to + tail.length),
+      effects: EditorView.scrollIntoView(from), annotations: isolateHistory.of('full'), userEvent: 'input.table.insert' });
+    view.focus(); return null;
+  }
   const table = parsed && findTable(draft.state, from, parsed);
   if (!table || table.from !== from || table.to !== to || table.parent?.name !== 'Document') return 'This position cannot contain a new table.';
   const rows = tableCells(table, (a, b) => draft.state.doc.sliceString(a, b));
