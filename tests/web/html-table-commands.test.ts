@@ -57,3 +57,38 @@ it('applies table alignment to all cells', () => {
   const aligned = table(changeHTMLTable(source, 0, 0, 'align-table-center')!);
   expect(Array.from(aligned.querySelectorAll('td')).every(cell => cell.getAttribute('align') === 'center')).toBe(true);
 });
+
+it('splits an ordinary cell into columns and keeps other rows visually intact', () => {
+  const result = table(changeHTMLTable(source, 0, 0, 'split')!);
+  expect(result.rows[0].cells.length).toBe(3);
+  expect(result.rows[0].cells[0].textContent).toBe('A');
+  expect(result.rows[0].cells[1].textContent).toBe('');
+  expect(result.rows[1].cells.length).toBe(2);
+  expect(result.rows[1].cells[0].colSpan).toBe(2);
+  expect(result.rows[1].cells[0].textContent).toBe('C');
+  expect(result.rows[0].cells[2].textContent).toBe('B');
+});
+it('splits an ordinary cell into rows and extends adjacent cells', () => {
+  const result = table(changeHTMLTable(source, 0, 0, 'split-rows')!);
+  expect(result.rows.length).toBe(3);
+  expect(result.rows[0].cells[1].rowSpan).toBe(2);
+  expect(result.rows[1].cells.length).toBe(1);
+  expect(result.rows[1].cells[0].textContent).toBe('');
+  expect(result.rows[2].textContent).toBe('CD');
+});
+it('splits inside an existing span without adding a grid track', async () => {
+  const { htmlTableSize } = await import('../../src/web/html-table-commands');
+  const merged = changeHTMLTable(source, 0, 0, 'merge-right')!;
+  const split = changeHTMLTable(merged, 0, 0, 'split-columns')!;
+  expect(htmlTableSize(split, 0)).toEqual({ rows: 2, columns: 2 });
+  expect(table(split).rows[0].cells.length).toBe(2);
+  expect(table(split).rows[0].cells[0].textContent).toBe('AB');
+});
+it('splits header cells within the same row group and keeps alignment', () => {
+  const header = '<table><thead><tr><th align="center">Title</th><th>Other</th></tr></thead><tbody><tr><td>A</td><td>B</td></tr></tbody></table>';
+  const result = table(changeHTMLTable(header, 0, 0, 'split-rows')!);
+  expect(result.tHead!.rows.length).toBe(2);
+  expect(result.tBodies[0].rows.length).toBe(1);
+  expect(result.tHead!.rows[1].cells[0].localName).toBe('th');
+  expect(result.tHead!.rows[1].cells[0].getAttribute('align')).toBe('center');
+});

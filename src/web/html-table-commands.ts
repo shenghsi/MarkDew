@@ -3,7 +3,8 @@ export const htmlTableCommands = [
   ['column-left', 'Insert column left'], ['column-right', 'Insert column right'],
   ['delete-row', 'Delete row'], ['delete-column', 'Delete column'],
   ['merge-right', 'Merge with right cell'], ['merge-down', 'Merge with cell below'],
-  ['split', 'Split cell'], ['align-left', 'Align left'], ['align-center', 'Align center'],
+  ['split', 'Split cell'], ['split-columns', 'Split into two columns'],
+  ['split-rows', 'Split into two rows'], ['align-left', 'Align left'], ['align-center', 'Align center'],
   ['align-right', 'Align right'], ['delete-table', 'Delete table'],
 ] as const;
 export type HTMLTableCommand = typeof htmlTableCommands[number][0] | 'align-table-left' | 'align-table-center' | 'align-table-right';
@@ -45,8 +46,41 @@ export function changeHTMLTable(source: string, tableIndex: number, cellIndex: n
     selected.element.append(...Array.from(other.element.childNodes));
     if (right) selected.width += other.width; else selected.height += other.height;
     cells.splice(cells.indexOf(other), 1);
+  } else if (command === 'split-columns' || command === 'split-rows' ||
+    command === 'split' && selected.width === 1 && selected.height === 1) {
+    const vertical = command === 'split-rows';
+    const axis = vertical ? 'row' : 'column', span = vertical ? 'height' : 'width';
+    const originalSpan = selected[span];
+    const newCell = fresh(selected.row, selected.column, selected.element.localName);
+    for (const name of ['align', 'dir', 'lang']) {
+      const value = selected.element.getAttribute(name);
+      if (value !== null) newCell.element.setAttribute(name, value);
+    }
+    if (originalSpan > 1) {
+      selected[span] = Math.floor(originalSpan / 2);
+      newCell[axis] = selected[axis] + selected[span];
+      newCell[span] = originalSpan - selected[span];
+      newCell[vertical ? 'width' : 'height'] = selected[vertical ? 'width' : 'height'];
+    } else {
+      // Add a grid boundary through this cell. Other cells that cross its
+      // original track gain a span, so they remain visually unsplit.
+      if ((vertical ? rows.length : columns) >= 1000 || cells.some(cell => cell !== selected &&
+        cell[axis] <= selected[axis] && cell[axis] + cell[span] > selected[axis] && cell[span] >= 1000)) return;
+      const position = selected[axis] + 1;
+      for (const cell of cells) {
+        if (cell === selected) continue;
+        if (cell[axis] <= selected[axis] && cell[axis] + cell[span] > selected[axis]) cell[span]++;
+        else if (cell[axis] >= position) cell[axis]++;
+      }
+      newCell[axis] = position;
+      newCell[vertical ? 'width' : 'height'] = selected[vertical ? 'width' : 'height'];
+      if (vertical) {
+        const row = document.createElement('tr'), previous = rows[selected.row];
+        previous.parentElement!.insertBefore(row, previous.nextSibling); rows.splice(position, 0, row);
+      }
+    }
+    cells.push(newCell);
   } else if (command === 'split') {
-    if (selected.width === 1 && selected.height === 1) return;
     for (let r = selected.row; r < selected.row + selected.height; r++) for (let c = selected.column; c < selected.column + selected.width; c++)
       if (r !== selected.row || c !== selected.column) cells.push(fresh(r, c, selected.element.localName));
     selected.width = selected.height = 1;

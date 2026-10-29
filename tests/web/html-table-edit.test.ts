@@ -114,3 +114,15 @@ it('previews and applies HTML table size from the Markdown-style grid', () => {
   expect(text().match(/<td/g)).toHaveLength(12);
   expect(text()).toContain('Edited');
 });
+
+it('enables ordinary-cell splitting in the context menu with exact Undo', () => {
+  const { cell, text, undo } = setup('<table><tr><td>A</td><td>B</td></tr></table>');
+  context(cell);
+  const split = Array.from(document.querySelectorAll<HTMLElement>('.menu-item')).find(item =>
+    item.querySelector('.menu-label')?.textContent === 'Split into two rows')!;
+  expect(split.getAttribute('aria-disabled')).toBeNull(); split.click();
+  expect(text().match(/<tr>/g)).toHaveLength(2);
+  expect(text()).toContain('rowspan="2"');
+  expect(undo()).toBe(true);
+  expect(text()).toBe('<table><tr><td>A</td><td>B</td></tr></table>');
+});

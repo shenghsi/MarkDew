@@ -1694,3 +1694,11 @@ resize controls stay usable. Outside-click handlers preserve normal actions.
 Right-click in the editor, Insert, HTML table inserts a table with two columns,
 one header row, and two body rows after the complete current block. It preserves
 selected text and supports exact source Undo.
+
+Split cell also works on an ordinary HTML table cell and divides it into two
+columns. The cell context menu offers Split into two columns and Split into two
+rows for either ordinary or merged cells. A directional split divides an existing
+span when possible. Otherwise, it adds a grid boundary and extends the spans of
+other cells on that track so those cells stay visually unsplit. Content stays in
+the first cell; the new cell is empty and keeps the cell type and alignment.
+The existing Split cell command still restores merged cells to unit cells.
