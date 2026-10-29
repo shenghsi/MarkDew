@@ -44,3 +44,17 @@ it('applies table commands as one change with Undo support', async () => {
   expect(state.doc.toString()).toBe(source);
   dispose?.(); body.remove();
 });
+
+it('clears table controls when a different location is clicked', () => {
+  const source = '<table><tr><td><p>Text</p></td></tr></table>';
+  const view = { state: EditorState.create({ doc: source }), dispatch() {} } as any;
+  const body = document.createElement('div'); body.innerHTML = source; document.body.append(body);
+  const dispose = mountHTMLTableEdit(body, view, 0, source);
+  body.querySelector('td')!.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+  expect(body.querySelector('.html-table-selected-cell')).not.toBeNull();
+  body.querySelector('select')!.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+  expect(body.querySelector('.html-table-selected-cell')).not.toBeNull();
+  document.body.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+  expect(body.querySelector('.html-table-selected-cell')).toBeNull();
+  dispose?.(); body.remove();
+});

@@ -1683,3 +1683,7 @@ The HTML table label and operations menu appear after a cell in the table is
 clicked. Selecting a cell in another HTML table hides the previous controls.
 Keyboard focus within the toolbar also shows the controls. The toolbar keeps
 its space while hidden so the table does not move when controls appear.
+HTML table controls clear their selected-cell state when the user clicks outside
+that table and its toolbar, including outside the editor. Markdown table editing
+also ends on outside clicks; detached context menus and resize controls stay
+usable. These handlers do not prevent the clicked control's normal action.

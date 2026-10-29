@@ -119,7 +119,7 @@ export const tableHistoryView = ViewPlugin.fromClass(class {
   private cancelFocus() { this.focus = false; this.focusTarget = undefined; this.scrollAttempt = undefined; }
   private onPointerDown = (event: MouseEvent) => {
     const target = event.target as HTMLElement | null;
-    if (target && !target.closest('.preview-table') && this.view.contentDOM.contains(target)) {
+    if (target && !target.closest('.preview-table, .table-context-menu, .table-resize-popover')) {
       const active = this.view.state.field(tableCellField, false);
       if (active) endTableEdit(this.view);
     }
@@ -127,6 +127,7 @@ export const tableHistoryView = ViewPlugin.fromClass(class {
   constructor(readonly view: EditorView) {
     document.addEventListener('focusin', this.focusChanged);
     document.addEventListener('pointerdown', this.onPointerDown, true);
+    document.addEventListener('mousedown', this.onPointerDown, true);
     this.schedule();
   }
   update(update: ViewUpdate) {
@@ -169,6 +170,7 @@ export const tableHistoryView = ViewPlugin.fromClass(class {
     this.cancelFocus();
     document.removeEventListener('focusin', this.focusChanged);
     document.removeEventListener('pointerdown', this.onPointerDown, true);
+    document.removeEventListener('mousedown', this.onPointerDown, true);
   }
 });
 

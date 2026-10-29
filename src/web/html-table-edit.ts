@@ -50,6 +50,22 @@ export function mountHTMLTableEdit(body: HTMLElement, view: EditorView, from: nu
     });
     bar.append(select); table.before(bar); controls.push(bar); refresh();
   }
+  const dismiss = (event: Event) => {
+    const target = event.target;
+    if (!(target instanceof Node)) return;
+    for (const table of tables) {
+      const toolbar = table.previousElementSibling;
+      if (table.contains(target) || toolbar?.classList.contains('html-table-toolbar') && toolbar.contains(target)) continue;
+      table.querySelectorAll('.html-table-selected-cell').forEach(cell => cell.classList.remove('html-table-selected-cell'));
+      if (toolbar?.contains(document.activeElement) && document.activeElement instanceof HTMLElement) document.activeElement.blur();
+    }
+  };
+  document.addEventListener('pointerdown', dismiss, true);
+  document.addEventListener('mousedown', dismiss, true);
+  listeners.push(() => {
+    document.removeEventListener('pointerdown', dismiss, true);
+    document.removeEventListener('mousedown', dismiss, true);
+  });
   cells.forEach((cell, index) => {
     cell.dataset.htmlEditable = 'true';
     const table = cell.closest('table') as HTMLTableElement;

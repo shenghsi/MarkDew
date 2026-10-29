@@ -647,3 +647,15 @@ it('restores omitted-cell edits through mode changes and source edits before the
   undo(editor); expect(source()).toBe(original); expect(restored.child!.state.doc.length).toBe(0);
   redo(editor); expect(source()).toBe(changed);
 });
+
+it('hides table controls after a click outside the editor', async () => {
+  const { editor, table, element, source } = setup('| A |\n|---|\n| B |\n\nEnd');
+  table.begin(1, 0);
+  const button = document.createElement('button'); document.body.append(button);
+  expect(element.querySelector<HTMLElement>('.table-floating-bar')!.hidden).toBe(false);
+  button.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+  await Promise.resolve();
+  expect(editor.state.field(tableCellField)).toBeNull();
+  expect(element.querySelector<HTMLElement>('.table-floating-bar')!.hidden).toBe(true);
+  expect(source()).toContain('| B |');
+});
