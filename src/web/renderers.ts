@@ -23,7 +23,7 @@ interface TableImageEnvironment { references?: object; definitions?: { type: 'de
   phrasing?: Map<string, Heading | Paragraph>; htmlBlocks?: Map<string, string>;
   links?: Map<string, string>; headingTargets?: Map<string, { from: number; to: number }> }
 const tableTree = (source: string) => fromMarkdown(source, {
-  extensions: [gfm(), math()], mdastExtensions: [gfmFromMarkdown(), mathFromMarkdown()],
+  extensions: [gfm({ singleTilde: false }), math()], mdastExtensions: [gfmFromMarkdown(), mathFromMarkdown()],
 });
 tableMarkdown.renderer.rules.image = (tokens, index, _options, environment: TableImageEnvironment) => {
   const image = imageInfo(tokens[index], environment.path || '', environment.document);

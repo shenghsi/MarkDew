@@ -958,6 +958,7 @@ export class TableEditor {
     this.child = new EditorView({ parent: cell, state: EditorState.create({
       doc: this.outer.state.doc.sliceString(range.from, range.to), selection,
       extensions: [
+        EditorView.lineWrapping,
         textDirection,
         EditorView.contentAttributes.of({ 'aria-label': `Table cell, row ${row + 1}, column ${column + 1}`, 'aria-multiline': 'false',
           'aria-description': 'Enter or Escape returns to the document outside the table. Tab moves to the next cell and adds a row at the final cell.' }),

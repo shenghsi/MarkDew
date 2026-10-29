@@ -163,3 +163,9 @@ it('cancels before renderer work and strips formula link and resource actions', 
   expect(dom.querySelector('a, img, script, foreignObject, [href], [src]')).toBeNull();
   expect(dom.querySelector('svg')).not.toBeNull(); expect(measure).toHaveBeenCalledOnce();
 });
+
+it('keeps single tildes literal in table cells', () => {
+  const projection = tableProjection('| A |\n| - |\n| ~xyx~ and ~~deleted~~ |', {}, '');
+  expect(projection.html).toContain('~xyx~');
+  expect(projection.html).toContain('<del>deleted</del>');
+});
