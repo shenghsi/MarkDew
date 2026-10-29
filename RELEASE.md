@@ -1,16 +1,9 @@
-# MarkDew v1.2.3
+# MarkDew v1.2.4
 
 ## What is new
 
-- Linux Open With lists MarkDew for Markdown and text files. The desktop entry now accepts file arguments and includes the text/x-markdown MIME alias.
-
-- HTML table cells stay formatted during live editing. Paragraphs, bold text, and merged cells remain visible without HTML markup.
-- Insert HTML tables from the editor's right-click menu under Insert.
-- Right-click an HTML table cell to insert or delete rows and columns, align content, merge cells, or split ordinary and merged cells into rows or columns.
-- HTML tables use the same resize grid and toolbar icons as Markdown tables. The toolbar has table size, alignment, and delete controls. Empty columns have a minimum width.
-- Table controls hide when you click elsewhere. Undo and Redo shortcuts work inside formatted HTML table cells.
-- Markdown table cells wrap text during live editing. Single tildes stay literal; double tildes still apply strikethrough.
-- Mermaid diagrams have more maximum-height options.
+- Fix HTML table cell editing: clicking a cell now gives it focus and shows the insertion cursor, including when the document editor was inactive.
+- Includes the HTML table editing and Linux Open With improvements from v1.2.3.
 
 ## In-app updates
 
