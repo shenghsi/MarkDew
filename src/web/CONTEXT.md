@@ -1668,3 +1668,18 @@ Ctrl+Enter (Cmd+Enter on macOS) applies the change; Escape cancels it. Source
 locations preserve surrounding tags, attributes, and merged cells. Read-only,
 isolated previews, container-prefixed blocks, and cells without explicit closing
 tags retain source editing. The HTML caption still opens the complete source.
+
+HTML table controls show an HTML table label and a Table operations menu above
+supported tables. Click a cell to select it. The menu inserts or deletes rows
+and columns, aligns cell content, merges with the right or lower cell when edges
+match within one row group, splits a merged cell into unit cells, and deletes a
+table. A split keeps content in the first cell. Merge joins content with a line
+break. Structural commands use an inert copy of authored HTML and one editor
+transaction, so Undo restores the exact source. HTML serialization can normalize
+source spelling and whitespace. Cell-only edits still retain exact surrounding
+source. Nested or irregular tables do not support structural commands. Empty
+cells have a minimum width of 5em, and tables fill the available preview width.
+The HTML table label and operations menu appear after a cell in the table is
+clicked. Selecting a cell in another HTML table hides the previous controls.
+Keyboard focus within the toolbar also shows the controls. The toolbar keeps
+its space while hidden so the table does not move when controls appear.

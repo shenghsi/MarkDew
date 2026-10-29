@@ -1516,3 +1516,37 @@ body.no-document #word-count, body.no-document #document-title { display: none; 
   background: var(--surface);
   border: 1px solid var(--accent);
 }
+
+.preview-block-html-body { overflow-x: auto; }
+.preview-block-html-body table { width: 100%; }
+.preview-block-html-body th, .preview-block-html-body td {
+  min-width: 5em;
+  overflow-wrap: anywhere;
+}
+.html-table-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 5px 0;
+  font: 12px system-ui, sans-serif;
+  color: var(--muted);
+}
+.html-table-label {
+  padding: 2px 6px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+}
+.html-table-toolbar select { font: inherit; color: var(--ink); background: var(--surface); max-width: 100%; }
+.preview-block-html-body .html-table-selected-cell { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+/* Show controls for the selected HTML table. */
+.html-table-toolbar {
+  opacity: 0;
+  pointer-events: none;
+}
+.html-table-toolbar:has(+ table .html-table-selected-cell),
+.html-table-toolbar:focus-within {
+  opacity: 1;
+  pointer-events: auto;
+}

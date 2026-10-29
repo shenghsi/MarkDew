@@ -29,3 +29,18 @@ it('cancels cell changes with Escape', () => {
   expect(body.querySelector('td')!.textContent).toBe('old');
   dispose?.(); body.remove();
 });
+
+it('applies table commands as one change with Undo support', async () => {
+  const { history, undo } = await import('@codemirror/commands');
+  const source = '<table><tr><td>A</td><td>B</td></tr></table>';
+  let state = EditorState.create({ doc: source, extensions: [history()] });
+  const view = { get state() { return state; }, dispatch(spec: any) { state = state.update(spec).state; } } as any;
+  const body = document.createElement('div'); body.innerHTML = source; document.body.append(body);
+  const dispose = mountHTMLTableEdit(body, view, 0, source);
+  const select = body.querySelector('select')!;
+  select.value = 'merge-right'; select.dispatchEvent(new Event('change'));
+  expect(state.doc.toString()).toContain('colspan="2"');
+  expect(undo({ state, dispatch: (transaction: any) => { state = transaction.state; } })).toBe(true);
+  expect(state.doc.toString()).toBe(source);
+  dispose?.(); body.remove();
+});
