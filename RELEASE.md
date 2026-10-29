@@ -1,9 +1,10 @@
-# MarkDew v1.2.4
+# MarkDew v1.2.5
 
 ## What is new
 
-- Fix HTML table cell editing: clicking a cell now gives it focus and shows the insertion cursor, including when the document editor was inactive.
-- Includes the HTML table editing and Linux Open With improvements from v1.2.3.
+- Double-clicking a file in a fresh window uses that file's folder instead of reopening the previously closed project in another window.
+- Existing open files and modified tabs retain their project routing rules.
+- Includes the HTML table cursor fix from v1.2.4.
 
 ## In-app updates
 
