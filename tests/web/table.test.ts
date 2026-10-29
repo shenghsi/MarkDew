@@ -5,7 +5,7 @@ import { EditorView } from '@codemirror/view';
 import { history, redo, undo, undoDepth } from '@codemirror/commands';
 import { markdown, markdownLanguage } from '@codemirror/lang-markdown';
 import { livePreview } from '../../src/web/preview';
-import { tableComposing, tableEditor, escapeCellPipes, tableCellEffect, tableCellField, tableHistoryCommand } from '../../src/web/table';
+import { tableCells, tableComposing, tableEditor, escapeCellPipes, tableCellEffect, tableCellField, tableHistoryCommand } from '../../src/web/table';
 import { fromSource, normalize, savedSource, sourceExtensions, sourceField } from '../../src/web/source';
 import { tablePlan, TableCommand, findTable } from '../../src/web/table-commands';
 import { syntaxTree } from '@codemirror/language';
@@ -658,4 +658,17 @@ it('hides table controls after a click outside the editor', async () => {
   expect(editor.state.field(tableCellField)).toBeNull();
   expect(element.querySelector<HTMLElement>('.table-floating-bar')!.hidden).toBe(true);
   expect(source()).toContain('| B |');
+});
+
+it('uses the shared hover grid to resize Markdown tables', () => {
+  const { table, source } = setup('| A |\n|---|\n| B |\n\nEnd');
+  table.begin(1, 0); table.toggleResizePopover();
+  const target = document.querySelector<HTMLElement>('.table-resize-box[data-row="2"][data-col="2"]')!;
+  target.dispatchEvent(new MouseEvent('mouseenter'));
+  expect(document.querySelectorAll('.table-resize-box.selected')).toHaveLength(9);
+  target.click();
+  expect(document.querySelector('.table-resize-popover')).toBeNull();
+  expect(source()).toContain('A'); expect(source()).toContain('B');
+  const parsed = findTable(outer!.state, 0)!;
+  expect(tableCells(parsed, (from, to) => outer!.state.doc.sliceString(from, to)).map(row => row.length)).toEqual([3, 3, 3]);
 });

@@ -1,3 +1,4 @@
+import { openTableResizePopover } from './table-resize-popover';
 import type { EditorView } from '@codemirror/view';
 import { isolateHistory } from '@codemirror/commands';
 import DOMPurify from 'dompurify';
@@ -35,6 +36,7 @@ export function mountHTMLTableEdit(body: HTMLElement, view: EditorView, from: nu
   let active: { cell: HTMLElement; index: number; html: string } | undefined;
   let closeMenu: (() => void) | undefined;
   let menu: HTMLElement | undefined;
+  let resizePopover: ReturnType<typeof openTableResizePopover> | undefined;
   const listeners: (() => void)[] = [];
   const controls: HTMLElement[] = [];
   const tables = Array.from(body.querySelectorAll<HTMLTableElement>('table'));
@@ -92,27 +94,23 @@ export function mountHTMLTableEdit(body: HTMLElement, view: EditorView, from: nu
       return element;
     };
     const resize = () => {
-      bar.querySelector('.html-table-size')?.remove();
+      if (resizePopover) { resizePopover.close(); return; }
       const size = htmlTableSize(operationSource(), index); if (!size) return;
-      const panel = document.createElement('div'); panel.className = 'html-table-size'; panel.setAttribute('role', 'group'); panel.setAttribute('aria-label', 'Table size');
-      const field = (name: string, value: number) => {
-        const label = document.createElement('label'); label.textContent = name + ' ';
-        const input = document.createElement('input'); input.type = 'number'; input.min = '1'; input.max = '50'; input.value = String(value);
-        input.setAttribute('aria-label', name); label.append(input); panel.append(label); return input;
-      };
-      const rows = field('Rows', size.rows), columns = field('Columns', size.columns);
-      const apply = document.createElement('button'); apply.type = 'button'; apply.textContent = 'Apply';
-      apply.addEventListener('click', () => {
-        if (!current()) return;
-        const next = resizeHTMLTable(operationSource(), index, Number(rows.value), Number(columns.value));
-        if (next === undefined) { rows.reportValidity(); columns.reportValidity(); return; }
-        finish(false); panel.remove();
-        if (next !== source) dispatch({ from, to: from + source.length, insert: next });
+      resizePopover = openTableResizePopover({
+        anchor: resizeButton, columns: size.columns, rows: size.rows,
+        minRows: 1, maxRows: 50, maxColumns: 50,
+        apply: (columns, rows) => {
+          if (!current()) return;
+          const next = resizeHTMLTable(operationSource(), index, rows, columns);
+          if (next === undefined) return;
+          finish(false);
+          if (next !== source) dispatch({ from, to: from + source.length, insert: next });
+        },
+        onClose: () => { resizePopover = undefined; },
       });
-      panel.append(apply); panel.addEventListener('keydown', event => { event.stopPropagation(); if (event.key === 'Escape') panel.remove(); });
-      bar.append(panel);
     };
-    left.append(button('Resize table', gridSvg, resize));
+    const resizeButton = button('Resize table', gridSvg, resize);
+    left.append(resizeButton);
     for (const [alignment, icon] of [['left', alignLeftSvg], ['center', alignCenterSvg], ['right', alignRightSvg]] as const)
       left.append(button(`Align table ${alignment}`, icon, () => run(index, 0, `align-table-${alignment}`)));
     right.append(label, button('Delete table', trashSvg, () => run(index, 0, 'delete-table'), 'table-bar-delete'));
@@ -149,7 +147,7 @@ export function mountHTMLTableEdit(body: HTMLElement, view: EditorView, from: nu
       openMenu(entries(tables.indexOf(table), Array.from(table.querySelectorAll('td, th')).indexOf(cell), false), event.clientX, event.clientY);
     });
     on('blur', event => {
-      if (controls.some(bar => event.relatedTarget instanceof Node && bar.contains(event.relatedTarget))) return;
+      if (event.relatedTarget instanceof Node && (resizePopover?.element.contains(event.relatedTarget) || controls.some(bar => bar.contains(event.relatedTarget as Node)))) return;
       if (alive && active?.cell === cell) finish(true);
     });
     on('keydown', event => {
@@ -174,9 +172,9 @@ export function mountHTMLTableEdit(body: HTMLElement, view: EditorView, from: nu
     listeners.push(() => { cell.classList.remove('html-table-selected-cell'); delete cell.dataset.htmlEditable; });
   });
   const dismiss = (event: Event) => {
-    if (!(event.target instanceof Node) || menu?.contains(event.target)) return;
+    if (!(event.target instanceof Node) || menu?.contains(event.target) || resizePopover?.element.contains(event.target)) return;
     if (!tables.some(table => table.contains(event.target as Node) || table.previousElementSibling?.contains(event.target as Node))) {
-      closeMenu?.(); finish(true);
+      closeMenu?.(); resizePopover?.close(); finish(true);
       body.querySelectorAll('.html-table-selected-cell').forEach(cell => cell.classList.remove('html-table-selected-cell'));
       if (controls.some(bar => bar.contains(document.activeElement)) && document.activeElement instanceof HTMLElement) document.activeElement.blur();
     }
@@ -185,7 +183,7 @@ export function mountHTMLTableEdit(body: HTMLElement, view: EditorView, from: nu
   const resume = resumeCell.get(view);
   if (resume?.from === from) { resumeCell.delete(view); if (cells[resume.index]) start(cells[resume.index], resume.index); }
   return () => {
-    alive = false; closeMenu?.(); finish(false);
+    alive = false; closeMenu?.(); resizePopover?.close(); finish(false);
     document.removeEventListener('pointerdown', dismiss, true); document.removeEventListener('mousedown', dismiss, true);
     listeners.forEach(remove => remove()); controls.forEach(control => control.remove());
   };

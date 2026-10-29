@@ -1683,7 +1683,10 @@ a minimum width of 5em, and tables fill the available preview width.
 The HTML table toolbar uses the Markdown table icons. Resize table and whole-table
 alignment are on the left. The HTML table label and Delete table
 are on the right. Resize
-accepts 1 to 50 rows and columns and adjusts spans at changed boundaries. The
+uses the same 6-column by 10-row hover grid as Markdown tables. Click a grid
+cell to apply, or enter Columns and Rows and press Enter. Escape, an outside
+click, or another click on Resize table closes the grid. HTML tables accept
+1 to 50 rows and columns and adjust spans at changed boundaries. The
 toolbar appears after a cell is clicked and hides when the user clicks outside
 the table, toolbar, and active menu. Its reserved space prevents movement.
 Markdown table editing also ends on outside clicks; detached context menus and

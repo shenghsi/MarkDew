@@ -1,3 +1,4 @@
+import { openTableResizePopover } from './table-resize-popover';
 import { gridSvg, alignLeftSvg, alignCenterSvg, alignRightSvg, trashSvg } from './table-toolbar-icons';
 import { ChangeDesc, EditorSelection, EditorState, Facet, StateEffect, StateField, Transaction } from '@codemirror/state';
 import { EditorView, keymap, ViewPlugin, ViewUpdate } from '@codemirror/view';
@@ -191,7 +192,7 @@ export class TableEditor {
   private alignLeftBtn?: HTMLButtonElement;
   private alignCenterBtn?: HTMLButtonElement;
   private alignRightBtn?: HTMLButtonElement;
-  private activeResizePopover: HTMLElement | null = null;
+  private activeResizePopover: ReturnType<typeof openTableResizePopover> | null = null;
   private activeContextMenu: HTMLElement | null = null;
 
   private setTools(open: boolean) {
@@ -211,7 +212,7 @@ export class TableEditor {
     if (this.activeContextMenu) { this.activeContextMenu.remove(); this.activeContextMenu = null; }
   }
   private closeResizePopover() {
-    if (this.activeResizePopover) { this.activeResizePopover.remove(); this.activeResizePopover = null; }
+    this.activeResizePopover?.close(); this.activeResizePopover = null;
   }
 
   currentAlignment(): 'left' | 'center' | 'right' {
@@ -251,135 +252,14 @@ export class TableEditor {
   }
 
   toggleResizePopover() {
-    if (this.activeResizePopover) {
-      this.closeResizePopover();
-      return;
-    }
-    const currCols = this.cells[0]?.length || 2;
-    const currRows = this.cells.length || 2;
-
-    const popover = document.createElement('div');
-    popover.className = 'table-resize-popover';
-    popover.setAttribute('role', 'dialog');
-    popover.setAttribute('aria-label', 'Resize table grid');
-
-    const grid = document.createElement('div');
-    grid.className = 'table-resize-grid';
-
-    const boxes: HTMLElement[][] = [];
-    for (let r = 0; r < 10; r++) {
-      boxes[r] = [];
-      for (let c = 0; c < 6; c++) {
-        const box = document.createElement('div');
-        box.className = 'table-resize-box';
-        box.dataset.row = String(r);
-        box.dataset.col = String(c);
-        box.addEventListener('mouseenter', () => highlight(c + 1, r + 1));
-        box.addEventListener('mousedown', e => { e.preventDefault(); e.stopPropagation(); });
-        box.addEventListener('click', e => {
-          e.preventDefault(); e.stopPropagation();
-          this.closeResizePopover();
-          this.resizeTable(c + 1, r + 1);
-        });
-        grid.append(box);
-        boxes[r][c] = box;
-      }
-    }
-
-    const divider = document.createElement('div');
-    divider.className = 'table-resize-divider';
-
-    const inputs = document.createElement('div');
-    inputs.className = 'table-resize-inputs';
-
-    const colInput = document.createElement('input');
-    colInput.type = 'number';
-    colInput.className = 'table-resize-input col-input';
-    colInput.min = '1'; colInput.max = '30';
-    colInput.value = String(currCols);
-    colInput.setAttribute('aria-label', 'Columns');
-
-    const times = document.createElement('span');
-    times.textContent = 'x';
-
-    const rowInput = document.createElement('input');
-    rowInput.type = 'number';
-    rowInput.className = 'table-resize-input row-input';
-    rowInput.min = '2'; rowInput.max = '50';
-    rowInput.value = String(currRows);
-    rowInput.setAttribute('aria-label', 'Rows');
-
-    const highlight = (cols: number, rows: number) => {
-      colInput.value = String(cols);
-      rowInput.value = String(rows);
-      for (let r = 0; r < 10; r++) {
-        for (let c = 0; c < 6; c++) {
-          boxes[r][c].classList.toggle('selected', c < cols && r < rows);
-        }
-      }
-    };
-
-    const applyFromInputs = () => {
-      const cols = Math.max(1, parseInt(colInput.value, 10) || 1);
-      const rows = Math.max(2, parseInt(rowInput.value, 10) || 2);
-      this.closeResizePopover();
-      this.resizeTable(cols, rows);
-    };
-
-    colInput.addEventListener('input', () => {
-      const c = parseInt(colInput.value, 10) || 0;
-      const r = parseInt(rowInput.value, 10) || 0;
-      for (let row = 0; row < 10; row++) {
-        for (let col = 0; col < 6; col++) {
-          boxes[row][col].classList.toggle('selected', col < c && row < r);
-        }
-      }
+    if (this.activeResizePopover) { this.closeResizePopover(); return; }
+    if (!this.resizeBtn) return;
+    this.activeResizePopover = openTableResizePopover({
+      anchor: this.resizeBtn, columns: this.cells[0]?.length || 2, rows: this.cells.length || 2,
+      minRows: 2, maxRows: 50, maxColumns: 30,
+      apply: (columns, rows) => { this.resizeTable(columns, rows); },
+      onClose: () => { this.activeResizePopover = null; },
     });
-    rowInput.addEventListener('input', () => {
-      const c = parseInt(colInput.value, 10) || 0;
-      const r = parseInt(rowInput.value, 10) || 0;
-      for (let row = 0; row < 10; row++) {
-        for (let col = 0; col < 6; col++) {
-          boxes[row][col].classList.toggle('selected', col < c && row < r);
-        }
-      }
-    });
-
-    colInput.addEventListener('keydown', e => {
-      if (e.key === 'Enter') { e.preventDefault(); applyFromInputs(); }
-      else if (e.key === 'Escape') { e.preventDefault(); this.closeResizePopover(); }
-    });
-    rowInput.addEventListener('keydown', e => {
-      if (e.key === 'Enter') { e.preventDefault(); applyFromInputs(); }
-      else if (e.key === 'Escape') { e.preventDefault(); this.closeResizePopover(); }
-    });
-
-    inputs.append(colInput, times, rowInput);
-    popover.append(grid, divider, inputs);
-
-    highlight(Math.min(6, currCols), Math.min(10, currRows));
-
-    popover.addEventListener('mousedown', e => { e.stopPropagation(); });
-
-    this.dom.append(popover);
-    this.activeResizePopover = popover;
-
-    const dismiss = (e: Event) => {
-      if (!popover.contains(e.target as Node) && e.target !== this.resizeBtn && !this.resizeBtn?.contains(e.target as Node)) {
-        this.closeResizePopover();
-        window.removeEventListener('pointerdown', dismiss, true);
-        window.removeEventListener('keydown', onKey, true);
-      }
-    };
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        this.closeResizePopover();
-        window.removeEventListener('pointerdown', dismiss, true);
-        window.removeEventListener('keydown', onKey, true);
-      }
-    };
-    window.addEventListener('pointerdown', dismiss, true);
-    window.addEventListener('keydown', onKey, true);
   }
 
   resizeTable(targetCols: number, targetRows: number): boolean {

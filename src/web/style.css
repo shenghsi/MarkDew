@@ -1536,19 +1536,3 @@ body.no-document #word-count, body.no-document #document-title { display: none; 
   pointer-events: auto;
 }
 .html-table-toolbar { justify-content: space-between; position: relative; }
-.html-table-size {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background: var(--paper);
-  color: var(--ink);
-  box-shadow: 0 4px 12px #0002;
-}
-.html-table-size input { width: 4em; }

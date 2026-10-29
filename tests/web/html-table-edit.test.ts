@@ -82,9 +82,9 @@ it('uses Markdown-style toolbar icons for global table operations', () => {
 it('changes table size from the toolbar', () => {
   const { body, text } = setup('<table><tr><td>A</td><td>B</td></tr></table>');
   body.querySelector<HTMLElement>('button[aria-label="Resize table"]')!.click();
-  body.querySelector<HTMLInputElement>('input[aria-label="Rows"]')!.value = '3';
-  body.querySelector<HTMLInputElement>('input[aria-label="Columns"]')!.value = '3';
-  body.querySelector<HTMLElement>('.html-table-size button')!.click();
+  document.querySelector<HTMLInputElement>('input[aria-label="Rows"]')!.value = '3';
+  document.querySelector<HTMLInputElement>('input[aria-label="Columns"]')!.value = '3';
+  document.querySelector<HTMLInputElement>('input[aria-label="Rows"]')!.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
   expect(text().match(/<tr>/g)).toHaveLength(3);
   expect(text().match(/<td/g)).toHaveLength(9);
 });
@@ -96,4 +96,21 @@ it('commits cell changes before the Save shortcut runs', () => {
   click(cell); cell.textContent = 'New';
   cell.dispatchEvent(new KeyboardEvent('keydown', { key: 's', ctrlKey: true, bubbles: true, cancelable: true }));
   expect(saved).toContain('<td>New</td>');
+});
+
+it('previews and applies HTML table size from the Markdown-style grid', () => {
+  const { body, cell, text } = setup('<table><tr><td>A</td><td>B</td></tr></table>');
+  click(cell); cell.textContent = 'Edited';
+  body.querySelector<HTMLElement>('button[aria-label="Resize table"]')!.click();
+  const grid = document.querySelector('.table-resize-grid')!;
+  expect(grid.children).toHaveLength(60);
+  const target = grid.querySelector<HTMLElement>('[data-row="2"][data-col="3"]')!;
+  target.dispatchEvent(new MouseEvent('mouseenter'));
+  expect(grid.querySelectorAll('.selected')).toHaveLength(12);
+  expect(document.querySelector<HTMLInputElement>('[aria-label="Columns"]')!.value).toBe('4');
+  target.click();
+  expect(document.querySelector('.table-resize-popover')).toBeNull();
+  expect(text().match(/<tr>/g)).toHaveLength(3);
+  expect(text().match(/<td/g)).toHaveLength(12);
+  expect(text()).toContain('Edited');
 });
