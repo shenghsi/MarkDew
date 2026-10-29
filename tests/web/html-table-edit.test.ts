@@ -150,3 +150,15 @@ it('supports Command+Z and Command+Shift+Z and protects composition', () => {
   cell.dispatchEvent(new KeyboardEvent('keydown', { key: 'z', metaKey: true, shiftKey: true, bubbles: true }));
   expect(text()).toContain('New');
 });
+
+it('focuses a nested editable cell and places the caret inside it', () => {
+  const { body, cell } = setup('<table><tr><td><p><strong>Text</strong></p></td></tr></table>');
+  const outer = document.createElement('div'); outer.contentEditable = 'true';
+  body.before(outer); outer.append(body);
+  window.getSelection()?.removeAllRanges();
+  click(cell);
+  expect(cell.tabIndex).toBe(0);
+  expect(document.activeElement).toBe(cell);
+  expect(cell.contains(window.getSelection()!.anchorNode)).toBe(true);
+  expect(window.getSelection()!.isCollapsed).toBe(true);
+});

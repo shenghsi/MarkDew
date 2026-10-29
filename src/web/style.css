@@ -1536,3 +1536,10 @@ body.no-document #word-count, body.no-document #document-title { display: none; 
   pointer-events: auto;
 }
 .html-table-toolbar { justify-content: space-between; position: relative; }
+/* Nested HTML cell editors must not inherit the inactive document caret color. */
+#editor .preview-block-html-body [contenteditable="true"] {
+  caret-color: var(--ink) !important;
+  cursor: text;
+  user-select: text;
+  -webkit-user-select: text;
+}

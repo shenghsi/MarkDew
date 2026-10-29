@@ -48,7 +48,7 @@ export function mountHTMLTableEdit(body: HTMLElement, view: EditorView, from: nu
     if (!active) return false;
     const edit = active; active = undefined;
     const html = edit.cell.innerHTML;
-    edit.cell.removeAttribute('contenteditable'); edit.cell.removeAttribute('aria-label');
+    edit.cell.removeAttribute('contenteditable'); edit.cell.removeAttribute('aria-label'); edit.cell.removeAttribute('tabindex');
     if (!save) edit.cell.innerHTML = edit.html;
     if (save && html !== edit.html && current()) {
       const range = bounds[edit.index];
@@ -133,7 +133,13 @@ export function mountHTMLTableEdit(body: HTMLElement, view: EditorView, from: nu
     choose(cell);
     active = { cell, index, html: cell.innerHTML };
     cell.setAttribute('contenteditable', 'true'); cell.setAttribute('aria-label', 'HTML table cell content');
-    cell.focus();
+    cell.tabIndex = 0;
+    cell.focus({ preventScroll: true });
+    const selection = window.getSelection();
+    if (selection && !cell.contains(selection.anchorNode)) {
+      const range = document.createRange(); range.selectNodeContents(cell); range.collapse(true);
+      selection.removeAllRanges(); selection.addRange(range);
+    }
   };
   cells.forEach((cell, index) => {
     cell.dataset.htmlEditable = 'true';

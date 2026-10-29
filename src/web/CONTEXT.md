@@ -1708,3 +1708,7 @@ Cmd+Z commits pending cell text as one history step and undoes it. Ctrl+Shift+Z,
 Cmd+Shift+Z, or Ctrl+Y redoes the last undone step. The shortcuts use document
 history, then return focus to the editor. Composition and read-only cells are
 protected. Markdown cells and the document editor retain their history keymaps.
+HTML cell editing sets an explicit focus target and initializes a collapsed
+selection inside the cell. Its caret color overrides the inactive document's
+inherited transparent caret, so a click shows the insertion cursor even when
+the outer document editor was inactive.
