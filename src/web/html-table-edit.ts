@@ -1,6 +1,6 @@
 import { openTableResizePopover } from './table-resize-popover';
 import type { EditorView } from '@codemirror/view';
-import { isolateHistory } from '@codemirror/commands';
+import { isolateHistory, undo, redo } from '@codemirror/commands';
 import DOMPurify from 'dompurify';
 import { parseFragment } from 'parse5';
 import { gridSvg, alignLeftSvg, alignCenterSvg, alignRightSvg, trashSvg } from './table-toolbar-icons';
@@ -153,6 +153,15 @@ export function mountHTMLTableEdit(body: HTMLElement, view: EditorView, from: nu
     on('keydown', event => {
       event.stopPropagation();
       if (event.isComposing) return;
+      const mod = event.ctrlKey || event.metaKey;
+      const key = event.key.toLowerCase();
+      if (mod && !event.altKey && (key === 'z' || key === 'y')) {
+        event.preventDefault();
+        if (event.repeat || view.state.readOnly) return;
+        finish(true);
+        (key === 'y' || event.shiftKey ? redo : undo)(view);
+        view.focus(); return;
+      }
       if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's') {
         event.preventDefault(); finish(true); document.getElementById(event.shiftKey ? 'save-as' : 'save')?.click(); return;
       }

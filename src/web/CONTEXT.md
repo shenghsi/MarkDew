@@ -1702,3 +1702,9 @@ span when possible. Otherwise, it adds a grid boundary and extends the spans of
 other cells on that track so those cells stay visually unsplit. Content stays in
 the first cell; the new cell is empty and keeps the cell type and alignment.
 The existing Split cell command still restores merged cells to unit cells.
+
+Undo and Redo shortcuts also work inside formatted HTML table cells. Ctrl+Z or
+Cmd+Z commits pending cell text as one history step and undoes it. Ctrl+Shift+Z,
+Cmd+Shift+Z, or Ctrl+Y redoes the last undone step. The shortcuts use document
+history, then return focus to the editor. Composition and read-only cells are
+protected. Markdown cells and the document editor retain their history keymaps.

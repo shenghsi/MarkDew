@@ -7,7 +7,7 @@ let dispose: (() => void) | undefined;
 afterEach(() => { dispose?.(); dispose = undefined; document.body.replaceChildren(); });
 function setup(source: string, readOnly = false) {
   let state = EditorState.create({ doc: source, extensions: [history(), EditorState.readOnly.of(readOnly)] });
-  const view = { get state() { return state; }, dispatch(spec: any) { state = state.update(spec).state; } } as any;
+  const view = { focus() {}, get state() { return state; }, dispatch(spec: any) { state = state.update(spec).state; } } as any;
   const body = document.createElement('div'); body.innerHTML = source; document.body.append(body);
   dispose = mountHTMLTableEdit(body, view, 0, source);
   return { body, cell: body.querySelector('td')!, view, text: () => state.doc.toString(),
@@ -125,4 +125,28 @@ it('enables ordinary-cell splitting in the context menu with exact Undo', () => 
   expect(text()).toContain('rowspan="2"');
   expect(undo()).toBe(true);
   expect(text()).toBe('<table><tr><td>A</td><td>B</td></tr></table>');
+});
+
+
+it('supports Undo and both Redo shortcuts in HTML table cells', () => {
+  for (const redoKey of [{ key: 'z', shiftKey: true }, { key: 'y', shiftKey: false }]) {
+    const source = '<table><tr><td>Old</td></tr></table>';
+    const { cell, text } = setup(source);
+    click(cell); cell.textContent = 'New';
+    cell.dispatchEvent(new KeyboardEvent('keydown', { key: 'z', ctrlKey: true, bubbles: true, cancelable: true }));
+    expect(text()).toBe(source);
+    cell.dispatchEvent(new KeyboardEvent('keydown', { ...redoKey, ctrlKey: true, bubbles: true, cancelable: true }));
+    expect(text()).toContain('<td>New</td>');
+    dispose?.(); document.body.replaceChildren();
+  }
+});
+it('supports Command+Z and Command+Shift+Z and protects composition', () => {
+  const { cell, text } = setup('<table><tr><td>Old</td></tr></table>');
+  click(cell); cell.textContent = 'New';
+  cell.dispatchEvent(new KeyboardEvent('keydown', { key: 'z', metaKey: true, isComposing: true, bubbles: true }));
+  expect(cell.textContent).toBe('New'); expect(text()).toContain('Old');
+  cell.dispatchEvent(new KeyboardEvent('keydown', { key: 'z', metaKey: true, bubbles: true }));
+  expect(text()).toContain('Old');
+  cell.dispatchEvent(new KeyboardEvent('keydown', { key: 'z', metaKey: true, shiftKey: true, bubbles: true }));
+  expect(text()).toContain('New');
 });
