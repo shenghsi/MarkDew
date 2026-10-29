@@ -1712,3 +1712,7 @@ HTML cell editing sets an explicit focus target and initializes a collapsed
 selection inside the cell. Its caret color overrides the inactive document's
 inherited transparent caret, so a click shows the insertion cursor even when
 the outer document editor was inactive.
+When the first native file-open request reaches a fresh window with one clean,
+untitled tab, the requested file's containing folder replaces the saved sidebar
+folder. A previously closed project must not cause a second window to open.
+Existing open files and modified tabs retain their project routing rules.

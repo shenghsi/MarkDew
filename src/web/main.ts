@@ -826,6 +826,7 @@ const openNoticeText = document.createElement('span'); openNoticeText.setAttribu
 const dismissOpenNotice = document.createElement('button'); dismissOpenNotice.textContent = 'Dismiss';
 dismissOpenNotice.addEventListener('click', () => { openNotice.hidden = true; openNoticeText.textContent = ''; });
 openNotice.append(openNoticeText, dismissOpenNotice); app.append(openNotice);
+let firstNativeOpen = true;
 const nativeOpen = isTauri() ? openRequests(
   callback => getCurrentWindow().listen('markdew-open-request', callback),
   () => (!getCurrentWindow().label || getCurrentWindow().label === 'main') ? invoke<OpenBatch>('take_open_requests') : Promise.resolve({ paths: [], warnings: [] }),
@@ -833,6 +834,17 @@ const nativeOpen = isTauri() ? openRequests(
     if (!pageActive) return;
     if (busy || composing()) { status.textContent = 'Finish the file command or text input, then repeat Open for these files.'; return; }
     await operation(async () => {
+      // A persisted sidebar folder is not an open project in a fresh window.
+      // Launch files must replace that stale context instead of spawning beside it.
+      if (firstNativeOpen) {
+        firstNativeOpen = false;
+        const curr = active();
+        if (tabs.all.length === 1 && !curr.path && !tabDirty(curr) && paths.length) {
+          const folder = getParentDir(paths[0]);
+          layout.folderChanged(folder);
+          initSidebar(folder, filesPane.hidden);
+        }
+      }
       if (layout.folder) {
         const outside: string[] = [];
         for (const path of paths) {

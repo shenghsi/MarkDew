@@ -33,11 +33,12 @@ it('opens launch files after startup Retry and preserves existing tabs through f
     if (command === 'recovery_list') return { session: 'current', revision: 0, entries: [], warnings: [] };
     if (command === 'quit_ready') return null;
     if (command === 'open_document') {
-      if (args.path === '/fail.md') throw 'read failed';
+      if (args.path === '/notes/fail.md') throw 'read failed';
       return reply ?? { source: loaded, path: args.path };
     }
   });
   const calls = (name: string) => mocks.invoke.mock.calls.filter(([command]) => command === name);
+  localStorage.setItem('markdew.layout', JSON.stringify({ version: 1, folder: '/previously-closed-project', sidebar: 'hidden', width: 250 }));
   document.body.innerHTML = '<div id="app"></div>';
   const { view } = await import('../../src/web/main');
   const source = () => savedSource(view.state.field(sourceField));
@@ -51,6 +52,8 @@ it('opens launch files after startup Retry and preserves existing tabs through f
     Array.from(document.querySelectorAll('button')).find(button => button.textContent === 'Retry recovery')!.click();
     await vi.waitFor(() => { expect(source()).toBe(loaded); unlocked(); });
     expect(calls('open_document')[0][1]).toEqual({ document: 1, path: literal });
+    expect(calls('open_folder_window')).toHaveLength(0);
+    expect(JSON.parse(localStorage.getItem('markdew.layout')!).folder).toBe('/notes');
     expect(view.state.field(imagePath)).toBe(literal); expect(undoDepth(view.state)).toBe(0);
     const notice = document.querySelector<HTMLElement>('.native-open-notice')!;
     expect(notice.hidden).toBe(false); expect(notice.textContent).toContain('Unsupported file skipped.');
@@ -67,16 +70,16 @@ it('opens launch files after startup Retry and preserves existing tabs through f
     await vi.waitFor(() => expect(document.querySelector('#status')!.textContent).toContain('repeat Open'));
     view.contentDOM.dispatchEvent(new CompositionEvent('compositionend', { bubbles: true }));
     expect(calls('open_document')).toHaveLength(1); expect(source()).toBe(draft);
-    notify(['/second.md', '/fail.md', '/not-opened.md']);
+    notify(['/notes/second.md', '/notes/fail.md', '/notes/not-opened.md']);
     await vi.waitFor(() => expect(document.querySelector('#status')!.textContent).toContain('read failed'));
-    await vi.waitFor(unlocked); expect(source()).toBe(loaded); expect(view.state.field(imagePath)).toBe('/second.md');
-    expect(calls('open_document').map(([, args]) => args.path)).toEqual([literal, '/second.md', '/fail.md']);
+    await vi.waitFor(unlocked); expect(source()).toBe(loaded); expect(view.state.field(imagePath)).toBe('/notes/second.md');
+    expect(calls('open_document').map(([, args]) => args.path)).toEqual([literal, '/notes/second.md', '/notes/fail.md']);
     notify([literal]); await vi.waitFor(() => { expect(source()).toBe(draft); unlocked(); });
     undo(view); expect(source()).toBe(loaded);
     let finish!: (value: { source: string; path: string }) => void;
     reply = new Promise(done => { finish = done; });
-    notify(['/slow.md']); await vi.waitFor(() => expect(calls('open_document').at(-1)![1].path).toBe('/slow.md'));
-    notify(['/busy.md']); finish({ source: loaded, path: '/slow.md' });
+    notify(['/notes/slow.md']); await vi.waitFor(() => expect(calls('open_document').at(-1)![1].path).toBe('/notes/slow.md'));
+    notify(['/busy.md']); finish({ source: loaded, path: '/notes/slow.md' });
     await vi.waitFor(() => expect(document.querySelector('#status')!.textContent).toContain('repeat Open'));
     await vi.waitFor(unlocked); expect(calls('open_document').some(([, args]) => args.path === '/busy.md')).toBe(false);
     expect(mocks.open).not.toHaveBeenCalled();
