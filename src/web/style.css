@@ -1501,3 +1501,18 @@ body.no-document #word-count, body.no-document #document-title { display: none; 
 .quick-open-folder { color: var(--muted); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; direction: rtl; text-align: left; }
 .quick-open-note { padding: 6px 14px; color: var(--muted); font-size: 12px; border-top: 1px solid var(--border); min-height: 1.4em; }
 .quick-open-note:empty { display: none; }
+
+.html-table-cell-editor {
+  display: block;
+  width: 100%;
+  min-width: 6em;
+  min-height: 4em;
+  box-sizing: border-box;
+  resize: vertical;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font: inherit;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--accent);
+}

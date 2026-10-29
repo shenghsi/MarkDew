@@ -235,6 +235,7 @@ class PreviewWidget extends WidgetType {
       }
     };
     dom.addEventListener('mousedown', event => {
+      if (item.kind === 'html' && (event.target as HTMLElement).closest('[data-html-editable]')) return;
       if (item.listMarkers && (event.target as HTMLElement).closest('.md-list-marker, .md-task-toggle')) return;
       if (item.kind === 'table' && (event.target as HTMLElement).closest('th, td, .table-actions, .table-tools')) return;
       event.preventDefault();
@@ -242,11 +243,13 @@ class PreviewWidget extends WidgetType {
       reveal({ x: mouse.clientX, y: mouse.clientY });
     });
     dom.addEventListener('click', event => {
+      if (item.kind === 'html' && (event.target as HTMLElement).closest('[data-html-editable]')) return;
       if (item.listMarkers && (event.target as HTMLElement).closest('.md-list-marker, .md-task-toggle')) return;
       event.preventDefault();
     });
     dom.addEventListener('keydown', event => {
       if (event.defaultPrevented) return;
+      if (item.kind === 'html' && (event.target as HTMLElement).closest('[data-html-editable]')) return;
       if (item.listMarkers && (event.target as HTMLElement).closest('.md-list-marker, .md-task-toggle')) return;
       if (item.kind === 'table' && (event.target as HTMLElement).closest('th, td, .table-actions, .table-tools')) return;
       const key = (event as KeyboardEvent).key;
@@ -295,7 +298,7 @@ class PreviewWidget extends WidgetType {
     else if (item.kind === 'html') {
       const state = view.state, bodyFrom = syntaxTree(state).topNode.getChild('Frontmatter')?.to || 0;
       cancellations.set(dom, mountBlockHTML(dom, { source: item.source!, doc: state.doc, bodyFrom,
-        from: item.from, to: item.to,
+        from: item.from, to: item.to, view,
         path: state.field(imagePath, false) || '',
         document: state.facet(imageDocument) }, () => view.requestMeasure()));
     } else if (item.kind === 'table') new TableEditor(dom, view, item.from, item.to, item.source!);

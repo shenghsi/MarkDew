@@ -13,6 +13,7 @@ export interface BlockHTMLPreview {
   to: number;
   path?: string;
   document?: number;
+  view?: import("@codemirror/view").EditorView;
 }
 export type BlockHTMLLoader = () => Promise<typeof blockHTML>;
 const load: BlockHTMLLoader = () => import('./inline-html').then(module => module.blockHTML);
@@ -21,6 +22,7 @@ export function mountBlockHTML(dom: HTMLElement, preview: BlockHTMLPreview,
   measure: () => void, loader: BlockHTMLLoader = load) {
   let alive = true;
   let releaseFrame = () => {};
+  let releaseEditor = () => {};
   const current = () => alive && dom.isConnected;
   dom.textContent = preview.source; dom.dataset.ready = 'loading';
   const caption = (isolated = false) => {
@@ -69,6 +71,10 @@ export function mountBlockHTML(dom: HTMLElement, preview: BlockHTMLPreview,
     });
     dom.replaceChildren(body, caption()); dom.classList.add('preview-block-html');
     dom.dataset.ready = 'true'; measure();
+    if (preview.view && value === preview.source && body.querySelector('table')) {
+      const { mountHTMLTableEdit } = await import('./html-table-edit');
+      if (current()) releaseEditor = mountHTMLTableEdit(body, preview.view, preview.from, preview.source) || (() => {});
+    }
   })().catch(err => { void fallback(err); });
-  return () => { alive = false; releaseFrame(); };
+  return () => { alive = false; releaseEditor(); releaseFrame(); };
 }

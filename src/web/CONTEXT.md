@@ -1661,3 +1661,10 @@ and the default palette), Classic, Warm, and Cool. Box colors is One color or By
 flowchart box its own fill and border: start and end (rounded, stadium), decision (diamond),
 data (cylinder), input and output (parallelogram, trapezoid), circle, preparation (hexagon),
 and flag. Other boxes keep the palette color. Author style and classDef colors still win.
+
+Supported block HTML tables permit cell content editing in live preview. Click a
+cell to open a text area with that cell's inner HTML. Leaving the cell or pressing
+Ctrl+Enter (Cmd+Enter on macOS) applies the change; Escape cancels it. Source
+locations preserve surrounding tags, attributes, and merged cells. Read-only,
+isolated previews, container-prefixed blocks, and cells without explicit closing
+tags retain source editing. The HTML caption still opens the complete source.
