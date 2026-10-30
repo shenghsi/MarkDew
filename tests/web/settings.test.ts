@@ -13,6 +13,7 @@ import {
   showAboutDialog,
   isModalOpen,
 } from '../../src/web/settings';
+import { applyFonts, FONT_KEYS } from '../../src/web/font-settings';
 import { writingSizeControls } from '../../src/web/writing-size';
 
 describe('Settings and Line Width', () => {
@@ -31,6 +32,7 @@ describe('Settings and Line Width', () => {
     };
     document.body.innerHTML = '';
     document.documentElement.style.removeProperty('--editor-max-width');
+    for (const property of ['--writing-font', '--table-font', '--code-font']) document.documentElement.style.removeProperty(property);
   });
 
   afterEach(() => {
@@ -132,6 +134,33 @@ describe('Settings and Line Width', () => {
 
     expect(isModalOpen()).toBe(false);
     expect(document.querySelector('.settings-modal')).toBeNull();
+  });
+
+  it('saves the table font, restores it at startup, and returns to Text font', () => {
+    storage.setItem(FONT_KEYS.TEXT, 'Body Family');
+    applyFonts(storage);
+    const measure = vi.fn();
+    const modal = showSettingsDialog({ storage, onMeasure: measure, category: 'appearance' });
+    const select = modal.querySelector<HTMLSelectElement>(`select[data-key="${FONT_KEYS.TABLE}"]`)!;
+    expect(select.options[0].text).toBe('Use Text font');
+    expect(select.value).toBe('');
+    select.add(new Option('Table Family', 'Table Family'));
+    select.value = 'Table Family';
+    measure.mockClear();
+    select.dispatchEvent(new Event('change'));
+    expect(storage.getItem(FONT_KEYS.TABLE)).toBe('Table Family');
+    expect(document.documentElement.style.getPropertyValue('--table-font')).toMatch(/^"Table Family",/);
+    expect(document.documentElement.style.getPropertyValue('--writing-font')).toMatch(/^"Body Family",/);
+    expect(measure).toHaveBeenCalledTimes(1);
+    document.documentElement.style.removeProperty('--table-font');
+    const dispose = initSettings({ storage });
+    expect(document.documentElement.style.getPropertyValue('--table-font')).toMatch(/^"Table Family",/);
+    dispose();
+    select.value = '';
+    select.dispatchEvent(new Event('change'));
+    expect(storage.getItem(FONT_KEYS.TABLE)).toBeNull();
+    expect(document.documentElement.style.getPropertyValue('--table-font')).toBe('');
+    modal.querySelector<HTMLButtonElement>('.modal-footer button')!.click();
   });
 
   it('dismisses settings dialog on Escape key', () => {

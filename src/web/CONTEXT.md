@@ -106,10 +106,12 @@ over it. The document text, source record, and history do not change, and copyin
 the real text. Image error messages and print warnings name the type and size of long data URIs.
 
 Settings that apply at once: Writing Size goes through the header's writing-size control, because that
-control keeps the scale on the writing surface and a value on the page root is hidden by it. Text font
-and Code font list the families installed on the computer (the desktop host command list_fonts, using
-fontdb) and apply through the CSS variables --writing-font and --code-font; a chosen font goes first and
-the default stack stays behind it for missing characters. The Pasted images and Dropped images choices
+control keeps the scale on the writing surface and a value on the page root is hidden by it. Text font,
+Table font, and Code font list the families installed on the computer (the desktop host command list_fonts, using
+fontdb) and apply through the CSS variables --writing-font, --table-font, and --code-font; a chosen font goes first and
+the default stack stays behind it for missing characters. Table font defaults to Use Text font.
+Markdown and supported block HTML tables use the table font in preview and cell editing.
+The Pasted images and Dropped images choices
 are read from storage when an image arrives, so they apply without a restart.
 WebKitGTK (Linux) sends a paste with no data at all when the clipboard holds only an image. For such an
 empty paste the editor asks the host (read_clipboard_image, GTK clipboard, PNG bytes) and then continues

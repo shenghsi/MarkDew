@@ -425,7 +425,7 @@ div.preview-widget.preview-html:focus { outline: none !important; }
 .preview-block-html-body h4, .preview-block-html-body h5, .preview-block-html-body h6 { line-height: 1.4; font-family: system-ui, sans-serif; }
 .preview-block-html-body pre { overflow: auto; white-space: pre; background: var(--surface); padding: .7em; }
 .preview-block-html-body code { font-family: var(--code-font, ui-monospace, Menlo, Consolas, monospace); }
-.preview-block-html-body table { border-collapse: collapse; }
+.preview-block-html-body table { border-collapse: collapse; font-family: var(--table-font, inherit); }
 .preview-block-html-body th, .preview-block-html-body td { border: 1px solid var(--border); padding: .4em .7em; }
 .preview-block-html-body blockquote { margin-inline: 0; border-left: 3px solid var(--border); padding-left: 1em; }
 .preview-block-html-body details { margin: 0; padding: 6px 10px; border: 1px solid var(--border); border-radius: 4px; background: var(--surface); }
@@ -453,12 +453,12 @@ div.preview-inline-html:not(.preview-html).md-quote { padding-left: calc(var(--q
 .preview-error { color: #a32424; font: 14px system-ui; border: 1px solid #e3c0c0; }
 div.preview-widget.preview-table { position: relative; padding: 12px; overflow: visible; }
 div.preview-widget.preview-table:has(> .table-floating-bar:not([hidden])) { padding-top: 34px; }
-.preview-table table { border-collapse: collapse; width: 100%; }
+.preview-table table { border-collapse: collapse; width: 100%; font-family: var(--table-font, inherit); }
 .preview-table th, .preview-table td {
   border: 1px solid #d5dae0;
   padding: 6px 12px;
   box-sizing: border-box;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-family: inherit;
   font-size: 16px;
   line-height: 1.5;
   vertical-align: top;
@@ -479,7 +479,7 @@ div.preview-widget.preview-table:has(> .table-floating-bar:not([hidden])) { padd
   height: 100%;
   max-height: 100%;
   min-width: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+  font-family: inherit !important;
   font-size: 16px !important;
   line-height: 1.5 !important;
   font-weight: normal;
@@ -507,7 +507,7 @@ div.preview-widget.preview-table:has(> .table-floating-bar:not([hidden])) { padd
 .editing-cell .cm-editor .cm-scroller .cm-content,
 #app #editor .editing-cell .cm-content {
   padding: 6px 12px !important;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+  font-family: inherit !important;
   font-size: 16px !important;
   line-height: 1.5 !important;
   box-sizing: border-box;

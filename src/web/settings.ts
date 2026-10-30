@@ -721,7 +721,7 @@ export function showSettingsDialog(options?: {
       let chosen = '';
       try { chosen = storage.getItem(key) || ''; } catch { /* Show the default. */ }
       const fill = (families: string[]) => {
-        select.replaceChildren(new Option(t('appearance.font_default', storage), ''));
+        select.replaceChildren(new Option(t(key === FONT_KEYS.TABLE ? 'appearance.font_follow_text' : 'appearance.font_default', storage), ''));
         // A saved font that is no longer installed stays visible, so the choice is not lost.
         for (const family of chosen && !families.includes(chosen) ? [chosen, ...families] : families) {
           const option = new Option(family, family);
@@ -749,7 +749,9 @@ export function showSettingsDialog(options?: {
     editorGroupTitle.className = 'settings-group-title';
     editorGroupTitle.textContent = t('appearance.group_editor', storage);
     editorGroup.append(editorGroupTitle, lineWidthSection, writingSizeSec,
-      fontSection(t('appearance.font_text', storage), FONT_KEYS.TEXT), fontSection(t('appearance.font_code', storage), FONT_KEYS.CODE));
+      fontSection(t('appearance.font_text', storage), FONT_KEYS.TEXT),
+      fontSection(t('appearance.font_table', storage), FONT_KEYS.TABLE),
+      fontSection(t('appearance.font_code', storage), FONT_KEYS.CODE));
 
     // Group: Mermaid Diagram, in three sections
     const diagramGroup = document.createElement('div');

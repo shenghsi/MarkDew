@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Table font check</title>
+<link rel="stylesheet" href="/src/web/style.css">
+<style>body { display: block; } #app { height: 650px; } #result { white-space: pre-wrap; }</style>
+<div id="app"><div id="editor"></div></div>
+<pre id="result">running</pre>
+<script type="module">
+import { EditorState } from '@codemirror/state';
+import { EditorView } from '@codemirror/view';
+import { documentLanguage } from '/src/web/document-language.ts';
+import { livePreview } from '/src/web/preview.ts';
+import { tableEditor } from '/src/web/table.ts';
+import { showSettingsDialog } from '/src/web/settings.ts';
+import { applyFonts, FONT_KEYS } from '/src/web/font-settings.ts';
+const doc = '| Heading | Value |\n| - | - |\n| Table text | `code` |\n\n<table><tr><td>HTML text</td></tr></table>\n\nEnd';
+const data = { [FONT_KEYS.TEXT]: 'Georgia', [FONT_KEYS.TABLE]: 'Arial' };
+const storage = {
+  getItem: key => data[key] ?? null,
+  setItem: (key, value) => { data[key] = value; },
+  removeItem: key => { delete data[key]; },
+};
+const view = new EditorView({ parent: document.querySelector('#editor'), state: EditorState.create({
+  doc, selection: { anchor: doc.length }, extensions: [documentLanguage(), livePreview],
+}) });
+const nextFrame = () => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+const results = [];
+function check(name, selector, expected) {
+  const element = document.querySelector(selector);
+  const font = element ? getComputedStyle(element).fontFamily : 'missing';
+  results.push({ name, font, ok: font.startsWith(expected) || font.startsWith(`"${expected}"`) });
+}
+try {
+  applyFonts(storage);
+  for (let attempt = 0; attempt < 120 && !document.querySelector('[data-html-editable]'); attempt++) await nextFrame();
+  const modal = showSettingsDialog({ storage, category: 'appearance', onMeasure: () => view.requestMeasure() });
+  const select = modal.querySelector(`select[data-key="${FONT_KEYS.TABLE}"]`);
+  results.push({ name: 'Saved choice in Settings', ok: select.value === 'Arial' });
+  modal.querySelector('.modal-footer button').click();
+  check('Body font stays separate', '#editor > .cm-editor > .cm-scroller > .cm-content', 'Georgia');
+  check('Markdown preview', '.preview-table td', 'Arial');
+  check('HTML preview', '.preview-block-html-body td', 'Arial');
+  tableEditor(document.querySelector('.preview-table')).begin(1, 0);
+  await nextFrame();
+  check('Markdown cell editing', '.editing-cell .cm-content', 'Arial');
+  const htmlCell = document.querySelector('.preview-block-html-body td');
+  htmlCell.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+  await nextFrame();
+  check('HTML cell editing', '.preview-block-html-body td[contenteditable="true"]', 'Arial');
+  const reset = showSettingsDialog({ storage, category: 'appearance', onMeasure: () => view.requestMeasure() });
+  const resetSelect = reset.querySelector(`select[data-key="${FONT_KEYS.TABLE}"]`);
+  resetSelect.value = '';
+  resetSelect.dispatchEvent(new Event('change'));
+  reset.querySelector('.modal-footer button').click();
+  await nextFrame();
+  check('Markdown follows Text font', '.preview-table td', 'Georgia');
+  check('HTML follows Text font', '.preview-block-html-body td', 'Georgia');
+  tableEditor(document.querySelector('.preview-table')).begin(1, 0);
+  await nextFrame();
+  check('Markdown edit follows Text font', '.editing-cell .cm-content', 'Georgia');
+  data[FONT_KEYS.TEXT] = 'Verdana';
+  applyFonts(storage);
+  await nextFrame();
+  check('Text font change reaches active cell', '.editing-cell .cm-content', 'Verdana');
+  results.push({ name: 'Source unchanged', ok: view.state.doc.toString() === doc });
+  document.querySelector('#result').textContent = JSON.stringify({ ok: results.every(result => result.ok), results }, null, 2);
+} catch (error) {
+  document.querySelector('#result').textContent = JSON.stringify({ ok: false, results, error: String(error) }, null, 2);
+}
+window.addEventListener('pagehide', () => view.destroy(), { once: true });
+</script>
+</html>

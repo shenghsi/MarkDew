@@ -1,6 +1,6 @@
 import { invoke, isTauri } from '@tauri-apps/api/core';
 
-export const FONT_KEYS = { TEXT: 'markdew.writing-font', CODE: 'markdew.code-font' } as const;
+export const FONT_KEYS = { TEXT: 'markdew.writing-font', CODE: 'markdew.code-font', TABLE: 'markdew.table-font' } as const;
 // The stacks the app uses when no font is chosen. A chosen font goes first and these stay behind it,
 // so characters the chosen font lacks (CJK, emoji) still show. The Simplified Chinese fonts keep
 // CJK punctuation such as 、 in its Simplified Chinese form, whatever the page language is.
@@ -12,7 +12,7 @@ const valid = (family: string | null): family is string => !!family && family.le
 
 // An empty or invalid choice removes the variable, so the CSS default applies.
 export function applyFonts(storage: Pick<Storage, 'getItem'>, root: HTMLElement = document.documentElement) {
-  for (const [key, property, stack] of [[FONT_KEYS.TEXT, '--writing-font', TEXT_STACK], [FONT_KEYS.CODE, '--code-font', CODE_STACK]] as const) {
+  for (const [key, property, stack] of [[FONT_KEYS.TEXT, '--writing-font', TEXT_STACK], [FONT_KEYS.CODE, '--code-font', CODE_STACK], [FONT_KEYS.TABLE, '--table-font', TEXT_STACK]] as const) {
     let family: string | null = null;
     try { family = storage.getItem(key); } catch { /* Use the default font. */ }
     if (valid(family)) root.style.setProperty(property, `${quote(family)}, ${stack}`);
