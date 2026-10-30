@@ -7,10 +7,25 @@ the Markdown source one click away.
 
 - Live preview with source reveal
 - Markdown and code highlighting
-- MathJax formulas, Mermaid diagrams, tables, and isolated HTML
+- Edit formatted HTML tables in live preview without exposing their markup
+- Merge and split HTML table cells, including cells that are not merged
+- Edit and resize both HTML and Markdown tables
+- MathJax formulas, Mermaid diagrams, and isolated HTML
 - Light, Dark, and System themes
 - Files sidebar, Outline, and tabs for many documents
 - In-app updates
+
+## Table editing
+
+MarkDew lets you edit supported HTML tables in the live preview. Cell text keeps
+its formatting, and the table keeps its dimensions. Use the cell menu to add or
+remove rows and columns, align, merge, or split cells. Resize and align the whole
+table from its toolbar.
+
+Markdown tables have live cell editing too. Add or remove rows and columns,
+resize the table, and set row height or alternating row colors from the table
+controls. Right-click in the editor and select **Insert > HTML table** to add a
+formatted table to a document.
 
 MarkDew was named MarkBend through v1.0.10. The Bend compiler is no longer part
 of the app. Earlier releases and the Bend history are in the former repository,

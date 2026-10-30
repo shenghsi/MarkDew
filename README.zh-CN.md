@@ -6,10 +6,19 @@ MarkDew 是一款桌面 Markdown 编辑器。它提供实时预览，并且一�
 
 - 实时预览，可展开源码
 - Markdown 与代码高亮
-- MathJax 公式、Mermaid 图表、表格和隔离的 HTML
+- 在实时预览中编辑带格式的 HTML 表格，不显示 HTML 标记
+- 合并和拆分 HTML 表格单元格，也可拆分普通单元格
+- 编辑 HTML 和 Markdown 表格，并调整表格大小
+- MathJax 公式、Mermaid 图表和隔离的 HTML
 - 浅色、深色和跟随系统主题
 - 文件侧边栏、大纲，以及支持多文档的标签页
 - 应用内更新
+
+## 表格编辑
+
+MarkDew 支持在实时预览中编辑 HTML 表格。单元格文字会保留格式，表格会保留尺寸。使用单元格菜单添加或删除行列、设置对齐方式、合并或拆分单元格。使用工具栏调整整个表格的大小和对齐方式。
+
+Markdown 表格也支持实时单元格编辑。使用表格控件添加或删除行列、调整表格大小，以及设置行高或交替行颜色。在编辑器中右键，选择 **插入 > HTML 表格**，即可在文档中添加表格。
 
 MarkDew 在 v1.0.10 及之前名为 MarkBend。Bend 编译器已不再属于本应用。早期版本和 Bend 的历史记录保存在原仓库
 [shenghsi/MarkBend](https://github.com/shenghsi/MarkBend) 中。
