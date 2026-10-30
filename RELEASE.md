@@ -1,10 +1,10 @@
-# MarkDew v1.2.5
+# MarkDew v1.2.6
 
 ## What is new
 
-- Double-clicking a file in a fresh window uses that file's folder instead of reopening the previously closed project in another window.
-- Existing open files and modified tabs retain their project routing rules.
-- Includes the HTML table cursor fix from v1.2.4.
+- Tables now use the Text font by default, including during cell editing.
+- Settings > Appearance has a Table font setting for Markdown and supported HTML tables. Select Use Text font to use the body font.
+- Table font changes apply at once and are saved for the next start.
 
 ## In-app updates
 
