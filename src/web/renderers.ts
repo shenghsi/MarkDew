@@ -163,7 +163,7 @@ export function htmlFrame(source: string): string {
   const html = DOMPurify.sanitize(source, { ADD_TAGS: ['style'], FORCE_BODY: true,
     FORBID_TAGS: ['script', 'iframe', 'object', 'embed', 'base', 'link', 'meta'],
     FORBID_ATTR: ['href', 'srcset', 'action', 'formaction'] });
-  return `<!doctype html><html><head><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data: https:; font-src data:; form-action 'none'; base-uri 'none'"><style>body{margin:0;padding:0;color:#24272c;font:16px system-ui}@media(prefers-color-scheme:dark){body{color:#f0f0f0}}p{margin:0}img{max-width:100%}</style></head><body>${html}</body></html>`;
+  return `<!doctype html><html><head><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data: https:; font-src data:; form-action 'none'; base-uri 'none'"><style>body{margin:0;padding:0;color:#24272c;font:16px system-ui}@media(prefers-color-scheme:dark){body{color:#f0f0f0}}::selection{background:#b4d5fe}@media(prefers-color-scheme:dark){::selection{background:#3f6a8f}}p{margin:0}img{max-width:100%}</style></head><body>${html}</body></html>`;
 }
 
 export async function renderDiagram(source: string, target: 'screen' | 'print' = 'screen'): Promise<string> {

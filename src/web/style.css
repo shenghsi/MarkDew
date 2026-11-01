@@ -593,19 +593,19 @@ button:disabled { cursor: default; opacity: .5; }
 
 :root {
   --paper: #ffffff; --ink: #333333; --muted: #737373; --surface: #fafafa;
-  --border: #e7e7e7; --accent: #246b86; --selected: #eef3f8;
+  --border: #e7e7e7; --accent: #246b86; --selected: #eef3f8; --selection: #b4d5fe;
   --error: #a32424; --keyword: #7044a2; --string: #20623c; --number: #945020;
 }
 :root[data-theme="light"] {
   color-scheme: light;
   --paper: #ffffff; --ink: #333333; --muted: #737373; --surface: #fafafa;
-  --border: #e7e7e7; --accent: #246b86; --selected: #eef3f8;
+  --border: #e7e7e7; --accent: #246b86; --selected: #eef3f8; --selection: #b4d5fe;
   --error: #a32424; --keyword: #7044a2; --string: #20623c; --number: #945020;
 }
 :root[data-theme="dark"] {
   color-scheme: dark;
   --paper: #20242b; --ink: #e6e9ee; --muted: #b5bdc9; --surface: #2b313b;
-  --border: #586271; --accent: #8ac9e8; --selected: #354e63;
+  --border: #586271; --accent: #8ac9e8; --selected: #354e63; --selection: #3f6a8f;
   --error: #ffb2ae; --keyword: #d4adff; --string: #a4d9b2; --number: #efc095;
 }
 :root { color: var(--ink); background: var(--paper); }
@@ -622,8 +622,13 @@ header, .format-bar, .link-controls, #outline { border-color: var(--border); }
 }
 /* The editor draws no cursor layer, so the browser caret is the cursor. Keep it hidden until the user clicks or types. */
 #editor > .cm-editor:not(.editor-active) > .cm-scroller > .cm-content { caret-color: transparent !important; }
-.cm-selectionBackground, .cm-focused .cm-selectionBackground { background: var(--selected) !important; }
-.cm-content ::selection { background: var(--selected); }
+.cm-selectionBackground, .cm-focused .cm-selectionBackground { background: var(--selection) !important; }
+.cm-content ::selection, .cm-content::selection, .cm-line::selection { background: var(--selection); color: inherit; }
+/* Every text surface follows the theme: tables, cell editors, math, inputs, panels. */
+::selection, #app *::selection { background: var(--selection); color: inherit; }
+/* Diagrams keep a light canvas, so they use the light selection color. */
+.preview-mermaid ::selection, .preview-mermaid::selection { background: #b4d5fe; color: #24272c; }
+:root[data-diagram-palette="app"] .preview-mermaid:not(.preview-error) ::selection { background: var(--selection); color: inherit; }
 .cm-activeLine { background: transparent; }
 .cm-gutters, .cm-panels { color: var(--muted); background: var(--surface); border-color: var(--border); }
 .cm-activeLineGutter { background: var(--selected); }
