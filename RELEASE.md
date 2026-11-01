@@ -1,10 +1,9 @@
-# MarkDew v1.2.6
+# MarkDew v1.2.7
 
 ## What is new
 
-- Tables now use the Text font by default, including during cell editing.
-- Settings > Appearance has a Table font setting for Markdown and supported HTML tables. Select Use Text font to use the body font.
-- Table font changes apply at once and are saved for the next start.
+- **Fix:** Selected text now has a visible background in the editor, tables, math and diagrams. The color follows the Light and Dark theme.
+- Includes everything in v1.2.6, including the Table font setting.
 
 ## In-app updates
 
