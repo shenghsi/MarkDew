@@ -15,8 +15,8 @@ it('discloses compact tools without changing input, and retains visible forms an
     const toggle=document.querySelector<HTMLButtonElement>('#tools-toggle')!,panel=document.querySelector<HTMLElement>('#tools-panel')!;
     expect(panel.hidden).toBe(true); expect(toggle.getAttribute('aria-controls')).toBe(panel.id);
     expect(toggle.getAttribute('aria-expanded')).toBe('false');
-    expect(document.querySelector('#document-title')!.textContent).toBe('Untitled •');
-    expect(document.querySelector<HTMLElement>('.document-tabs')!.parentElement!.hidden).toBe(true);
+    expect(document.querySelector('#document-title')!.textContent).toBe('Untitled.md •');
+    expect(document.querySelector<HTMLElement>('.document-tabs')!.parentElement!.hidden).toBe(false);
     expect(panel.querySelector('#close-document')).not.toBeNull();
     const state=view.state,baseline=tabs.active.baseline,depth=undoDepth(state); view.focus();
     const pointer=new MouseEvent('mousedown',{bubbles:true,cancelable:true}); toggle.dispatchEvent(pointer); expect(pointer.defaultPrevented).toBe(true);

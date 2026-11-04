@@ -37,9 +37,9 @@ it('restores exact source without an original-file baseline and retains newer ed
   failWrite = false;
   restore();
   await vi.waitFor(() => expect(source()).toBe(original));
-  await vi.waitFor(() => expect(calls('recovery_checkpoint').at(-1)?.[1]).toMatchObject({ source: original, dirty: true, label: 'Untitled' }));
+  await vi.waitFor(() => expect(calls('recovery_checkpoint').at(-1)?.[1]).toMatchObject({ source: original, dirty: true, label: 'Untitled.md' }));
   expect(view.state.doc.toString()).toBe(normalize(original.slice(1))); expect(undoDepth(view.state)).toBe(0);
-  expect(document.querySelector('#status')!.textContent).toBe('Untitled • Unsaved');
+  expect(document.querySelector('#status')!.textContent).toBe('Untitled.md • Unsaved');
   document.querySelector<HTMLButtonElement>('#save')!.click();
   await vi.waitFor(() => expect(calls('save_document')).toHaveLength(1));
   expect(calls('save_document')[0][1]).toEqual({ document: 1, path: '/tmp/recovered-copy.md', source: original });

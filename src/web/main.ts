@@ -47,6 +47,7 @@ import { wordCount } from './word-count';
 import { nativeMenu } from './native-menu';
 import { openRequests, OpenBatch } from './open-requests';
 import { layoutPreferences } from './layout-preferences';
+import { projectFiles } from './project-files';
 import { writingSizeControls } from './writing-size';
 import { createScrollStabilizer } from './scroll-stabilizer';
 import { writingSizeMeasurement } from './writing-size-measure';
@@ -92,7 +93,12 @@ const tools = document.createElement('section'); tools.id = 'tools-panel'; tools
 const header = document.querySelector('header')!; header.before(documentBar, tools); tools.append(header);
 const paneControls = document.createElement('div'); paneControls.className = 'document-pane-controls';
 const viewControls = document.createElement('div'); viewControls.className = 'document-view-controls';
-const tabContainer = document.createElement('div'); tabContainer.className = 'document-tabs-host'; tabContainer.hidden = true;
+const tabContainer = document.createElement('div'); tabContainer.className = 'document-tabs-host';
+// The + button opens a new Untitled.md tab. It follows the last tab.
+const newTabButton = document.createElement('button'); newTabButton.type = 'button'; newTabButton.id = 'new-tab';
+newTabButton.className = 'document-new-tab'; newTabButton.textContent = '+';
+newTabButton.title = 'New Tab'; newTabButton.setAttribute('aria-label', 'New Tab');
+newTabButton.addEventListener('click', () => document.querySelector<HTMLButtonElement>('#new')?.click());
 const outlineButton = document.querySelector<HTMLButtonElement>('#outline-toggle')!;
 outlineButton.title = 'Outline'; outlineButton.setAttribute('aria-label', 'Outline');
 const outlineMenuButton = document.createElement('button'); outlineMenuButton.id = 'outline-menu';
@@ -101,6 +107,8 @@ const filesButton = document.createElement('button'); filesButton.id = 'files-to
 const sourceButton = document.querySelector<HTMLButtonElement>('#source')!;
 sourceButton.title = 'Source Code Mode'; sourceButton.setAttribute('aria-label', 'Source Mode');
 viewControls.append(countLabel, outlineMenuButton, filesButton, toolsButton);
+// The tab bar shows each open document, also when only one is open. The title stays hidden.
+title.hidden = true;
 documentBar.append(paneControls, title, tabContainer, viewControls);
 if (isTauri()) {
   void Promise.resolve(invoke('update_menu_state', { language: getCurrentLanguage() })).catch(() => {});
@@ -162,6 +170,19 @@ const filesPane = document.createElement('aside'); filesPane.id = 'files'; files
 outlinePane.before(filesPane);
 if (isTauri() && /Macintosh|Mac OS X/.test(navigator.userAgent)) document.documentElement.dataset.platform = 'macos';
 const layout = layoutPreferences();
+// The project folder of this window: the folder it opened with, or the folder it adopted.
+// A sidebar folder kept from an earlier launch is not a project, so it records no open files.
+let projectRoot = '';
+const rememberedFiles = projectFiles();
+let rememberedKey = '';
+function rememberProjectFiles() {
+  if (!isTauri() || !projectRoot || !tabsReady) return;
+  const files = tabs.all.map(tab => tab.path).filter(path => path && isPathInsideFolder(path, projectRoot));
+  const current = files.includes(tabs.active.path) ? tabs.active.path : '';
+  const next = JSON.stringify([projectRoot, files, current]);
+  if (next === rememberedKey) return;
+  rememberedKey = next; rememberedFiles.set(projectRoot, files, current);
+}
 const workspace = document.querySelector<HTMLElement>('.workspace')!;
 workspace.style.setProperty('--sidebar-width', `${layout.width}px`);
 app.style.setProperty('--sidebar-width', `${layout.width}px`);
@@ -294,7 +315,7 @@ const dirty = () => text() !== active().baseline;
 let sidebar: ReturnType<typeof fileSidebar> | undefined;
 const report = () => { active().state = view.state; status.textContent = `${tabName(active())}${dirty() ? ' • Unsaved' : ''}${active().uncertain ? ' • Check Save' : ''}`;
   documentCount.update(view.state.doc);
-  title.textContent = `${tabName(active())}${dirty() ? ' •' : ''}`; title.title = active().path || 'Untitled';
+  title.textContent = `${tabName(active())}${dirty() ? ' •' : ''}`; title.title = active().path || 'Untitled.md';
   title.classList.toggle('document-title-preview', !!active().preview);
   renderTabs(); sidebar?.select(active().path); syncMenuChecks(); };
 // File dialogs start in the folder of the current file, or else in the open project folder.
@@ -417,7 +438,8 @@ window.addEventListener('pagehide', () => sidebarSizing.dispose(), { once: true 
 const webLinks = webLinkOpener(view, message => { status.textContent = message; }, () => busy ? 'Wait for the file command, then open the web link.' :
   composing() ? 'Finish text input, then open the web link.' : null, undefined, () => status.textContent === 'Opening web link…');
 window.addEventListener('pagehide', () => webLinks.dispose(), { once: true });
-tabs = new DocumentTabs({ id: 0, state: view.state, path: '', baseline: '', uncertain: false, sourceMode: false }, inputLock);
+// At app start no file is open: the first tab is a blank placeholder, so the empty state shows.
+tabs = new DocumentTabs({ id: 0, state: view.state, path: '', baseline: '', uncertain: false, sourceMode: false, placeholder: true }, inputLock);
 tabsReady = true;
 syncMenuChecks();
 const tabBar = documentTabBar(tabContainer, id => { switchTab(id); }, id => { void operation(() => closeTab(id), true); }, id => {
@@ -429,10 +451,14 @@ const tabBar = documentTabBar(tabContainer, id => { switchTab(id); }, id => { vo
   }
 });
 function renderTabs() {
+  // An edit or a path ends the placeholder for good, so Undo back to empty keeps the editor.
+  if (tabs.active.placeholder && (tabs.active.path || tabDirty(tabs.active))) tabs.active.placeholder = false;
   tabBar.render(tabs);
-  const multiple = tabs.all.length >= 2, empty = noDocument();
-  tabContainer.hidden = !multiple;
-  title.hidden = multiple || empty;
+  const empty = noDocument();
+  // With no file open, the tab bar shows only the + button: the blank placeholder tab stays hidden.
+  tabContainer.classList.toggle('document-tabs-empty', empty);
+  if (!newTabButton.isConnected) tabContainer.querySelector('.document-tabs')!.append(newTabButton);
+  rememberProjectFiles();
   emptyPanel.hidden = !empty; document.body.classList.toggle('no-document', empty);
   for (const id of emptyControls) { const button = document.getElementById(id) as HTMLButtonElement | null; if (button) button.disabled = empty; }
   if (empty && !tools.hidden) toolsButton.click();
@@ -458,7 +484,7 @@ const quick = quickOpen({
   open: path => {
     void operation(async () => {
       // With no project folder, the folder that was searched becomes it, not the folder of the chosen file.
-      if (!layout.folder && quickRoot) { layout.folderChanged(quickRoot); initSidebar(quickRoot, false); showSidebarView('files'); }
+      if (!layout.folder && quickRoot) { layout.folderChanged(quickRoot); projectRoot ||= quickRoot; initSidebar(quickRoot, false); showSidebarView('files'); }
       await handleOpenFile(path);
     }, true);
   },
@@ -804,6 +830,7 @@ async function handleOpenFile(selected: string) {
   }
   if (!layout.folder) {
     layout.folderChanged(containingFolder);
+    projectRoot ||= containingFolder;
     initSidebar(containingFolder, false);
     showSidebarView('files');
   }
@@ -842,6 +869,7 @@ const nativeOpen = isTauri() ? openRequests(
         if (tabs.all.length === 1 && !curr.path && !tabDirty(curr) && paths.length) {
           const folder = getParentDir(paths[0]);
           layout.folderChanged(folder);
+          projectRoot ||= folder;
           initSidebar(folder, filesPane.hidden);
         }
       }
@@ -1017,6 +1045,11 @@ if (isTauri()) {
       showSidebarView('files');
       void invoke('add_recent_file', { path: folder }).catch(() => {});
     }
+    if (folder) {
+      await initialization;
+      await operation(() => restoreProjectFiles(folder), true);
+      projectRoot = folder; rememberProjectFiles();
+    }
     if (file) {
       await initialization;
       const curr = active();
@@ -1028,6 +1061,21 @@ if (isTauri()) {
       sidebar?.select(file);
     }
   }).catch(() => {});
+}
+// Opening a project folder opens the files that were open the last time this folder was a project.
+// Files that no longer open are skipped. The active file of that time becomes active again.
+async function restoreProjectFiles(folder: string) {
+  const saved = rememberedFiles.get(folder);
+  if (!saved) return;
+  let activeTab: DocumentTab | undefined;
+  for (const path of saved.files) {
+    if (!pageActive || composing()) return;
+    if (!isPathInsideFolder(path, folder)) continue;
+    const tab = await loadFile(path).catch(() => undefined);
+    if (tab && path === saved.active) activeTab = tab;
+  }
+  if (activeTab && tabs.get(activeTab.id)) switchTab(activeTab.id, true);
+  sidebar?.select(active().path);
 }
 const autoRefreshInterval = setInterval(() => {
   if (!pageActive || busy || composing() || filesPane.hidden || document.hidden) return;
@@ -1256,6 +1304,8 @@ if (isTauri()) {
         // input is locked until startup completes.
         const source = info.id === previous.id && !info.path && !info.baseline ? tabSource(previous) : info.baseline;
         const tab: DocumentTab = { ...info, sourceMode: false, state: state(source, { ...info, sourceMode: false }) };
+        // A fresh window keeps its blank start tab as the placeholder of the empty state.
+        if (previous.placeholder && startup.documents.length === 1 && !info.path && !source) tab.placeholder = true;
         const token = startup.sessions.find(token => token.document === tab.id);
         if (!token) throw new Error('Recovery session is missing. Retry recovery.');
         attachRecovery(tab, token); return tab;

@@ -131,7 +131,25 @@ no path, no edits, and no sibling tab. New File reuses the blank tab and shows t
 file from the sidebar, the picker, or a drop loads into it. Save, Save As, Undo, Redo, Find, Source,
 Check Save, Print, Close document, and Tools are disabled, and native menu commands other than New,
 Open, Open Folder, sidebar, outline, Settings, About, and theme are refused. At app start the first
-tab is still a normal Untitled document.
+tab is also this blank placeholder, so the app opens with the empty state and no Untitled document.
+An edit or a path ends the placeholder for good: Undo back to empty text keeps the editor.
+A file that opens at start (launch file, initial file, or remembered project file) loads into the placeholder tab.
+
+Tab bar: when a document is open, the document bar shows one tab for each open document, also when only one
+document is open. The document title stays hidden. The empty state shows the tab bar with only the + button:
+the blank placeholder tab stays hidden (class document-tabs-empty). + there reuses the placeholder tab, like New.
+New Tab (+) button: it follows the last tab. It does the same as New: it opens a new tab named Untitled.md.
+An untitled tab shows the name Untitled.md, and Save asks for a name with Untitled.md as the default.
+
+Project files: a window that opens with a project folder (Open Folder, a recent folder, or a file outside
+the current project) opens the files that were open the last time that folder was a project. The active file of
+that time becomes active again. Files that cannot open (for example, deleted files) are skipped and are no longer
+remembered. The record (localStorage key markdew.projectFiles) keeps native paths only, for each folder: at most
+64 files inside the folder and the active file, for at most 32 folders, most recent first. Each tab change
+writes the record of the window's project folder. Untitled tabs and files outside the folder are not recorded. A window
+that adopts a folder (first opened file, Open Quickly) starts to record for that folder. The sidebar folder that
+the main window keeps from an earlier launch is not a project folder, so the main window does not restore or
+record files for it.
 
 Files sidebar, New File: the new file is created as Untitled.md and its name opens in an inline
 text box with the name before .md selected, so typing renames it. Enter or a click elsewhere keeps

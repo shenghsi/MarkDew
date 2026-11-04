@@ -21,7 +21,7 @@ export interface DocumentTab {
 
 export const tabSource = (tab: DocumentTab) => savedSource(tab.state.field(sourceField));
 export const tabDirty = (tab: DocumentTab) => tab.uncertain || tabSource(tab) !== tab.baseline;
-export const tabName = (tab: DocumentTab) => tab.path.split(/[\\/]/).pop() || 'Untitled';
+export const tabName = (tab: DocumentTab) => tab.path.split(/[\\/]/).pop() || 'Untitled.md';
 
 // This model owns retained editor states. The caller owns file effects and must
 // confirm recovery and host retirement before it removes a tab.
@@ -139,7 +139,7 @@ export function documentTabBar(
         }
         label!.textContent = `${tabName(tab)}${tabDirty(tab) ? ' • Unsaved' : ''}${tab.uncertain ? ' • Check Save' : ''}`;
         closeBtn!.setAttribute('aria-label', `Close ${tabName(tab)}`);
-        button.title = tab.path || 'Untitled'; button.setAttribute('aria-selected', String(tab.id === active));
+        button.title = tab.path || 'Untitled.md'; button.setAttribute('aria-selected', String(tab.id === active));
         button.tabIndex = tab.id === active ? 0 : -1;
         if (tab.preview) {
           button.classList.add('document-tab-preview');

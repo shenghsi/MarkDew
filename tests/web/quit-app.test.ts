@@ -64,11 +64,12 @@ it('guards application Quit and awaits exact recovery before approval while reta
   const count = calls('recovery_checkpoint').length; mocks.quit!({ payload: 7 });
   await vi.waitFor(() => expect(calls('recovery_checkpoint').length).toBeGreaterThan(count));
   expect(outcome(7)).toBeUndefined(); expect(view.state.readOnly).toBe(true);
-  expect(calls('recovery_checkpoint').at(-1)![1]).toMatchObject({ document: 0, source: '', dirty: false });
+  // original.md opened into the blank start tab, so document 0 is that file.
+  expect(calls('recovery_checkpoint').at(-1)![1]).toMatchObject({ document: 0, source: original + ' unsaved later', dirty: true });
   finishWrite!(); blockedWrite = undefined; await vi.waitFor(() => expect(outcome(7)?.allow).toBe(true));
   expect(view.state.readOnly).toBe(true); expect(source()).toBe(original + ' unsaved later');
   expect(calls('recovery_checkpoint').at(-1)![1].dirty).toBe(true); // Quit retains its confirmed copy.
-  expect(calls('recovery_checkpoint').at(-1)![1]).toMatchObject({ document: 1, source: original + ' unsaved later', dirty: true });
+  expect(calls('recovery_checkpoint').at(-1)![1]).toMatchObject({ document: 0, source: original + ' unsaved later', dirty: true });
   view.destroy(); window.dispatchEvent(new Event('pagehide'));
 });
 
