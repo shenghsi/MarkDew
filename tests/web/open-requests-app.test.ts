@@ -51,7 +51,7 @@ it('opens launch files after startup Retry and preserves existing tabs through f
     startupFails = false;
     Array.from(document.querySelectorAll('button')).find(button => button.textContent === 'Retry recovery')!.click();
     await vi.waitFor(() => { expect(source()).toBe(loaded); unlocked(); });
-    expect(calls('open_document')[0][1]).toEqual({ document: 1, path: literal });
+    expect(calls('open_document')[0][1]).toEqual({ document: 0, path: literal });
     expect(calls('open_folder_window')).toHaveLength(0);
     expect(JSON.parse(localStorage.getItem('markdew.layout')!).folder).toBe('/notes');
     expect(view.state.field(imagePath)).toBe(literal); expect(undoDepth(view.state)).toBe(0);

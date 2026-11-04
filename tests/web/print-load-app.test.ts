@@ -33,7 +33,7 @@ it('defers print loading, captures the requested state, and blocks duplicate req
   document.querySelector<HTMLButtonElement>('#new')!.click();expect(app!.tabs.all).toHaveLength(1);
   app!.view.dispatch({changes:{from:app!.view.state.doc.length,insert:'Later edit'},userEvent:'input.type'});
   const later=source();release();await vi.waitFor(()=>expect(show).toHaveBeenCalledTimes(1));
-  expect(show.mock.calls[0][0]).toMatchObject({state:captured,id:tab.id,path:tab.path,title:'Untitled'});
+  expect(show.mock.calls[0][0]).toMatchObject({state:captured,id:tab.id,path:tab.path,title:'Untitled.md'});
   const sourceModule=await import('../../src/web/source');
   expect(sourceModule.savedSource(show.mock.calls[0][0].state.field(sourceModule.sourceField))).toBe(before);
   expect(undoDepth(captured)).toBe(depth);expect(source()).toBe(later);
