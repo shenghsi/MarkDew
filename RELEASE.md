@@ -1,9 +1,11 @@
-# MarkDew v1.2.7
+# MarkDew v1.3.0
 
 ## What is new
 
-- **Fix:** Selected text now has a visible background in the editor, tables, math and diagrams. The color follows the Light and Dark theme.
-- Includes everything in v1.2.6, including the Table font setting.
+- A **New Tab** button opens a blank tab.
+- MarkDew now starts with no file open.
+- MarkDew remembers the project files for the next start.
+- Includes everything in v1.2.7.
 
 ## In-app updates
 
