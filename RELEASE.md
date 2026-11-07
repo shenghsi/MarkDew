@@ -1,11 +1,10 @@
-# MarkDew v1.3.0
+# MarkDew v1.4.0
 
 ## What is new
 
-- A **New Tab** button opens a blank tab.
-- MarkDew now starts with no file open.
-- MarkDew remembers the project files for the next start.
-- Includes everything in v1.2.7.
+- **Settings > Files > Show all file types in the Files sidebar** (off by default). When it is on, the Files sidebar shows all files. Markdown and text files open in MarkDew. Double-click another file, or press Enter, to open it in the system default app.
+- MarkDew does not start programs from the sidebar. Scripts, installers, and files that can run (for example .exe, .sh, .command, .webloc, or a file with an execute bit) are only shown in Finder or Explorer.
+- Includes everything in v1.3.0: the New Tab button, start with no file open, and remembered project files.
 
 ## In-app updates
 
