@@ -103,6 +103,13 @@ and txt files. Work runs outside the UI thread. These path checks cannot prevent
 another process from replacing a parent or entry before a later Open command.
 Listing changes no source record, document baseline, or recovery. Native folder
 picker and Windows/Linux sidebar acceptance remain open.
+With `all`, the listing keeps every regular file except system clutter (.DS_Store, .localized,
+Thumbs.db, desktop.ini, `._*` AppleDouble files, `~$*` Office lock files). open_with_default_app opens a
+listed file with the system default app. The file must be an absolute regular file without a link or
+reparse point. A file that can start a program is only revealed in the file manager, never opened: a
+platform list of program extensions (read after Windows trailing dot and space removal; a colon counts as
+a program), and on Unix any file with an execute bit. The extension lists are not complete. Like
+delete_path, the command does not limit the path to the window's folder.
 
 Chosen-image, clipboard-image, and dropped-image copy are separate file effects.
 The host derives

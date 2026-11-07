@@ -140,6 +140,12 @@ export const translations = {
     'files.sidebar_files': 'Files Tree',
     'files.sidebar_outline': 'Outline',
     'files.sidebar_hidden': 'Hidden',
+    'files.all_files_title': 'Files Sidebar',
+    'files.all_files_desc': 'Markdown and text files open in MarkDew. Double-click other files to open them in the system default app.',
+    'files.all_files': 'Show all file types in the Files sidebar',
+    'sidebar.external_opened': 'Opened {name} in the default app.',
+    'sidebar.external_revealed': '{name} can start a program, so MarkDew shows it in the file manager and does not open it.',
+    'sidebar.no_files': 'No files or folders.',
 
     // Empty state
     'empty.notice': 'No configuration options are available for this category yet.',
@@ -360,6 +366,12 @@ export const translations = {
     'files.sidebar_files': '文件树',
     'files.sidebar_outline': '大纲',
     'files.sidebar_hidden': '隐藏',
+    'files.all_files_title': '文件侧边栏',
+    'files.all_files_desc': 'Markdown 和文本文件在 MarkDew 中打开。双击其他文件，用系统默认应用打开。',
+    'files.all_files': '在文件侧边栏中显示所有文件类型',
+    'sidebar.external_opened': '已用默认应用打开 {name}。',
+    'sidebar.external_revealed': '{name} 可能会启动程序，因此 MarkDew 只在文件管理器中显示它，不会打开它。',
+    'sidebar.no_files': '没有文件或文件夹。',
 
     // Sidebar Context Menu
     'sidebar.new_file': '新建文件',

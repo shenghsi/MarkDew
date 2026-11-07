@@ -180,10 +180,35 @@ fn toggle_maximize_window(window: tauri::WebviewWindow) -> Result<(), String> {
 }
 
 #[tauri::command]
-async fn list_directory(path: String) -> Result<directory::Listing, String> {
-    tauri::async_runtime::spawn_blocking(move || directory::list(&PathBuf::from(path)))
-        .await
-        .map_err(|e| e.to_string())?
+async fn list_directory(path: String, all: Option<bool>) -> Result<directory::Listing, String> {
+    tauri::async_runtime::spawn_blocking(move || {
+        directory::list(&PathBuf::from(path), all.unwrap_or(false))
+    })
+    .await
+    .map_err(|e| e.to_string())?
+}
+
+// Opens a non-Markdown file from the Files sidebar with the system default app. A file that
+// can start a program is only shown in the file manager. Returns "opened" or "revealed".
+#[tauri::command]
+async fn open_with_default_app(app: tauri::AppHandle, path: String) -> Result<&'static str, String> {
+    tauri::async_runtime::spawn_blocking(move || {
+        let file = PathBuf::from(&path);
+        match directory::external_file(&file)? {
+            directory::External::Open => app
+                .opener()
+                .open_path(path, None::<&str>)
+                .map(|_| "opened")
+                .map_err(|error| error.to_string()),
+            directory::External::Reveal => app
+                .opener()
+                .reveal_item_in_dir(&file)
+                .map(|_| "revealed")
+                .map_err(|error| error.to_string()),
+        }
+    })
+    .await
+    .map_err(|e| e.to_string())?
 }
 
 #[tauri::command]
@@ -1393,6 +1418,7 @@ fn main() {
             resolve_document_link,
             open_web_link,
             list_directory,
+            open_with_default_app,
             list_project_files,
             open_folder_window,
             take_initial_folder,
