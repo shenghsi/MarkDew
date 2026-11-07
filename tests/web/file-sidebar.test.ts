@@ -343,3 +343,33 @@ it('refreshes expanded subfolders quietly when parent root is unchanged', async 
   expect(button(pane, 'sub')).toBe(folderBtn);
   sidebar.dispose();
 });
+
+it('opens other file types in the default app on double click or Enter and keeps Markdown in the editor', async () => {
+  const pane = document.createElement('aside'); document.body.append(pane);
+  const read = vi.fn().mockResolvedValue({ entries: [
+    { name: 'notes.md', path: '/root/notes.md', directory: false },
+    { name: 'photo.png', path: '/root/photo.png', directory: false },
+  ], warnings: [] });
+  const open = vi.fn(), openExternal = vi.fn();
+  const sidebar = fileSidebar(pane, { read, open, openExternal, allFiles: () => true, choose: vi.fn(), allowed: () => true }, { root: '/root' });
+  await vi.waitFor(() => expect(button(pane, 'photo.png')).toBeDefined());
+  const photo = button(pane, 'photo.png');
+  photo.dispatchEvent(new MouseEvent('click', { bubbles: true, detail: 1 }));
+  expect(openExternal).not.toHaveBeenCalled();
+  photo.dispatchEvent(new MouseEvent('dblclick', { bubbles: true, detail: 2 }));
+  expect(openExternal).toHaveBeenCalledWith('/root/photo.png');
+  photo.dispatchEvent(new MouseEvent('click', { bubbles: true, detail: 0 }));
+  expect(openExternal).toHaveBeenCalledTimes(2);
+  button(pane, 'notes.md').dispatchEvent(new MouseEvent('dblclick', { bubbles: true, detail: 2 }));
+  expect(open).toHaveBeenCalledWith('/root/notes.md', { preview: false, newTab: true });
+  expect(openExternal).toHaveBeenCalledTimes(2); expect(open).toHaveBeenCalledTimes(1);
+  sidebar.dispose();
+});
+
+it('says no files when the sidebar lists all file types', async () => {
+  const pane = document.createElement('aside'); document.body.append(pane);
+  const sidebar = fileSidebar(pane, { read: vi.fn().mockResolvedValue({ entries: [], warnings: [] }), open: vi.fn(),
+    allFiles: () => true, choose: vi.fn(), allowed: () => true }, { root: '/root' });
+  await vi.waitFor(() => expect(pane.textContent).toContain('No files or folders.'));
+  sidebar.dispose();
+});

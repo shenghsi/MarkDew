@@ -960,6 +960,12 @@ or recovery. Browser fixture checks keyboard expansion, Unicode labels, retained
 source/history, and narrow layout with a test folder service. Native picker,
 file identity, and platform sidebar acceptance remain open.
 
+Settings → Files, Show all file types in the Files sidebar (default off): the sidebar lists every
+regular file. Markdown and text files (md, markdown, txt) keep the guarded Open route. A single click on
+another file only focuses it (its name shows muted); a double click or Enter opens it in the system default
+app, or reveals it in the file manager when it can start a program. Rename adds .md only when an editor
+file gets a name without an editor extension. A change refreshes the sidebar in every window.
+
 The compact document bar follows typora-layout.png. Its title is literal text
 with an unsaved mark. Files, Outline, and Source remain available. Tools is a non-modal
 disclosure for file and formatting controls. Opening or closing it changes no

@@ -1,4 +1,5 @@
 import { isAutoUpdateEnabled, setAutoUpdateEnabled } from './auto-update';
+import { SIDEBAR_ALL_FILES_KEY, setSidebarShowsAllFiles, sidebarShowsAllFiles } from './file-sidebar';
 import { invoke, isTauri } from '@tauri-apps/api/core';
 import { setTheme, ThemeChoice } from './theme';
 import { checkAppUpdates, installAppUpdate, UpdateInfo } from './updater';
@@ -411,6 +412,31 @@ export function showSettingsDialog(options?: {
     });
     sidebarSec.append(h, desc, sidebarSelect);
     filesPanel.append(sidebarSec);
+
+    // Section: which files the Files sidebar lists.
+    const allSec = document.createElement('section');
+    allSec.className = 'settings-section';
+    const allTitle = document.createElement('h3');
+    allTitle.className = 'settings-section-title';
+    allTitle.textContent = t('files.all_files_title', storage);
+    const allDesc = document.createElement('p');
+    allDesc.className = 'settings-desc';
+    allDesc.textContent = t('files.all_files_desc', storage);
+    const allLabel = document.createElement('label');
+    allLabel.className = 'settings-checkbox';
+    const allCheck = document.createElement('input');
+    allCheck.type = 'checkbox';
+    allCheck.dataset.key = SIDEBAR_ALL_FILES_KEY;
+    allCheck.checked = sidebarShowsAllFiles(storage);
+    allCheck.addEventListener('change', () => {
+      setSidebarShowsAllFiles(allCheck.checked, storage);
+      window.dispatchEvent(new CustomEvent('markdew:sidebar-files-changed'));
+    });
+    const allText = document.createElement('span');
+    allText.textContent = t('files.all_files', storage);
+    allLabel.append(allCheck, allText);
+    allSec.append(allTitle, allDesc, allLabel);
+    filesPanel.append(allSec);
   }
 
   // Populate Panel: Editor (Notice)

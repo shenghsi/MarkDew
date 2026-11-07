@@ -28,7 +28,8 @@ fn linked(metadata: &fs::Metadata) -> bool {
     false
 }
 
-pub fn list(path: &Path) -> Result<Listing, String> {
+// With `all`, the list shows every regular file, not only md, markdown, and txt files.
+pub fn list(path: &Path, all: bool) -> Result<Listing, String> {
     if !path.is_absolute() {
         return Err("Choose an absolute folder path.".into());
     }
@@ -72,11 +73,8 @@ pub fn list(path: &Path) -> Result<Listing, String> {
         let directory = metadata.is_dir();
         if !directory
             && (!metadata.is_file()
-                || !path.extension().and_then(|e| e.to_str()).is_some_and(|e| {
-                    ["md", "markdown", "txt"]
-                        .iter()
-                        .any(|suffix| e.eq_ignore_ascii_case(suffix))
-                }))
+                || (all && entry.file_name().to_str().is_some_and(system_clutter))
+                || (!all && !supported(&path)))
         {
             continue;
         }
@@ -166,6 +164,110 @@ pub fn find_files(root: &Path) -> Result<Files, String> {
     Ok(result)
 }
 
+// System files that the all-files list does not show: Finder and Windows folder data,
+// AppleDouble files on non-Mac disks, and Office lock files.
+fn system_clutter(name: &str) -> bool {
+    [".DS_Store", ".localized", "Thumbs.db", "desktop.ini"]
+        .iter()
+        .any(|n| name.eq_ignore_ascii_case(n))
+        || name.starts_with("._")
+        || name.starts_with("~$")
+}
+
+// Extensions whose default app runs code, starts a program, or follows a link to one.
+// The lists are not complete, so the default-app route also refuses files with an execute bit.
+// Common Windows programs are refused everywhere: a copied program must not run under Wine or a VM.
+const PROGRAM_EXTENSIONS: &[&str] = &["bat", "cmd", "com", "exe", "jar", "lnk", "msi", "scr"];
+#[cfg(unix)]
+const PLATFORM_EXTENSIONS: &[&str] = &[
+    "bash", "csh", "desktop", "ksh", "sh", "tcsh", "zsh",
+    #[cfg(target_os = "macos")]
+    "app",
+    #[cfg(target_os = "macos")]
+    "command",
+    #[cfg(target_os = "macos")]
+    "fileloc",
+    #[cfg(target_os = "macos")]
+    "inetloc",
+    #[cfg(target_os = "macos")]
+    "mobileconfig",
+    #[cfg(target_os = "macos")]
+    "mpkg",
+    #[cfg(target_os = "macos")]
+    "pkg",
+    // Python Launcher can be the default app for Python files.
+    #[cfg(target_os = "macos")]
+    "py",
+    #[cfg(target_os = "macos")]
+    "pyw",
+    #[cfg(target_os = "macos")]
+    "shortcut",
+    #[cfg(target_os = "macos")]
+    "terminal",
+    #[cfg(target_os = "macos")]
+    "tool",
+    #[cfg(target_os = "macos")]
+    "webloc",
+    #[cfg(target_os = "macos")]
+    "workflow",
+];
+#[cfg(windows)]
+const PLATFORM_EXTENSIONS: &[&str] = &[
+    "appref-ms", "application", "chm", "cpl", "gadget", "hta", "inf", "js", "jse", "library-ms", "msc", "msp",
+    "pif", "ps1", "ps1xml", "ps2", "psc1", "psm1", "reg", "scf", "search-ms", "settingcontent-ms", "url", "vb",
+    "vbe", "vbs", "website", "ws", "wsc", "wsf", "wsh", "xll",
+];
+#[cfg(not(any(unix, windows)))]
+const PLATFORM_EXTENSIONS: &[&str] = &[];
+
+// Windows ignores trailing dots and spaces in a name, so "run.exe." opens as "run.exe".
+// Check the extension as Windows reads it. A colon (an NTFS stream name) counts as a program.
+fn program_name(name: &str) -> bool {
+    let name = name.trim_end_matches(['.', ' ']);
+    if name.contains(':') {
+        return true;
+    }
+    name.rsplit_once('.')
+        .is_some_and(|(_, ext)| {
+            PROGRAM_EXTENSIONS.iter().chain(PLATFORM_EXTENSIONS).any(|p| ext.eq_ignore_ascii_case(p))
+        })
+}
+
+#[cfg(unix)]
+fn executable(metadata: &fs::Metadata) -> bool {
+    use std::os::unix::fs::PermissionsExt;
+    metadata.permissions().mode() & 0o111 != 0
+}
+#[cfg(not(unix))]
+fn executable(_: &fs::Metadata) -> bool {
+    false
+}
+
+#[derive(Debug, PartialEq)]
+pub enum External {
+    // The system default app can open the file.
+    Open,
+    // The file can start a program. Show it in the file manager and do not run it.
+    Reveal,
+}
+
+// Checks a file before the system default app opens it. It must be an absolute regular file
+// without a link or reparse point. A program is only shown in the file manager.
+pub fn external_file(path: &Path) -> Result<External, String> {
+    if !path.is_absolute() {
+        return Err("Choose an absolute file path.".into());
+    }
+    let metadata = fs::symlink_metadata(path).map_err(|e| e.to_string())?;
+    if !metadata.is_file() || linked(&metadata) {
+        return Err("Choose a regular file without a link or reparse point.".into());
+    }
+    let name = path.file_name().and_then(|n| n.to_str()).ok_or("The file name has unsupported encoding.")?;
+    if program_name(name) || executable(&metadata) {
+        return Ok(External::Reveal);
+    }
+    Ok(External::Open)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -176,7 +278,7 @@ mod tests {
         for name in ["b.MD", "a.txt", "c.markdown", "image.png"] {
             fs::write(root.path().join(name), "").unwrap();
         }
-        let result = list(root.path()).unwrap();
+        let result = list(root.path(), false).unwrap();
         assert_eq!(
             result
                 .entries
@@ -190,9 +292,68 @@ mod tests {
             root.path().join("日本語%20").to_str().unwrap()
         );
         assert!(result.warnings.is_empty());
-        assert!(list(Path::new("relative")).is_err());
-        assert!(list(&root.path().join("a.txt")).is_err());
-        assert!(list(&root.path().join("missing")).is_err());
+        assert!(list(Path::new("relative"), false).is_err());
+        assert!(list(&root.path().join("a.txt"), false).is_err());
+        assert!(list(&root.path().join("missing"), false).is_err());
+    }
+    #[test]
+    fn lists_all_regular_files_when_asked() {
+        let root = tempfile::tempdir().unwrap();
+        fs::create_dir(root.path().join("folder")).unwrap();
+        for name in ["b.md", "image.png", "notes", ".DS_Store", "._image.png", "~$report.docx", "Thumbs.db"] {
+            fs::write(root.path().join(name), "").unwrap();
+        }
+        let names: Vec<_> = list(root.path(), true)
+            .unwrap()
+            .entries
+            .into_iter()
+            .map(|e| e.name)
+            .collect();
+        assert_eq!(names, ["folder", "b.md", "image.png", "notes"]);
+    }
+    #[test]
+    fn checks_files_for_the_default_app() {
+        let root = tempfile::tempdir().unwrap();
+        fs::create_dir(root.path().join("folder")).unwrap();
+        let programs: &[&str] = if cfg!(target_os = "macos") {
+            &["run.EXE", "script.sh", "set.terminal", "go.webloc", "tool.py"]
+        } else if cfg!(windows) {
+            &["run.EXE", "page.hta", "go.url", "task.js"]
+        } else {
+            &["run.EXE", "script.sh", "app.desktop"]
+        };
+        for name in ["image.png", "report.PDF"].iter().chain(programs) {
+            fs::write(root.path().join(name), "").unwrap();
+        }
+        assert_eq!(external_file(&root.path().join("image.png")), Ok(External::Open));
+        assert_eq!(external_file(&root.path().join("report.PDF")), Ok(External::Open));
+        for name in programs {
+            assert_eq!(external_file(&root.path().join(name)), Ok(External::Reveal), "{name}");
+        }
+        assert!(external_file(&root.path().join("folder")).is_err());
+        assert!(external_file(&root.path().join("missing")).is_err());
+        assert!(external_file(Path::new("relative.png")).is_err());
+    }
+    #[test]
+    fn reads_program_extensions_as_windows_does() {
+        assert!(program_name("run.exe."));
+        assert!(program_name("run.exe . "));
+        assert!(program_name("notes.txt:hidden.exe"));
+        assert!(program_name("Setup.MSI"));
+        assert!(!program_name("photo.png"));
+        assert!(!program_name("README"));
+        assert!(!program_name("exe"));
+    }
+    #[cfg(unix)]
+    #[test]
+    fn treats_executable_files_as_programs() {
+        use std::os::unix::fs::PermissionsExt;
+        let root = tempfile::tempdir().unwrap();
+        let file = root.path().join("configure");
+        fs::write(&file, "").unwrap();
+        assert_eq!(external_file(&file), Ok(External::Open));
+        fs::set_permissions(&file, fs::Permissions::from_mode(0o755)).unwrap();
+        assert_eq!(external_file(&file), Ok(External::Reveal));
     }
     #[test]
     fn bounds_scanned_entries_even_when_files_are_not_markdown() {
@@ -200,7 +361,7 @@ mod tests {
         for i in 0..=SCAN_LIMIT {
             fs::write(root.path().join(format!("{i}.bin")), "").unwrap();
         }
-        let result = list(root.path()).unwrap();
+        let result = list(root.path(), false).unwrap();
         assert!(result.entries.is_empty());
         assert!(result.warnings[0].contains("incomplete"));
     }
@@ -214,8 +375,9 @@ mod tests {
         fs::write(real.join("doc.md"), "").unwrap();
         symlink(&real, root.path().join("alias")).unwrap();
         symlink(real.join("doc.md"), root.path().join("alias.md")).unwrap();
-        assert!(list(&root.path().join("alias")).is_err());
-        assert_eq!(list(root.path()).unwrap().entries.len(), 1);
+        assert!(list(&root.path().join("alias"), false).is_err());
+        assert_eq!(list(root.path(), false).unwrap().entries.len(), 1);
+        assert_eq!(list(root.path(), true).unwrap().entries.len(), 1);
     }
     #[test]
     fn finds_supported_files_in_nested_folders_and_skips_hidden_linked_and_build_folders() {

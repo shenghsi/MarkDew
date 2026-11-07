@@ -42,7 +42,7 @@ import { imageDrops } from './image-drop';
 import { copyImageAsset } from './image-assets';
 import { clipboardImageControls, droppedImageControls } from './clipboard-assets';
 import { toolsPanel } from './tools-panel';
-import { fileSidebar, getParentDir, getSeparator, isPathInsideFolder } from './file-sidebar';
+import { fileSidebar, getFileName, getParentDir, getSeparator, isPathInsideFolder, SIDEBAR_ALL_FILES_KEY, sidebarShowsAllFiles } from './file-sidebar';
 import { wordCount } from './word-count';
 import { nativeMenu } from './native-menu';
 import { openRequests, OpenBatch } from './open-requests';
@@ -940,7 +940,15 @@ function initSidebar(initialRoot: string, deferRead: boolean) {
   sidebar?.dispose();
   filesPane.replaceChildren();
   sidebar = fileSidebar(filesPane, {
-    read: path => invoke('list_directory', { path }),
+    read: path => invoke('list_directory', { path, all: sidebarShowsAllFiles() }),
+    allFiles: () => sidebarShowsAllFiles(),
+    openExternal: path => {
+      void invoke<'opened' | 'revealed'>('open_with_default_app', { path })
+        .then(result => {
+          status.textContent = t(result === 'revealed' ? 'sidebar.external_revealed' : 'sidebar.external_opened', { name: getFileName(path) });
+        })
+        .catch(error => { status.textContent = String(error); });
+    },
     allowed: () => {
       if (!pageActive || busy) return false;
       if (composing()) { status.textContent = 'Finish text input, then use Files.'; return false; }
@@ -1031,6 +1039,9 @@ function initSidebar(initialRoot: string, deferRead: boolean) {
   sidebar.select(active().path);
 }
 initSidebar(isTauri() ? layout.folder : '', filesPane.hidden);
+// Settings → Files can change which files the sidebar lists, in this window or in another window.
+window.addEventListener('markdew:sidebar-files-changed', () => sidebar?.refresh());
+window.addEventListener('storage', event => { if (event.key === SIDEBAR_ALL_FILES_KEY) sidebar?.refresh(); });
 if (isTauri()) {
   if (layout.folder) {
     void invoke('add_recent_file', { path: layout.folder }).catch(() => {});

@@ -29,6 +29,19 @@ export function getFileName(path: string): string {
   return idx >= 0 ? path.slice(idx + 1) : path;
 }
 
+// Settings → Files: when on, the sidebar lists every file type. Other files open in the system default app.
+export const SIDEBAR_ALL_FILES_KEY = 'markdew.sidebar-all-files';
+export function sidebarShowsAllFiles(storage: Storage = localStorage): boolean {
+  try { return storage.getItem(SIDEBAR_ALL_FILES_KEY) === 'on'; } catch { return false; }
+}
+export function setSidebarShowsAllFiles(enabled: boolean, storage: Storage = localStorage): void {
+  try { storage.setItem(SIDEBAR_ALL_FILES_KEY, enabled ? 'on' : 'off'); } catch { /* This launch keeps the choice. */ }
+}
+// Files that MarkDew opens in its editor. The sidebar sends other files to the system default app.
+export function isEditorFile(path: string): boolean {
+  return /\.(md|markdown|txt)$/i.test(path);
+}
+
 export interface OpenOptions {
   preview?: boolean;
   newTab?: boolean;
@@ -43,6 +56,9 @@ export interface SidebarServices {
   renameFile?: (oldPath: string, newPath: string) => Promise<void>;
   deletePath?: (path: string) => Promise<void>;
   confirmDelete?: (name: string, isDirectory: boolean, path?: string) => Promise<boolean> | boolean;
+  // Opens a file that is not Markdown or text with the system default app.
+  openExternal?: (path: string) => void;
+  allFiles?: () => boolean;
 }
 
 // Each mounted folder owns its request token. A root refresh removes all older
@@ -159,7 +175,7 @@ export function fileSidebar(pane: HTMLElement, services: SidebarServices,
       }
       clear();
       for (const warning of listing.warnings) message(parent, warning);
-      if (!listing.entries.length) message(parent, 'No Markdown files or folders.');
+      if (!listing.entries.length) message(parent, services.allFiles?.() ? t('sidebar.no_files') : 'No Markdown files or folders.');
       const list = document.createElement('ul'); parent.append(list);
       const childFolders: { path: string; reload: () => void }[] = [];
       for (const entry of listing.entries) {
@@ -171,6 +187,16 @@ export function fileSidebar(pane: HTMLElement, services: SidebarServices,
         if (!entry.directory) {
           button.dataset.filePath = entry.path;
           if (entry.path === active) button.setAttribute('aria-current', 'page');
+          if (!isEditorFile(entry.name) && services.openExternal) {
+            // A double click or Enter opens the file in the system default app. A single click only focuses it.
+            button.classList.add('files-external');
+            const openExternal = () => {
+              if (!disposed && body.contains(button) && services.allowed()) services.openExternal?.(entry.path);
+            };
+            button.addEventListener('click', (event: MouseEvent) => { if (event.detail === 0) openExternal(); });
+            button.addEventListener('dblclick', openExternal);
+            continue;
+          }
           let clickTimer: ReturnType<typeof setTimeout> | null = null;
           button.addEventListener('click', (event: MouseEvent) => {
             if (disposed || !body.contains(button) || !services.allowed()) return;
@@ -237,7 +263,7 @@ export function fileSidebar(pane: HTMLElement, services: SidebarServices,
     if (root && !deferredRead) void load(root, body, () => !disposed && generation === request, undefined, () => {
       if (persistRoot) { persistRoot = false; options.rootChanged?.(root); }
     });
-    else { cachedListings.delete(body); body.replaceChildren(); message(body, 'Choose a folder to show Markdown files.'); }
+    else { cachedListings.delete(body); body.replaceChildren(); message(body, services.allFiles?.() ? 'Choose a folder to show files.' : 'Choose a folder to show Markdown files.'); }
   }
   choose.addEventListener('click', async () => {
     if (disposed || choosing || !services.allowed()) return;
@@ -357,7 +383,7 @@ export function fileSidebar(pane: HTMLElement, services: SidebarServices,
         return;
       }
 
-      const finalName = rawVal.endsWith('.md') ? rawVal : `${rawVal}.md`;
+      const finalName = isEditorFile(rawVal) || !isEditorFile(initialName) ? rawVal : `${rawVal}.md`;
       const finalPath = parentDir.endsWith(sep) ? `${parentDir}${finalName}` : `${parentDir}${sep}${finalName}`;
 
       if (finalPath !== currentPath && services.renameFile) {

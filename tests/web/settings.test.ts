@@ -368,3 +368,19 @@ it('keeps the Pandoc path in the Export page, and opens that page when asked', a
   expect(data['markdew.pandoc-path']).toBeUndefined();
   document.querySelector<HTMLElement>('.modal-backdrop')?.remove();
 });
+
+it('saves the Files sidebar all-file-types choice and tells the sidebar to refresh', () => {
+  const data: Record<string, string> = {};
+  const storage = { getItem: (k: string) => data[k] ?? null, setItem: (k: string, v: string) => { data[k] = v; },
+    removeItem: (k: string) => { delete data[k]; }, clear: () => {}, key: () => null, length: 0 } as Storage;
+  const changed = vi.fn(); window.addEventListener('markdew:sidebar-files-changed', changed);
+  showSettingsDialog({ storage, category: 'files' });
+  const check = document.querySelector<HTMLInputElement>('input[data-key="markdew.sidebar-all-files"]')!;
+  expect(check.checked).toBe(false);
+  check.checked = true; check.dispatchEvent(new Event('change'));
+  expect(data['markdew.sidebar-all-files']).toBe('on'); expect(changed).toHaveBeenCalledTimes(1);
+  check.checked = false; check.dispatchEvent(new Event('change'));
+  expect(data['markdew.sidebar-all-files']).toBe('off'); expect(changed).toHaveBeenCalledTimes(2);
+  window.removeEventListener('markdew:sidebar-files-changed', changed);
+  document.querySelector<HTMLElement>('.modal-backdrop')?.remove();
+});

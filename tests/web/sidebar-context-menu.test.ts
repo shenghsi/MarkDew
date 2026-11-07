@@ -383,3 +383,22 @@ it('starts editing the name when the host spells the created path differently fr
   await vi.waitFor(() => expect(services.renameFile).toHaveBeenCalledWith('/root/Untitled.md', '/root/Typed.md'));
   sidebar.dispose();
 });
+
+it.each([
+  ['photo.png', 'picture.jpeg', '/root/picture.jpeg'],
+  ['notes.md', 'notes.txt', '/root/notes.txt'],
+  ['notes.md', 'renamed', '/root/renamed.md'],
+])('renames %s to %s without adding .md to a typed file type', async (from, typed, expected) => {
+  const pane = document.createElement('aside'); document.body.append(pane);
+  const read = vi.fn().mockResolvedValue({ entries: [{ name: from, path: `/root/${from}`, directory: false }], warnings: [] });
+  const renameFile = vi.fn().mockResolvedValue(undefined);
+  const sidebar = fileSidebar(pane, { read, open: vi.fn(), openExternal: vi.fn(), choose: vi.fn(), allowed: () => true,
+    createFile: vi.fn(), renameFile }, { root: '/root' });
+  await vi.waitFor(() => expect(pane.querySelector(`button[data-file-path="/root/${from}"]`)).not.toBeNull());
+  pane.querySelector(`button[data-file-path="/root/${from}"]`)!.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true }));
+  Array.from(document.querySelectorAll<HTMLButtonElement>('.sidebar-context-item')).find(b => b.textContent === 'Rename')!.click();
+  const input = pane.querySelector<HTMLInputElement>('.files-rename-input')!;
+  input.value = typed; input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  await vi.waitFor(() => expect(renameFile).toHaveBeenCalledWith(`/root/${from}`, expected));
+  sidebar.dispose();
+});
