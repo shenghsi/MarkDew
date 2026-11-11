@@ -7,6 +7,18 @@ export const FONT_KEYS = { TEXT: 'markdew.writing-font', CODE: 'markdew.code-fon
 export const TEXT_STACK = '"Open Sans", "Clear Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, "PingFang SC", "Noto Sans CJK SC", "Source Han Sans SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif, "Apple Color Emoji", "Segoe UI Emoji"';
 export const CODE_STACK = 'ui-monospace, Menlo, Consolas, monospace';
 
+// Body text size in pixels. The default is the size the editor used before this setting existed.
+export const BODY_SIZE_KEY = 'markdew.body-font-size';
+export const BODY_SIZE_DEFAULT = 17;
+export const BODY_SIZES = [12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 24, 26, 28, 32] as const;
+export function readBodySize(storage: Pick<Storage, 'getItem'>): number {
+  try {
+    const value = Number(storage.getItem(BODY_SIZE_KEY));
+    if (BODY_SIZES.some(size => size === value)) return value;
+  } catch { /* Use the default size. */ }
+  return BODY_SIZE_DEFAULT;
+}
+
 const quote = (family: string) => `"${family.replace(/["\\\u0000-\u001f]/g, '')}"`;
 const valid = (family: string | null): family is string => !!family && family.length <= 200 && !/[\u0000-\u001f]/.test(family);
 
@@ -18,6 +30,13 @@ export function applyFonts(storage: Pick<Storage, 'getItem'>, root: HTMLElement 
     if (valid(family)) root.style.setProperty(property, `${quote(family)}, ${stack}`);
     else root.style.removeProperty(property);
   }
+}
+
+// The size multiplies with the Writing Size scale in the style sheet.
+export function applyBodySize(storage: Pick<Storage, 'getItem'>, root: HTMLElement = document.documentElement) {
+  const size = readBodySize(storage);
+  if (size === BODY_SIZE_DEFAULT) root.style.removeProperty('--body-font-size');
+  else root.style.setProperty('--body-font-size', `${size}px`);
 }
 
 let cached: Promise<string[]> | undefined;

@@ -8,7 +8,7 @@ import {
   DIAGRAM_MAX_HEIGHTS, DEFAULT_DIAGRAM_SETTINGS, getDiagramSettings, applyDiagramStyle,
 } from './diagram-settings';
 import { layoutPreferences, SidebarChoice } from './layout-preferences';
-import { applyFonts, FONT_KEYS, installedFonts } from './font-settings';
+import { applyBodySize, applyFonts, BODY_SIZE_KEY, BODY_SIZE_DEFAULT, BODY_SIZES, FONT_KEYS, installedFonts } from './font-settings';
 import { PANDOC_PATH_KEY } from './pandoc-exchange';
 import {
   t,
@@ -118,6 +118,7 @@ export function initSettings(options?: {
   const current = getSavedLineWidth(storage);
   applyLineWidth(current);
   applyFonts(storage);
+  applyBodySize(storage);
   applyDiagramStyle(getDiagramSettings(storage));
 
   const onStorage = (event: StorageEvent) => {
@@ -768,13 +769,31 @@ export function showSettingsDialog(options?: {
       return section;
     };
 
+    // Section: body text size in pixels
+    const bodySizeSec = document.createElement('section');
+    bodySizeSec.className = 'settings-section';
+    const bsHeading = document.createElement('h3');
+    bsHeading.className = 'settings-section-title';
+    bsHeading.textContent = t('appearance.body_size', storage);
+    const bsDesc = document.createElement('p');
+    bsDesc.className = 'settings-desc';
+    bsDesc.textContent = t('appearance.body_size_desc', storage);
+    const bsSelect = createSelectControl(
+      storage,
+      BODY_SIZE_KEY,
+      BODY_SIZES.map(size => ({ label: `${size} px`, value: String(size) })),
+      String(BODY_SIZE_DEFAULT),
+      () => { applyBodySize(storage); options?.onMeasure?.(); },
+    );
+    bodySizeSec.append(bsHeading, bsDesc, bsSelect);
+
     // Group: Editor (line width, writing size)
     const editorGroup = document.createElement('div');
     editorGroup.className = 'settings-group';
     const editorGroupTitle = document.createElement('h2');
     editorGroupTitle.className = 'settings-group-title';
     editorGroupTitle.textContent = t('appearance.group_editor', storage);
-    editorGroup.append(editorGroupTitle, lineWidthSection, writingSizeSec,
+    editorGroup.append(editorGroupTitle, lineWidthSection, writingSizeSec, bodySizeSec,
       fontSection(t('appearance.font_text', storage), FONT_KEYS.TEXT),
       fontSection(t('appearance.font_table', storage), FONT_KEYS.TABLE),
       fontSection(t('appearance.font_code', storage), FONT_KEYS.CODE));
