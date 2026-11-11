@@ -1,10 +1,9 @@
-# MarkDew v1.4.0
+# MarkDew v1.5.0
 
 ## What is new
 
-- **Settings > Files > Show all file types in the Files sidebar** (off by default). When it is on, the Files sidebar shows all files. Markdown and text files open in MarkDew. Double-click another file, or press Enter, to open it in the system default app.
-- MarkDew does not start programs from the sidebar. Scripts, installers, and files that can run (for example .exe, .sh, .command, .webloc, or a file with an execute bit) are only shown in Finder or Explorer.
-- Includes everything in v1.3.0: the New Tab button, start with no file open, and remembered project files.
+- **Settings > Appearance > Editor > Body text size** sets the font size of body text in pixels (12 to 32 px, default 17 px). Writing Size still scales the result.
+- Includes everything in v1.4.0: the option to list all file types in the Files sidebar.
 
 ## In-app updates
 
