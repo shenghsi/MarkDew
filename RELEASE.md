@@ -1,9 +1,10 @@
-# MarkDew v1.6.1
+# MarkDew v1.6.2
 
 ## What is new
 
 - New: **Compare**. Right-click a file in Files, or right-click in the editor, and choose **Compare…** to see changes against Git history. Compare the current file with the last commit, the staged copy, or any earlier commit, or compare two commits. Use side-by-side or inline view. You can edit the current file in the view, then choose **Apply edits** and Save. It needs Git installed.
 - New: in Compare, choose **Show changes in a commit…** to see what one commit changed, in one step.
+- Fixed: a rare false "Recovery session is active" error when another program started at the same moment.
 - Includes everything in v1.5.1: the Find and Replace focus fix, and the Body text size setting.
 
 ## In-app updates
