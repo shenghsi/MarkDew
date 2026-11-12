@@ -19,6 +19,15 @@ const CURRENT = 'current';
 const EMPTY = 'empty';
 const label = (commit: CommitInfo) => `${commit.short} · ${commit.subject} · ${commit.date.slice(0, 10)} · ${commit.author}`;
 
+// Side by side: the merge view adds spacers so changed blocks line up, so equal scroll offsets match.
+function linkScroll(a: HTMLElement, b: HTMLElement): void {
+  const link = (from: HTMLElement, to: HTMLElement) => from.addEventListener('scroll', () => {
+    if (to.scrollTop === from.scrollTop && to.scrollLeft === from.scrollLeft) return;
+    to.scrollTop = from.scrollTop; to.scrollLeft = from.scrollLeft;
+  }, { passive: true });
+  link(a, b); link(b, a);
+}
+
 // A full-window dialog that compares two versions of one file. The newer side is editable only when it is
 // the current file. Edits go back to the document through `apply`, so Undo and Save keep their rules.
 export function openCompare(host: CompareHost): { close: () => void } {
@@ -80,6 +89,7 @@ export function openCompare(host: CompareHost): { close: () => void } {
       single = new EditorView({ parent: body, doc: right, extensions: [...common, unifiedMergeView({ original: left, mergeControls: false, gutter: true })] });
     } else {
       merge = new MergeView({ parent: body, a: { doc: left, extensions: locked }, b: { doc: right, extensions: common }, gutter: true, highlightChanges: true });
+      linkScroll(merge.a.scrollDOM, merge.b.scrollDOM);
     }
     apply.hidden = !editable;
     note.textContent = left === right ? t('compare.same') : editable ? t('compare.hint') : t('compare.readonly');
