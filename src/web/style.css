@@ -1563,9 +1563,9 @@ body.no-document #word-count, body.no-document #document-title { display: none; 
 .compare-bar button:disabled { opacity: .5; }
 .compare-note { padding: 4px 14px; font-size: 12px; color: var(--muted); border-bottom: 1px solid var(--border); min-height: 1.4em; }
 .compare-body { flex: 1; min-height: 0; overflow: auto; }
-.compare-body .cm-mergeView, .compare-body .cm-editor { height: 100%; }
-.compare-body .cm-mergeViewEditors { height: 100%; }
-.compare-body .cm-mergeViewEditor { flex: 1 1 0; min-width: 0; overflow: auto; }
+.compare-body > .cm-editor, .compare-body .cm-mergeView { height: 100%; }
+/* Side by side: the merge view itself is the one scroller, so both panes scroll together. */
+.compare-body .cm-mergeViewEditor { flex: 1 1 0; min-width: 0; }
 .compare-body .cm-editor { background: var(--paper); font: 14px/1.55 ui-monospace, Menlo, Consolas, monospace; }
 .compare-body .cm-content { caret-color: var(--ink); }
 .compare-body .cm-changedLine, .compare-body .cm-insertedLine { background: rgba(46, 160, 67, .14); }
