@@ -1,4 +1,4 @@
-# MarkDew v1.7.1
+# MarkDew v1.7.2
 
 ## What is new
 
@@ -7,6 +7,7 @@
 - Fixed: a rare false "Recovery session is active" error when another program started at the same moment.
 - New: Compare now opens as a tab next to your file tabs, not in a separate window. Switch between a file and its comparison, and keep Compare tabs for several files open at once.
 - New: in Compare, a change map beside the scroll bar shows where the changes are in the file: green for added, red for removed, amber for changed.
+- Fixed: a Compare tab now shows only the comparison panes. The editor and Outline no longer take space beside them.
 - Fixed: in Compare, side-by-side panes now scroll together. Scroll one side and the other follows.
 - Includes everything in v1.5.1: the Find and Replace focus fix, and the Body text size setting.
 
