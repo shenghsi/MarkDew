@@ -77,12 +77,14 @@ export function openCompare(host: CompareHost, parent: HTMLElement): CompareHand
     if (!editor || !scroller) { ruler.replaceChildren(); return; }
     const total = Math.max(scroller.scrollHeight, 1), height = ruler.clientHeight || scroller.clientHeight;
     const marks: HTMLElement[] = [];
+    // Block tops start at the text, below the padding above it. Add that gap, so a mark sits where its text is in the scroller.
+    const gap = editor.documentTop - scroller.getBoundingClientRect().top + scroller.scrollTop;
     for (const chunk of getChunks(editor.state)?.chunks ?? []) {
       const top = editor.lineBlockAt(Math.min(chunk.fromB, editor.state.doc.length)).top;
       const bottom = chunk.toB > chunk.fromB ? editor.lineBlockAt(Math.min(chunk.endB, editor.state.doc.length)).bottom : top;
       const mark = document.createElement('span');
       mark.className = chunk.fromA === chunk.endA ? 'added' : chunk.fromB === chunk.endB ? 'removed' : 'changed';
-      mark.style.top = `${(top / total) * height}px`;
+      mark.style.top = `${((top + gap) / total) * height}px`;
       mark.style.height = `${Math.max(((bottom - top) / total) * height, 3)}px`;
       marks.push(mark);
     }

@@ -1,4 +1,4 @@
-# MarkDew v1.7.2
+# MarkDew v1.7.3
 
 ## What is new
 
@@ -8,6 +8,7 @@
 - New: Compare now opens as a tab next to your file tabs, not in a separate window. Switch between a file and its comparison, and keep Compare tabs for several files open at once.
 - New: in Compare, a change map beside the scroll bar shows where the changes are in the file: green for added, red for removed, amber for changed.
 - Fixed: a Compare tab now shows only the comparison panes. The editor and Outline no longer take space beside them.
+- Fixed: the Compare change map now matches the scroll bar. Its marks sit lower, where the changed lines are.
 - Fixed: in Compare, side-by-side panes now scroll together. Scroll one side and the other follows.
 - Includes everything in v1.5.1: the Find and Replace focus fix, and the Body text size setting.
 
