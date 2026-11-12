@@ -1564,7 +1564,12 @@ body.no-document #word-count, body.no-document #document-title { display: none; 
 .compare-bar select, .compare-bar button { font: inherit; font-size: 13px; color: var(--ink); background: var(--paper); border: 1px solid var(--border); border-radius: 4px; padding: 3px 8px; max-width: 320px; }
 .compare-bar button:disabled { opacity: .5; }
 .compare-note { padding: 4px 14px; font-size: 12px; color: var(--muted); border-bottom: 1px solid var(--border); min-height: 1.4em; }
-.compare-body { flex: 1; min-height: 0; overflow: auto; }
+.compare-body { flex: 1; min-height: 0; overflow: auto; position: relative; }
+.compare-ruler { position: absolute; top: 0; right: 0; bottom: 0; width: 12px; pointer-events: none; z-index: 5; }
+.compare-ruler span { position: absolute; left: 3px; right: 1px; border-radius: 1px; opacity: .85; }
+.compare-ruler .added { background: rgba(46, 160, 67, 1); }
+.compare-ruler .removed { background: rgba(248, 81, 73, 1); }
+.compare-ruler .changed { background: rgba(210, 153, 34, 1); }
 .compare-body > .cm-editor, .compare-body .cm-mergeView { height: 100%; }
 /* Side by side: the merge view itself is the one scroller, so both panes scroll together. */
 .compare-body .cm-mergeViewEditor { flex: 1 1 0; min-width: 0; }

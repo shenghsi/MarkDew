@@ -74,3 +74,13 @@ test('Show changes in a commit compares it with the one before, or with empty fo
   expect([older.value, newer.value]).toEqual(['empty', 'abc1234']);
   expect(document.querySelector('.compare-note')!.textContent).toContain('read-only');
 });
+
+test('the change map marks each changed block over the scroll bar', async () => {
+  vi.stubGlobal('requestAnimationFrame', (fn: () => void) => setTimeout(fn, 0) as unknown as number);
+  vi.stubGlobal('cancelAnimationFrame', (id: number) => clearTimeout(id));
+  openCompare(host({ current: () => 'a\nnew\nc\n', read: async () => 'a\nold\nc\nd\n' }), document.body); await settle();
+  await new Promise(r => setTimeout(r, 20));
+  const marks = Array.from(document.querySelectorAll('.compare-ruler span')).map(m => m.className);
+  expect(marks).toEqual(['changed', 'removed']);
+  vi.unstubAllGlobals();
+});

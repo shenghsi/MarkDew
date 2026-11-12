@@ -1,6 +1,6 @@
 import { EditorState, type Extension } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
-import { MergeView, unifiedMergeView } from '@codemirror/merge';
+import { MergeView, unifiedMergeView, getChunks } from '@codemirror/merge';
 import { t, type TranslationKey } from './i18n';
 
 export interface CommitInfo { hash: string; short: string; author: string; date: string; subject: string; name: string }
@@ -53,8 +53,10 @@ export function openCompare(host: CompareHost, parent: HTMLElement): CompareHand
   bar.append(title, commitPick, older.wrap, newer.wrap, mode, apply, close);
   const note = document.createElement('div'); note.className = 'compare-note'; note.setAttribute('role', 'status');
   const body = document.createElement('div'); body.className = 'compare-body';
+  // The change map sits over the scroll bar. Each mark shows where a change is in the whole file.
+  const ruler = document.createElement('div'); ruler.className = 'compare-ruler'; ruler.setAttribute('aria-hidden', 'true');
   overlay.append(bar, note, body);
-  parent.append(overlay);
+  parent.append(overlay); body.append(ruler);
 
   const cache = new Map<string, string>();
   let commits: CommitInfo[] = [];
@@ -68,7 +70,30 @@ export function openCompare(host: CompareHost, parent: HTMLElement): CompareHand
     const text = await host.read(value, commit?.name);
     cache.set(value, text); return text;
   };
-  const destroy = () => { merge?.destroy(); single?.destroy(); merge = single = undefined; body.replaceChildren(); };
+  let frame = 0;
+  const drawRuler = () => {
+    frame = 0;
+    const editor = merge ? merge.b : single; const scroller = merge ? merge.dom : single?.scrollDOM;
+    if (!editor || !scroller) { ruler.replaceChildren(); return; }
+    const total = Math.max(scroller.scrollHeight, 1), height = ruler.clientHeight || scroller.clientHeight;
+    const marks: HTMLElement[] = [];
+    for (const chunk of getChunks(editor.state)?.chunks ?? []) {
+      const top = editor.lineBlockAt(Math.min(chunk.fromB, editor.state.doc.length)).top;
+      const bottom = chunk.toB > chunk.fromB ? editor.lineBlockAt(Math.min(chunk.endB, editor.state.doc.length)).bottom : top;
+      const mark = document.createElement('span');
+      mark.className = chunk.fromA === chunk.endA ? 'added' : chunk.fromB === chunk.endB ? 'removed' : 'changed';
+      mark.style.top = `${(top / total) * height}px`;
+      mark.style.height = `${Math.max(((bottom - top) / total) * height, 3)}px`;
+      marks.push(mark);
+    }
+    ruler.replaceChildren(...marks);
+  };
+  const scheduleRuler = () => { if (!frame && !closed) frame = requestAnimationFrame(drawRuler); };
+  const observer = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(scheduleRuler);
+  const destroy = () => {
+    if (frame) cancelAnimationFrame(frame); frame = 0; observer?.disconnect();
+    merge?.destroy(); single?.destroy(); merge = single = undefined; body.replaceChildren(ruler); ruler.replaceChildren();
+  };
   const editedText = () => merge ? merge.b.state.doc.toString() : single ? single.state.doc.toString() : baseline;
 
   const render = async (fresh = false) => {
@@ -83,13 +108,19 @@ export function openCompare(host: CompareHost, parent: HTMLElement): CompareHand
     baseline = right; loaded = true;
     const editable = newer.control.value === CURRENT;
     const common: Extension[] = [EditorView.lineWrapping, EditorState.readOnly.of(!editable), EditorView.editable.of(editable),
-      EditorView.updateListener.of(update => { if (update.docChanged && editable) { dirty = true; apply.disabled = false; } })];
+      EditorView.updateListener.of(update => {
+        if (update.docChanged && editable) { dirty = true; apply.disabled = false; }
+        if (update.docChanged || update.heightChanged) scheduleRuler();
+      })];
     const locked: Extension[] = [EditorView.lineWrapping, EditorState.readOnly.of(true), EditorView.editable.of(false)];
     if (mode.value === 'inline') {
       single = new EditorView({ parent: body, doc: right, extensions: [...common, unifiedMergeView({ original: left, mergeControls: false, gutter: true })] });
     } else {
       merge = new MergeView({ parent: body, a: { doc: left, extensions: locked }, b: { doc: right, extensions: common }, gutter: true, highlightChanges: true });
     }
+    const scroller = merge ? merge.dom : single!.scrollDOM;
+    observer?.observe(scroller);
+    scheduleRuler();
     apply.hidden = !editable;
     note.textContent = left === right ? t('compare.same') : editable ? t('compare.hint') : t('compare.readonly');
     (merge ? merge.b : single!).focus();
