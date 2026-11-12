@@ -1,9 +1,9 @@
-# MarkDew v1.5.0
+# MarkDew v1.5.1
 
 ## What is new
 
-- **Settings > Appearance > Editor > Body text size** sets the font size of body text in pixels (12 to 32 px, default 17 px). Writing Size still scales the result.
-- Includes everything in v1.4.0: the option to list all file types in the Files sidebar.
+- Fixed: the Find and Replace boxes could not take the cursor. Clicking them moved focus back to the editor.
+- Includes everything in v1.5.0: the Body text size setting.
 
 ## In-app updates
 

@@ -383,6 +383,7 @@ if (typeof window !== 'undefined') (window as any).view = view;
 document.querySelector('#editor')?.addEventListener('click', event => {
   if (event.defaultPrevented) return;
   const target = event.target as HTMLElement | null;
+  if (target?.closest('.cm-panels, .markdew-search-panel')) return;
   if (!target?.closest('.cm-scroller')) {
     if (!view.hasFocus) view.focus();
     if (!view.state.field(editorActiveField, false)) {
