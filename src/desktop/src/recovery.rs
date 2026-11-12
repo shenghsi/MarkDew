@@ -235,13 +235,20 @@ fn lease(directory: &Path) -> Result<Option<fs::File>, String> {
     if !file.metadata().map_err(|e| e.to_string())?.is_file() {
         return Err("Invalid opened recovery lease.".into());
     }
-    match file.try_lock_exclusive() {
-        Ok(()) => Ok(Some(file)),
-        Err(error) if error.raw_os_error() == fs2::lock_contended_error().raw_os_error() => {
-            Ok(None)
+    // A program started at the same moment (Pandoc, Git) can briefly hold a copy of a lease that was just
+    // released, until it starts. Wait a short time before the lease counts as active.
+    for attempt in 0..10 {
+        match file.try_lock_exclusive() {
+            Ok(()) => return Ok(Some(file)),
+            Err(error) if error.raw_os_error() == fs2::lock_contended_error().raw_os_error() => {
+                if attempt < 9 {
+                    std::thread::sleep(std::time::Duration::from_millis(20));
+                }
+            }
+            Err(error) => return Err(error.to_string()),
         }
-        Err(error) => Err(error.to_string()),
     }
+    Ok(None)
 }
 impl Store {
     pub fn session_id(&self) -> String {
