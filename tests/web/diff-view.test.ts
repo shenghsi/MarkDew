@@ -7,13 +7,13 @@ const commit = { hash: 'abc1234', short: 'abc1234', author: 'A', date: '2026-01-
 const host = (over: Partial<CompareHost> = {}): CompareHost => ({
   fileName: 'a.md', current: () => 'new\n', history: async () => [commit],
   read: async rev => (rev === 'head' ? 'old\n' : rev === 'staged' ? 'mid\n' : 'first\n'),
-  apply: vi.fn(), confirmDiscard: () => true, ...over,
+  apply: vi.fn(), confirmDiscard: () => true, closed: vi.fn(), ...over,
 });
 const settle = async () => { for (let i = 0; i < 20; i++) await Promise.resolve(); await new Promise(r => setTimeout(r, 0)); };
 afterEach(() => { document.body.replaceChildren(); });
 
 test('lists plain choices, shows both sides, and applies edits from the newer side', async () => {
-  const h = host(); openCompare(h); await settle();
+  const h = host(); openCompare(h, document.body); await settle();
   const selects = document.querySelectorAll<HTMLSelectElement>('.compare-pick select');
   expect(Array.from(selects[1].options).map(o => o.value)).toEqual(['current', 'staged', 'head', 'abc1234']);
   expect(Array.from(selects[0].options).map(o => o.value)).toEqual(['staged', 'head', 'abc1234', 'empty']);
@@ -22,7 +22,7 @@ test('lists plain choices, shows both sides, and applies edits from the newer si
 });
 
 test('Apply returns the edited text and closes', async () => {
-  const h = host(); openCompare(h); await settle();
+  const h = host(); openCompare(h, document.body); await settle();
   const apply = Array.from(document.querySelectorAll<HTMLButtonElement>('.compare-bar button')).find(b => b.textContent === 'Apply edits')!;
   expect(apply.disabled).toBe(true);
   const editors = document.querySelectorAll<HTMLElement>('.cm-mergeViewEditor .cm-content');
@@ -31,11 +31,12 @@ test('Apply returns the edited text and closes', async () => {
   expect(apply.disabled).toBe(false);
   apply.click();
   expect(h.apply).toHaveBeenCalledWith('Xnew\n');
-  expect(document.querySelector('.compare-overlay')).toBeNull();
+  expect(document.querySelector('.compare-view')).toBeNull();
+  expect(h.closed).toHaveBeenCalledTimes(1);
 });
 
 test('two commits compare read-only, and inline mode works', async () => {
-  openCompare(host()); await settle();
+  openCompare(host(), document.body); await settle();
   const [older, newer] = Array.from(document.querySelectorAll<HTMLSelectElement>('.compare-pick select')); const mode = document.querySelector<HTMLSelectElement>('.compare-mode')!;
   older.value = 'staged'; newer.value = 'head'; newer.dispatchEvent(new Event('change')); await settle();
   expect(Array.from(document.querySelectorAll<HTMLButtonElement>('.compare-bar button')).find(b => b.textContent === 'Apply edits')!.hidden).toBe(true);
@@ -45,16 +46,25 @@ test('two commits compare read-only, and inline mode works', async () => {
   expect(document.querySelectorAll('.cm-editor').length).toBe(1);
 });
 
-test('a missing version shows the error and Escape closes', async () => {
-  openCompare(host({ read: async () => { throw 'This version does not have the file.'; } })); await settle();
+test('a missing version shows the error, and Close removes the panel', async () => {
+  const h = host({ read: async () => { throw 'This version does not have the file.'; } });
+  const handle = openCompare(h, document.body); await settle();
   expect(document.querySelector('.compare-note')!.textContent).toContain('does not have');
-  document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true })); await settle();
-  expect(document.querySelector('.compare-overlay')).toBeNull();
+  await handle.close();
+  expect(document.querySelector('.compare-view')).toBeNull();
+  expect(h.closed).toHaveBeenCalledTimes(1);
+});
+
+test('refresh reads the editor text again only while the panel has no edits', async () => {
+  let text = 'new\n';
+  const handle = openCompare(host({ current: () => text }), document.body); await settle();
+  text = 'newer\n'; handle.refresh(); await settle();
+  expect(document.querySelector('.cm-mergeViewEditors')!.textContent).toContain('newer');
 });
 
 test('Show changes in a commit compares it with the one before, or with empty for the first', async () => {
   const second = { ...commit, hash: 'def5678', short: 'def5678', subject: 'second' };
-  openCompare(host({ history: async () => [second, commit], read: async rev => (rev === 'def5678' ? 'two\n' : 'one\n') })); await settle();
+  openCompare(host({ history: async () => [second, commit], read: async rev => (rev === 'def5678' ? 'two\n' : 'one\n') }), document.body); await settle();
   const pick = document.querySelector<HTMLSelectElement>('.compare-commit')!;
   const [older, newer] = Array.from(document.querySelectorAll<HTMLSelectElement>('.compare-pick select'));
   pick.value = 'def5678'; pick.dispatchEvent(new Event('change')); await settle();

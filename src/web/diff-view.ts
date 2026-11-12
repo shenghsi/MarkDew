@@ -13,17 +13,26 @@ export interface CompareHost {
   read: (rev: string, name?: string) => Promise<string>;
   apply: (text: string) => void;
   confirmDiscard: () => Promise<boolean> | boolean;
+  // The compare view calls this once, after it removed itself (Close, or Apply edits).
+  closed: () => void;
 }
 
 const CURRENT = 'current';
 const EMPTY = 'empty';
 const label = (commit: CommitInfo) => `${commit.short} · ${commit.subject} · ${commit.date.slice(0, 10)} · ${commit.author}`;
 
-// A full-window dialog that compares two versions of one file. The newer side is editable only when it is
-// the current file. Edits go back to the document through `apply`, so Undo and Save keep their rules.
-export function openCompare(host: CompareHost): { close: () => void } {
+// A panel in the editor area (its own tab) that compares two versions of one file. The newer side is editable
+// only when it is the current file. Edits go back to the document through `apply`, so Undo and Save keep their rules.
+export interface CompareHandle {
+  element: HTMLElement;
+  close: () => Promise<void>;
+  // Reads the editor text again, when it changed while the panel was hidden and the panel has no edits.
+  refresh: () => void;
+  dirty: () => boolean;
+}
+export function openCompare(host: CompareHost, parent: HTMLElement): CompareHandle {
   const overlay = document.createElement('div');
-  overlay.className = 'compare-overlay'; overlay.setAttribute('role', 'dialog'); overlay.setAttribute('aria-modal', 'true');
+  overlay.className = 'compare-view'; overlay.id = 'compare-panel-' + Math.random().toString(36).slice(2); overlay.setAttribute('role', 'tabpanel');
   overlay.setAttribute('aria-label', t('compare.title', { name: host.fileName }));
   const bar = document.createElement('div'); bar.className = 'compare-bar';
   const title = document.createElement('strong'); title.textContent = t('compare.title', { name: host.fileName });
@@ -45,12 +54,12 @@ export function openCompare(host: CompareHost): { close: () => void } {
   const note = document.createElement('div'); note.className = 'compare-note'; note.setAttribute('role', 'status');
   const body = document.createElement('div'); body.className = 'compare-body';
   overlay.append(bar, note, body);
-  document.body.append(overlay);
+  parent.append(overlay);
 
   const cache = new Map<string, string>();
   let commits: CommitInfo[] = [];
   let merge: MergeView | undefined, single: EditorView | undefined;
-  let serial = 0, closed = false, dirty = false, baseline = '';
+  let serial = 0, closed = false, dirty = false, baseline = '', loaded = false;
   const textOf = async (value: string): Promise<string> => {
     if (value === CURRENT) return host.current();
     if (value === EMPTY) return '';
@@ -62,16 +71,16 @@ export function openCompare(host: CompareHost): { close: () => void } {
   const destroy = () => { merge?.destroy(); single?.destroy(); merge = single = undefined; body.replaceChildren(); };
   const editedText = () => merge ? merge.b.state.doc.toString() : single ? single.state.doc.toString() : baseline;
 
-  const render = async () => {
+  const render = async (fresh = false) => {
     const mine = ++serial;
-    const keep = newer.control.value === CURRENT && (merge || single) ? editedText() : undefined;
+    const keep = !fresh && newer.control.value === CURRENT && (merge || single) ? editedText() : undefined;
     destroy(); note.textContent = t('compare.loading'); dirty = false; apply.disabled = true;
     let left: string, right: string;
     try { [left, right] = await Promise.all([textOf(older.control.value), textOf(newer.control.value)]); }
     catch (error) { if (mine === serial && !closed) note.textContent = String(error); return; }
     if (mine !== serial || closed) return;
     if (keep !== undefined && newer.control.value === CURRENT) right = keep;
-    baseline = right;
+    baseline = right; loaded = true;
     const editable = newer.control.value === CURRENT;
     const common: Extension[] = [EditorView.lineWrapping, EditorState.readOnly.of(!editable), EditorView.editable.of(editable),
       EditorView.updateListener.of(update => { if (update.docChanged && editable) { dirty = true; apply.disabled = false; } })];
@@ -89,12 +98,11 @@ export function openCompare(host: CompareHost): { close: () => void } {
   const leave = async () => {
     if (closed) return;
     if (dirty && !(await host.confirmDiscard())) return;
-    closed = true; destroy(); overlay.remove(); document.removeEventListener('keydown', key, true);
+    finish();
   };
-  const key = (event: KeyboardEvent) => { if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); void leave(); } };
-  document.addEventListener('keydown', key, true);
+  const finish = () => { closed = true; destroy(); overlay.remove(); host.closed(); };
   close.addEventListener('click', () => { void leave(); });
-  apply.addEventListener('click', () => { host.apply(editedText()); dirty = false; closed = true; destroy(); overlay.remove(); document.removeEventListener('keydown', key, true); });
+  apply.addEventListener('click', () => { host.apply(editedText()); dirty = false; finish(); });
   commitPick.addEventListener('change', () => {
     const index = commits.findIndex(commit => commit.hash === commitPick.value);
     commitPick.value = '';
@@ -119,5 +127,9 @@ export function openCompare(host: CompareHost): { close: () => void } {
     older.control.value = 'head'; newer.control.value = CURRENT;
     await render();
   })();
-  return { close: () => { void leave(); } };
+  const refresh = () => {
+    if (closed || dirty || newer.control.value !== CURRENT || !loaded) return;
+    if (host.current() !== baseline) void render(true);
+  };
+  return { element: overlay, close: leave, refresh, dirty: () => dirty };
 }

@@ -67,6 +67,9 @@ export class DocumentTabs {
 
 // Activation is manual: arrow keys move focus; Enter/Space use the normal button
 // action. This prevents a focus move from changing the document during input.
+// A side tab (for example Compare) shares the bar. Its ID is below zero so it never meets a document ID.
+export interface ExtraTab { id: number; label: string; title: string; selected: boolean }
+
 export function documentTabBar(
   parent: HTMLElement,
   select: (id: number) => void,
@@ -113,9 +116,10 @@ export function documentTabBar(
   list.addEventListener('click', click); list.addEventListener('dblclick', dblclick); list.addEventListener('keydown', key);
   bar.append(list, fallbackClose); parent.append(bar);
   return {
-    render(tabs: DocumentTabs) {
-      active = tabs.active.id;
-      const current = new Set(tabs.all.map(tab => tab.id));
+    render(tabs: DocumentTabs, extras: readonly ExtraTab[] = []) {
+      const extraSelected = extras.some(extra => extra.selected);
+      active = extraSelected ? extras.find(extra => extra.selected)!.id : tabs.active.id;
+      const current = new Set([...tabs.all.map(tab => tab.id), ...extras.map(extra => extra.id)]);
       for (const [id, button] of buttons) {
         if (!current.has(id)) {
           button.remove(); buttons.delete(id); labels.delete(id); closeButtons.delete(id);
@@ -141,13 +145,34 @@ export function documentTabBar(
         closeBtn!.setAttribute('aria-label', `Close ${tabName(tab)}`);
         button.title = tab.path || 'Untitled.md'; button.setAttribute('aria-selected', String(tab.id === active));
         button.tabIndex = tab.id === active ? 0 : -1;
+        button.classList.remove('document-tab-compare');
         if (tab.preview) {
           button.classList.add('document-tab-preview');
         } else {
           button.classList.remove('document-tab-preview');
         }
       }
-      fallbackClose.setAttribute('aria-label', `Close ${tabName(tabs.active)}`);
+      for (const extra of extras) {
+        let button = buttons.get(extra.id);
+        let label = labels.get(extra.id);
+        let closeBtn = closeButtons.get(extra.id);
+        if (!button) {
+          button = document.createElement('button'); button.type = 'button'; button.setAttribute('role', 'tab');
+          button.id = `document-tab-${extra.id}`; button.setAttribute('aria-controls', 'compare-panel');
+          button.dataset.document = String(extra.id); button.classList.add('document-tab-compare');
+          label = document.createElement('span'); label.className = 'document-tab-label';
+          closeBtn = document.createElement('button'); closeBtn.type = 'button';
+          closeBtn.className = 'document-tab-close'; closeBtn.tabIndex = -1;
+          closeBtn.dataset.close = String(extra.id);
+          button.append(label, closeBtn);
+          buttons.set(extra.id, button); labels.set(extra.id, label); closeButtons.set(extra.id, closeBtn);
+          list.append(button);
+        }
+        label!.textContent = extra.label; closeBtn!.setAttribute('aria-label', `Close ${extra.label}`);
+        button.title = extra.title; button.setAttribute('aria-selected', String(extra.selected));
+        button.tabIndex = extra.selected ? 0 : -1;
+      }
+      fallbackClose.setAttribute('aria-label', `Close ${extraSelected ? extras.find(extra => extra.selected)!.label : tabName(tabs.active)}`);
     },
     destroy() {
       list.removeEventListener('click', click); list.removeEventListener('dblclick', dblclick); list.removeEventListener('keydown', key);

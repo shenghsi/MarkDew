@@ -18,7 +18,7 @@ import { format, Format } from './formatting';
 import { insertTable } from './table-insert';
 import { codeBlock } from './code-block-command';
 import { editorMenu } from './editor-menu';
-import { openCompare } from './diff-view';
+import { openCompare, type CompareHandle } from './diff-view';
 import { listTab } from './list-indent';
 import { collapseDataUris } from './data-uri-collapse';
 import { pandocExchange } from './pandoc-exchange';
@@ -440,11 +440,23 @@ window.addEventListener('pagehide', () => sidebarSizing.dispose(), { once: true 
 const webLinks = webLinkOpener(view, message => { status.textContent = message; }, () => busy ? 'Wait for the file command, then open the web link.' :
   composing() ? 'Finish text input, then open the web link.' : null, undefined, () => status.textContent === 'Opening web link…');
 window.addEventListener('pagehide', () => webLinks.dispose(), { once: true });
+// Compare tabs share the tab bar with the file tabs. A Compare tab belongs to one file tab and is not saved
+// with the session. Its ID is below zero. Showing it makes its file the active document, but the Compare panel
+// replaces the editor until the user selects a file tab.
+interface CompareTab { id: number; file: DocumentTab; name: string; path: string; handle: CompareHandle }
+const compareTabs: CompareTab[] = [];
+let compareSeq = 0;
+let shownCompare: CompareTab | undefined;
+function layoutCompare() {
+  for (const entry of compareTabs) entry.handle.element.hidden = entry !== shownCompare;
+  workspace.classList.toggle('compare-shown', !!shownCompare);
+}
 // At app start no file is open: the first tab is a blank placeholder, so the empty state shows.
 tabs = new DocumentTabs({ id: 0, state: view.state, path: '', baseline: '', uncertain: false, sourceMode: false, placeholder: true }, inputLock);
 tabsReady = true;
 syncMenuChecks();
-const tabBar = documentTabBar(tabContainer, id => { switchTab(id); }, id => { void operation(() => closeTab(id), true); }, id => {
+const tabBar = documentTabBar(tabContainer, id => { if (id < 0) showCompare(id); else switchTab(id); },
+  id => { if (id < 0) void closeCompare(id); else void operation(() => closeTab(id), true); }, id => {
   const tab = tabs.get(id);
   if (tab && tab.preview) {
     tab.preview = false;
@@ -455,7 +467,9 @@ const tabBar = documentTabBar(tabContainer, id => { switchTab(id); }, id => { vo
 function renderTabs() {
   // An edit or a path ends the placeholder for good, so Undo back to empty keeps the editor.
   if (tabs.active.placeholder && (tabs.active.path || tabDirty(tabs.active))) tabs.active.placeholder = false;
-  tabBar.render(tabs);
+  tabBar.render(tabs, compareTabs.map(entry => ({
+    id: entry.id, label: t('compare.title', { name: entry.name }), title: entry.path, selected: entry === shownCompare,
+  })));
   const empty = noDocument();
   // With no file open, the tab bar shows only the + button: the blank placeholder tab stays hidden.
   tabContainer.classList.toggle('document-tabs-empty', empty);
@@ -645,6 +659,7 @@ function switchTab(id: number, internal = false) {
   if (!tabs.activate(view, id, () => (!busy || internal) && !composing(), () => {
     document.querySelectorAll<HTMLFormElement>('.link-controls').forEach(form => form.querySelector<HTMLButtonElement>('[data-cancel]')!.click());
   })) return false;
+  if (shownCompare) { shownCompare = undefined; layoutCompare(); renderTabs(); }
   fileTransition();
   document.querySelector('#source')!.setAttribute('aria-pressed', String(active().sourceMode));
   document.querySelector('#editor')!.classList.toggle('source-mode', active().sourceMode);
@@ -783,6 +798,11 @@ async function addDocument(source = '', file?: string, preview = false) {
 }
 async function closeTab(id: number, force = false) {
   const tab = tabs.get(id); if (!tab || !(force || await discard(tab))) return;
+  // Its Compare tabs close with it. The user can keep a Compare tab that has edits.
+  for (const entry of compareTabs.filter(other => other.file === tab)) {
+    await entry.handle.close();
+    if (compareTabs.includes(entry)) return;
+  }
   checkpoint(tab); await flushRecovery(tab);
   let replacement: DocumentTab | undefined;
   if (tabs.all.length === 1) { replacement = await createTab(); replacement.placeholder = true; tabs.add(replacement); renderTabs(); }
@@ -939,31 +959,52 @@ async function openDocumentLink(destination: string, fragment?: string) {
   }
   status.textContent = 'File link opened.';
 }
-// Compare: the active tab against Git history. The newer side is editable and goes back into the editor.
+// Compare: the active tab against Git history, in its own tab. The newer side is editable and goes back into the editor.
 async function compareActive() {
   const tab = active();
   if (!isTauri() || !tab.path) { status.textContent = t('compare.no_git'); return; }
+  const known = compareTabs.find(entry => entry.file === tab);
+  if (known) { showCompare(known.id); return; }
   const path = tab.path;
   const info = await invoke<{ tracked: boolean }>('git_info', { path }).catch(error => { status.textContent = String(error); return undefined; });
   if (!info) return;
   if (!info.tracked) { status.textContent = t('compare.no_git'); return; }
   const lf = (text: string) => text.replace(/\r\n?/g, '\n');
-  openCompare({
-    fileName: getFileName(path),
-    current: () => view.state.doc.toString(),
+  const entry = { id: --compareSeq, file: tab, name: getFileName(path), path } as CompareTab;
+  entry.handle = openCompare({
+    fileName: entry.name,
+    // A hidden file tab keeps its text in its saved state, not in the editor.
+    current: () => (tab === active() ? view.state : tab.state).doc.toString(),
     history: () => invoke('git_history', { path }),
     read: (rev, name) => invoke<string>('git_file_at', { path, rev, name }).then(lf),
+    // The panel only shows while its file is the active document, so the editor view holds the file.
     apply: text => {
       const old = view.state.doc.toString();
       let from = 0; while (from < old.length && from < text.length && old[from] === text[from]) from++;
       let end = 0; while (end < old.length - from && end < text.length - from && old[old.length - 1 - end] === text[text.length - 1 - end]) end++;
       if (from === old.length && from === text.length) return;
       view.dispatch({ changes: { from, to: old.length - end, insert: text.slice(from, text.length - end) } });
-      status.textContent = t('compare.applied'); view.focus();
+      status.textContent = t('compare.applied');
     },
     confirmDiscard: () => ask(t('compare.discard'), { title: 'MarkDew', kind: 'warning' }),
-  });
+    closed: () => {
+      const index = compareTabs.indexOf(entry); if (index >= 0) compareTabs.splice(index, 1);
+      const wasShown = shownCompare === entry;
+      if (wasShown) shownCompare = undefined;
+      layoutCompare(); renderTabs();
+      if (wasShown) view.focus();
+    },
+  }, workspace);
+  compareTabs.push(entry);
+  showCompare(entry.id);
 }
+function showCompare(id: number) {
+  const entry = compareTabs.find(other => other.id === id); if (!entry) return false;
+  if (active() !== entry.file && !switchTab(entry.file.id)) return false;
+  shownCompare = entry; layoutCompare(); entry.handle.refresh(); renderTabs();
+  return true;
+}
+async function closeCompare(id: number) { await compareTabs.find(entry => entry.id === id)?.handle.close(); }
 
 function initSidebar(initialRoot: string, deferRead: boolean) {
   sidebar?.dispose();

@@ -1744,7 +1744,10 @@ folder. A previously closed project must not cause a second window to open.
 Existing open files and modified tabs retain their project routing rules.
 
 Compare: right-click a Markdown or text file in Files, or in the editor, and choose Compare…
-It opens a full-window dialog for the active tab. Two lists choose the older and the newer
+It opens a Compare tab in the tab bar, next to the file tabs. Each file has at most one Compare tab,
+but Compare tabs for different files can be open together. Select a file tab to return to the
+editor, and the Compare tab to return to the comparison. Compare tabs are not saved with the
+session. Closing a file tab closes its Compare tab. Two lists choose the older and the newer
 version: Current file (the editor text, with unsaved edits), Staged copy, Last saved commit
 (HEAD), or any commit from the file's history (up to 200, renames followed). The default is
 Last saved commit against Current file. Side by side and Inline show the same difference.

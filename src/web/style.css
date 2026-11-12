@@ -1555,7 +1555,9 @@ body.no-document #word-count, body.no-document #document-title { display: none; 
 }
 
 /* Compare: a full-window dialog with two versions of one file. */
-.compare-overlay { position: fixed; inset: 0; z-index: 60; display: flex; flex-direction: column; background: var(--paper); color: var(--ink); }
+.compare-view { flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column; background: var(--paper); color: var(--ink); }
+.workspace.compare-shown > #editor { display: none; }
+.compare-view[hidden] { display: none; }
 .compare-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; padding: 8px 14px; border-bottom: 1px solid var(--border); background: var(--surface); }
 .compare-bar strong { margin-right: auto; }
 .compare-pick { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); }
