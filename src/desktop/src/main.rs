@@ -14,6 +14,7 @@ mod assets;
 mod directory;
 mod documents;
 mod export;
+mod git;
 mod images;
 mod local_links;
 mod menu;
@@ -209,6 +210,27 @@ async fn open_with_default_app(app: tauri::AppHandle, path: String) -> Result<&'
     })
     .await
     .map_err(|e| e.to_string())?
+}
+
+#[tauri::command]
+async fn git_info(path: String) -> Result<git::Info, String> {
+    tauri::async_runtime::spawn_blocking(move || git::info(&PathBuf::from(path)))
+        .await
+        .map_err(|e| e.to_string())?
+}
+
+#[tauri::command]
+async fn git_history(path: String) -> Result<Vec<git::Commit>, String> {
+    tauri::async_runtime::spawn_blocking(move || git::history(&PathBuf::from(path)))
+        .await
+        .map_err(|e| e.to_string())?
+}
+
+#[tauri::command]
+async fn git_file_at(path: String, rev: String, name: Option<String>) -> Result<String, String> {
+    tauri::async_runtime::spawn_blocking(move || git::file_at(&PathBuf::from(path), &rev, name.as_deref()))
+        .await
+        .map_err(|e| e.to_string())?
 }
 
 #[tauri::command]
@@ -1420,6 +1442,9 @@ fn main() {
             list_directory,
             open_with_default_app,
             list_project_files,
+            git_info,
+            git_history,
+            git_file_at,
             open_folder_window,
             take_initial_folder,
             take_initial_file,

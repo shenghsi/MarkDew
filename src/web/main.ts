@@ -18,6 +18,7 @@ import { format, Format } from './formatting';
 import { insertTable } from './table-insert';
 import { codeBlock } from './code-block-command';
 import { editorMenu } from './editor-menu';
+import { openCompare } from './diff-view';
 import { listTab } from './list-indent';
 import { collapseDataUris } from './data-uri-collapse';
 import { pandocExchange } from './pandoc-exchange';
@@ -555,7 +556,8 @@ const openImageControls = linkControls(view, tools, message => { status.textCont
 imageButton.addEventListener('mousedown', event => event.preventDefault());
 imageButton.addEventListener('click', openImageControls);
 const disposeEditorMenu = editorMenu(view, { allowed: () => pageActive && !busy && !composing() && !document.querySelector('.print-dialog'),
-  report: message => { status.textContent = message; }, openLink: () => { openLinkControls(); }, openImage: () => { openImageControls(); } });
+  report: message => { status.textContent = message; }, openLink: () => { openLinkControls(); }, openImage: () => { openImageControls(); },
+  compare: isTauri() ? () => { void compareActive(); } : undefined });
 window.addEventListener('pagehide', disposeEditorMenu, { once: true });
 linkButton.addEventListener('mousedown', event => event.preventDefault());
 linkButton.addEventListener('click', openLinkControls);
@@ -937,12 +939,42 @@ async function openDocumentLink(destination: string, fragment?: string) {
   }
   status.textContent = 'File link opened.';
 }
+// Compare: the active tab against Git history. The newer side is editable and goes back into the editor.
+async function compareActive() {
+  const tab = active();
+  if (!isTauri() || !tab.path) { status.textContent = t('compare.no_git'); return; }
+  const path = tab.path;
+  const info = await invoke<{ tracked: boolean }>('git_info', { path }).catch(error => { status.textContent = String(error); return undefined; });
+  if (!info) return;
+  if (!info.tracked) { status.textContent = t('compare.no_git'); return; }
+  const lf = (text: string) => text.replace(/\r\n?/g, '\n');
+  openCompare({
+    fileName: getFileName(path),
+    current: () => view.state.doc.toString(),
+    history: () => invoke('git_history', { path }),
+    read: (rev, name) => invoke<string>('git_file_at', { path, rev, name }).then(lf),
+    apply: text => {
+      const old = view.state.doc.toString();
+      let from = 0; while (from < old.length && from < text.length && old[from] === text[from]) from++;
+      let end = 0; while (end < old.length - from && end < text.length - from && old[old.length - 1 - end] === text[text.length - 1 - end]) end++;
+      if (from === old.length && from === text.length) return;
+      view.dispatch({ changes: { from, to: old.length - end, insert: text.slice(from, text.length - end) } });
+      status.textContent = t('compare.applied'); view.focus();
+    },
+    confirmDiscard: () => ask(t('compare.discard'), { title: 'MarkDew', kind: 'warning' }),
+  });
+}
+
 function initSidebar(initialRoot: string, deferRead: boolean) {
   sidebar?.dispose();
   filesPane.replaceChildren();
   sidebar = fileSidebar(filesPane, {
     read: path => invoke('list_directory', { path, all: sidebarShowsAllFiles() }),
     allFiles: () => sidebarShowsAllFiles(),
+    compare: path => { void operation(async () => {
+      const existing = await tabFor(path);
+      if (existing) switchTab(existing.id, true); else await addDocument('', path, false);
+    }, true).then(() => compareActive()); },
     openExternal: path => {
       void invoke<'opened' | 'revealed'>('open_with_default_app', { path })
         .then(result => {

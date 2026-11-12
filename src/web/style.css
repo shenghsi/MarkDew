@@ -1553,3 +1553,23 @@ body.no-document #word-count, body.no-document #document-title { display: none; 
   user-select: text;
   -webkit-user-select: text;
 }
+
+/* Compare: a full-window dialog with two versions of one file. */
+.compare-overlay { position: fixed; inset: 0; z-index: 60; display: flex; flex-direction: column; background: var(--paper); color: var(--ink); }
+.compare-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; padding: 8px 14px; border-bottom: 1px solid var(--border); background: var(--surface); }
+.compare-bar strong { margin-right: auto; }
+.compare-pick { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); }
+.compare-bar select, .compare-bar button { font: inherit; font-size: 13px; color: var(--ink); background: var(--paper); border: 1px solid var(--border); border-radius: 4px; padding: 3px 8px; max-width: 320px; }
+.compare-bar button:disabled { opacity: .5; }
+.compare-note { padding: 4px 14px; font-size: 12px; color: var(--muted); border-bottom: 1px solid var(--border); min-height: 1.4em; }
+.compare-body { flex: 1; min-height: 0; overflow: auto; }
+.compare-body .cm-mergeView, .compare-body .cm-editor { height: 100%; }
+.compare-body .cm-mergeViewEditors { height: 100%; }
+.compare-body .cm-mergeViewEditor { flex: 1 1 0; min-width: 0; overflow: auto; }
+.compare-body .cm-editor { background: var(--paper); font: 14px/1.55 ui-monospace, Menlo, Consolas, monospace; }
+.compare-body .cm-content { caret-color: var(--ink); }
+.compare-body .cm-changedLine, .compare-body .cm-insertedLine { background: rgba(46, 160, 67, .14); }
+.compare-body .cm-deletedChunk, .compare-body .cm-deletedLine { background: rgba(248, 81, 73, .14); }
+.compare-body .cm-changedText, .compare-body ins.cm-insertedLine, .compare-body ins { background: rgba(46, 160, 67, .35); text-decoration: none; }
+.compare-body .cm-deletedText, .compare-body del { background: rgba(248, 81, 73, .35); }
+.compare-body .cm-changeGutter { width: 4px; }

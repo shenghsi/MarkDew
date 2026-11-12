@@ -238,3 +238,10 @@ text/x-markdown, and text/plain without changing the user's default editor.
 The package name is mark-dew; the executable is markdew-desktop. A desktop entry
 without a file argument can be registered for MIME types but still omitted from
 Open With by file managers that require file-handler support.
+
+# Git history
+
+git.rs starts the installed git program with fixed arguments and no shell, for Compare. It
+only reads: rev-parse, ls-files, diff --quiet, log --follow, and show. A revision is head,
+staged, or a hex commit hash. Output is limited to 16 MiB and 20 seconds. A missing git program
+returns a message that names Git.

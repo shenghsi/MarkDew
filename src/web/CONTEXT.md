@@ -1742,3 +1742,14 @@ When the first native file-open request reaches a fresh window with one clean,
 untitled tab, the requested file's containing folder replaces the saved sidebar
 folder. A previously closed project must not cause a second window to open.
 Existing open files and modified tabs retain their project routing rules.
+
+Compare: right-click a Markdown or text file in Files, or in the editor, and choose Compare…
+It opens a full-window dialog for the active tab. Two lists choose the older and the newer
+version: Current file (the editor text, with unsaved edits), Staged copy, Last saved commit
+(HEAD), or any commit from the file's history (up to 200, renames followed). The default is
+Last saved commit against Current file. Side by side and Inline show the same difference.
+Only Current file is editable. Apply edits puts the changed text into the editor as one
+change, so Undo works; Save then follows the normal rules. A file outside a Git repository, or
+a repository with no commit, shows a message and no dialog. The host runs the installed git
+program read-only (git_info, git_history, git_file_at in git.rs). Stage, commit, blame, and
+folder diffs are not part of Compare.

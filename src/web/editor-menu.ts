@@ -14,6 +14,7 @@ export interface EditorMenuHost {
   report: (message: string) => void;
   openLink: () => void;
   openImage: () => void;
+  compare?: () => void;
 }
 
 const svg = (body: string) => `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${body}</svg>`;
@@ -74,6 +75,7 @@ export function editorMenu(view: EditorView, host: EditorMenuHost): () => void {
         { label: t('menu.task_list'), icon: icons.task, run: line('task') },
       ] },
       { type: 'separator' },
+      ...(host.compare ? [{ type: 'item' as const, label: t('compare.menu'), run: host.compare }, { type: 'separator' as const }] : []),
       { type: 'item', label: t('menu.paragraph'), submenu: [
         ...[1, 2, 3, 4, 5, 6].map(heading), { type: 'separator' },
         { type: 'item', label: t('menu.paragraph'), checked: current === 'paragraph', run: apply('paragraph') },

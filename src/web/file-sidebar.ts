@@ -59,6 +59,8 @@ export interface SidebarServices {
   // Opens a file that is not Markdown or text with the system default app.
   openExternal?: (path: string) => void;
   allFiles?: () => boolean;
+  // Compare a file with an older Git version.
+  compare?: (path: string) => void;
 }
 
 // Each mounted folder owns its request token. A root refresh removes all older
@@ -468,6 +470,18 @@ export function fileSidebar(pane: HTMLElement, services: SidebarServices,
       void handleNewFile(targetDir, targetFolderBtn);
     });
     menu.append(newFileItem);
+
+    if (fileButton && services.compare && fileButton.dataset.filePath && isEditorFile(fileButton.dataset.filePath)) {
+      const compareItem = document.createElement('button');
+      compareItem.type = 'button';
+      compareItem.className = 'sidebar-context-item';
+      compareItem.textContent = t('compare.menu');
+      compareItem.addEventListener('click', () => {
+        closeContextMenu();
+        services.compare!(fileButton.dataset.filePath!);
+      });
+      menu.append(compareItem);
+    }
 
     if (fileButton && services.renameFile && fileButton.dataset.filePath) {
       const renameItem = document.createElement('button');
