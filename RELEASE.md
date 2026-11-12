@@ -1,9 +1,9 @@
-# MarkDew v1.5.1
+# MarkDew v1.6.0
 
 ## What is new
 
-- Fixed: the Find and Replace boxes could not take the cursor. Clicking them moved focus back to the editor.
-- Includes everything in v1.5.0: the Body text size setting.
+- New: **Compare**. Right-click a file in Files, or right-click in the editor, and choose **Compare…** to see changes against Git history. Compare the current file with the last commit, the staged copy, or any earlier commit, or compare two commits. Use side-by-side or inline view. You can edit the current file in the view, then choose **Apply edits** and Save. It needs Git installed.
+- Includes everything in v1.5.1: the Find and Replace focus fix, and the Body text size setting.
 
 ## In-app updates
 
