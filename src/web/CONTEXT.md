@@ -1752,4 +1752,5 @@ Only Current file is editable. Apply edits puts the changed text into the editor
 change, so Undo works; Save then follows the normal rules. A file outside a Git repository, or
 a repository with no commit, shows a message and no dialog. The host runs the installed git
 program read-only (git_info, git_history, git_file_at in git.rs). Stage, commit, blame, and
-folder diffs are not part of Compare.
+folder diffs are not part of Compare. Show changes in a commit sets Older to the commit before it
+for this file (Empty for the first one) and Newer to that commit.

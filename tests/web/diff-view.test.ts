@@ -16,7 +16,7 @@ test('lists plain choices, shows both sides, and applies edits from the newer si
   const h = host(); openCompare(h); await settle();
   const selects = document.querySelectorAll<HTMLSelectElement>('.compare-pick select');
   expect(Array.from(selects[1].options).map(o => o.value)).toEqual(['current', 'staged', 'head', 'abc1234']);
-  expect(Array.from(selects[0].options).map(o => o.value)).toEqual(['staged', 'head', 'abc1234']);
+  expect(Array.from(selects[0].options).map(o => o.value)).toEqual(['staged', 'head', 'abc1234', 'empty']);
   expect(document.querySelectorAll('.cm-mergeViewEditor').length).toBe(2);
   document.querySelector<HTMLButtonElement>('.compare-bar button')!.click();
 });
@@ -36,7 +36,7 @@ test('Apply returns the edited text and closes', async () => {
 
 test('two commits compare read-only, and inline mode works', async () => {
   openCompare(host()); await settle();
-  const [older, newer, mode] = Array.from(document.querySelectorAll<HTMLSelectElement>('.compare-bar select'));
+  const [older, newer] = Array.from(document.querySelectorAll<HTMLSelectElement>('.compare-pick select')); const mode = document.querySelector<HTMLSelectElement>('.compare-mode')!;
   older.value = 'staged'; newer.value = 'head'; newer.dispatchEvent(new Event('change')); await settle();
   expect(Array.from(document.querySelectorAll<HTMLButtonElement>('.compare-bar button')).find(b => b.textContent === 'Apply edits')!.hidden).toBe(true);
   expect(document.querySelector('.compare-note')!.textContent).toContain('read-only');
@@ -50,4 +50,17 @@ test('a missing version shows the error and Escape closes', async () => {
   expect(document.querySelector('.compare-note')!.textContent).toContain('does not have');
   document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true })); await settle();
   expect(document.querySelector('.compare-overlay')).toBeNull();
+});
+
+test('Show changes in a commit compares it with the one before, or with empty for the first', async () => {
+  const second = { ...commit, hash: 'def5678', short: 'def5678', subject: 'second' };
+  openCompare(host({ history: async () => [second, commit], read: async rev => (rev === 'def5678' ? 'two\n' : 'one\n') })); await settle();
+  const pick = document.querySelector<HTMLSelectElement>('.compare-commit')!;
+  const [older, newer] = Array.from(document.querySelectorAll<HTMLSelectElement>('.compare-pick select'));
+  pick.value = 'def5678'; pick.dispatchEvent(new Event('change')); await settle();
+  expect([older.value, newer.value]).toEqual(['abc1234', 'def5678']);
+  expect(document.querySelector('.compare-note')!.textContent).toContain('read-only');
+  pick.value = 'abc1234'; pick.dispatchEvent(new Event('change')); await settle();
+  expect([older.value, newer.value]).toEqual(['empty', 'abc1234']);
+  expect(document.querySelector('.compare-note')!.textContent).toContain('read-only');
 });

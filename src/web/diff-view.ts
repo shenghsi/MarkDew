@@ -16,6 +16,7 @@ export interface CompareHost {
 }
 
 const CURRENT = 'current';
+const EMPTY = 'empty';
 const label = (commit: CommitInfo) => `${commit.short} · ${commit.subject} · ${commit.date.slice(0, 10)} · ${commit.author}`;
 
 // A full-window dialog that compares two versions of one file. The newer side is editable only when it is
@@ -37,7 +38,10 @@ export function openCompare(host: CompareHost): { close: () => void } {
   for (const [value, name] of [['side', 'compare.side'], ['inline', 'compare.inline']] as const) mode.append(new Option(t(name), value));
   const apply = document.createElement('button'); apply.type = 'button'; apply.textContent = t('compare.apply');
   const close = document.createElement('button'); close.type = 'button'; close.textContent = t('compare.close');
-  bar.append(title, older.wrap, newer.wrap, mode, apply, close);
+  // One choice shows what a commit changed: the commit against the one before it for this file.
+  const commitPick = document.createElement('select'); commitPick.className = 'compare-commit'; commitPick.setAttribute('aria-label', t('compare.commit_changes'));
+  commitPick.append(new Option(t('compare.commit_changes'), ''));
+  bar.append(title, commitPick, older.wrap, newer.wrap, mode, apply, close);
   const note = document.createElement('div'); note.className = 'compare-note'; note.setAttribute('role', 'status');
   const body = document.createElement('div'); body.className = 'compare-body';
   overlay.append(bar, note, body);
@@ -49,6 +53,7 @@ export function openCompare(host: CompareHost): { close: () => void } {
   let serial = 0, closed = false, dirty = false, baseline = '';
   const textOf = async (value: string): Promise<string> => {
     if (value === CURRENT) return host.current();
+    if (value === EMPTY) return '';
     const known = cache.get(value); if (known !== undefined) return known;
     const commit = commits.find(c => c.hash === value);
     const text = await host.read(value, commit?.name);
@@ -90,6 +95,14 @@ export function openCompare(host: CompareHost): { close: () => void } {
   document.addEventListener('keydown', key, true);
   close.addEventListener('click', () => { void leave(); });
   apply.addEventListener('click', () => { host.apply(editedText()); dirty = false; closed = true; destroy(); overlay.remove(); document.removeEventListener('keydown', key, true); });
+  commitPick.addEventListener('change', () => {
+    const index = commits.findIndex(commit => commit.hash === commitPick.value);
+    commitPick.value = '';
+    if (index < 0) return;
+    newer.control.value = commits[index].hash;
+    older.control.value = commits[index + 1]?.hash ?? EMPTY;
+    void render();
+  });
   for (const control of [older.control, newer.control, mode]) control.addEventListener('change', () => { void render(); });
 
   void (async () => {
@@ -99,7 +112,9 @@ export function openCompare(host: CompareHost): { close: () => void } {
       if (current) control.append(new Option(t('compare.current'), CURRENT));
       control.append(new Option(t('compare.staged'), 'staged'), new Option(t('compare.head'), 'head'));
       for (const commit of commits) control.append(new Option(label(commit), commit.hash));
+      if (!current) control.append(new Option(t('compare.empty'), EMPTY));
     };
+    for (const commit of commits) commitPick.append(new Option(label(commit), commit.hash));
     fill(older.control, false); fill(newer.control, true);
     older.control.value = 'head'; newer.control.value = CURRENT;
     await render();
