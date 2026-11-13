@@ -242,20 +242,11 @@ reversed replacements, and an unavailable paragraph start. The browser fixture
 is available at tests/browser/scroll-stability.html. Real keyboard geometry and
 large-document input timing remain unverified because browser control failed.
 
-Live preview gives inactive paragraph blank lines a scaled 14-pixel box. Direct
-BR children are hidden on compact and collapsed separators. Selected blank
-lines retain normal editing metrics. Fenced and indented code blank lines keep
-their code metrics. Tables use 12-pixel resting padding and 34 pixels above
-content while the floating toolbar is visible. WebKit and Chromium each pass
-25 geometry, Source/Live, exact source record, and Undo/Redo checks in
-tests/browser/blank-line-spacing.html. Before this CSS change, both engines
-already measured 14-pixel paragraph blanks; the visible excess came from
-34-pixel resting table padding. The BR line-box hypothesis was not reproduced.
-The web tests and frontend build pass. Bend proof passes with the project's
-verified 2.0.38 compiler. Bend 2.0.36 and later reject repeated constructor names
-across aliased modules, so constructors in this project are unique (SaveReady,
-PlanReady, WorkspaceReady, TextValue, Visible). Native Tauri WebView acceptance remains
-open.
+Live preview blank lines use normal line height, including separators beside
+tables. Selection does not change blank-line spacing. The blank-line decoration
+field and its shrinking styles have been removed. Fenced and indented code
+lines keep their code metrics. Tables keep 12-pixel resting padding and
+34 pixels above content while the floating toolbar is visible.
 
 Native editor cursors use the theme ink color. The app's cursor selector has
 higher CSS specificity than CodeMirror's default light-theme content selector.

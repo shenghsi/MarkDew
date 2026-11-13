@@ -37,13 +37,13 @@ function select(number) { view.dispatch({selection: {anchor: view.state.doc.line
 function source() { return savedSource(view.state.field(sourceField)); }
 try {
   await settle();
-  check('paragraph blank height', height(2), 14);
-  check('paragraph blank offsetHeight', lineDOM(2).offsetHeight, 14);
-  check('blank br display', getComputedStyle(lineDOM(2).querySelector('br')).display, 'none');
-  check('blank before table', height(4), 0);
-  check('blank after table', height(8), 0);
-  check('resting table padding', getComputedStyle(document.querySelector('.preview-table')).paddingTop, '12px');
   const normalHeight = height(1);
+  check('paragraph blank height', height(2), normalHeight);
+  check('paragraph blank offsetHeight', lineDOM(2).offsetHeight, Math.round(normalHeight));
+  check('blank br display', getComputedStyle(lineDOM(2).querySelector('br')).display !== 'none', true);
+  check('blank before table', height(4), normalHeight);
+  check('blank after table', height(8), normalHeight);
+  check('resting table padding', getComputedStyle(document.querySelector('.preview-table')).paddingTop, '12px');
   check('fenced code blank remains visible', height(11) > 14, true);
   check('indented code blank remains visible', height(16) > 14, true);
   select(2); await settle();
@@ -52,7 +52,7 @@ try {
   select(4); await settle();
   check('selected table separator height', height(4), normalHeight);
   select(19); await settle();
-  check('table separator collapses again', height(4), 0);
+  check('table separator keeps normal height', height(4), normalHeight);
   tableEditor(document.querySelector('.preview-table')).begin(1, 0); await settle();
   const table = document.querySelector('.preview-table'), bar = table.querySelector('.table-floating-bar');
   check('editing table padding', getComputedStyle(table).paddingTop, '34px');
@@ -60,13 +60,13 @@ try {
   endTableEdit(view); await settle();
   check('finished table padding', getComputedStyle(document.querySelector('.preview-table')).paddingTop, '12px');
   document.documentElement.style.setProperty('--writing-scale', '1.5'); await settle();
-  check('scaled blank height', height(2), 21);
+  check('scaled blank height', height(2), height(1));
   document.documentElement.style.removeProperty('--writing-scale');
   view.dispatch({effects: display.reconfigure([])}); await settle();
   check('Source blank height', height(2), normalHeight);
   check('Source has no compact blanks', view.dom.querySelectorAll('.md-blank-line, .md-blank-line-block').length, 0);
   view.dispatch({effects: display.reconfigure(livePreview)}); await settle();
-  check('Live blank height', height(2), 14);
+  check('Live blank height', height(2), normalHeight);
   check('presentation retains exact source', source(), original);
   check('presentation adds no history', undoDepth(view.state), 0);
   select(2); view.focus();

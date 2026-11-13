@@ -273,52 +273,18 @@ it('does not expand row height when clicking cell with inline code backticks', a
   }
 });
 
-it('renders compact spacing on blank lines outside code blocks', async () => {
+it('keeps blank lines free of spacing decorations', async () => {
   const source = 'Paragraph 0\n\nParagraph 1\n\n| Col A | Col B |\n| --- | --- |\n| 1 | 2 |\n\n```python\ndef foo():\n    pass\n\ndef bar():\n    pass\n```\n\nParagraph 2';
   const { editor } = create(source);
   await vi.waitFor(() => expect(document.querySelector('.preview-table')).not.toBeNull());
 
-  // Blank lines between paragraphs receive md-blank-line (Typora 0.8em spacing)
-  const paragraphBlankLines = document.querySelectorAll('.cm-line.md-blank-line');
-  expect(paragraphBlankLines.length).toBe(2);
+  const spacingDecorations = () => document.querySelectorAll('.md-blank-line, .md-blank-line-block');
+  expect(spacingDecorations().length).toBe(0);
+  expect(document.querySelectorAll('.cm-line.md-code-line').length).toBe(5);
 
-  // Blank lines adjacent to table receive md-blank-line-block (collapsed to eliminate redundant space)
-  const tableAdjacentBlankLines = document.querySelectorAll('.cm-line.md-blank-line-block');
-  expect(tableAdjacentBlankLines.length).toBe(2);
-
-  // Blank lines inside code blocks do NOT receive md-blank-line or md-blank-line-block
-  const codeLines = document.querySelectorAll('.cm-line.md-code-line');
-  expect(codeLines.length).toBe(5);
-  Array.from(codeLines).forEach(cl => {
-    expect(cl.classList.contains('md-blank-line')).toBe(false);
-    expect(cl.classList.contains('md-blank-line-block')).toBe(false);
-  });
-
-  // Clicking on a blank line to edit it removes compact/collapse classes so line height is normal
-  const line2 = editor.state.doc.line(2);
-  editor.dispatch({
-    selection: { anchor: line2.from }
-  });
-  expect(document.querySelectorAll('.cm-line.md-blank-line').length).toBe(paragraphBlankLines.length - 1);
-
-  const line4 = editor.state.doc.line(4);
-  editor.dispatch({
-    selection: { anchor: line4.from }
-  });
-  expect(document.querySelectorAll('.cm-line.md-blank-line-block').length).toBe(tableAdjacentBlankLines.length - 1);
-
-  // Moving cursor away restores compact rendering
-  editor.dispatch({
-    selection: { anchor: editor.state.doc.length }
-  });
-  expect(document.querySelectorAll('.cm-line.md-blank-line').length).toBe(paragraphBlankLines.length);
-  expect(document.querySelectorAll('.cm-line.md-blank-line-block').length).toBe(tableAdjacentBlankLines.length);
-
-  // Typing on a blank line removes decoration
-  editor.dispatch({
-    changes: { from: line2.from, to: line2.to, insert: 'Now not blank' }
-  });
-  expect(document.querySelectorAll('.cm-line.md-blank-line').length).toBe(paragraphBlankLines.length - 1);
+  for (const number of [2, 4, editor.state.doc.lines]) {
+    editor.dispatch({ selection: { anchor: editor.state.doc.line(number).from } });
+    expect(spacingDecorations().length).toBe(0);
+  }
+  expect(editor.state.doc.toString()).toBe(source);
 });
-
-

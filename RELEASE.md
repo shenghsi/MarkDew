@@ -1,6 +1,8 @@
-# MarkDew v1.7.3
+# MarkDew v1.7.4
 
 ## What is new
+
+- Fixed: blank lines now use normal line height in Live preview, including blank lines beside tables. Removed the spacing reduction that caused rendering problems.
 
 - New: **Compare**. Right-click a file in Files, or right-click in the editor, and choose **Compare…** to see changes against Git history. Compare the current file with the last commit, the staged copy, or any earlier commit, or compare two commits. Use side-by-side or inline view. You can edit the current file in the view, then choose **Apply edits** and Save. It needs Git installed.
 - New: in Compare, choose **Show changes in a commit…** to see what one commit changed, in one step.

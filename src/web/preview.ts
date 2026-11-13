@@ -1,4 +1,4 @@
-import { EditorState, Range, RangeSet, RangeSetBuilder, StateEffect, StateField } from '@codemirror/state';
+import { EditorState, Range, RangeSet, StateEffect, StateField } from '@codemirror/state';
 import { syntaxTree } from '@codemirror/language';
 import { Decoration, DecorationSet, EditorView, WidgetType } from '@codemirror/view';
 import { Tree, SyntaxNode } from '@lezer/common';
@@ -924,92 +924,4 @@ export function previewItems(state: EditorState): Item[] {
   return plan.mode === 'full' ? plan.items : collectPreview(state, syntaxTree(state), plan.imageVersion);
 }
 
-function computeBlankLines(state: EditorState): DecorationSet {
-  const codeRanges: { from: number; to: number }[] = [];
-  const tableRanges: { from: number; to: number }[] = [];
-  syntaxTree(state).iterate({
-    enter(ref) {
-      const node = ref.node;
-      if (node.name === 'FencedCode') {
-        const firstMark = children(node).find(child => child.name === 'CodeMark');
-        const marks = children(node).filter(child => child.name === 'CodeMark');
-        const closingMark = marks.length > 1 ? marks[marks.length - 1] : null;
-        const code = children(node).find(child => child.name === 'CodeText');
-        const fenceStr = firstMark ? state.doc.sliceString(firstMark.from, firstMark.to) : '```';
-        const fenceChar = fenceStr[0];
-        const fenceLen = fenceStr.length;
-        const swallowed = code ? new RegExp(`(?:^|\\n)[ ]{0,3}${fenceChar}{${fenceLen},}`).test(state.doc.sliceString(code.from, code.to)) : false;
-        if (closingMark && !swallowed) {
-          codeRanges.push({ from: node.from, to: node.to });
-        }
-        return false;
-      }
-      if (node.name === 'MathBlock' || node.name === 'CodeBlock') {
-        codeRanges.push({ from: node.from, to: node.to });
-        return false;
-      }
-      if (node.name === 'Table') {
-        tableRanges.push({ from: node.from, to: node.to });
-        return false;
-      }
-    }
-  });
-
-  const builder = new RangeSetBuilder<Decoration>();
-  const blankDeco = Decoration.line({ attributes: { class: 'md-blank-line' } });
-  const blockDeco = Decoration.line({ attributes: { class: 'md-blank-line-block' } });
-  let codeIdx = 0;
-
-  for (let i = 1; i <= state.doc.lines; i++) {
-    const line = state.doc.line(i);
-    if (line.text.trim().length === 0) {
-      while (codeIdx < codeRanges.length && codeRanges[codeIdx].to < line.from) {
-        codeIdx++;
-      }
-      const inCode = codeIdx < codeRanges.length &&
-        line.from >= codeRanges[codeIdx].from &&
-        line.to <= codeRanges[codeIdx].to;
-
-      const isSelected = selected(state, line.from, line.to);
-
-      if (!inCode && !isSelected) {
-        let isAdjacentToTable = false;
-        if (i < state.doc.lines) {
-          const nextLine = state.doc.line(i + 1);
-          if (tableRanges.some(r => nextLine.from >= r.from && nextLine.to <= r.to)) {
-            isAdjacentToTable = true;
-          }
-        }
-        if (!isAdjacentToTable && i > 1) {
-          const prevLine = state.doc.line(i - 1);
-          if (tableRanges.some(r => prevLine.from >= r.from && prevLine.to <= r.to)) {
-            isAdjacentToTable = true;
-          }
-        }
-
-        if (isAdjacentToTable) {
-          builder.add(line.from, line.from, blockDeco);
-        } else {
-          builder.add(line.from, line.from, blankDeco);
-        }
-      }
-    }
-  }
-  return builder.finish();
-}
-
-export const blankLineField = StateField.define<DecorationSet>({
-  create(state) {
-    return computeBlankLines(state);
-  },
-  update(decorations, tr) {
-    if (!tr.docChanged && !tr.selection && syntaxTree(tr.state) === syntaxTree(tr.startState) &&
-        !tr.effects.some(e => e.is(setEditorActive))) {
-      return decorations;
-    }
-    return computeBlankLines(tr.state);
-  },
-  provide: field => EditorView.decorations.from(field),
-});
-
-export const livePreview = [codeFenceInput, editorActiveField, footnoteField, tableCellField, tableImageVersion, previewField, tableHistoryView, codeHoverPlugin, blankLineField];
+export const livePreview = [codeFenceInput, editorActiveField, footnoteField, tableCellField, tableImageVersion, previewField, tableHistoryView, codeHoverPlugin];

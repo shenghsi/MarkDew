@@ -286,32 +286,6 @@ button[aria-pressed="true"] { background: #dcecf3; border-color: #246b86; }
   border: 0 !important;
   background: transparent !important;
 }
-.cm-line.md-blank-line {
-  height: calc(14px * var(--writing-scale, 1)) !important;
-  max-height: calc(14px * var(--writing-scale, 1)) !important;
-  line-height: calc(14px * var(--writing-scale, 1)) !important;
-  min-height: calc(14px * var(--writing-scale, 1)) !important;
-  font-size: calc(10px * var(--writing-scale, 1)) !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  border: 0 !important;
-  overflow: hidden !important;
-}
-.cm-line.md-blank-line-block {
-  height: 0 !important;
-  min-height: 0 !important;
-  line-height: 0 !important;
-  font-size: 0 !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  overflow: hidden !important;
-  border: 0 !important;
-  background: transparent !important;
-}
-.cm-line.md-blank-line > br,
-.cm-line.md-blank-line-block > br {
-  display: none;
-}
 .cm-line.md-code-line .md-code-block {
   background: transparent !important;
   font-size: inherit !important;
