@@ -197,8 +197,21 @@ class PreviewWidget extends WidgetType {
       this.item.imageBodyFrom === other.item.imageBodyFrom &&
       JSON.stringify(this.item.note) === JSON.stringify(other.item.note);
   }
+  // Same content at a shifted position: keep the DOM so typing above a block does not redraw it.
+  private signature() {
+    const a = this.item;
+    return JSON.stringify([a.kind, a.source, a.block, a.imageVersion, a.image, a.replaceFrom === undefined]);
+  }
   updateDOM(dom: HTMLElement, view: EditorView) {
-    if (this.item.kind !== 'table') return false;
+    const kind = this.item.kind;
+    if (kind !== 'table') {
+      const shiftable = kind === 'image' || kind === 'math' || kind === 'mermaid' || kind === 'frontmatter';
+      const old = dom.dataset;
+      if (!shiftable || dom.dataset.kind !== kind || old.sig !== this.signature()) return false;
+      dom.dataset.from = String(this.item.from); dom.dataset.to = String(this.item.to);
+      dom.dataset.replaceFrom = String(replacementFrom(this.item));
+      return true;
+    }
     dom.dataset.from = String(this.item.from); dom.dataset.to = String(this.item.to);
     return tableEditor(dom)?.refresh(this.item.from, this.item.to, this.item.source!) || false;
   }
@@ -207,6 +220,7 @@ class PreviewWidget extends WidgetType {
     const dom = document.createElement(item.block ? 'div' : 'span');
     dom.className = `preview-widget preview-${item.kind}`;
     dom.dataset.from = String(item.from); dom.dataset.to = String(item.to);
+    dom.dataset.replaceFrom = String(replacementFrom(item)); dom.dataset.kind = String(item.kind); dom.dataset.sig = this.signature();
     dom.tabIndex = item.kind === 'table' ? -1 : 0; dom.setAttribute('role', item.kind === 'table' || item.listMarkers ? 'group' : 'button');
     dom.setAttribute('aria-label', item.kind === 'table' ? 'Editable table' : `Edit ${item.kind === 'frontmatter' ? 'front matter' : item.kind === 'inline-html' ? 'HTML text' : item.kind} source`);
     const reveal = (point?: { x: number; y: number }) => {
@@ -228,7 +242,7 @@ class PreviewWidget extends WidgetType {
       view.focus();
       if (point && (point.x !== 0 || point.y !== 0)) {
         const coordPos = view.posAtCoords(point);
-        const minPos = replacementFrom(item);
+        const minPos = Number(dom.dataset.replaceFrom);
         if (coordPos !== null && coordPos >= minPos && coordPos <= to) {
           view.dispatch({ selection: { anchor: coordPos } });
         }
