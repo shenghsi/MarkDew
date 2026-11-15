@@ -55,7 +55,7 @@ try {
   check('table separator keeps normal height', height(4), normalHeight);
   tableEditor(document.querySelector('.preview-table')).begin(1, 0); await settle();
   const table = document.querySelector('.preview-table'), bar = table.querySelector('.table-floating-bar');
-  check('editing table padding', getComputedStyle(table).paddingTop, '34px');
+  check('editing table padding unchanged', getComputedStyle(table).paddingTop, '12px');
   check('toolbar clears table', bar.getBoundingClientRect().bottom <= table.querySelector('table').getBoundingClientRect().top, true);
   endTableEdit(view); await settle();
   check('finished table padding', getComputedStyle(document.querySelector('.preview-table')).paddingTop, '12px');

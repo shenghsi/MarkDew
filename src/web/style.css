@@ -426,7 +426,6 @@ div.preview-inline-html:not(.preview-html).md-quote { padding-left: calc(var(--q
 .preview-caption { display: block; color: #69727a; font: 12px system-ui; }
 .preview-error { color: #a32424; font: 14px system-ui; border: 1px solid #e3c0c0; }
 div.preview-widget.preview-table { position: relative; padding: 12px; overflow: visible; }
-div.preview-widget.preview-table:has(> .table-floating-bar:not([hidden])) { padding-top: 34px; }
 .preview-table table { border-collapse: collapse; width: 100%; font-family: var(--table-font, inherit); }
 .preview-table th, .preview-table td {
   border: 1px solid #d5dae0;
@@ -501,7 +500,8 @@ div.preview-widget.preview-table:has(> .table-floating-bar:not([hidden])) { padd
 
 /* Floating toolbar displayed above table during edit with zero layout shift */
 .table-floating-bar {
-  position: absolute; top: 4px; left: 12px; right: 12px; height: 26px;
+  position: absolute; top: -16px; left: 12px; right: 12px; height: 26px;
+  background: var(--paper); border-radius: 5px; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
   display: flex; align-items: center; justify-content: space-between; user-select: none;
   z-index: 10; opacity: 0; pointer-events: none; transition: opacity 0.15s ease;
 }
