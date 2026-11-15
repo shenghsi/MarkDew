@@ -42,6 +42,12 @@ export function isEditorFile(path: string): boolean {
   return /\.(md|markdown|txt)$/i.test(path);
 }
 
+// The path of an entry inside a folder, with forward slashes. A path outside the folder stays whole.
+export function relativeTo(folder: string, path: string): string {
+  const full = path.replace(/\\/g, '/'), base = folder.replace(/\\/g, '/').replace(/\/+$/, '');
+  return isPathInsideFolder(path, folder) ? full.slice(base.length + 1) : full;
+}
+
 export interface OpenOptions {
   preview?: boolean;
   newTab?: boolean;
@@ -493,6 +499,24 @@ export function fileSidebar(pane: HTMLElement, services: SidebarServices,
         startInlineRename(fileButton, fileButton.dataset.filePath!, false);
       });
       menu.append(renameItem);
+    }
+
+    if (targetPath) {
+      const copyEntries: [string, () => string][] = [
+        ['sidebar.copy_path', () => targetPath!],
+        ['sidebar.copy_relative_path', () => relativeTo(root, targetPath!)],
+      ];
+      for (const [key, text] of copyEntries) {
+        const copyItem = document.createElement('button');
+        copyItem.type = 'button';
+        copyItem.className = 'sidebar-context-item';
+        copyItem.textContent = t(key as Parameters<typeof t>[0]);
+        copyItem.addEventListener('click', () => {
+          closeContextMenu();
+          navigator.clipboard.writeText(text()).catch(err => message(body, String(err)));
+        });
+        menu.append(copyItem);
+      }
     }
 
     if (targetPath && services.deletePath) {

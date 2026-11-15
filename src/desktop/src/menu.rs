@@ -212,6 +212,7 @@ const COMMANDS: &[(&str, &str, &str)] = &[
     ("markdew-toggle-sidebar", "Toggle Sidebar", "toggle-sidebar"),
     ("markdew-toggle-outline", "Outline", "toggle-outline"),
     ("markdew-source-mode", "Source Code Mode", "source-mode"),
+    ("markdew-read-mode", "Read Mode", "read-mode"),
     ("markdew-theme-system", "System", "theme-system"),
     ("markdew-theme-light", "Light", "theme-light"),
     ("markdew-theme-dark", "Dark", "theme-dark"),
@@ -343,6 +344,7 @@ pub fn translate_menu_id(id: &str, lang: &str) -> Option<&'static str> {
         "markdew-toggle-sidebar" => Some(if is_zh { "切换侧边栏" } else { "Toggle Sidebar" }),
         "markdew-toggle-outline" => Some(if is_zh { "大纲" } else { "Outline" }),
         "markdew-source-mode" => Some(if is_zh { "源代码模式" } else { "Source Code Mode" }),
+        "markdew-read-mode" => Some(if is_zh { "阅读模式" } else { "Read Mode" }),
         "markdew-theme-system" => Some(if is_zh { "跟随系统" } else { "System" }),
         "markdew-theme-light" => Some(if is_zh { "浅色" } else { "Light" }),
         "markdew-theme-dark" => Some(if is_zh { "深色" } else { "Dark" }),
@@ -683,6 +685,7 @@ pub fn build<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<Menu<R>> {
             &check_item_by_cmd(app, "toggle-outline", false)?,
             &PredefinedMenuItem::separator(app)?,
             &check_item_by_cmd(app, "source-mode", false)?,
+            &check_item_by_cmd(app, "read-mode", false)?,
         ],
     )?;
     let themes = Submenu::with_id_and_items(
@@ -835,6 +838,7 @@ mod tests {
             "markdew-theme-light",
             "markdew-theme-dark",
             "markdew-source-mode",
+            "markdew-read-mode",
             "markdew-toggle-outline",
         ];
         for id in check_ids {

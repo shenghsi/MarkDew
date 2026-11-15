@@ -844,6 +844,7 @@ fn update_menu_state(
     app: tauri::AppHandle,
     theme: Option<String>,
     source_mode: Option<bool>,
+    read_mode: Option<bool>,
     outline: Option<bool>,
     language: Option<String>,
 ) -> Result<(), String> {
@@ -852,6 +853,9 @@ fn update_menu_state(
     }
     if let Some(sm) = source_mode {
         menu::set_check_item_state(&app, "markdew-source-mode", sm).map_err(|e| e.to_string())?;
+    }
+    if let Some(rm) = read_mode {
+        menu::set_check_item_state(&app, "markdew-read-mode", rm).map_err(|e| e.to_string())?;
     }
     if let Some(o) = outline {
         menu::set_check_item_state(&app, "markdew-toggle-outline", o).map_err(|e| e.to_string())?;

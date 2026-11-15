@@ -1,7 +1,9 @@
-# MarkDew v1.7.5
+# MarkDew v1.7.6
 
 ## What is new
 
+- New: **Read Mode**. Turn it on in View > Read Mode, or with the Read button in the status bar, to stop all editing in the window. Turn it off to edit again.
+- New: right-click a file or folder in Files and choose **Copy Path** or **Copy Relative Path**.
 - Fixed: editing no longer makes images, equations, diagrams and front matter flash. They stay in place when you type above them.
 - Fixed: blank lines now use normal line height in Live preview, including blank lines beside tables. Removed the spacing reduction that caused rendering problems.
 

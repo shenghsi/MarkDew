@@ -5,7 +5,7 @@ const commands = new Set([
   'new', 'open', 'open-folder', 'open-quickly', 'save', 'save-as', 'close-document', 'print', 'undo', 'redo', 'find',
   'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'paragraph', 'table', 'code-block', 'quote',
   'bold', 'italic', 'code', 'strike', 'link',
-  'toggle-sidebar', 'toggle-outline', 'source-mode',
+  'toggle-sidebar', 'toggle-outline', 'source-mode', 'read-mode',
   'theme-system', 'theme-light', 'theme-dark',
   'settings', 'about',
   'import', 'export-pdf', 'export-png', 'export-html', 'export-html-plain', 'export-docx', 'export-odt', 'export-rtf', 'export-epub',

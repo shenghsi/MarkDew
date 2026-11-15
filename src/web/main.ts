@@ -144,7 +144,8 @@ if (isTauri()) {
   });
 }
 const statusBar = document.createElement('footer'); statusBar.className = 'document-status'; statusBar.hidden = true;
-statusBar.append(sourceButton, document.querySelector('#status')!); app.append(statusBar);
+const readButton = document.createElement('button'); readButton.id = 'read-mode'; readButton.textContent = 'Read'; readButton.title = 'Read Mode'; readButton.setAttribute('aria-label', 'Read Mode'); readButton.setAttribute('aria-pressed', 'false');
+statusBar.append(readButton, sourceButton, document.querySelector('#status')!); app.append(statusBar);
 const outlinePane = document.querySelector<HTMLElement>('#outline')!;
 const sidebarHeader = document.createElement('div'); sidebarHeader.className = 'sidebar-header';
 const sidebarTitle = document.createElement('span'); sidebarTitle.className = 'sidebar-title';
@@ -195,6 +196,7 @@ function syncMenuChecks() {
   if (!isTauri() || !tabsReady) return;
   void Promise.resolve(invoke('update_menu_state', {
     source_mode: active()?.sourceMode ?? false,
+    read_mode: readMode,
     outline: !outlinePane.hidden,
     language: getCurrentLanguage(),
   })).catch(() => {});
@@ -271,7 +273,7 @@ function notify(message: string) {
 }
 window.addEventListener('pagehide', () => clearTimeout(toastTimer), { once: true });
 export let tabs: DocumentTabs;
-let busy = isTauri(), terminating = false, lockActive = false;
+let busy = isTauri(), terminating = false, lockActive = false, readMode = false;
 let pageActive = true;
 window.addEventListener('pagehide', () => { pageActive = false; }, { once: true });
 const active = () => tabs.active;
@@ -607,6 +609,7 @@ function updateUILanguage() {
   outlineButton.setAttribute('aria-label', t('toolbar.outline'));
   outlineMenuButton.title = t('toolbar.outline');
   outlineMenuButton.setAttribute('aria-label', t('toolbar.outline'));
+  readButton.title = t('toolbar.read_mode'); readButton.setAttribute('aria-label', t('toolbar.read_mode')); readButton.textContent = t('toolbar.read');
   sourceButton.title = t('toolbar.source_mode');
   sourceButton.setAttribute('aria-label', t('toolbar.source_mode'));
 
@@ -652,8 +655,9 @@ async function operation(action: () => Promise<unknown>, lock = false, focusAfte
   } }
 }
 function applyLock() {
-  view.dispatch({ effects: inputLock.reconfigure(lockActive ? [EditorState.readOnly.of(true), EditorView.editable.of(false)] : []) });
-  document.querySelectorAll<HTMLElement>('.link-controls').forEach(form => { form.inert = lockActive; });
+  const locked = lockActive || readMode;
+  view.dispatch({ effects: inputLock.reconfigure(locked ? [EditorState.readOnly.of(true), EditorView.editable.of(false)] : []) });
+  document.querySelectorAll<HTMLElement>('.link-controls').forEach(form => { form.inert = locked; });
 }
 function switchTab(id: number, internal = false) {
   if (!tabs.activate(view, id, () => (!busy || internal) && !composing(), () => {
@@ -1256,6 +1260,10 @@ if (isTauri()) {
       outlineButton.click();
       return true;
     }
+    if (command === 'read-mode') {
+      readButton.click();
+      return true;
+    }
     if (command === 'source-mode') {
       sourceButton.click();
       return true;
@@ -1316,6 +1324,14 @@ document.querySelector('#outline-toggle')!.addEventListener('click', () => {
   } else {
     hideSidebar();
   }
+});
+readButton.addEventListener('click', () => {
+  if (composing()) { status.textContent = 'Finish text input, then change read mode.'; return; }
+  readMode = !readMode;
+  readButton.setAttribute('aria-pressed', String(readMode));
+  document.querySelector('#editor')!.classList.toggle('read-mode', readMode);
+  applyLock(); syncMenuChecks();
+  status.textContent = readMode ? t('toolbar.read_mode_on') : '';
 });
 document.querySelector('#source')!.addEventListener('click', () => {
   if (composing()) { status.textContent = 'Finish text input, then change the display.'; return; }
