@@ -62,6 +62,17 @@ export function selected(state: EditorState, from: number, to: number) {
   if (state.field(editorActiveField, false) === false) return false;
   return state.selection.ranges.some(range => range.from <= to && range.to >= from);
 }
+// True while the last selection came from a pointer click or drag. Then a caret that only
+// touches an inline equation does not turn it into source, so a click beside it repaints nothing.
+export const pointerSelection = StateField.define<boolean>({
+  create: () => false,
+  update: (value, tr) => tr.selection || tr.docChanged ? tr.isUserEvent('select.pointer') : value,
+});
+function itemSelected(state: EditorState, item: Item, from: number, to: number) {
+  if (item.kind !== 'math' || item.block || state.field(pointerSelection, false) !== true) return selected(state, from, to);
+  if (state.field(editorActiveField, false) === false) return false;
+  return state.selection.ranges.some(range => range.from < to && range.to > from);
+}
 const selectionFrom = (item: Item) => Math.min(item.listMarkers?.[0].ownerFrom ?? item.marker?.ownerFrom ?? item.from,
   item.revealFrom ?? item.from);
 const selectionTo = (item: Item) => item.revealTo ?? item.listMarkers?.[0].ownerTo ?? item.marker?.ownerTo ?? item.to;
@@ -319,8 +330,17 @@ class PreviewWidget extends WidgetType {
     else if (item.kind === 'math' && item.block && !item.source!.trim()) {
       dom.classList.add('preview-math-empty'); dom.textContent = 'Empty equation';
     } else {
-      dom.textContent = 'Rendering…';
-      const promise = item.kind === 'math' ? import('./math-renderer').then(module => module.renderMath(item.source!, !!item.block))
+      const mathKey = item.kind === 'math' ? `${item.block ? 'b' : 'i'}:${item.source}` : '';
+      const known = mathKey ? renderedMath.get(mathKey) : undefined;
+      // A formula that was drawn before paints at once. A caret that touches and leaves
+      // an equation then rebuilds it without the "Rendering…" flash.
+      if (known !== undefined) { dom.innerHTML = known; dom.dataset.ready = 'true'; }
+      else dom.textContent = 'Rendering…';
+      const promise = known !== undefined ? Promise.resolve(known)
+        : item.kind === 'math' ? import('./math-renderer').then(module => module.renderMath(item.source!, !!item.block)).then(html => {
+            if (renderedMath.size >= 512) renderedMath.delete(renderedMath.keys().next().value!);
+            renderedMath.set(mathKey, html); return html;
+          })
         : renderDiagram(item.source!);
       if (item.kind === 'mermaid') diagramViews.set(dom, { source: item.source!, view });
       cancellations.set(dom, mountResult(dom, promise, () => view.requestMeasure()));
@@ -330,6 +350,7 @@ class PreviewWidget extends WidgetType {
   destroy(dom: HTMLElement) { tableEditor(dom)?.destroy(); cancellations.get(dom)?.(); cancellations.delete(dom); }
   get estimatedHeight() { return this.item.block ? (this.item.kind === 'html' ? 24 : 100) : -1; }
 }
+const renderedMath = new Map<string, string>();
 const cancellations = new WeakMap<HTMLElement, () => void>();
 const diagramViews = new WeakMap<HTMLElement, { source: string; view: EditorView }>();
 // Diagram settings change layout, so mounted diagrams render again with the new options.
@@ -710,7 +731,7 @@ export function previewDecorations(state: EditorState, items: Item[], reuse = fa
   };
   const active = state.field(tableCellField, false);
   for (const item of items) {
-    const isSelected = selected(state, selectionFrom(item), selectionTo(item))
+    const isSelected = itemSelected(state, item, selectionFrom(item), selectionTo(item))
       || !!(!item.kind && item.hide && overlapsRevealedHTML(item.from, item.to));
     const editing = !!(item.kind === 'table' && active?.from === item.from && active.to === item.to);
     const lineStart = item.line ? state.doc.lineAt(item.from).from : -1;
@@ -810,7 +831,7 @@ function selectionDecorations(plan: Pick<FullPlan, 'items' | 'decorations'>, bef
   const changed = [...candidates].filter(group => group.items.some(item => {
     if (!item.marker && !item.kind && !item.rule && !item.hide?.length) return false;
     const from = selectionFrom(item), to = selectionTo(item);
-    return selected(before, from, to) !== selected(after, from, to);
+    return itemSelected(before, item, from, to) !== itemSelected(after, item, from, to);
   }));
   // Large selections can touch most groups. One full construction is cheaper.
   if (changed.length > groups.length / 2) return previewDecorations(after, plan.items, true);
@@ -938,4 +959,4 @@ export function previewItems(state: EditorState): Item[] {
   return plan.mode === 'full' ? plan.items : collectPreview(state, syntaxTree(state), plan.imageVersion);
 }
 
-export const livePreview = [codeFenceInput, editorActiveField, footnoteField, tableCellField, tableImageVersion, previewField, tableHistoryView, codeHoverPlugin];
+export const livePreview = [codeFenceInput, editorActiveField, pointerSelection, footnoteField, tableCellField, tableImageVersion, previewField, tableHistoryView, codeHoverPlugin];

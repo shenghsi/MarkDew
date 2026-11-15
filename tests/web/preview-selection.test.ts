@@ -73,3 +73,12 @@ it('keeps unrelated decoration objects and rebuilds after source, image context 
   state = state.update({ selection: { anchor: table.to } }).state; check(state);
   state = state.update({ effects: tableCellEffect.of(null) }).state; check(state);
 });
+
+it('keeps an inline equation drawn when a click only touches its edge', () => {
+  const source = 'A $x$B and $y$ end';
+  const state = create(source);
+  const widgets = (s: EditorState) => { let n = 0; s.field(previewField).decorations.between(0, source.length, (_f, _t, v) => { if (v.spec.widget) n++; }); return n; };
+  const edge = source.indexOf('B');
+  expect(widgets(state.update({ selection: { anchor: edge }, userEvent: 'select.pointer' }).state)).toBe(2);
+  expect(widgets(state.update({ selection: { anchor: edge }, userEvent: 'select' }).state)).toBe(1);
+});

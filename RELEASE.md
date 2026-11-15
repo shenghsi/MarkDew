@@ -1,7 +1,9 @@
-# MarkDew v1.7.7
+# MarkDew v1.7.8
 
 ## What is new
 
+- Fixed: clicking in a table cell no longer moves the table or the text around it. The table tools now appear above the table and cover the text there.
+- Fixed: a click next to an inline equation no longer turns it into source or repaints the line. Equations that were drawn before also appear at once, with no "Rendering…" flash.
 - New: a file that changes on disk now reloads by itself when it has no unsaved edits. With unsaved edits, you still see a warning.
 - New: **Read Mode**. Turn it on in View > Read Mode, or with the Read button in the status bar, to stop all editing in the window. Turn it off to edit again.
 - New: right-click a file or folder in Files and choose **Copy Path** or **Copy Relative Path**.
