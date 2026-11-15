@@ -1,7 +1,10 @@
-# MarkDew v1.7.9
+# MarkDew v1.7.10
 
 ## What is new
 
+- New: Ctrl-click (Cmd-click on macOS) a link in a table cell to open it. Web links open in the browser. File links open in MarkDew or the default app.
+- Fixed: links in table cells now look like links.
+- Fixed: header text in a table is now left aligned by default, like the other rows.
 - New: About MarkDew now shows the GitHub repository link. If you like MarkDew, you can give it a star there.
 - Fixed: clicking in a table cell no longer moves the table or the text around it. The table tools now appear above the table and cover the text there.
 - Fixed: a click next to an inline equation no longer turns it into source or repaints the line. Equations that were drawn before also appear at once, with no "Rendering…" flash.

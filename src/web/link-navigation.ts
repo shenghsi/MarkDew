@@ -3,7 +3,7 @@ import { EditorView } from '@codemirror/view';
 import { ensureSyntaxTree } from '@codemirror/language';
 import { documentImageEnvironment } from './renderers';
 import { footnotes, overlaps } from './footnotes';
-import { tableCellField, tableComposing } from './table';
+import { tableCellField, tableComposing, tableLinkFollower } from './table';
 import { webURL } from './web-links';
 import { localLink } from './local-links';
 
@@ -29,6 +29,11 @@ export function linkTarget(state: EditorState, position: number): LinkTarget | s
   const environment = documentImageEnvironment(state.doc, bodyFrom);
   const destination = environment.links?.get(`${node.from - bodyFrom}:${node.to - bodyFrom}`);
   if (destination === undefined) return 'This link has no accepted Markdown destination.';
+  return destinationTarget(state, destination);
+}
+
+// Resolve one accepted Markdown destination to a heading, web, or file target.
+export function destinationTarget(state: EditorState, destination: string): LinkTarget | string {
   if (!destination.startsWith('#')) {
     try { return /^https?:/i.test(destination) ? { kind: 'web', url: webURL(destination) } : { kind: 'file', ...localLink(destination) }; }
     catch (error) { return `Cannot follow this link: ${String(error)}`; }
@@ -62,7 +67,21 @@ export function followLink(view: EditorView, position: number, report: (message:
   const reason = blocked() || (view.compositionStarted || tableComposing(view) ? 'Finish text input, then follow the heading link.' :
     view.state.field(tableCellField, false) ? 'End the table cell edit, then follow the heading link.' : null);
   if (reason) { report(reason); return true; }
-  const target = linkTarget(view.state, position);
+  return followTarget(view, linkTarget(view.state, position), report, openWeb, openFile);
+}
+
+// Follow a destination read from a rendered table cell link.
+export function followDestination(view: EditorView, destination: string, report: (message: string) => void,
+  blocked: () => string | null = () => null, openWeb?: (url: string) => void,
+  openFile?: (destination: string, fragment?: string) => void) {
+  const reason = blocked() || (view.compositionStarted || tableComposing(view) ? 'Finish text input, then follow the link.' :
+    view.state.field(tableCellField, false) ? 'End the table cell edit, then follow the link.' : null);
+  if (reason) { report(reason); return true; }
+  return followTarget(view, destinationTarget(view.state, destination), report, openWeb, openFile);
+}
+
+function followTarget(view: EditorView, target: LinkTarget | string | undefined, report: (message: string) => void,
+  openWeb?: (url: string) => void, openFile?: (destination: string, fragment?: string) => void) {
   if (target === undefined) return false;
   if (typeof target === 'string') { report(target); return true; }
   if (target.kind === 'web') {
@@ -80,17 +99,20 @@ export function followLink(view: EditorView, position: number, report: (message:
 export function linkNavigation(report: (message: string) => void, blocked: () => string | null = () => null,
   openWeb?: (url: string) => void, openFile?: (destination: string, fragment?: string) => void) {
   const mod = (event: MouseEvent | KeyboardEvent) => /Mac|iPhone|iPad|iPod/.test(navigator.platform) ? event.metaKey && !event.ctrlKey : event.ctrlKey && !event.metaKey;
-  return EditorView.domEventHandlers({ keydown(event, view) {
+  const handlers = EditorView.domEventHandlers({ keydown(event, view) {
       if (event.defaultPrevented || event.key !== 'Enter' || !mod(event) || event.altKey || event.shiftKey || event.isComposing) return false;
       if (event.repeat) { event.preventDefault(); return true; }
       const result = followLink(view, view.state.selection.main.head, report, blocked, openWeb, openFile);
       if (result) event.preventDefault(); return result;
     }, mousedown(event, view) {
       if (event.defaultPrevented || event.button !== 0 || !mod(event) || event.altKey || event.shiftKey ||
-        !(event.target instanceof Element) || event.target.closest('.preview-widget') || !view.contentDOM.contains(event.target)) return false;
+        !(event.target instanceof Element) || !view.contentDOM.contains(event.target)) return false;
+      if (event.target.closest('.preview-widget')) return false;
       const position = view.posAtCoords({ x: event.clientX, y: event.clientY });
       if (position === null) return false;
       const result = followLink(view, position, report, blocked, openWeb, openFile);
       if (result) event.preventDefault(); return result;
     } });
+  // Preview widgets ignore editor events, so table cells call this through the facet.
+  return [handlers, tableLinkFollower.of((view, destination) => followDestination(view, destination, report, blocked, openWeb, openFile))];
 }

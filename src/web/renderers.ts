@@ -142,8 +142,11 @@ function resourceProjection(tree: ReturnType<typeof tableSourceTree>, source: st
         children: [{ type: 'text', value: String(note.number) }] }) : { type: 'text', value: raw(node) };
     },
     html: (_state, node) => ({ type: 'raw', value: node.value }),
-    link: (state, node) => ({ type: 'element', tagName: 'span', properties: { className: ['md-link'] }, children: state.all(node) }),
-    linkReference: (state, node) => ({ type: 'element', tagName: 'span', properties: { className: ['md-link'] }, children: state.all(node) }),
+    link: (state, node) => ({ type: 'element', tagName: 'span', properties: { className: ['md-link'], dataLinkDestination: node.url }, children: state.all(node) }),
+    linkReference: (state, node) => {
+      const destination = state.definitionById.get(node.identifier.toUpperCase())?.url;
+      return { type: 'element', tagName: 'span', properties: { className: ['md-link'], ...(destination === undefined ? {} : { dataLinkDestination: destination }) }, children: state.all(node) };
+    },
     image: (_state, node) => imageSlot(node, node.url, node.title),
     imageReference: (state, node) => {
       const definition = state.definitionById.get(node.identifier.toUpperCase());

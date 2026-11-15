@@ -145,3 +145,16 @@ it('hides a reference suffix in preview and reveals its exact source when select
   view.dispatch({ selection: { anchor: 3 } }); expect(document.querySelector('.cm-line')!.textContent).toBe('[label][ref]');
   expect(undoDepth(view.state)).toBe(0);
 });
+it('follows a rendered table cell link with Ctrl-click but not a plain click', async () => {
+  const { linkNavigation } = await import('../../src/web/link-navigation');
+  const source = '| A |\n| --- |\n| [doc](R01-a.md) [web](https://example.com) |\n';
+  view?.destroy(); document.body.replaceChildren();
+  view = new EditorView({ state: EditorState.create({ doc: source, extensions: [markdown({ base: markdownLanguage }), livePreview,
+    linkNavigation(message => opened.push('msg:' + message), () => null, url => opened.push(url), (destination) => opened.push(destination))] }), parent: document.body });
+  const opened: string[] = [];
+  const spans = () => Array.from(document.querySelectorAll<HTMLElement>('.preview-table [data-link-destination]'));
+  expect(spans().map(span => span.dataset.linkDestination)).toEqual(['R01-a.md', 'https://example.com']);
+  const click = (index: number, ctrlKey: boolean) => spans()[index].dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true, button: 0, ctrlKey }));
+  click(0, true); click(1, true); expect(opened).toEqual(['R01-a.md', 'https://example.com/']);
+  click(0, false); expect(opened).toHaveLength(2); // A plain click starts cell editing.
+});
