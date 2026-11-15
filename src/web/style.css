@@ -436,7 +436,9 @@ div.preview-widget.preview-table { position: relative; padding: 12px; overflow: 
   line-height: 1.5;
   vertical-align: top;
 }
-.preview-table th { background: #f6f8fa; font-weight: 600; }
+.preview-table th { background: #f6f8fa; font-weight: 600; text-align: left; }
+.preview-table th[align="center"], .preview-table td[align="center"] { text-align: center; }
+.preview-table th[align="right"], .preview-table td[align="right"] { text-align: right; }
 .preview-table tbody tr:nth-child(2n),
 .preview-table table > tr:nth-child(2n) {
   background-color: #f6f8fa;
