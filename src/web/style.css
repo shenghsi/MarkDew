@@ -1305,6 +1305,11 @@ button[aria-pressed="true"], #outline .outline-content button:hover, #outline:no
   opacity: 0.8;
 }
 
+.about-repo { width: 100%; margin-bottom: 16px; text-align: center; font-size: 12px; color: var(--muted); }
+.about-repo-text { margin: 0 0 8px; line-height: 1.5; }
+.about-repo-link { color: var(--accent, #0969da); font-weight: 600; cursor: pointer; text-decoration: none; }
+.about-repo-link:hover { text-decoration: underline; }
+
 .about-footer {
   width: 100%;
   display: flex;

@@ -1187,6 +1187,19 @@ export function showAboutDialog(): HTMLElement {
     <p class="about-license">Dual-licensed under GNU AGPLv3 and commercial license.</p>
   `;
 
+  const repoURL = 'https://github.com/shenghsi/MarkDew';
+  const repo = document.createElement('div');
+  repo.className = 'about-repo';
+  const repoText = document.createElement('p');
+  repoText.className = 'about-repo-text';
+  repoText.textContent = 'Open source on GitHub. If you like MarkDew, please give it a star.';
+  const repoLink = document.createElement('a');
+  repoLink.className = 'about-repo-link';
+  repoLink.href = repoURL;
+  repoLink.textContent = '★ Star MarkDew on GitHub';
+  repoLink.addEventListener('click', event => { event.preventDefault(); openWebUrl(repoURL); });
+  repo.append(repoText, repoLink);
+
   const updateSection = document.createElement('div');
   updateSection.className = 'about-update-section';
 
@@ -1266,7 +1279,7 @@ export function showAboutDialog(): HTMLElement {
   doneBtn.textContent = 'Close';
   footer.append(doneBtn);
 
-  modal.append(closeBtn, logoContainer, appName, version, tagline, techInfo, updateSection, footer);
+  modal.append(closeBtn, logoContainer, appName, version, tagline, techInfo, repo, updateSection, footer);
   backdrop.append(modal);
   document.body.append(backdrop);
 

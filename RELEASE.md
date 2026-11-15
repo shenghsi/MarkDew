@@ -1,7 +1,8 @@
-# MarkDew v1.7.8
+# MarkDew v1.7.9
 
 ## What is new
 
+- New: About MarkDew now shows the GitHub repository link. If you like MarkDew, you can give it a star there.
 - Fixed: clicking in a table cell no longer moves the table or the text around it. The table tools now appear above the table and cover the text there.
 - Fixed: a click next to an inline equation no longer turns it into source or repaints the line. Equations that were drawn before also appear at once, with no "Rendering…" flash.
 - New: a file that changes on disk now reloads by itself when it has no unsaved edits. With unsaved edits, you still see a warning.
