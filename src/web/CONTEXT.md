@@ -1363,6 +1363,8 @@ adds source or history edits. Window Close remains a separate clear policy.
 File checks compare disk bytes with the host's saved baseline. They never change
 source or history. Checks do not overlap. Document transitions invalidate pending
 results and errors. Checks defer during file commands and outer or cell composition.
+A changed file reloads at once when the document has no unsaved edits and no uncertain Save.
+With unsaved edits, the check shows a warning and keeps the source.
 Reload waits for discard confirmation and recovery acknowledgment before reading.
 A valid read starts a new history. Cancel and failed reads retain source and
 baseline. Uncertain Save blocks Reload and Save As until Check Save succeeds.

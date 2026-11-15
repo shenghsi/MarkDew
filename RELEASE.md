@@ -1,7 +1,8 @@
-# MarkDew v1.7.6
+# MarkDew v1.7.7
 
 ## What is new
 
+- New: a file that changes on disk now reloads by itself when it has no unsaved edits. With unsaved edits, you still see a warning.
 - New: **Read Mode**. Turn it on in View > Read Mode, or with the Read button in the status bar, to stop all editing in the window. Turn it off to edit again.
 - New: right-click a file or folder in Files and choose **Copy Path** or **Copy Relative Path**.
 - Fixed: editing no longer makes images, equations, diagrams and front matter flash. They stay in place when you type above them.

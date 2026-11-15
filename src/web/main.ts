@@ -1355,7 +1355,11 @@ if (isTauri()) {
     () => void operation(() => saveFile(true)), () => void watcher?.check());
   watcher = new FileWatcher(() => active().path ? { path: active().path, version: fileVersion } : undefined,
     () => !busy && !composing(),
-    () => invoke<FileStatus>('file_status', { document: active().id }), result => showFileWarning!(result));
+    () => invoke<FileStatus>('file_status', { document: active().id }), result => {
+      // A clean document reloads at once. Unsaved edits keep the warning, so no work is lost.
+      if (result.kind === 'changed' && !dirty() && !active().uncertain) void operation(reloadFile, true);
+      else showFileWarning!(result);
+    });
   const checkFile = document.createElement('button'); checkFile.textContent = 'Check File'; checkFile.id = 'check-file';
   checkFile.addEventListener('click', () => void watcher?.check()); document.querySelector('header')!.append(checkFile);
   const timer = setInterval(() => { if (document.visibilityState === 'visible') void watcher?.check(); }, 2000);
