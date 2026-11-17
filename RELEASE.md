@@ -1,7 +1,8 @@
-# MarkDew v1.7.10
+# MarkDew v1.7.11
 
 ## What is new
 
+- Fixed: Ctrl-click (Cmd-click on macOS) on a table link now works while a table cell is open for editing. It closes the edit and follows the link.
 - New: Ctrl-click (Cmd-click on macOS) a link in a table cell to open it. Web links open in the browser. File links open in MarkDew or the default app.
 - Fixed: links in table cells now look like links.
 - Fixed: header text in a table is now left aligned by default, like the other rows.
