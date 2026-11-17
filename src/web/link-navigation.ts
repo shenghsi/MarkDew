@@ -3,7 +3,7 @@ import { EditorView } from '@codemirror/view';
 import { ensureSyntaxTree } from '@codemirror/language';
 import { documentImageEnvironment } from './renderers';
 import { footnotes, overlaps } from './footnotes';
-import { tableCellField, tableComposing, tableLinkFollower } from './table';
+import { endTableEdit, tableCellField, tableComposing, tableLinkFollower } from './table';
 import { webURL } from './web-links';
 import { localLink } from './local-links';
 
@@ -74,9 +74,10 @@ export function followLink(view: EditorView, position: number, report: (message:
 export function followDestination(view: EditorView, destination: string, report: (message: string) => void,
   blocked: () => string | null = () => null, openWeb?: (url: string) => void,
   openFile?: (destination: string, fragment?: string) => void) {
-  const reason = blocked() || (view.compositionStarted || tableComposing(view) ? 'Finish text input, then follow the link.' :
-    view.state.field(tableCellField, false) ? 'End the table cell edit, then follow the link.' : null);
+  const reason = blocked() || (view.compositionStarted || tableComposing(view) ? 'Finish text input, then follow the link.' : null);
   if (reason) { report(reason); return true; }
+  // A Ctrl/Cmd-click on a rendered link ends any open cell edit first.
+  if (view.state.field(tableCellField, false)) endTableEdit(view);
   return followTarget(view, destinationTarget(view.state, destination), report, openWeb, openFile);
 }
 
