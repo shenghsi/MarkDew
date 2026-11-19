@@ -1357,7 +1357,11 @@ if (isTauri()) {
     () => !busy && !composing(),
     () => invoke<FileStatus>('file_status', { document: active().id }), result => {
       // A clean document reloads at once. Unsaved edits keep the warning, so no work is lost.
-      if (result.kind === 'changed' && !dirty() && !active().uncertain) void operation(reloadFile, true);
+      const clean = !dirty() && !active().uncertain;
+      if (result.kind === 'changed' && clean) void operation(reloadFile, true);
+      // An editor may replace the file in steps, so it can be missing for a moment. A clean document
+      // shows no warning here. The next poll finds the file again and reloads it.
+      else if (result.kind === 'unavailable' && clean) showFileWarning!(undefined);
       else showFileWarning!(result);
     });
   const checkFile = document.createElement('button'); checkFile.textContent = 'Check File'; checkFile.id = 'check-file';

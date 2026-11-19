@@ -1364,6 +1364,8 @@ File checks compare disk bytes with the host's saved baseline. They never change
 source or history. Checks do not overlap. Document transitions invalidate pending
 results and errors. Checks defer during file commands and outer or cell composition.
 A changed file reloads at once when the document has no unsaved edits and no uncertain Save.
+An unavailable file shows no warning under the same conditions. The next check can
+reload the file when an external save makes it available again.
 With unsaved edits, the check shows a warning and keeps the source.
 Reload waits for discard confirmation and recovery acknowledgment before reading.
 A valid read starts a new history. Cancel and failed reads retain source and

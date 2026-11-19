@@ -1,6 +1,8 @@
-# MarkDew v1.7.11
+# MarkDew v1.7.12
 
 ## What is new
+
+- Fixed: a clean document no longer shows a file warning when another editor briefly removes the file during a save. The next file check reloads changed content when the file is available again.
 
 - Fixed: Ctrl-click (Cmd-click on macOS) on a table link now works while a table cell is open for editing. It closes the edit and follows the link.
 - New: Ctrl-click (Cmd-click on macOS) a link in a table cell to open it. Web links open in the browser. File links open in MarkDew or the default app.
