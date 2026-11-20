@@ -1,9 +1,12 @@
 App updates use tauri-plugin-updater 2.14 with a pinned public key and required
 signed version. Native state retains the checked update. A separate update gate
-excludes window creation and a second install until failure or restart. Exactly
-one main window is required; the current Quit gate is not used to approve an
-update. The renderer requires saved tabs and confirmed recovery before dispatch;
-the host rechecks Save uncertainty before installation. Windows can exit directly
+excludes window creation and a second install until failure or restart. Any window
+can check for or install an update; during installation, the host coordinates all
+other open windows so each locks editing, checks for unsaved documents or conflict
+drafts, and flushes recovery before download and restart. The current Quit gate is
+not used to approve an update. The renderer requires saved tabs and confirmed recovery
+before dispatch; the host rechecks Save uncertainty before installation. Windows can
+exit directly
 from its installer. Only a successful install grants the dedicated restart code.
 Linux verifies the download, then runs pkexec /usr/bin/dpkg --install for the DEB.
 The system authentication agent owns the password dialog. Cancellation or failure

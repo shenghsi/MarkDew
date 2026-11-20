@@ -707,6 +707,71 @@ registerUpdateGuard(async install => {
   }, true);
   if (failure) throw failure;
 });
+if (isTauri()) {
+  const activePrepareTokens = new Set<number>();
+  const releaseWaiters = new Map<number, () => void>();
+  const releasedTokens = new Set<number>();
+  void getCurrentWindow().listen<number>('markdew-update-release', event => {
+    const token = event.payload;
+    const release = releaseWaiters.get(token);
+    if (release) {
+      releaseWaiters.delete(token);
+      release();
+    } else if (activePrepareTokens.has(token)) {
+      releasedTokens.add(token);
+    }
+  });
+  void getCurrentWindow().listen<number>('markdew-update-prepare', event => {
+    const token = event.payload;
+    activePrepareTokens.add(token);
+    void (async () => {
+      try {
+        if (!pageActive || busy || composing()) {
+          await invoke('resolve_update_prepare', {
+            token,
+            ok: false,
+            error: 'Finish the current command or text input in the other MarkDew window, then repeat the update.',
+          }).catch(() => {});
+          return;
+        }
+        let responded = false;
+        await operation(async () => {
+          try {
+            if (compareTabs.some(entry => entry.conflict && entry.handle.dirty())) {
+              throw new Error(t('conflict.pending'));
+            }
+            active().state = view.state;
+            await installWithSavedDocuments(tabs.all.map(tab => ({
+              dirty: tabDirty(tab), uncertain: tab.uncertain,
+              checkpoint: () => checkpoint(tab), flush: () => flushRecovery(tab),
+            })), async () => {
+              responded = true;
+              await invoke('resolve_update_prepare', { token, ok: true, error: null });
+              if (!releasedTokens.delete(token)) {
+                await new Promise<void>(resolve => { releaseWaiters.set(token, resolve); });
+              }
+            });
+          } catch (error) {
+            responded = true;
+            const message = error instanceof Error ? error.message : String(error);
+            await invoke('resolve_update_prepare', { token, ok: false, error: message }).catch(() => {});
+          }
+        }, true);
+        if (!responded) {
+          await invoke('resolve_update_prepare', {
+            token,
+            ok: false,
+            error: 'Finish the current command or text input in the other MarkDew window, then repeat the update.',
+          }).catch(() => {});
+        }
+      } finally {
+        activePrepareTokens.delete(token);
+        releasedTokens.delete(token);
+        releaseWaiters.delete(token);
+      }
+    })();
+  });
+}
 async function saveFile(as = false) {
   if (shownCompare?.conflict) throw new Error(t('conflict.pending'));
   const tab = active();

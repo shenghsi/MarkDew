@@ -22,8 +22,8 @@ describe('native app updates', () => {
   });
 
   it('shows native check errors instead of reporting up to date', async () => {
-    mocks.invoke.mockRejectedValue('Close the other MarkDew windows.');
-    expect(await checkAppUpdates('1.0.0')).toEqual({ status: 'error', message: 'Close the other MarkDew windows.' });
+    mocks.invoke.mockRejectedValue('An update is already in progress.');
+    expect(await checkAppUpdates('1.0.0')).toEqual({ status: 'error', message: 'An update is already in progress.' });
   });
 
   it('does not install if document preparation fails', async () => {

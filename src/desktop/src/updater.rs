@@ -1,8 +1,12 @@
-use std::sync::{
-    atomic::{AtomicBool, Ordering},
-    Mutex,
+use std::{
+    collections::HashSet,
+    sync::{
+        atomic::{AtomicBool, Ordering},
+        Arc, Condvar, Mutex,
+    },
+    time::{Duration, Instant},
 };
-use tauri::{ipc::Channel, Manager};
+use tauri::{ipc::Channel, Emitter, Manager};
 use tauri_plugin_updater::{Update, UpdaterExt};
 
 // Window creation holds this lock until the new window exists. An update keeps
@@ -11,32 +15,151 @@ pub static INSTALLING: Mutex<bool> = Mutex::new(false);
 pub static RESTART_READY: AtomicBool = AtomicBool::new(false);
 pub type Pending = Mutex<Option<Update>>;
 
-struct InstallLease;
+const UPDATE_PREPARE_EVENT: &str = "markdew-update-prepare";
+const UPDATE_RELEASE_EVENT: &str = "markdew-update-release";
+const PREPARE_TIMEOUT: Duration = Duration::from_secs(15);
+
+#[derive(Default)]
+pub struct PrepareCoordinator {
+    next_token: u64,
+    active: Option<ActivePrepare>,
+}
+
+struct ActivePrepare {
+    token: u64,
+    pending: HashSet<String>,
+    error: Option<String>,
+    signal: Arc<(Mutex<bool>, Condvar)>,
+}
+
+impl PrepareCoordinator {
+    pub fn begin(&mut self, peers: &[String]) -> (u64, Arc<(Mutex<bool>, Condvar)>) {
+        self.next_token += 1;
+        let token = self.next_token;
+        let done = peers.is_empty();
+        let signal = Arc::new((Mutex::new(done), Condvar::new()));
+        if !done {
+            self.active = Some(ActivePrepare {
+                token,
+                pending: peers.iter().cloned().collect(),
+                error: None,
+                signal: signal.clone(),
+            });
+        } else {
+            self.active = None;
+        }
+        (token, signal)
+    }
+
+    pub fn resolve(&mut self, token: u64, label: &str, ok: bool, error: Option<String>) {
+        let Some(active) = self.active.as_mut() else {
+            return;
+        };
+        if active.token != token || !active.pending.remove(label) {
+            return;
+        }
+        if !ok && active.error.is_none() {
+            active.error = Some(
+                error.unwrap_or_else(|| {
+                    "Another MarkDew window could not prepare for the update.".into()
+                }),
+            );
+        }
+        if active.error.is_some() || active.pending.is_empty() {
+            Self::notify(&active.signal);
+        }
+    }
+
+    pub fn window_closed(&mut self, label: &str) {
+        let Some(active) = self.active.as_mut() else {
+            return;
+        };
+        if active.pending.remove(label) && active.pending.is_empty() {
+            Self::notify(&active.signal);
+        }
+    }
+
+    pub fn outcome(&self, token: u64) -> Result<(), String> {
+        let Some(active) = self.active.as_ref() else {
+            return Ok(());
+        };
+        if active.token != token {
+            return Ok(());
+        }
+        if let Some(error) = &active.error {
+            return Err(error.clone());
+        }
+        if !active.pending.is_empty() {
+            return Err("Another MarkDew window did not respond in time. Try again.".into());
+        }
+        Ok(())
+    }
+
+    pub fn cancel(&mut self, token: u64) {
+        if self.active.as_ref().is_some_and(|a| a.token == token) {
+            if let Some(active) = self.active.take() {
+                Self::notify(&active.signal);
+            }
+        }
+    }
+
+    fn notify(signal: &(Mutex<bool>, Condvar)) {
+        if let Ok(mut done) = signal.0.lock() {
+            *done = true;
+            signal.1.notify_all();
+        }
+    }
+}
+
+struct InstallLease {
+    app: Option<tauri::AppHandle>,
+    token: u64,
+    peers: Vec<String>,
+}
+
 impl Drop for InstallLease {
     fn drop(&mut self) {
+        if let Some(app) = &self.app {
+            if let Some(coord) = app.try_state::<Mutex<PrepareCoordinator>>() {
+                if let Ok(mut guard) = coord.lock() {
+                    guard.cancel(self.token);
+                }
+            }
+            for peer in &self.peers {
+                let _ = app.emit_to(peer, UPDATE_RELEASE_EVENT, self.token);
+            }
+        }
         if let Ok(mut installing) = INSTALLING.lock() {
             *installing = false;
         }
     }
 }
 
-fn single_main(app: &tauri::AppHandle, label: &str) -> Result<(), String> {
-    validate_window(label, app.webview_windows().len())
+pub fn window_closed(app: &tauri::AppHandle, label: &str) {
+    if let Some(coord) = app.try_state::<Mutex<PrepareCoordinator>>() {
+        if let Ok(mut guard) = coord.lock() {
+            guard.window_closed(label);
+        }
+    }
 }
 
-fn validate_window(label: &str, count: usize) -> Result<(), String> {
-    if label != "main" || count != 1 {
-        return Err("Close the other MarkDew windows before you install an update.".into());
-    }
+#[tauri::command]
+pub fn resolve_update_prepare(
+    window: tauri::WebviewWindow,
+    coordinator: tauri::State<'_, Mutex<PrepareCoordinator>>,
+    token: u64,
+    ok: bool,
+    error: Option<String>,
+) -> Result<(), String> {
+    coordinator
+        .lock()
+        .map_err(|e| e.to_string())?
+        .resolve(token, window.label(), ok, error);
     Ok(())
 }
 
 #[tauri::command]
-pub async fn check_app_update(
-    app: tauri::AppHandle,
-    window: tauri::WebviewWindow,
-) -> Result<serde_json::Value, String> {
-    single_main(&app, window.label())?;
+pub async fn check_app_update(app: tauri::AppHandle) -> Result<serde_json::Value, String> {
     if *INSTALLING.lock().map_err(|e| e.to_string())? {
         return Err("An update is already in progress.".into());
     }
@@ -71,14 +194,30 @@ pub async fn install_app_update(
     window: tauri::WebviewWindow,
     progress: Channel<serde_json::Value>,
 ) -> Result<(), String> {
-    let lease = {
+    let caller = window.label().to_string();
+    let (lease, peers, token, signal) = {
         let mut installing = INSTALLING.lock().map_err(|e| e.to_string())?;
         if *installing {
             return Err("An update is already in progress.".into());
         }
-        single_main(&app, window.label())?;
+        let peers: Vec<String> = app
+            .webview_windows()
+            .keys()
+            .filter(|label| *label != &caller)
+            .cloned()
+            .collect();
+        let (token, signal) = app
+            .state::<Mutex<PrepareCoordinator>>()
+            .lock()
+            .map_err(|e| e.to_string())?
+            .begin(&peers);
         *installing = true;
-        InstallLease
+        let lease = InstallLease {
+            app: Some(app.clone()),
+            token,
+            peers: peers.clone(),
+        };
+        (lease, peers, token, signal)
     };
     let update = app
         .state::<Pending>()
@@ -86,12 +225,52 @@ pub async fn install_app_update(
         .map_err(|e| e.to_string())?
         .clone()
         .ok_or("Check for updates before you install an update.")?;
+    if !peers.is_empty() {
+        for peer in &peers {
+            if app.get_webview_window(peer).is_none() {
+                app.state::<Mutex<PrepareCoordinator>>()
+                    .lock()
+                    .map_err(|e| e.to_string())?
+                    .window_closed(peer);
+                continue;
+            }
+            if app.emit_to(peer, UPDATE_PREPARE_EVENT, token).is_err() {
+                return Err("Cannot contact another MarkDew window to prepare for the update.".into());
+            }
+        }
+        tauri::async_runtime::spawn_blocking(move || {
+            let (lock, cvar) = &*signal;
+            let Ok(mut done) = lock.lock() else { return };
+            let deadline = Instant::now() + PREPARE_TIMEOUT;
+            while !*done {
+                let remaining = deadline.saturating_duration_since(Instant::now());
+                if remaining.is_zero() {
+                    break;
+                }
+                match cvar.wait_timeout(done, remaining) {
+                    Ok((guard, result)) => {
+                        done = guard;
+                        if result.timed_out() {
+                            break;
+                        }
+                    }
+                    Err(_) => break,
+                }
+            }
+        })
+        .await
+        .map_err(|e| e.to_string())?;
+        app.state::<Mutex<PrepareCoordinator>>()
+            .lock()
+            .map_err(|e| e.to_string())?
+            .outcome(token)?;
+    }
     let mut downloaded = 0_u64;
     let bytes = update.download(|length, total| {
         downloaded += length as u64;
         let _ = progress.send(serde_json::json!({"stage": "download", "downloaded": downloaded, "total": total}));
     }, || {}).await.map_err(|e| e.to_string())?;
-    // The renderer has locked input and confirmed every recovery checkpoint.
+    // All open renderers have locked input and confirmed every recovery checkpoint.
     // Recheck host Save uncertainty immediately before any installer can exit.
     if app
         .state::<Mutex<crate::Documents>>()
@@ -101,7 +280,6 @@ pub async fn install_app_update(
     {
         return Err("Check the last save before you install the update.".into());
     }
-    single_main(&app, window.label())?;
     let _ = progress.send(serde_json::json!({"stage": "install"}));
     tauri::async_runtime::spawn_blocking(move || -> Result<(), String> {
         let _lease = lease;
@@ -144,18 +322,58 @@ mod tests {
     use super::*;
 
     #[test]
-    fn update_requires_exactly_one_main_window() {
-        assert!(validate_window("main", 1).is_ok());
-        assert!(validate_window("main", 0).is_err());
-        assert!(validate_window("main", 2).is_err());
-        assert!(validate_window("window-1", 1).is_err());
+    fn coordinator_succeeds_when_all_peers_approve_or_close() {
+        let mut coord = PrepareCoordinator::default();
+        let peers = vec!["window-1".to_string(), "window-2".to_string()];
+        let (token, signal) = coord.begin(&peers);
+        assert!(!*signal.0.lock().unwrap());
+
+        coord.resolve(token, "window-1", true, None);
+        assert!(!*signal.0.lock().unwrap());
+
+        coord.window_closed("window-2");
+        assert!(*signal.0.lock().unwrap());
+        assert!(coord.outcome(token).is_ok());
+    }
+
+    #[test]
+    fn coordinator_surfaces_peer_rejection_and_ignores_stale_tokens() {
+        let mut coord = PrepareCoordinator::default();
+        let peers = vec!["window-1".to_string(), "window-2".to_string()];
+        let (token, signal) = coord.begin(&peers);
+
+        coord.resolve(token + 1, "window-1", false, Some("stale".into()));
+        assert!(!*signal.0.lock().unwrap());
+
+        coord.resolve(token, "window-1", false, Some("Save all documents.".into()));
+        assert!(*signal.0.lock().unwrap());
+        assert_eq!(coord.outcome(token).unwrap_err(), "Save all documents.");
+    }
+
+    #[test]
+    fn coordinator_reports_unresponsive_peer_and_handles_no_peers() {
+        let mut coord = PrepareCoordinator::default();
+        let (empty_token, empty_signal) = coord.begin(&[]);
+        assert!(*empty_signal.0.lock().unwrap());
+        assert!(coord.outcome(empty_token).is_ok());
+
+        let (token, signal) = coord.begin(&["window-1".to_string()]);
+        assert!(!*signal.0.lock().unwrap());
+        assert!(coord.outcome(token).is_err());
+
+        coord.cancel(token);
+        assert!(*signal.0.lock().unwrap());
     }
 
     #[test]
     fn install_failure_releases_window_gate() {
         *INSTALLING.lock().unwrap() = true;
         {
-            let _lease = InstallLease;
+            let _lease = InstallLease {
+                app: None,
+                token: 0,
+                peers: Vec::new(),
+            };
         }
         assert!(!*INSTALLING.lock().unwrap());
     }

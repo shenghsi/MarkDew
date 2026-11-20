@@ -1386,6 +1386,7 @@ fn main() {
     tauri::Builder::default()
         .plugin(tauri_plugin_updater::Builder::new().build())
         .manage(updater::Pending::default())
+        .manage(Mutex::new(updater::PrepareCoordinator::default()))
         .plugin(tauri_plugin_dialog::init())
         .plugin(
             tauri_plugin_opener::Builder::new()
@@ -1531,9 +1532,15 @@ fn main() {
             app.manage(recent_store);
             Ok(())
         })
+        .on_window_event(|window, event| {
+            if let tauri::WindowEvent::Destroyed = event {
+                updater::window_closed(window.app_handle(), window.label());
+            }
+        })
         .invoke_handler(tauri::generate_handler![
             updater::check_app_update,
             updater::install_app_update,
+            updater::resolve_update_prepare,
             resolve_document_link,
             open_web_link,
             list_directory,
