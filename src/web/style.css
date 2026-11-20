@@ -1564,8 +1564,15 @@ body.no-document #word-count, body.no-document #document-title { display: none; 
 .compare-body .cm-mergeViewEditor { flex: 1 1 0; min-width: 0; }
 .compare-body .cm-editor { background: var(--paper); font: 14px/1.55 ui-monospace, Menlo, Consolas, monospace; }
 .compare-body .cm-content { caret-color: var(--ink); }
-.compare-body .cm-changedLine, .compare-body .cm-insertedLine { background: rgba(46, 160, 67, .14); }
-.compare-body .cm-deletedChunk, .compare-body .cm-deletedLine { background: rgba(248, 81, 73, .14); }
-.compare-body .cm-changedText, .compare-body ins.cm-insertedLine, .compare-body ins { background: rgba(46, 160, 67, .35); text-decoration: none; }
-.compare-body .cm-deletedText, .compare-body del { background: rgba(248, 81, 73, .35); }
+.compare-body .cm-editor.cm-merge-a .cm-changedLine,
+.compare-body .cm-editor .cm-deletedChunk { background: rgba(248, 81, 73, .12); }
+.compare-body .cm-editor.cm-merge-b .cm-changedLine { background: rgba(46, 160, 67, .12); }
+.compare-body .cm-editor.cm-merge-b .cm-inlineChangedLine { background: rgba(210, 153, 34, .08); }
+.compare-body .cm-editor .cm-insertedLine,
+.compare-body .cm-editor .cm-deletedLine,
+.compare-body .cm-editor .cm-deletedLine del { background: none; text-decoration: none; }
+.compare-body .cm-editor.cm-merge-a .cm-changedText,
+.compare-body .cm-editor .cm-deletedChunk .cm-deletedText { background: rgba(248, 81, 73, .36); border-radius: 2px; }
+.compare-body .cm-editor.cm-merge-b .cm-deletedText { background: rgba(248, 81, 73, .36); text-decoration: line-through; border-radius: 2px; }
+.compare-body .cm-editor.cm-merge-b .cm-changedText { background: rgba(46, 160, 67, .36); border-radius: 2px; }
 .compare-body .cm-changeGutter { width: 4px; }

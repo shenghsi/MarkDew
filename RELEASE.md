@@ -1,6 +1,9 @@
-# MarkDew v1.7.13
+# MarkDew v1.7.14
 
 ## What is new
+
+- Fixed: file version Compare and disk-editor Diff tabs now highlight exact word-level differences instead of marking whole paragraphs, including across long documents with large edits elsewhere. Inline mode shows small paragraph edits in place.
+- New: Check for Updates and Update and Restart now work while multiple MarkDew windows are open.
 
 - New: disk changes load automatically when they do not conflict with editor changes. Separate changes combine, and unsaved editor changes stay unsaved.
 - New: file conflicts offer **Use disk**, **Use editor**, and **Review differences**. Review opens a **Diff** tab with disk text on the left and editable editor text on the right. Copy individual changes from disk, or edit a merged result, then choose **Apply merged text** and Save. Git is not required.

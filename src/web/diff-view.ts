@@ -1,6 +1,7 @@
 import { EditorState, type Extension } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
 import { MergeView, unifiedMergeView, getChunks } from '@codemirror/merge';
+import { compareDiffConfig } from './compare-diff';
 import { t, type TranslationKey } from './i18n';
 
 export interface CommitInfo { hash: string; short: string; author: string; date: string; subject: string; name: string }
@@ -116,9 +117,9 @@ export function openCompare(host: CompareHost, parent: HTMLElement): CompareHand
       })];
     const locked: Extension[] = [EditorView.lineWrapping, EditorState.readOnly.of(true), EditorView.editable.of(false)];
     if (mode.value === 'inline') {
-      single = new EditorView({ parent: body, doc: right, extensions: [...common, unifiedMergeView({ original: left, mergeControls: false, gutter: true })] });
+      single = new EditorView({ parent: body, doc: right, extensions: [...common, unifiedMergeView({ original: left, mergeControls: false, gutter: true, allowInlineDiffs: true, diffConfig: compareDiffConfig })] });
     } else {
-      merge = new MergeView({ parent: body, a: { doc: left, extensions: locked }, b: { doc: right, extensions: common }, gutter: true, highlightChanges: true });
+      merge = new MergeView({ parent: body, a: { doc: left, extensions: locked }, b: { doc: right, extensions: common }, gutter: true, highlightChanges: true, diffConfig: compareDiffConfig });
     }
     const scroller = merge ? merge.dom : single!.scrollDOM;
     observer?.observe(scroller);

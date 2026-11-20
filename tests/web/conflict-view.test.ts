@@ -68,3 +68,11 @@ it('keeps a dirty comparison when Close is cancelled', async () => {
   await handle.close(); expect(h.closed).not.toHaveBeenCalled(); expect(handle.element.isConnected).toBe(true);
   h.confirmDiscard = () => true; await handle.close();
 });
+it('highlights only changed words in a modified paragraph during disk-editor comparison', () => {
+  const diskPara = 'Keep the rest of this long paragraph intact while changing only one word on disk.\n';
+  const editorPara = 'Keep the rest of this long paragraph intact while changing only one phrase on disk.\n';
+  const h = host({ current: () => editorPara, disk: { source: diskPara, generation: 4 } });
+  openConflict(h, document.body);
+  expect(Array.from(document.querySelectorAll('.cm-merge-a .cm-changedText')).map(el => el.textContent)).toEqual(['word']);
+  expect(Array.from(document.querySelectorAll('.cm-merge-b .cm-changedText')).map(el => el.textContent)).toEqual(['phrase']);
+});

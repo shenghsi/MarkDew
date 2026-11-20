@@ -84,3 +84,22 @@ test('the change map marks each changed block over the scroll bar', async () => 
   expect(marks).toEqual(['changed', 'removed']);
   vi.unstubAllGlobals();
 });
+
+test('side-by-side and inline views highlight only changed words in a modified paragraph', async () => {
+  const oldPara = 'This paragraph stays mostly identical except for two small words right here.';
+  const newPara = 'This paragraph stays mostly identical except for two exact terms right here.';
+  openCompare(host({ current: () => `${newPara}\n`, read: async () => `${oldPara}\n` }), document.body);
+  await settle();
+
+  const leftHighlights = Array.from(document.querySelectorAll('.cm-merge-a .cm-changedText')).map(el => el.textContent);
+  const rightHighlights = Array.from(document.querySelectorAll('.cm-merge-b .cm-changedText')).map(el => el.textContent);
+  expect(leftHighlights.join(' ')).toBe('small words');
+  expect(rightHighlights.join(' ')).toBe('exact terms');
+
+  const mode = document.querySelector<HTMLSelectElement>('.compare-mode')!;
+  mode.value = 'inline'; mode.dispatchEvent(new Event('change')); await settle();
+
+  expect(document.querySelectorAll('.cm-inlineChangedLine').length).toBe(1);
+  expect(Array.from(document.querySelectorAll('del.cm-deletedText')).map(el => el.textContent).join(' ')).toBe('small words');
+  expect(Array.from(document.querySelectorAll('.cm-merge-b .cm-changedText')).map(el => el.textContent).join(' ')).toBe('exact terms');
+});

@@ -2,6 +2,7 @@ import { Compartment, EditorState } from '@codemirror/state';
 import { EditorView, keymap } from '@codemirror/view';
 import { defaultKeymap, history, historyKeymap } from '@codemirror/commands';
 import { MergeView } from '@codemirror/merge';
+import { compareDiffConfig } from './compare-diff';
 import { fromSource, normalize, savedSource, sourceExtensions, sourceField } from './source';
 import { t, type TranslationKey } from './i18n';
 import type { CompareHandle } from './diff-view';
@@ -51,7 +52,7 @@ export function openConflict(host: ConflictHost, parent: HTMLElement): CompareHa
     b: { doc: normalize(record.raw), extensions: [sourceExtensions(record), history(),
       keymap.of([...defaultKeymap, ...historyKeymap]), EditorView.lineWrapping, input.of([]),
       EditorView.updateListener.of(update => { if (update.docChanged) controls(); })] },
-    gutter: true, highlightChanges: true, revertControls: 'a-to-b',
+    gutter: true, highlightChanges: true, diffConfig: compareDiffConfig, revertControls: 'a-to-b',
     renderRevertControl: () => {
       const copy = document.createElement('button'); copy.type = 'button'; copy.textContent = '→';
       copy.title = t('conflict.copy'); copy.setAttribute('aria-label', copy.title);
