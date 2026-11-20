@@ -1,6 +1,15 @@
-# MarkDew v1.7.12
+# MarkDew v1.7.13
 
 ## What is new
+
+- New: disk changes load automatically when they do not conflict with editor changes. Separate changes combine, and unsaved editor changes stay unsaved.
+- New: file conflicts offer **Use disk**, **Use editor**, and **Review differences**. Review opens a **Diff** tab with disk text on the left and editable editor text on the right. Copy individual changes from disk, or edit a merged result, then choose **Apply merged text** and Save. Git is not required.
+- The Diff tab keeps its draft if the disk file changes again or acceptance fails. **Refresh disk** updates the disk side and keeps the draft. Close and Quit ask before discarding a changed draft.
+
+- New: select files and folders in Files with Ctrl-click (Cmd-click on macOS), or select a range with Shift-click. Ctrl/Cmd+A selects all visible entries.
+- New: move selected files and folders by dragging them onto a folder or the project folder label. You can also use Cut and Paste from the context menu or with Ctrl/Cmd+X and Ctrl/Cmd+V. Escape clears the selection and Cut.
+- New: Move and Rename update local links and image paths in project Markdown and text files, including shared link definitions and HTML href/src attributes. Links inside moved documents also adjust to their new folder. Open tabs retain unsaved edits.
+- Existing destination names are refused. Changed files and uncertain saves block the move before it starts. If a later link update fails, the app reports the affected file; completed moves remain complete.
 
 - Fixed: a clean document no longer shows a file warning when another editor briefly removes the file during a save. The next file check reloads changed content when the file is available again.
 
@@ -11,7 +20,6 @@
 - New: About MarkDew now shows the GitHub repository link. If you like MarkDew, you can give it a star there.
 - Fixed: clicking in a table cell no longer moves the table or the text around it. The table tools now appear above the table and cover the text there.
 - Fixed: a click next to an inline equation no longer turns it into source or repaints the line. Equations that were drawn before also appear at once, with no "Rendering…" flash.
-- New: a file that changes on disk now reloads by itself when it has no unsaved edits. With unsaved edits, you still see a warning.
 - New: **Read Mode**. Turn it on in View > Read Mode, or with the Read button in the status bar, to stop all editing in the window. Turn it off to edit again.
 - New: right-click a file or folder in Files and choose **Copy Path** or **Copy Relative Path**.
 - Fixed: editing no longer makes images, equations, diagrams and front matter flash. They stay in place when you type above them.

@@ -1,3 +1,5 @@
+import { diff } from '@codemirror/merge';
+import { mergeFileChange } from './file-merge';
 import { Compartment, EditorState } from '@codemirror/state';
 import { EditorView, keymap, lineNumbers, highlightActiveLine } from '@codemirror/view';
 import { defaultKeymap, history, historyKeymap, undo, redo } from '@codemirror/commands';
@@ -8,7 +10,7 @@ import { classHighlighter } from '@lezer/highlight';
 import { invoke, isTauri } from '@tauri-apps/api/core';
 import { open, save, ask } from '@tauri-apps/plugin-dialog';
 import { getCurrentWindow } from '@tauri-apps/api/window';
-import { fromSource, normalize, savedSource, sourceExtensions, sourceField } from './source';
+import { fromSource, normalize, savedSource, sourceExtensions, sourceField, restoreSource } from './source';
 import { markdownReturn, markdownBackspace, exitBlockDown } from './commands';
 import { canUseFiles } from './file-guard';
 import { livePreview, setEditorActive, editorActiveField, rerenderDiagrams } from './preview';
@@ -19,6 +21,7 @@ import { insertTable } from './table-insert';
 import { codeBlock } from './code-block-command';
 import { editorMenu } from './editor-menu';
 import { openCompare, type CompareHandle } from './diff-view';
+import { openConflict, type DiskSnapshot } from './conflict-view';
 import { listTab } from './list-indent';
 import { collapseDataUris } from './data-uri-collapse';
 import { pandocExchange } from './pandoc-exchange';
@@ -43,6 +46,7 @@ import { imageDrops } from './image-drop';
 import { copyImageAsset } from './image-assets';
 import { clipboardImageControls, droppedImageControls } from './clipboard-assets';
 import { toolsPanel } from './tools-panel';
+import { moveReferenceChanges, applyReferenceChanges } from './move-references';
 import { fileSidebar, getFileName, getParentDir, getSeparator, isPathInsideFolder, SIDEBAR_ALL_FILES_KEY, sidebarShowsAllFiles } from './file-sidebar';
 import { wordCount } from './word-count';
 import { nativeMenu } from './native-menu';
@@ -371,7 +375,7 @@ const state = (source: string, tab?: Pick<DocumentTab, 'id' | 'path' | 'sourceMo
     url => webLinks.open(url), (destination, fragment) => { void operation(() => openDocumentLink(destination, fragment), true); }),
   keymap.of([{ key: 'Mod-/', run: () => { sourceButton.click(); return true; } }, { mac: 'Ctrl-/', run: () => { sourceButton.click(); return true; } }, ...guardedSearchKeymap, ...formattingKeys, { key: 'Mod-k', run: () => openLinkControls() }, { key: 'Mod-Shift-i', run: () => openImageControls() }, { key: 'Enter', run: markdownReturn }, { key: 'Backspace', run: markdownBackspace }, { key: 'Tab', run: target => listTab(target, 1) }, { key: 'Shift-Tab', run: target => listTab(target, -1) }, { key: 'ArrowDown', run: exitBlockDown }, { key: 'Mod-s', run: () => { void operation(saveFile); return true; } }, ...markdownKeymap.filter(binding => binding.key !== 'Enter'), ...defaultKeymap, ...historyKeymap]),
   EditorView.updateListener.of(update => {
-    if (update.docChanged) { if (active().preview) active().preview = false; report(); checkpoint(); }
+    if (update.docChanged || update.startState.field(sourceField) !== update.state.field(sourceField)) { if (active().preview) active().preview = false; report(); checkpoint(); }
     if (update.startState.field(editorActiveField, false) !== update.state.field(editorActiveField, false)) {
       document.querySelector('#editor')?.classList.toggle('editor-active', !!update.state.field(editorActiveField, false));
     }
@@ -445,7 +449,7 @@ window.addEventListener('pagehide', () => webLinks.dispose(), { once: true });
 // Compare tabs share the tab bar with the file tabs. A Compare tab belongs to one file tab and is not saved
 // with the session. Its ID is below zero. Showing it makes its file the active document, but the Compare panel
 // replaces the editor until the user selects a file tab.
-interface CompareTab { id: number; file: DocumentTab; name: string; path: string; handle: CompareHandle }
+interface CompareTab { id: number; file: DocumentTab; name: string; path: string; handle: CompareHandle; conflict?: boolean }
 const compareTabs: CompareTab[] = [];
 let compareSeq = 0;
 let shownCompare: CompareTab | undefined;
@@ -470,7 +474,7 @@ function renderTabs() {
   // An edit or a path ends the placeholder for good, so Undo back to empty keeps the editor.
   if (tabs.active.placeholder && (tabs.active.path || tabDirty(tabs.active))) tabs.active.placeholder = false;
   tabBar.render(tabs, compareTabs.map(entry => ({
-    id: entry.id, label: t('compare.title', { name: entry.name }), title: entry.path, selected: entry === shownCompare,
+    id: entry.id, label: t(entry.conflict ? 'conflict.title' : 'compare.title', { name: entry.name }), title: entry.path, selected: entry === shownCompare,
   })));
   const empty = noDocument();
   // With no file open, the tab bar shows only the + button: the blank placeholder tab stays hidden.
@@ -656,6 +660,7 @@ async function operation(action: () => Promise<unknown>, lock = false, focusAfte
 }
 function applyLock() {
   const locked = lockActive || readMode;
+  document.querySelectorAll<HTMLElement>('.conflict-view').forEach(panel => { panel.inert = lockActive; });
   view.dispatch({ effects: inputLock.reconfigure(locked ? [EditorState.readOnly.of(true), EditorView.editable.of(false)] : []) });
   document.querySelectorAll<HTMLElement>('.link-controls').forEach(form => { form.inert = locked; });
 }
@@ -691,6 +696,7 @@ registerUpdateGuard(async install => {
   let failure: unknown;
   await operation(async () => {
     try {
+      if (compareTabs.some(entry => entry.conflict && entry.handle.dirty())) throw new Error(t('conflict.pending'));
       active().state = view.state;
       await installWithSavedDocuments(tabs.all.map(tab => ({
         dirty: tabDirty(tab), uncertain: tab.uncertain,
@@ -702,6 +708,7 @@ registerUpdateGuard(async install => {
   if (failure) throw failure;
 });
 async function saveFile(as = false) {
+  if (shownCompare?.conflict) throw new Error(t('conflict.pending'));
   const tab = active();
   if (tab.uncertain) throw new Error('Check the last save before you save again.');
   if (!isTauri()) throw new Error('Open the desktop app to use file commands.');
@@ -967,7 +974,7 @@ async function openDocumentLink(destination: string, fragment?: string) {
 async function compareActive() {
   const tab = active();
   if (!isTauri() || !tab.path) { status.textContent = t('compare.no_git'); return; }
-  const known = compareTabs.find(entry => entry.file === tab);
+  const known = compareTabs.find(entry => entry.file === tab && !entry.conflict);
   if (known) { showCompare(known.id); return; }
   const path = tab.path;
   const info = await invoke<{ tracked: boolean }>('git_info', { path }).catch(error => { status.textContent = String(error); return undefined; });
@@ -1006,6 +1013,13 @@ function showCompare(id: number) {
   const entry = compareTabs.find(other => other.id === id); if (!entry) return false;
   if (active() !== entry.file && !switchTab(entry.file.id)) return false;
   shownCompare = entry; layoutCompare(); entry.handle.refresh(); renderTabs();
+  return true;
+}
+async function discardConflictDrafts() {
+  for (const entry of compareTabs) {
+    if (entry.conflict && entry.handle.dirty() &&
+        !await ask(`${entry.name}: ${t('compare.discard')}`, { title: 'MarkDew', kind: 'warning' })) return false;
+  }
   return true;
 }
 async function closeCompare(id: number) { await compareTabs.find(entry => entry.id === id)?.handle.close(); }
@@ -1072,18 +1086,40 @@ function initSidebar(initialRoot: string, deferRead: boolean) {
       return await invoke<string>('create_file', { parent, name });
     },
     renameFile: async (oldPath: string, newPath: string) => {
-      // Find the tab first: after the rename the old path no longer resolves.
-      const openTab = await tabFor(oldPath);
-      await invoke('rename_file', { oldPath, newPath });
-      canonicalCache.clear();
-      if (openTab) {
-        openTab.path = await canonicalOf(newPath);
-        if (openTab === active()) {
-          fileTransition();
+      if (!pageActive || busy || composing()) throw new Error('Finish the current action, then move the file or folder.');
+      busy = true; lockActive = true; applyLock();
+      try {
+        tabs.capture(view);
+        const oldCanonical = await canonicalOf(oldPath);
+        const parentCanonical = await canonicalOf(getParentDir(newPath));
+        const newCanonical = parentCanonical + (parentCanonical.endsWith(getSeparator(parentCanonical)) ? '' : getSeparator(parentCanonical)) + getFileName(newPath);
+        const sources = await invoke<{ path: string; source: string }[]>('move_reference_sources', { root: sidebar?.root() || layout.folder });
+        const updates = sources.map(file => ({ ...file, next: applyReferenceChanges(file.source,
+          moveReferenceChanges(file.source, file.path, oldCanonical, newCanonical)) })).filter(file => file.next !== file.source);
+        const openFiles: { tab: DocumentTab; path: string; suffix?: string; changes: ReturnType<typeof moveReferenceChanges> }[] = [];
+        for (const tab of tabs.all) {
+          if (!tab.path) continue;
+          const path = await canonicalOf(tab.path);
+          const affected = pathKey(path) === pathKey(oldCanonical) || pathKey(path).startsWith(pathKey(oldCanonical) + getSeparator(oldCanonical));
+          openFiles.push({ tab, path, suffix: affected ? path.slice(oldCanonical.length) : undefined,
+            changes: moveReferenceChanges(tab.state.doc.toString(), path, oldCanonical, newCanonical) });
         }
-        report();
-        checkpoint(openTab);
-      }
+        const result = await invoke<{ files: { path: string; source: string; uncertain: boolean }[]; warnings: string[] }>('rename_file',
+          { oldPath, newPath, root: sidebar?.root() || layout.folder, updates });
+        canonicalCache.clear();
+        for (const { tab, path, suffix, changes } of openFiles) {
+          if (suffix !== undefined) tab.path = newCanonical + suffix;
+          const written = result.files.find(file => pathKey(file.path) === pathKey(path));
+          if (written) { tab.baseline = written.source; tab.uncertain = written.uncertain; }
+          if (changes.length) {
+            if (tab === active()) { view.dispatch({ changes }); tabs.capture(view); }
+            else tab.state = tab.state.update({ changes }).state;
+          }
+          if (suffix !== undefined || changes.length || written) checkpoint(tab);
+        }
+        fileTransition(); report();
+        if (result.warnings.length) status.textContent = result.warnings.join('\n');
+      } finally { busy = terminating; lockActive = false; if (pageActive && !terminating) applyLock(); }
     },
     // The system dialog asks first. window.confirm cannot be relied on here: the dialog plugin replaces it with an async function.
     confirmDelete: async (name: string, isDirectory: boolean, path?: string) => {
@@ -1350,15 +1386,89 @@ async function reloadFile() {
   tab.path = loaded.path; tab.baseline = loaded.source; fileTransition(); view.setState(state(loaded.source, tab)); applyLock();
   report(); checkpoint(); await flushRecovery();
 }
+function applyExactSource(source: string) {
+  if (text() === source) return;
+  const record = fromSource(source), next = normalize(record.raw);
+  const changes = diff(view.state.doc.toString(), next, { scanLimit: 1000, timeout: 50 })
+    .map(change => ({ from: change.fromA, to: change.toA, insert: next.slice(change.fromB, change.toB) }));
+  view.dispatch({ changes, effects: restoreSource.of(record) });
+}
+async function conflictSnapshot(tab: DocumentTab, path: string): Promise<DiskSnapshot> {
+  if (tab.path !== path || tab.uncertain) throw new Error(t('conflict.unavailable'));
+  const result = await invoke<FileStatus>('file_status', { document: tab.id });
+  if (tab.path !== path || tab.uncertain) throw new Error(t('conflict.unavailable'));
+  if (result.kind === 'changed') return result;
+  if (result.kind === 'unchanged') return { source: tab.baseline, generation: result.generation };
+  throw new Error(result.kind === 'unavailable' ? result.message : t('conflict.unavailable'));
+}
+async function acceptConflict(tab: DocumentTab, path: string, source: string, disk: DiskSnapshot, expectedEditor: string) {
+  if (tab !== active() || tab.path !== path || text() !== expectedEditor) throw new Error(t('conflict.changed_editor'));
+  if (tab.uncertain) throw new Error(t('conflict.unavailable'));
+  checkpoint(tab); await flushRecovery(tab);
+  await invoke('accept_file_change', { document: tab.id, generation: disk.generation, source: disk.source });
+  tab.baseline = disk.source;
+  applyExactSource(source);
+  fileTransition(); report(); checkpoint(tab); await flushRecovery(tab);
+}
+async function reviewFileConflict() {
+  const tab = active(), path = tab.path;
+  const known = compareTabs.find(entry => entry.file === tab && entry.conflict);
+  if (known) { showCompare(known.id); return; }
+  const disk = await conflictSnapshot(tab, path);
+  const entry = { id: --compareSeq, file: tab, name: getFileName(path), path, conflict: true } as CompareTab;
+  entry.handle = openConflict({
+    fileName: entry.name, current: () => tab === active() ? text() : tabSource(tab), disk,
+    readDisk: () => conflictSnapshot(tab, path),
+    apply: async (source, disk, expectedEditor) => {
+      // The panel keeps its draft until this operation succeeds, including recovery.
+      if (busy || composing() || tab !== active()) throw new Error(t('conflict.unavailable'));
+      let failure: unknown;
+      await operation(async () => {
+        try { await acceptConflict(tab, path, source, disk, expectedEditor); }
+        catch (error) { failure = error; }
+      }, true);
+      if (failure) throw failure;
+    },
+    confirmDiscard: () => ask(t('compare.discard'), { title: 'MarkDew', kind: 'warning' }),
+    closed: () => {
+      const index = compareTabs.indexOf(entry); if (index >= 0) compareTabs.splice(index, 1);
+      const wasShown = shownCompare === entry;
+      if (wasShown) shownCompare = undefined;
+      layoutCompare(); renderTabs();
+      if (wasShown) view.focus();
+    },
+  }, workspace);
+  compareTabs.push(entry); showCompare(entry.id);
+}
+async function useEditorForConflict() {
+  const tab = active(), path = tab.path, expectedEditor = text();
+  const disk = await conflictSnapshot(tab, path);
+  await acceptConflict(tab, path, expectedEditor, disk, expectedEditor);
+}
+async function loadFileChange(result: FileStatus & { kind: 'changed' }) {
+  const tab = active();
+  if (tab.uncertain) { showFileWarning?.({ kind: 'uncertain', generation: result.generation }); return; }
+  const current = text(), merged = mergeFileChange(tab.baseline, current, result.source);
+  if (merged === undefined) { showFileWarning?.(result); return; }
+  const clean = !dirty();
+  checkpoint(tab); await flushRecovery(tab);
+  await invoke('accept_file_change', { document: tab.id, generation: result.generation, source: result.source });
+  tab.baseline = result.source;
+  if (clean) view.setState(state(merged, tab));
+  else applyExactSource(merged);
+  fileTransition(); applyLock(); report(); checkpoint(tab); await flushRecovery(tab);
+}
 if (isTauri()) {
   showFileWarning = fileWarning(tools, () => void operation(reloadFile, true),
-    () => void operation(() => saveFile(true)), () => void watcher?.check());
+    () => void operation(() => saveFile(true)), () => void watcher?.check(),
+    () => void operation(reviewFileConflict, true), () => void operation(useEditorForConflict, true));
   watcher = new FileWatcher(() => active().path ? { path: active().path, version: fileVersion } : undefined,
-    () => !busy && !composing(),
+    () => !busy && !composing() && !tableInputView(view) &&
+      !compareTabs.some(entry => entry.file === active() && entry.conflict) &&
+      !document.querySelector('[data-html-editable][contenteditable="true"]'),
     () => invoke<FileStatus>('file_status', { document: active().id }), result => {
-      // A clean document reloads at once. Unsaved edits keep the warning, so no work is lost.
       const clean = !dirty() && !active().uncertain;
-      if (result.kind === 'changed' && clean) void operation(reloadFile, true);
+      if (result.kind === 'changed') void operation(() => loadFileChange(result), true);
       // An editor may replace the file in steps, so it can be missing for a moment. A clean document
       // shows no warning here. The next poll finds the file again and reloads it.
       else if (result.kind === 'unavailable' && clean) showFileWarning!(undefined);
@@ -1467,6 +1577,7 @@ function showUpdateNotice(update: UpdateInfo): void {
 if (isTauri()) void getCurrentWindow().onCloseRequested(async event => {
   event.preventDefault(); if (busy) return;
   await operation(async () => {
+    if (!await discardConflictDrafts()) return;
     for (const tab of tabs.all) if (!await discard(tab)) return;
     for (const tab of tabs.all) { checkpoint(tab); await flushRecovery(tab); }
     try {
@@ -1491,6 +1602,7 @@ if (isTauri()) {
     if (busy || composing()) {
       status.textContent = 'Finish the current command or text input, then repeat Quit.';
     } else await operation(async () => {
+      if (!await discardConflictDrafts()) return;
       for (const tab of tabs.all) if (!await discard(tab)) return;
       // Quit keeps the confirmed recovery copy. Close has a separate clear policy.
       for (const tab of tabs.all) { checkpoint(tab); await flushRecovery(tab); }

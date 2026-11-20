@@ -1360,16 +1360,39 @@ An approved request keeps input locked until exit. Listener startup buffers old
 events until the host returns a current pending token. Neither Quit nor Cancel
 adds source or history edits. Window Close remains a separate clear policy.
 
-File checks compare disk bytes with the host's saved baseline. They never change
-source or history. Checks do not overlap. Document transitions invalidate pending
-results and errors. Checks defer during file commands and outer or cell composition.
-A changed file reloads at once when the document has no unsaved edits and no uncertain Save.
-An unavailable file shows no warning under the same conditions. The next check can
-reload the file when an external save makes it available again.
-With unsaved edits, the check shows a warning and keeps the source.
-Reload waits for discard confirmation and recovery acknowledgment before reading.
-A valid read starts a new history. Cancel and failed reads retain source and
-baseline. Uncertain Save blocks Reload and Save As until Check Save succeeds.
+File checks compare disk bytes with the host's saved baseline and return exact changed
+source. Checks do not overlap. Document transitions invalidate pending results and
+errors. Checks defer during file commands, composition, and active table cell editing.
+A changed file loads automatically when the document has no unsaved edits and no
+uncertain Save. With unsaved edits, a three-way comparison uses the saved baseline,
+editor source, and disk source. Separate edits combine automatically; identical edits
+apply once. Overlapping edits and ambiguous insertion boundaries keep editor source
+and history and show the file warning. A bounded diff can refuse an uncertain merge.
+The warning offers Use disk, Use editor, and Review differences. Review differences
+opens a Diff tab for that document without Git. It shows read-only disk text on the
+left and editable editor text on the right, with highlighted changes and buttons to
+copy individual disk changes. Use disk and Use editor select a complete version;
+Apply merged text accepts the edited right side. Applying updates the document as
+one Undo step and accepts the shown disk snapshot as the Save baseline. It does not
+write the file. A later Save writes editor or merged text. Whole-version choices
+retain exact source, including BOM and line endings; copied hunks use editor line endings.
+Refresh disk retains the merge draft. Stale disk snapshots, changed editor text,
+uncertain Save, and failed recovery prevent acceptance. Polling pauses for that
+file while its Diff tab is open. Close confirms a dirty draft. Window Close and Quit
+also confirm draft discard; updates require drafts to be applied or closed first.
+Drafts are kept in the Diff tab until applied; recovery covers the document text.
+Exact source-only edits, including a BOM or line-ending change, also support Undo.
+The comparison preserves the BOM and exact source line endings.
+Recovery acknowledgment precedes acceptance. The host checks the document generation,
+Save certainty, and exact disk snapshot before it advances its baseline. The renderer
+uses that disk snapshot as its baseline and retains merged editor edits as unsaved.
+An automatic merge is one Undo step and retains earlier history. A clean load starts
+new history. No automatic load writes the file. Save still compares its own baseline.
+An unavailable file shows no warning when the editor is clean and Save is certain.
+The next check can load the file when an external save makes it available again.
+Manual Reload waits for discard confirmation and recovery acknowledgment before
+reading. A valid manual read starts new history. Cancel and failed reads retain source
+and baseline. Uncertain Save blocks Reload and Save As until Check Save succeeds.
 
 Native file drop accepts one Markdown or text file with an md, markdown, or txt
 extension, without changing path spelling. It uses the shared Open load path.
@@ -1752,3 +1775,28 @@ a repository with no commit, shows a message and no dialog. The host runs the in
 program read-only (git_info, git_history, git_file_at in git.rs). Stage, commit, blame, and
 folder diffs are not part of Compare. Show changes in a commit sets Older to the commit before it
 for this file (Empty for the first one) and Newer to that commit.
+
+
+Files selection and move: click selects one file or folder. Ctrl/Cmd-click toggles
+an entry, and Shift-click selects a visible range. Ctrl/Cmd+A selects all visible
+entries. Drag the selection onto a folder or the project folder label to move it.
+Cut and Paste are also available in the context menu and with Ctrl/Cmd+X and
+Ctrl/Cmd+V. Escape clears selection and Cut. A selected folder includes its
+children, so a selected child is not moved twice. Existing destinations are
+refused. The host updates open document paths, including children of a moved
+folder. Unsaved source and editor history stay in their tabs.
+
+Move and Rename update parsed local Markdown link and image destinations, shared
+reference definitions, and HTML href/src attributes in project Markdown and text
+files. Links in moved documents are rebased from their new folder. Fragments,
+link labels, titles, code, formulas, front matter, BOM, and source line endings are retained.
+The scan skips links/reparse points and .git, node_modules, target, dist, and build;
+it includes other hidden folders. It fails before the move on unreadable sources,
+invalid UTF-8, or scan limits (24 levels, 50,000 entries, 5,000 documents, 32 MiB
+combined source). Files outside the project are not scanned. Open editor text is
+updated separately, including unsaved links, without saving unrelated edits.
+Saved reference updates use the normal baseline comparison and confirmed Save.
+A changed disk source or uncertain baseline blocks the move before it starts.
+A later link-write failure reports that the move is complete and names the file
+that needs attention. Multiple selected roots move in sequence; completed moves
+stay complete if a later move fails. Native drag acceptance still needs a platform check.

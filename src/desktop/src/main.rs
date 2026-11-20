@@ -17,6 +17,7 @@ mod export;
 mod git;
 mod images;
 mod local_links;
+mod move_references;
 mod menu;
 mod open_requests;
 mod pandoc;
@@ -438,7 +439,7 @@ const LIMIT: usize = 8 * 1024 * 1024;
 #[serde(tag = "kind", rename_all = "snake_case")]
 enum FileObservation {
     Unchanged,
-    Changed,
+    Changed { source: String },
     Uncertain,
     Unavailable { message: String },
 }
@@ -457,7 +458,12 @@ fn observe_file(path: Option<PathBuf>, baseline: &[u8], uncertain: bool) -> File
     };
     match read(&path) {
         Ok(bytes) if bytes == baseline => FileObservation::Unchanged,
-        Ok(_) => FileObservation::Changed,
+        Ok(bytes) => match String::from_utf8(bytes) {
+            Ok(source) => FileObservation::Changed { source },
+            Err(_) => FileObservation::Unavailable {
+                message: "The file is not valid UTF-8.".into(),
+            },
+        },
         Err(message) => FileObservation::Unavailable { message },
     }
 }
@@ -482,6 +488,29 @@ async fn file_status(
     .map_err(|e| e.to_string())?;
     documents::current(&host, document, generation)?;
     Ok(status)
+}
+// Accept only the exact snapshot used for the renderer's three-way comparison.
+// A later disk write remains subject to the normal Save baseline check.
+#[tauri::command]
+fn accept_file_change(
+    document: Option<u64>,
+    generation: u64,
+    source: String,
+    host: State<Mutex<Documents>>,
+) -> Result<(), String> {
+    with_document(&host, document, |doc| accept_external(doc, generation, &source))
+}
+fn accept_external(doc: &mut Document, generation: u64, source: &str) -> Result<(), String> {
+    if doc.uncertain || doc.generation != generation {
+        return Err("The document changed. Check the file again.".into());
+    }
+    let path = doc.path.as_ref().ok_or("The document has no file path.")?;
+    if read(path)? != source.as_bytes() {
+        return Err("The file changed again. Check the file again.".into());
+    }
+    doc.generation = next_generation(doc)?;
+    doc.baseline = source.as_bytes().to_vec();
+    Ok(())
 }
 fn next_generation(doc: &Document) -> Result<u64, String> {
     doc.generation
@@ -703,7 +732,14 @@ fn rename_file_sync(
     host: &Mutex<Documents>,
 ) -> Result<(), String> {
     let old_buf = fs::canonicalize(PathBuf::from(old_path)).map_err(|e| e.to_string())?;
-    let new_buf = PathBuf::from(new_path);
+    let requested = PathBuf::from(new_path);
+    let parent = requested.parent().ok_or("Destination has no parent directory.")?;
+    let parent = fs::canonicalize(parent).map_err(|e| e.to_string())?;
+    let name = requested.file_name().ok_or("Destination has no name.")?;
+    let new_buf = parent.join(name);
+    if old_buf.is_dir() && new_buf.starts_with(&old_buf) {
+        return Err("Cannot move a folder into itself.".into());
+    }
     if !old_buf.exists() {
         return Err("Source file does not exist.".into());
     }
@@ -723,11 +759,12 @@ fn rename_file_sync(
     for id in ids {
         if let Ok(slot) = registry.get(Some(id)) {
             if let Ok(doc) = slot.lock() {
-                if doc.path.as_ref() == Some(&old_buf) {
+                if doc.path.as_ref().is_some_and(|path| path.starts_with(&old_buf)) {
                     if doc.uncertain {
                         return Err("Check the last save before renaming this file.".into());
                     }
-                    matching_docs.push(slot.clone());
+                    let suffix = doc.path.as_ref().unwrap().strip_prefix(&old_buf).unwrap().to_path_buf();
+                    matching_docs.push((slot.clone(), suffix));
                 }
             }
         }
@@ -739,9 +776,9 @@ fn rename_file_sync(
 
     let canonical_new = fs::canonicalize(&new_buf).unwrap_or(new_buf);
 
-    for slot in matching_docs {
+    for (slot, suffix) in matching_docs {
         if let Ok(mut doc) = slot.lock() {
-            doc.path = Some(canonical_new.clone());
+            doc.path = Some(if suffix.as_os_str().is_empty() { canonical_new.clone() } else { canonical_new.join(suffix) });
             if let Ok(gen) = next_generation(&doc) {
                 doc.generation = gen;
             }
@@ -752,12 +789,68 @@ fn rename_file_sync(
 }
 
 #[tauri::command]
-fn rename_file(
-    old_path: String,
-    new_path: String,
-    host: State<Mutex<Documents>>,
-) -> Result<(), String> {
-    rename_file_sync(&old_path, &new_path, &host)
+async fn move_reference_sources(root: String) -> Result<Vec<move_references::Source>, String> {
+    tauri::async_runtime::spawn_blocking(move || move_references::sources(Path::new(&root)))
+        .await.map_err(|e| e.to_string())?
+}
+
+fn rename_with_references(
+    old_path: &str, new_path: &str, root: Option<&str>,
+    updates: Vec<move_references::Update>, host: &Mutex<Documents>,
+) -> Result<move_references::Outcome, String> {
+    let old = fs::canonicalize(old_path).map_err(|e| e.to_string())?;
+    let requested = Path::new(new_path);
+    let new = fs::canonicalize(requested.parent().ok_or("Destination has no parent.")?).map_err(|e| e.to_string())?
+        .join(requested.file_name().ok_or("Destination has no name.")?);
+    let scope = root.map(fs::canonicalize).transpose().map_err(|e| e.to_string())?;
+    if !updates.is_empty() && scope.is_none() { return Err("Choose a project folder to update file links.".into()); }
+    let mut seen = std::collections::HashSet::new();
+    for update in &updates {
+        let path = Path::new(&update.path);
+        if !seen.insert(path.to_path_buf()) || !move_references::supported(path) ||
+            !path.starts_with(scope.as_ref().unwrap()) || fs::canonicalize(path).map_err(|e| e.to_string())? != path ||
+            update.next.len() > LIMIT || read(&path.to_path_buf())? != update.source.as_bytes() {
+            return Err(format!("The file changed before the move: {}", path.display()));
+        }
+        let registry = host.lock().map_err(|e| e.to_string())?;
+        for id in registry.ids() {
+            let slot = registry.get(Some(id))?;
+            let doc = slot.lock().map_err(|e| e.to_string())?;
+            if doc.path.as_deref() == Some(path) && (doc.uncertain || doc.baseline != update.source.as_bytes()) {
+                return Err("Check or reload the changed file before moving files.".into());
+            }
+        }
+    }
+    rename_file_sync(old_path, new_path, host)?;
+    let mut outcome = move_references::Outcome::default();
+    for update in updates {
+        let path = move_references::relocated(Path::new(&update.path), &old, &new);
+        let mut doc = Document { path: Some(path.clone()), baseline: update.source.into_bytes(), ..Default::default() };
+        if let Err(error) = save(&mut doc, path.clone(), update.next.as_bytes()) {
+            outcome.warnings.push(format!("The move is complete. Cannot confirm the link update in {}: {error}", path.display()));
+        }
+        if doc.baseline == update.next.as_bytes() {
+            let registry = host.lock().map_err(|e| e.to_string())?;
+            for id in registry.ids() {
+                let slot = registry.get(Some(id))?;
+                let mut open = slot.lock().map_err(|e| e.to_string())?;
+                if open.path.as_ref() == Some(&path) {
+                    open.baseline = doc.baseline.clone(); open.uncertain = doc.uncertain;
+                    open.generation = next_generation(&open)?;
+                }
+            }
+            outcome.files.push(move_references::Written { path: update.path, source: update.next, uncertain: doc.uncertain });
+        }
+    }
+    Ok(outcome)
+}
+
+#[tauri::command]
+async fn rename_file(
+    old_path: String, new_path: String, root: Option<String>, updates: Option<Vec<move_references::Update>>,
+    host: State<'_, Mutex<Documents>>,
+) -> Result<move_references::Outcome, String> {
+    rename_with_references(&old_path, &new_path, root.as_deref(), updates.unwrap_or_default(), &host)
 }
 
 #[tauri::command]
@@ -1455,6 +1548,7 @@ fn main() {
             toggle_maximize_window,
             create_file,
             rename_file,
+            move_reference_sources,
             delete_path,
             canonical_path,
             read_clipboard_image,
@@ -1485,6 +1579,7 @@ fn main() {
             recovery_discard_all,
             recovery_checkpoint,
             file_status,
+            accept_file_change,
             read_image,
             copy_image,
             save_png,
@@ -1885,7 +1980,9 @@ mod tests {
         fs::write(&path, "external").unwrap();
         assert_eq!(
             observe_file(Some(path.clone()), source.as_bytes(), false),
-            FileObservation::Changed
+            FileObservation::Changed {
+                source: "external".into()
+            }
         );
         assert_eq!(
             observe_file(Some(path.clone()), source.as_bytes(), true),
@@ -1921,6 +2018,32 @@ mod tests {
         assert_eq!(doc.generation, u64::MAX);
     }
     #[test]
+    fn accepting_external_changes_checks_snapshot_generation_and_uncertainty() {
+        let dir = tempfile::tempdir().unwrap();
+        let path = dir.path().join("source.md");
+        let mut doc = Document::default();
+        save(&mut doc, path.clone(), b"original").unwrap();
+        let generation = doc.generation;
+        fs::write(&path, "external").unwrap();
+        assert!(accept_external(&mut doc, generation + 1, "external").is_err());
+        assert!(accept_external(&mut doc, generation, "old snapshot").is_err());
+        doc.uncertain = true;
+        assert!(accept_external(&mut doc, generation, "external").is_err());
+        assert_eq!(doc.baseline, b"original");
+        assert_eq!(doc.generation, generation);
+        doc.uncertain = false;
+        accept_external(&mut doc, generation, "external").unwrap();
+        assert_eq!(doc.baseline, b"external");
+        assert_eq!(doc.generation, generation + 1);
+        assert!(accept_external(&mut doc, generation, "external").is_err());
+        fs::write(&path, "later write").unwrap();
+        assert!(save(&mut doc, path.clone(), b"merged editor").is_err());
+        assert_eq!(fs::read(&path).unwrap(), b"later write");
+        fs::write(&path, "external").unwrap();
+        save(&mut doc, path.clone(), b"merged editor").unwrap();
+        assert_eq!(fs::read(path).unwrap(), b"merged editor");
+    }
+    #[test]
     fn reload_failures_keep_baseline_and_later_writes_are_detected() {
         let dir = tempfile::tempdir().unwrap();
         let path = dir.path().join("source.md");
@@ -1945,7 +2068,9 @@ mod tests {
         assert_eq!(doc.baseline, b"read snapshot");
         assert_eq!(
             observe_file(doc.path.clone(), &doc.baseline, false),
-            FileObservation::Changed
+            FileObservation::Changed {
+                source: "later external".into()
+            }
         );
         doc.uncertain = true;
         assert!(load_document(&mut doc, path, read).is_err());
@@ -2060,6 +2185,60 @@ mod tests {
         // Document in host updated
         let updated_path = doc_slot.lock().unwrap().path.clone().unwrap();
         assert_eq!(updated_path, fs::canonicalize(PathBuf::from(&new_path)).unwrap());
+    }
+
+    #[test]
+    fn moving_folders_updates_open_children_and_rejects_unsafe_destinations() {
+        let dir = tempfile::tempdir().unwrap();
+        let root = fs::canonicalize(dir.path()).unwrap();
+        let folder = root.join("folder");
+        fs::create_dir(&folder).unwrap();
+        let child = folder.join("note.md");
+        fs::write(&child, b"saved").unwrap();
+        let host = Mutex::new(Documents::default());
+        let slot = host.lock().unwrap().get(None).unwrap();
+        slot.lock().unwrap().path = Some(child.clone());
+        let moved = root.join("moved");
+        let rename = |to: &Path| rename_file_sync(folder.to_str().unwrap(), to.to_str().unwrap(), &host);
+        assert!(rename(&folder.join("nested")).is_err());
+        slot.lock().unwrap().uncertain = true;
+        assert!(rename(&moved).is_err());
+        assert!(child.exists());
+        slot.lock().unwrap().uncertain = false;
+        fs::create_dir(&moved).unwrap();
+        assert!(rename(&moved).is_err());
+        fs::remove_dir(&moved).unwrap();
+        rename(&moved).unwrap();
+        assert_eq!(slot.lock().unwrap().path.as_ref(), Some(&moved.join("note.md")));
+        assert_eq!(fs::read(moved.join("note.md")).unwrap(), b"saved");
+    }
+
+    #[test]
+    fn move_references_updates_disk_and_open_baselines_without_overwriting_external_edits() {
+        let dir = tempfile::tempdir().unwrap();
+        let root = fs::canonicalize(dir.path()).unwrap();
+        let folder = root.join("notes"); fs::create_dir(&folder).unwrap();
+        let moved = root.join("archive");
+        let index = root.join("index.md");
+        let child = folder.join("a.md");
+        fs::write(&index, b"[A](notes/a.md)").unwrap();
+        fs::write(&child, b"[Home](../index.md)").unwrap();
+        let host = Mutex::new(Documents::default());
+        let slot = host.lock().unwrap().get(None).unwrap();
+        load_document(&mut slot.lock().unwrap(), index.clone(), read).unwrap();
+        let updates = || vec![move_references::Update {
+            path: index.to_str().unwrap().into(), source: "[A](notes/a.md)".into(), next: "[A](archive/a.md)".into()
+        }];
+        fs::write(&index, b"external edit").unwrap();
+        assert!(rename_with_references(folder.to_str().unwrap(), moved.to_str().unwrap(), root.to_str(), updates(), &host).is_err());
+        assert!(folder.exists()); assert!(!moved.exists());
+        fs::write(&index, b"[A](notes/a.md)").unwrap();
+        let result = rename_with_references(folder.to_str().unwrap(), moved.to_str().unwrap(), root.to_str(), updates(), &host).unwrap();
+        assert!(result.warnings.is_empty()); assert_eq!(result.files.len(), 1);
+        assert_eq!(fs::read(&index).unwrap(), b"[A](archive/a.md)");
+        assert_eq!(slot.lock().unwrap().baseline, b"[A](archive/a.md)");
+        assert!(moved.join("a.md").exists());
+        assert_eq!(move_references::sources(&root).unwrap().len(), 2);
     }
 
     #[test]

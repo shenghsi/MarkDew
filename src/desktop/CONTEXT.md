@@ -204,6 +204,13 @@ and successful save reconciliation advance the generation. Invalid UTF-8 and rea
 failures leave the baseline unchanged. An external writer can change the file
 after a check or validated read. Save keeps its own baseline comparison.
 
+Changed file observations include the exact UTF-8 source; invalid UTF-8 is unavailable.
+accept_file_change accepts that snapshot only if the document generation still matches,
+Save is certain, and a fresh bounded read equals the snapshot. Acceptance advances the
+host baseline and generation without writing the file. Conflicts keep the old baseline.
+The renderer can combine separate editor edits against this accepted disk baseline.
+A later disk write remains subject to the normal Save baseline comparison.
+
 Local image reads capture the document path and generation under the lock. Reads
 run outside the lock and recheck the generation before returning raw IPC bytes.
 The request's document path must match the host path. Relative image paths use
@@ -245,3 +252,14 @@ git.rs starts the installed git program with fixed arguments and no shell, for C
 only reads: rev-parse, ls-files, diff --quiet, log --follow, and show. A revision is head,
 staged, or a hex commit hash. Output is limited to 16 MiB and 20 seconds. A missing git program
 returns a message that names Git.
+
+
+move_reference_sources reads a bounded project snapshot for Move and Rename link
+updates. rename_file checks the planned old sources and open document baselines
+before moving. It updates paths for open descendants, then writes the planned
+reference edits through confirmed Save, preserving unsaved renderer text. Its
+result lists written sources, uncertainty, and any failures after the move. A
+failure after a completed move does not claim that the path stayed unchanged.
+The frontend parser owns destination edits; the host checks scope, source bytes,
+size, conflicts, and Save confirmation. This is not an atomic transaction across
+multiple files, and same-user path replacement races remain possible.

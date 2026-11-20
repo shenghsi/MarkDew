@@ -75,6 +75,8 @@ export function fileSidebar(pane: HTMLElement, services: SidebarServices,
   options: { root?: string; deferRead?: boolean; rootChanged?: (root: string) => void; switchView?: (view: 'files' | 'outline') => void; showHeading?: boolean } = {}) {
   let root = options.root || '', active = '', generation = 0, disposed = false, choosing = false;
   let deferredRead = !!options.deferRead, persistRoot = false;
+  const selectedPaths = new Set<string>();
+  let anchor = '', cutPaths: string[] = [], dragPaths: string[] = [], moving = false;
   const requests = new WeakMap<HTMLElement, number>();
   const parentFolders = new WeakMap<HTMLButtonElement, HTMLButtonElement>();
   const folderChildren = new WeakMap<HTMLButtonElement, HTMLElement>();
@@ -121,7 +123,7 @@ export function fileSidebar(pane: HTMLElement, services: SidebarServices,
   const label = document.createElement('div'); label.className = 'files-root';
   const rootName = document.createElement('span'); label.append(icon(true), rootName);
   const body = document.createElement('div'); body.className = 'files-list';
-  pane.setAttribute('aria-description', 'Arrow Up and Down move through files. Arrow Right opens a folder or moves to its children. Arrow Left closes a folder or moves to its parent. Home and End move to the first and last entries. Enter opens the focused file.');
+  pane.setAttribute('aria-description', 'Arrow Up and Down move through files. Arrow Right opens a folder or moves to its children. Arrow Left closes a folder or moves to its parent. Home and End move to the first and last entries. Enter opens the focused file. Ctrl or Command click selects multiple entries. Shift click selects a range. Drag entries to a folder to move them, or use Cut and Paste.');
   actions.append(choose, refresh);
   if (options.showHeading !== false) {
     pane.append(heading, actions, label, body);
@@ -130,7 +132,90 @@ export function fileSidebar(pane: HTMLElement, services: SidebarServices,
   }
   const visible = (button: HTMLButtonElement) => button.isConnected && body.contains(button) && !button.closest('[hidden]');
   const entries = (parent: HTMLElement = body) => Array.from(parent.querySelectorAll<HTMLButtonElement>('button[data-sidebar-entry]')).filter(visible);
+  function paintSelection() {
+    for (const row of entries()) {
+      row.classList.toggle('files-selected', selectedPaths.has(row.title));
+      row.classList.toggle('files-cut', cutPaths.includes(row.title));
+      row.setAttribute('aria-pressed', String(selectedPaths.has(row.title)));
+    }
+  }
+  function selectRow(row: HTMLButtonElement, event: MouseEvent) {
+    if (event.shiftKey && anchor) {
+      const rows = entries(), from = rows.findIndex(b => b.title === anchor), to = rows.indexOf(row);
+      if (!event.ctrlKey && !event.metaKey) selectedPaths.clear();
+      if (from >= 0) for (const item of rows.slice(Math.min(from, to), Math.max(from, to) + 1)) selectedPaths.add(item.title);
+      else selectedPaths.add(row.title);
+    } else {
+      if (!event.ctrlKey && !event.metaKey) selectedPaths.clear();
+      if ((event.ctrlKey || event.metaKey) && selectedPaths.has(row.title)) selectedPaths.delete(row.title);
+      else selectedPaths.add(row.title);
+      anchor = row.title;
+    }
+    paintSelection();
+  }
+  function moveSources(paths: string[]) {
+    return paths.filter(path => !paths.some(other => other !== path && isPathInsideFolder(path, other)));
+  }
+  function canMove(paths: string[], destination: string) {
+    return paths.length > 0 && paths.every(path => !isPathInsideFolder(destination, path));
+  }
+  async function moveTo(paths: string[], destination: string) {
+    const sources = moveSources(paths);
+    if (disposed || moving || !services.renameFile || !services.allowed() || !canMove(sources, destination)) return;
+    moving = true;
+    try {
+      for (const path of sources) {
+        if (disposed || !services.allowed()) break;
+        const sep = getSeparator(destination);
+        const next = destination + (destination.endsWith(sep) ? '' : sep) + getFileName(path);
+        if (next === path) { cutPaths = cutPaths.filter(value => value !== path); continue; }
+        await services.renameFile(path, next);
+        selectedPaths.delete(path);
+        cutPaths = cutPaths.filter(value => value !== path && !isPathInsideFolder(value, path));
+        for (const expanded of [...expandedPaths]) if (isPathInsideFolder(expanded, path)) {
+          expandedPaths.delete(expanded); expandedPaths.add(next + expanded.slice(path.length));
+        }
+      }
+      expandedPaths.add(destination);
+    } catch (error) {
+      // Refresh successful moves before reporting a later failure.
+      const request = ++generation;
+      await load(root, body, () => !disposed && generation === request);
+      if (!disposed) message(body, String(error)); return;
+    } finally { moving = false; }
+    render(); paintSelection();
+  }
+  function dropTarget(element: HTMLElement, destination: string) {
+    element.addEventListener('dragover', event => {
+      if (!disposed && !moving && services.allowed() && canMove(dragPaths, destination)) {
+        event.preventDefault(); event.stopPropagation();
+        if (event.dataTransfer) event.dataTransfer.dropEffect = 'move';
+        element.classList.add('files-drop-target');
+      }
+    });
+    element.addEventListener('dragleave', () => element.classList.remove('files-drop-target'));
+    element.addEventListener('drop', event => {
+      element.classList.remove('files-drop-target');
+      if (!dragPaths.length) return;
+      event.preventDefault(); event.stopPropagation();
+      void moveTo([...dragPaths], destination); dragPaths = [];
+    });
+  }
+  // The root can change after the folder picker returns.
+  label.addEventListener('dragover', event => { if (canMove(dragPaths, root) && services.allowed()) { event.preventDefault(); if (event.dataTransfer) event.dataTransfer.dropEffect = 'move'; } });
+  label.addEventListener('drop', event => { if (dragPaths.length) { event.preventDefault(); void moveTo([...dragPaths], root); dragPaths = []; } });
   function keydown(event: KeyboardEvent) {
+    if (!disposed && !moving && !event.isComposing && !event.altKey && services.allowed() && event.target instanceof HTMLButtonElement && visible(event.target)) {
+      const row = event.target;
+      if ((event.ctrlKey || event.metaKey) && ['a', 'x', 'v'].includes(event.key.toLowerCase())) {
+        const key = event.key.toLowerCase();
+        if (key === 'a') { selectedPaths.clear(); entries().forEach(item => selectedPaths.add(item.title)); paintSelection(); }
+        else if (services.renameFile && key === 'x') { if (!selectedPaths.size) selectedPaths.add(row.title); cutPaths = moveSources([...selectedPaths]); paintSelection(); }
+        else if (services.renameFile && key === 'v') void moveTo([...cutPaths], row.classList.contains('files-folder') ? row.title : getParentDir(row.title));
+        event.preventDefault(); event.stopPropagation(); return;
+      }
+      if (event.key === 'Escape') { selectedPaths.clear(); cutPaths = []; paintSelection(); return; }
+    }
     if (disposed || event.defaultPrevented || event.isComposing || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
     if (!['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
     const button = event.target;
@@ -192,6 +277,22 @@ export function fileSidebar(pane: HTMLElement, services: SidebarServices,
         const name = document.createElement('span'); name.className = 'files-entry-name'; name.textContent = entry.name;
         const caret = document.createElement('span'); caret.className = 'files-caret'; caret.setAttribute('aria-hidden', 'true');
         button.append(caret, icon(entry.directory), name); button.title = entry.path; item.append(button); list.append(item);
+        button.addEventListener('click', event => {
+          if (disposed || moving || !services.allowed()) { event.stopImmediatePropagation(); return; }
+          selectRow(button, event);
+          if (event.ctrlKey || event.metaKey || event.shiftKey) { event.preventDefault(); event.stopImmediatePropagation(); }
+        });
+        if (services.renameFile) {
+          button.draggable = true;
+          button.addEventListener('dragstart', event => {
+            if (disposed || moving || !services.allowed()) { event.preventDefault(); return; }
+            if (!selectedPaths.has(entry.path)) { selectedPaths.clear(); selectedPaths.add(entry.path); anchor = entry.path; paintSelection(); }
+            dragPaths = moveSources([...selectedPaths]);
+            if (event.dataTransfer) { event.dataTransfer.effectAllowed = 'move'; event.dataTransfer.setData('text/plain', dragPaths.join('\n')); }
+          });
+          button.addEventListener('dragend', () => { dragPaths = []; pane.querySelectorAll('.files-drop-target').forEach(el => el.classList.remove('files-drop-target')); });
+          if (entry.directory) dropTarget(button, entry.path);
+        }
         if (!entry.directory) {
           button.dataset.filePath = entry.path;
           if (entry.path === active) button.setAttribute('aria-current', 'page');
@@ -214,12 +315,13 @@ export function fileSidebar(pane: HTMLElement, services: SidebarServices,
             }
             clickTimer = setTimeout(() => {
               clickTimer = null;
-              if (!disposed && body.contains(button) && services.allowed()) {
+              if (!disposed && !dragPaths.length && selectedPaths.size === 1 && selectedPaths.has(entry.path) && body.contains(button) && services.allowed()) {
                 services.open(entry.path, { preview: true, newTab: false });
               }
             }, 200);
           });
-          button.addEventListener('dblclick', () => {
+          button.addEventListener('dblclick', (event: MouseEvent) => {
+            if (event.ctrlKey || event.metaKey || event.shiftKey) return;
             if (clickTimer) {
               clearTimeout(clickTimer);
               clickTimer = null;
@@ -251,6 +353,7 @@ export function fileSidebar(pane: HTMLElement, services: SidebarServices,
           if (expanded) reloadChild();
         });
       }
+      paintSelection();
       cachedListings.set(parent, { path, signature: newSignature, childFolders });
     } catch (error) {
       if (!current()) return;
@@ -274,11 +377,11 @@ export function fileSidebar(pane: HTMLElement, services: SidebarServices,
     else { cachedListings.delete(body); body.replaceChildren(); message(body, services.allFiles?.() ? 'Choose a folder to show files.' : 'Choose a folder to show Markdown files.'); }
   }
   choose.addEventListener('click', async () => {
-    if (disposed || choosing || !services.allowed()) return;
+    if (disposed || moving || choosing || !services.allowed()) return;
     choosing = true; choose.disabled = true;
     try {
       const selected = await services.choose();
-      if (!disposed && selected && services.allowed()) { root = selected; persistRoot = true; render(); }
+      if (!disposed && selected && services.allowed()) { selectedPaths.clear(); cutPaths = []; anchor = ''; root = selected; persistRoot = true; render(); }
     } catch (error) { if (!disposed) message(body, String(error)); }
     finally { choosing = false; choose.disabled = false; }
   });
@@ -436,7 +539,7 @@ export function fileSidebar(pane: HTMLElement, services: SidebarServices,
   }
 
   pane.addEventListener('contextmenu', (event: MouseEvent) => {
-    if (disposed || !services.allowed() || !root || !services.createFile) return;
+    if (disposed || moving || !services.allowed() || !root) return;
     event.preventDefault();
     closeContextMenu();
 
@@ -461,21 +564,35 @@ export function fileSidebar(pane: HTMLElement, services: SidebarServices,
       isDirectory = false;
     }
 
+    const row = folderButton || fileButton;
+    if (row && targetPath && !selectedPaths.has(targetPath)) { selectedPaths.clear(); selectedPaths.add(targetPath); anchor = targetPath; paintSelection(); }
     const menu = document.createElement('div');
     menu.className = 'sidebar-context-menu';
     menu.style.visibility = 'hidden';
     menu.style.left = `${event.clientX}px`;
     menu.style.top = `${event.clientY}px`;
 
-    const newFileItem = document.createElement('button');
-    newFileItem.type = 'button';
-    newFileItem.className = 'sidebar-context-item';
-    newFileItem.textContent = t('sidebar.new_file');
-    newFileItem.addEventListener('click', () => {
-      closeContextMenu();
-      void handleNewFile(targetDir, targetFolderBtn);
-    });
-    menu.append(newFileItem);
+    if (services.createFile) {
+      const newFileItem = document.createElement('button');
+      newFileItem.type = 'button';
+      newFileItem.className = 'sidebar-context-item';
+      newFileItem.textContent = t('sidebar.new_file');
+      newFileItem.addEventListener('click', () => {
+        closeContextMenu();
+        void handleNewFile(targetDir, targetFolderBtn);
+      });
+      menu.append(newFileItem);
+    }
+
+    if (services.renameFile) {
+      const addAction = (text: string, action: () => void, disabled = false) => {
+        const item = document.createElement('button'); item.type = 'button';
+        item.className = 'sidebar-context-item'; item.textContent = text; item.disabled = disabled;
+        item.addEventListener('click', () => { closeContextMenu(); action(); }); menu.append(item);
+      };
+      if (targetPath) addAction(t('sidebar.cut'), () => { cutPaths = moveSources([...selectedPaths]); paintSelection(); });
+      addAction(t('sidebar.paste'), () => { void moveTo([...cutPaths], targetDir); }, !canMove(cutPaths, targetDir));
+    }
 
     if (fileButton && services.compare && fileButton.dataset.filePath && isEditorFile(fileButton.dataset.filePath)) {
       const compareItem = document.createElement('button');

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { EditorState } from '@codemirror/state';
 import { history, undo, redo } from '@codemirror/commands';
-import { fromSource, normalize, savedSource, sourceExtensions, sourceField } from '../../src/web/source';
+import { fromSource, normalize, savedSource, sourceExtensions, sourceField, restoreSource } from '../../src/web/source';
 
 describe('source record and CodeMirror history', () => {
   it('retains the BOM and mixed line endings through edits, undo and redo', () => {
@@ -24,4 +24,13 @@ describe('source record and CodeMirror history', () => {
     undo(target); expect(savedSource(state.field(sourceField))).toBe('a\rb');
     redo(target); redo(target); expect(savedSource(state.field(sourceField))).toBe('a\rx\rb');
   });
+});
+
+it('undoes exact source changes that only change BOM and line endings', () => {
+  let state = EditorState.create({ doc: 'a\nb', extensions: [history(), sourceExtensions(fromSource('a\nb'))] });
+  const target = { get state() { return state; }, dispatch(transaction: any) { state = transaction.state; } };
+  state = state.update({ effects: restoreSource.of(fromSource('\uFEFFa\r\nb')) }).state;
+  expect(savedSource(state.field(sourceField))).toBe('\uFEFFa\r\nb');
+  expect(undo(target)).toBe(true); expect(savedSource(state.field(sourceField))).toBe('a\nb');
+  expect(redo(target)).toBe(true); expect(savedSource(state.field(sourceField))).toBe('\uFEFFa\r\nb');
 });

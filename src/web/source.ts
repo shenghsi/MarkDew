@@ -58,8 +58,8 @@ export const sourceField = StateField.define<SourceRecord>({
 
 export function sourceExtensions(record: SourceRecord) {
   return [sourceField.init(() => record), EditorState.lineSeparator.of('\n'),
-    invertedEffects.of(transaction => transaction.docChanged
+    invertedEffects.of(transaction => transaction.docChanged || transaction.effects.some(effect => effect.is(restoreSource))
       ? [restoreSource.of(transaction.startState.field(sourceField))] : []),
-    EditorState.transactionExtender.of(transaction => transaction.docChanged
+    EditorState.transactionExtender.of(transaction => transaction.docChanged || transaction.effects.some(effect => effect.is(restoreSource))
       ? { annotations: isolateHistory.of('full') } : null)];
 }

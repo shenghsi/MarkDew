@@ -9,7 +9,7 @@ vi.mock('@tauri-apps/plugin-dialog', () => ({ ask: mocks.ask, open: mocks.open, 
 vi.mock('@tauri-apps/api/window', () => ({ getCurrentWindow: () => ({ onDragDropEvent: async () => vi.fn(), onCloseRequested: vi.fn(), listen: vi.fn() }) }));
 it('keeps current source on file warnings and failed Reload then starts new exact history on accepted Reload', async () => {
   let disk = '\uFEFFa\rb\r\nEnd', failRead = false, failCheckpoint = false, uncertainSave = false;
-  let observation = { kind: 'changed', generation: 1 };
+  let observation: { kind: string; generation: number; source?: string } = { kind: 'changed', source: '\uFEFFa\rb\r\nEnd external', generation: 1 };
   const calls = (command: string) => mocks.invoke.mock.calls.filter(([name]) => name === command);
   mocks.invoke.mockImplementation(async (command: string) => {
     if (command === 'document_start') return startupFixture({ session: 'session-test', revision: 0, entries: [], warnings: [] });
@@ -31,7 +31,7 @@ it('keeps current source on file warnings and failed Reload then starts new exac
   view.dispatch({ changes: { from: view.state.doc.length, insert: ' draft' } });
   const original = source(), depth = undoDepth(view.state);
   document.querySelector<HTMLButtonElement>('#check-file')!.click();
-  await vi.waitFor(() => expect(document.querySelector('.file-warning')!.textContent).toContain('file changed on disk'));
+  await vi.waitFor(() => expect(document.querySelector('.file-warning')!.textContent).toContain('file on disk conflicts with the text in the editor'));
   expect(source()).toBe(original); expect(undoDepth(view.state)).toBe(depth);
   const reload = () => document.querySelector<HTMLButtonElement>('.file-warning button')!.click();
   mocks.ask.mockResolvedValueOnce(false); reload();
@@ -54,8 +54,9 @@ it('keeps current source on file warnings and failed Reload then starts new exac
   view.contentDOM.dispatchEvent(new CompositionEvent('compositionend', { bubbles: true }));
   uncertainSave = true; document.querySelector<HTMLButtonElement>('#save-as')!.click();
   await vi.waitFor(() => expect(document.querySelector('#status')!.textContent).toContain('uncertain'));
-  const controls = document.querySelectorAll<HTMLButtonElement>('.file-warning button');
-  expect(controls[0].disabled).toBe(true); expect(controls[1].disabled).toBe(true);
+  const controls = Array.from(document.querySelectorAll<HTMLButtonElement>('.file-warning button'));
+  expect(controls.find(button => button.textContent === 'Reload from disk')!.disabled).toBe(true);
+  expect(controls.find(button => button.textContent === 'Save As')!.disabled).toBe(true);
   const opens = calls('open_document').length; reload(); expect(calls('open_document')).toHaveLength(opens);
   observation = { kind: 'unchanged', generation: 2 };
   document.querySelector<HTMLButtonElement>('#check')!.click();

@@ -734,6 +734,10 @@ button[aria-pressed="true"], #outline .outline-content button:hover, #outline:no
 .files-list li > div { padding-left: 12px; }
 .files-list button { display: flex; align-items: center; gap: 5px; width: calc(100% - 8px); text-align: left; border: 0; border-radius: 4px; margin: 1px 4px; background: transparent; color: var(--muted); padding: 7px 10px; white-space: nowrap; font-size: 13px; transition: background 0.12s; }
 .files-list button:hover, .files-list button[aria-current="page"] { background: var(--selected); }
+.files-list button.files-selected { background: var(--selected); color: var(--ink); outline: 1px solid var(--accent); outline-offset: -1px; }
+.files-list button.files-cut { opacity: .5; }
+.files-drop-target { outline: 2px solid var(--accent); outline-offset: -2px; }
+.sidebar-context-item:disabled { opacity: .45; cursor: default; }
 .files-caret { width: 8px; flex: 0 0 8px; }
 .files-folder > .files-caret::before { content: '▸'; }
 .files-folder[aria-expanded="true"] > .files-caret::before { content: '▾'; }
@@ -1546,6 +1550,9 @@ body.no-document #word-count, body.no-document #document-title { display: none; 
 .compare-bar select, .compare-bar button { font: inherit; font-size: 13px; color: var(--ink); background: var(--paper); border: 1px solid var(--border); border-radius: 4px; padding: 3px 8px; max-width: 320px; }
 .compare-bar button:disabled { opacity: .5; }
 .compare-note { padding: 4px 14px; font-size: 12px; color: var(--muted); border-bottom: 1px solid var(--border); min-height: 1.4em; }
+.conflict-labels { display: flex; border-bottom: 1px solid var(--border); font-size: 13px; font-weight: 600; }
+.conflict-labels > span { flex: 1; padding: 5px 14px; }
+.conflict-view .cm-merge-revert button { color: var(--ink); background: var(--surface); border: 1px solid var(--border); border-radius: 4px; cursor: pointer; }
 .compare-body { flex: 1; min-height: 0; overflow: auto; position: relative; }
 .compare-ruler { position: absolute; top: 0; right: 0; bottom: 0; width: 12px; pointer-events: none; z-index: 5; }
 .compare-ruler span { position: absolute; left: 3px; right: 1px; border-radius: 1px; opacity: .85; }
