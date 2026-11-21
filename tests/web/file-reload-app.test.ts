@@ -8,6 +8,8 @@ vi.mock('@tauri-apps/api/core', () => ({ invoke: mocks.invoke, isTauri: () => tr
 vi.mock('@tauri-apps/plugin-dialog', () => ({ ask: mocks.ask, open: mocks.open, save: mocks.save }));
 vi.mock('@tauri-apps/api/window', () => ({ getCurrentWindow: () => ({ onDragDropEvent: async () => vi.fn(), onCloseRequested: vi.fn(), listen: vi.fn() }) }));
 it('loads disk changes, combines separate edits, and retains conflicts and failed reads', async () => {
+  Object.defineProperty(Range.prototype, 'getClientRects', { configurable: true, value: () => [] });
+  Object.defineProperty(Range.prototype, 'getBoundingClientRect', { configurable: true, value: () => new DOMRect() });
   let disk = '\uFEFFalpha\r\nbeta\rgamma\n', generation = 1, rejectAccept = false;
   mocks.invoke.mockImplementation(async (command: string, args: any) => {
     if (command === 'document_start') return startupFixture({ session: 'reload', revision: 0, entries: [], warnings: [] });
@@ -52,6 +54,19 @@ it('loads disk changes, combines separate edits, and retains conflicts and faile
   await vi.waitFor(() => { expect(source()).toBe(disk.replace('alpha', '日本語😀')); expect(view.state.readOnly).toBe(false); });
   // Saving the merged editor text must still use the disk snapshot as its baseline.
   document.querySelector<HTMLButtonElement>('#save')!.click();
-  await vi.waitFor(() => expect(mocks.invoke).toHaveBeenCalledWith('save_document', expect.objectContaining({ source: source() })));
+  await vi.waitFor(() => {
+    expect(mocks.invoke).toHaveBeenCalledWith('save_document', expect.objectContaining({ source: source() }));
+    expect(document.querySelector('#status')!.textContent).not.toContain('Unsaved');
+  });
+
+  // Reloading from disk preserves scroll position and mapped selection instead of jumping to the end of the file.
+  view.dispatch({ selection: { anchor: 3, head: 3 } });
+  view.scrollDOM.scrollTop = 180;
+  disk = `${source()}\nExtra trailing paragraph added on disk\n`;
+  check();
+  await vi.waitFor(() => { expect(source()).toBe(disk); expect(view.state.readOnly).toBe(false); });
+  expect(view.state.selection.main.head).toBe(3);
+  expect(view.scrollDOM.scrollTop).toBe(180);
+
   window.dispatchEvent(new Event('pagehide')); view.destroy();
 });

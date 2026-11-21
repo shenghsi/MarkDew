@@ -8,6 +8,8 @@ vi.mock('@tauri-apps/api/core', () => ({ invoke: mocks.invoke, isTauri: () => tr
 vi.mock('@tauri-apps/plugin-dialog', () => ({ ask: mocks.ask, open: mocks.open, save: mocks.save }));
 vi.mock('@tauri-apps/api/window', () => ({ getCurrentWindow: () => ({ onDragDropEvent: async () => vi.fn(), onCloseRequested: vi.fn(), listen: vi.fn() }) }));
 it('keeps current source on file warnings and failed Reload then starts new exact history on accepted Reload', async () => {
+  Object.defineProperty(Range.prototype, 'getClientRects', { configurable: true, value: () => [] });
+  Object.defineProperty(Range.prototype, 'getBoundingClientRect', { configurable: true, value: () => new DOMRect() });
   let disk = '\uFEFFa\rb\r\nEnd', failRead = false, failCheckpoint = false, uncertainSave = false;
   let observation: { kind: string; generation: number; source?: string } = { kind: 'changed', source: '\uFEFFa\rb\r\nEnd external', generation: 1 };
   const calls = (command: string) => mocks.invoke.mock.calls.filter(([name]) => name === command);

@@ -1,6 +1,7 @@
 import { diff } from '@codemirror/merge';
+import { compareDiff } from './compare-diff';
 import { mergeFileChange } from './file-merge';
-import { Compartment, EditorState } from '@codemirror/state';
+import { ChangeSet, Compartment, EditorState } from '@codemirror/state';
 import { EditorView, keymap, lineNumbers, highlightActiveLine } from '@codemirror/view';
 import { defaultKeymap, history, historyKeymap, undo, redo } from '@codemirror/commands';
 import { markdownKeymap } from '@codemirror/lang-markdown';
@@ -1472,20 +1473,115 @@ document.querySelector('#source')!.addEventListener('click', () => {
   syncMenuChecks();
 });
 document.querySelector('#check')!.addEventListener('click', () => void operation(async () => { const tab = active(); await invoke('check_save', { document: tab.id }); tab.uncertain = false; fileTransition(); report(); checkpoint(tab); await flushRecovery(tab); }));
+function captureViewAnchor(nextSource: string) {
+  const oldDoc = view.state.doc;
+  const oldText = oldDoc.toString();
+  const nextText = normalize(fromSource(nextSource).raw);
+  const changes = ChangeSet.of(
+    compareDiff(oldText, nextText).map(c => ({ from: c.fromA, to: c.toA, insert: nextText.slice(c.fromB, c.toB) })),
+    oldDoc.length,
+  );
+  const mapPos = (pos: number, assoc: -1 | 1 = 1) => {
+    const clamped = Math.max(0, Math.min(oldDoc.length, pos));
+    return changes.mapPos(clamped, assoc);
+  };
+  const selection = {
+    anchor: mapPos(view.state.selection.main.anchor, -1),
+    head: mapPos(view.state.selection.main.head, 1),
+  };
+  const scrollTop = view.scrollDOM.scrollTop;
+  const scrollLeft = view.scrollDOM.scrollLeft;
+  // Find the top visible line block at the current scroll offset and preserve its offset from the top of the viewport.
+  let anchorPos = 0;
+  let anchorOffset = scrollTop;
+  let hasAnchorBlock = false;
+  try {
+    if (view.scrollDOM.clientHeight > 0 && view.contentHeight > 0) {
+      const topBlock = view.lineBlockAtHeight(scrollTop + 8);
+      anchorPos = mapPos(topBlock.from, -1);
+      anchorOffset = scrollTop - topBlock.top;
+      hasAnchorBlock = true;
+    }
+  } catch {
+    // Fallback when viewportLines is empty in headless/unmeasured environments.
+  }
+  return {
+    selection,
+    scrollTop,
+    scrollLeft,
+    anchorPos,
+    anchorOffset,
+    hasAnchorBlock,
+  };
+}
+function stabilizeScrollAfterReload(captured: ReturnType<typeof captureViewAnchor>) {
+  const applyScroll = () => {
+    if (!pageActive) return;
+    if (captured.hasAnchorBlock && view.scrollDOM.clientHeight > 0 && view.contentHeight > 0) {
+      const pos = Math.min(captured.anchorPos, view.state.doc.length);
+      const block = view.lineBlockAt(pos);
+      view.scrollDOM.scrollTop = Math.max(0, block.top + captured.anchorOffset);
+    } else {
+      view.scrollDOM.scrollTop = captured.scrollTop;
+    }
+    view.scrollDOM.scrollLeft = captured.scrollLeft;
+  };
+  applyScroll();
+  view.requestMeasure({
+    read: () => {
+      if (!captured.hasAnchorBlock || view.scrollDOM.clientHeight <= 0 || view.contentHeight <= 0) {
+        return null;
+      }
+      const pos = Math.min(captured.anchorPos, view.state.doc.length);
+      return view.lineBlockAt(pos).top;
+    },
+    write: top => {
+      if (!pageActive) return;
+      if (top !== null) {
+        view.scrollDOM.scrollTop = Math.max(0, top + captured.anchorOffset);
+      } else {
+        view.scrollDOM.scrollTop = captured.scrollTop;
+      }
+      view.scrollDOM.scrollLeft = captured.scrollLeft;
+    },
+  });
+}
+function restoreReloadedState(source: string, tab: DocumentTab) {
+  const captured = captureViewAnchor(source);
+  const nextLen = normalize(fromSource(source).raw).length;
+  const nextState = state(source, tab).update({
+    selection: {
+      anchor: Math.min(captured.selection.anchor, nextLen),
+      head: Math.min(captured.selection.head, nextLen),
+    },
+  }).state;
+  tab.state = nextState;
+  view.setState(nextState);
+  stabilizeScrollAfterReload(captured);
+}
 async function reloadFile() {
   const tab = active(); if (!tab.path) return;
   if (!await discard()) return;
   checkpoint(); await flushRecovery();
   const loaded = await invoke<{ source: string; path: string }>('open_document', { document: tab.id, path: tab.path });
-  tab.path = loaded.path; tab.baseline = loaded.source; fileTransition(); view.setState(state(loaded.source, tab)); applyLock();
+  tab.path = loaded.path; tab.baseline = loaded.source; fileTransition(); restoreReloadedState(loaded.source, tab); applyLock();
   report(); checkpoint(); await flushRecovery();
 }
 function applyExactSource(source: string) {
   if (text() === source) return;
+  const captured = captureViewAnchor(source);
   const record = fromSource(source), next = normalize(record.raw);
-  const changes = diff(view.state.doc.toString(), next, { scanLimit: 1000, timeout: 50 })
+  const changes = compareDiff(view.state.doc.toString(), next)
     .map(change => ({ from: change.fromA, to: change.toA, insert: next.slice(change.fromB, change.toB) }));
-  view.dispatch({ changes, effects: restoreSource.of(record) });
+  view.dispatch({
+    changes,
+    selection: {
+      anchor: Math.min(captured.selection.anchor, next.length),
+      head: Math.min(captured.selection.head, next.length),
+    },
+    effects: restoreSource.of(record),
+  });
+  stabilizeScrollAfterReload(captured);
 }
 async function conflictSnapshot(tab: DocumentTab, path: string): Promise<DiskSnapshot> {
   if (tab.path !== path || tab.uncertain) throw new Error(t('conflict.unavailable'));
@@ -1548,7 +1644,7 @@ async function loadFileChange(result: FileStatus & { kind: 'changed' }) {
   checkpoint(tab); await flushRecovery(tab);
   await invoke('accept_file_change', { document: tab.id, generation: result.generation, source: result.source });
   tab.baseline = result.source;
-  if (clean) view.setState(state(merged, tab));
+  if (clean) restoreReloadedState(merged, tab);
   else applyExactSource(merged);
   fileTransition(); applyLock(); report(); checkpoint(tab); await flushRecovery(tab);
 }
