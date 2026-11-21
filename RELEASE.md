@@ -1,7 +1,8 @@
-# MarkDew v1.7.18
+# MarkDew v1.7.19
 
 ## What is new
 
+- New: Find and Replace now shows the current match index and total occurrences (`1/5`, `2/6`, `0/0`) inside the search input box and displays an overview ruler in the editor scrollbar track marking where all search matches are across the document.
 - Fixed: changed-line overview marks in the editor scrollbar track now align with the exact vertical positions of the changed lines in the scrollable document (accounting for top padding, bottom overscroll padding, wrapped paragraphs, and Live preview widgets) while staying free of scroll jitter.
 - Fixed: changed-line overview marks in the editor scrollbar track now stay at stable positions while scrolling across virtualized blocks and Live preview widgets.
 - New: changed-line overview marks in the editor scrollbar track show where added, modified, and deleted lines are across the entire document at a glance (in both Live preview and Source Code Mode, hidden in Read Mode).

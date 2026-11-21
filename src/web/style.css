@@ -124,6 +124,58 @@ button { background: #f6f7f8; color: #24272c; border: 1px solid #ccc; border-rad
   flex-shrink: 0;
 }
 
+.markdew-search-panel .search-match-count {
+  font-size: 11px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  padding: 0 6px;
+  white-space: nowrap;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.markdew-search-panel .search-match-count[hidden] {
+  display: none !important;
+}
+
+.cm-search-ruler {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 10px;
+  pointer-events: none;
+  user-select: none;
+  z-index: 6;
+}
+
+.cm-search-ruler-mark {
+  position: absolute;
+  left: 1px;
+  right: 1px;
+  min-height: 3px;
+  border-radius: 1.5px;
+  background-color: #d29922;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.cm-search-ruler-mark.cm-search-ruler-active {
+  background-color: #f0883e;
+  opacity: 1;
+  left: 0;
+  right: 0;
+  z-index: 1;
+}
+
+:root[data-theme="dark"] .cm-search-ruler-mark {
+  background-color: #e3b341;
+}
+
+:root[data-theme="dark"] .cm-search-ruler-mark.cm-search-ruler-active {
+  background-color: #ffa657;
+}
+
 .markdew-search-panel .search-btn-option {
   width: 22px;
   height: 20px;

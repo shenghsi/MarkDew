@@ -138,29 +138,52 @@ it('toggles search options and dispatches query changes', () => {
   expect(getSearchQuery(view.state).caseSensitive).toBe(false);
 });
 
-it('navigates matches with Next and Prev buttons', () => {
-  createEditor('foo 123 foo 456 foo');
+it('navigates matches with Next and Prev buttons and updates 1/N match count and scrollbar overview ruler', () => {
+  createEditor('foo 123 foo 456 foo\nline two\nfoo on line three\nfoo on line four');
   find(view);
 
   const panel = getActiveSearchPanel()!;
   const searchInput = panel.dom.querySelector<HTMLInputElement>('input[name="search"]')!;
+  const countSpan = panel.dom.querySelector<HTMLElement>('.search-match-count')!;
   const nextBtn = panel.dom.querySelector<HTMLButtonElement>('.search-btn-next')!;
   const prevBtn = panel.dom.querySelector<HTMLButtonElement>('.search-btn-prev')!;
+
+  // Initially empty query -> count hidden and no ruler marks
+  expect(countSpan.textContent).toBe('');
+  expect(countSpan.hidden).toBe(true);
+  expect(view.dom.querySelectorAll('.cm-search-ruler-mark')).toHaveLength(0);
 
   searchInput.value = 'foo';
   searchInput.dispatchEvent(new Event('input'));
 
+  // 5 occurrences in total; before navigating to a match, shows 0/5 and 5 ruler marks
+  expect(countSpan.hidden).toBe(false);
+  expect(countSpan.textContent).toBe('0/5');
+  expect(view.dom.querySelectorAll('.cm-search-ruler-mark')).toHaveLength(5);
+
   nextBtn.click();
   expect(view.state.selection.main.from).toBe(0);
   expect(view.state.selection.main.to).toBe(3);
+  expect(countSpan.textContent).toBe('1/5');
+  expect(view.dom.querySelectorAll('.cm-search-ruler-mark')[0].classList.contains('cm-search-ruler-active')).toBe(true);
 
   nextBtn.click();
   expect(view.state.selection.main.from).toBe(8);
   expect(view.state.selection.main.to).toBe(11);
+  expect(countSpan.textContent).toBe('2/5');
+  expect(view.dom.querySelectorAll('.cm-search-ruler-mark')[0].classList.contains('cm-search-ruler-active')).toBe(false);
+  expect(view.dom.querySelectorAll('.cm-search-ruler-mark')[1].classList.contains('cm-search-ruler-active')).toBe(true);
 
   prevBtn.click();
   expect(view.state.selection.main.from).toBe(0);
   expect(view.state.selection.main.to).toBe(3);
+  expect(countSpan.textContent).toBe('1/5');
+
+  // Non-matching query shows 0/0 and clears ruler marks
+  searchInput.value = 'nonexistent';
+  searchInput.dispatchEvent(new Event('input'));
+  expect(countSpan.textContent).toBe('0/0');
+  expect(view.dom.querySelectorAll('.cm-search-ruler-mark')).toHaveLength(0);
 });
 
 it('performs replace and replace all in replace mode', () => {

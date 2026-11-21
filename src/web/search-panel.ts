@@ -39,6 +39,7 @@ export class MarkDewSearchPanel implements Panel {
   private caseBtn: HTMLButtonElement;
   private wordBtn: HTMLButtonElement;
   private regexBtn: HTMLButtonElement;
+  private countSpan: HTMLElement;
   private prevBtn: HTMLButtonElement;
   private nextBtn: HTMLButtonElement;
   private closeBtn: HTMLButtonElement;
@@ -50,6 +51,15 @@ export class MarkDewSearchPanel implements Panel {
   private replaceActions: HTMLElement;
   private replaceBtn: HTMLButtonElement;
   private replaceAllBtn: HTMLButtonElement;
+
+  private ruler: HTMLElement;
+  private rulerFrame = 0;
+  private observer: ResizeObserver | undefined;
+  private matches: { from: number; to: number }[] = [];
+  private activeMatchIndex = -1;
+  private lastRulerScrollHeight = 0;
+  private lastRulerTrackHeight = 0;
+  private lastRulerGap = 0;
 
   private isComposing = false;
   private unsubLanguage: () => void;
@@ -142,8 +152,12 @@ export class MarkDewSearchPanel implements Panel {
     });
     this.regexBtn.classList.add('search-btn-regex');
 
+    this.countSpan = document.createElement('span');
+    this.countSpan.className = 'search-match-count';
+    this.countSpan.setAttribute('aria-live', 'polite');
+
     optionsGroup.append(this.caseBtn, this.wordBtn, this.regexBtn);
-    searchInputWrapper.append(this.searchInput, optionsGroup);
+    searchInputWrapper.append(this.searchInput, this.countSpan, optionsGroup);
 
     // Navigation buttons
     const navGroup = document.createElement('div');
@@ -240,6 +254,16 @@ export class MarkDewSearchPanel implements Panel {
 
     this.dom.append(searchRow, this.replaceRow);
 
+    this.ruler = document.createElement('div');
+    this.ruler.className = 'cm-search-ruler';
+    this.ruler.setAttribute('aria-hidden', 'true');
+    this.view.dom.appendChild(this.ruler);
+
+    if (typeof ResizeObserver !== 'undefined') {
+      this.observer = new ResizeObserver(() => this.scheduleRuler());
+      this.observer.observe(this.view.scrollDOM);
+    }
+
     // Escape listener on whole panel
     this.dom.addEventListener('keydown', event => {
       if (event.key === 'Escape') {
@@ -250,6 +274,8 @@ export class MarkDewSearchPanel implements Panel {
 
     this.updateLabels();
     this.updateModeUI();
+    this.recomputeMatches();
+    this.updateActiveMatch(true);
 
     this.unsubLanguage = subscribeLanguageChange(() => {
       this.updateLabels();
@@ -373,18 +399,178 @@ export class MarkDewSearchPanel implements Panel {
   }
 
   update(update: ViewUpdate): void {
+    let queryChanged = false;
     for (const tr of update.transactions) {
       for (const effect of tr.effects) {
-        if (effect.is(setSearchQuery) && !effect.value.eq(this.query)) {
-          this.setQuery(effect.value);
+        if (effect.is(setSearchQuery)) {
+          queryChanged = true;
+          if (!effect.value.eq(this.query)) {
+            this.setQuery(effect.value);
+          }
         }
+      }
+    }
+    if (update.docChanged || queryChanged) {
+      this.recomputeMatches();
+      this.updateActiveMatch(true);
+      this.scheduleRuler(true);
+    } else if (update.selectionSet) {
+      this.updateActiveMatch(false);
+    } else if (update.heightChanged || update.geometryChanged) {
+      this.scheduleRuler();
+    }
+  }
+
+  private recomputeMatches(): void {
+    const matches: { from: number; to: number }[] = [];
+    if (this.query.search && this.query.valid) {
+      try {
+        const cursor = this.query.getCursor(this.view.state);
+        const MAX_MATCHES = 10000;
+        for (let step = cursor.next(); !step.done && matches.length < MAX_MATCHES; step = cursor.next()) {
+          matches.push({ from: step.value.from, to: step.value.to });
+        }
+      } catch {
+        // Invalid regex or cursor error
+      }
+    }
+    this.matches = matches;
+  }
+
+  private updateActiveMatch(forceRuler = false): void {
+    if (!this.query.search || !this.query.valid) {
+      this.countSpan.textContent = '';
+      this.countSpan.hidden = true;
+      this.activeMatchIndex = -1;
+      if (forceRuler) this.renderRuler(true);
+      return;
+    }
+
+    const total = this.matches.length;
+    if (total === 0) {
+      this.countSpan.textContent = '0/0';
+      this.countSpan.hidden = false;
+      this.activeMatchIndex = -1;
+      if (forceRuler) this.renderRuler(true);
+      return;
+    }
+
+    const sel = this.view.state.selection.main;
+    let activeIdx = -1;
+    let low = 0;
+    let high = total - 1;
+    while (low <= high) {
+      const mid = (low + high) >> 1;
+      const m = this.matches[mid];
+      if (m.from === sel.from && m.to === sel.to) {
+        activeIdx = mid;
+        break;
+      }
+      if (m.from < sel.from || (m.from === sel.from && m.to < sel.to)) {
+        low = mid + 1;
+      } else {
+        high = mid - 1;
+      }
+    }
+
+    this.countSpan.textContent = `${activeIdx >= 0 ? activeIdx + 1 : 0}/${total}`;
+    this.countSpan.hidden = false;
+
+    const prevIdx = this.activeMatchIndex;
+    this.activeMatchIndex = activeIdx;
+    if (forceRuler) {
+      this.renderRuler(true);
+    } else if (prevIdx !== activeIdx && this.ruler.childElementCount === total) {
+      if (prevIdx >= 0 && prevIdx < this.ruler.children.length) {
+        this.ruler.children[prevIdx].classList.remove('cm-search-ruler-active');
+      }
+      if (activeIdx >= 0 && activeIdx < this.ruler.children.length) {
+        this.ruler.children[activeIdx].classList.add('cm-search-ruler-active');
       }
     }
   }
 
+  private scheduleRuler(force = false): void {
+    if (!this.rulerFrame && this.ruler.isConnected) {
+      this.rulerFrame = requestAnimationFrame(() => {
+        this.rulerFrame = 0;
+        this.renderRuler(force);
+      });
+    }
+  }
+
+  private renderRuler(force = false): void {
+    if (!this.ruler.isConnected) return;
+    if (!this.query.search || !this.query.valid || this.matches.length === 0) {
+      if (this.ruler.childElementCount > 0) this.ruler.replaceChildren();
+      this.lastRulerScrollHeight = 0;
+      this.lastRulerTrackHeight = 0;
+      this.lastRulerGap = 0;
+      return;
+    }
+
+    const scroller = this.view.scrollDOM;
+    const doc = this.view.state.doc;
+    const scrollerRect = scroller.getBoundingClientRect();
+    const gap =
+      scrollerRect.height > 0
+        ? Math.max(0, this.view.documentTop - scrollerRect.top + scroller.scrollTop)
+        : this.view.documentPadding.top;
+    const total = Math.max(scroller.scrollHeight, this.view.contentHeight + gap + this.view.documentPadding.bottom, 1);
+    const trackHeight = this.ruler.clientHeight || scroller.clientHeight;
+
+    if (
+      !force &&
+      this.ruler.childElementCount === this.matches.length &&
+      Math.abs(total - this.lastRulerScrollHeight) <= 2 &&
+      Math.abs(trackHeight - this.lastRulerTrackHeight) <= 1 &&
+      Math.abs(gap - this.lastRulerGap) <= 2
+    ) {
+      return;
+    }
+    this.lastRulerScrollHeight = total;
+    this.lastRulerTrackHeight = trackHeight;
+    this.lastRulerGap = gap;
+
+    const marks: HTMLElement[] = [];
+    for (let i = 0; i < this.matches.length; i++) {
+      const m = this.matches[i];
+      const startPos = Math.min(m.from, doc.length);
+      const endPos = Math.min(Math.max(m.from, m.to), doc.length);
+      const startBlock = this.view.lineBlockAt(startPos);
+      const endBlock = endPos > startPos ? this.view.lineBlockAt(endPos) : startBlock;
+      const top = startBlock.top;
+      const bottom = Math.max(top, endBlock.bottom);
+
+      const mark = document.createElement('span');
+      mark.className = `cm-search-ruler-mark${i === this.activeMatchIndex ? ' cm-search-ruler-active' : ''}`;
+      if (trackHeight > 0 && total > 1) {
+        const topPx = Math.min(trackHeight - 3, Math.max(0, ((top + gap) / total) * trackHeight));
+        const heightPx = Math.max(((bottom - top) / total) * trackHeight, 3);
+        mark.style.top = `${Math.round(topPx * 2) / 2}px`;
+        mark.style.height = `${Math.round(heightPx * 2) / 2}px`;
+      } else {
+        const totalLines = Math.max(doc.lines, 1);
+        const startLine = doc.lineAt(startPos).number;
+        const endLine = endPos > startPos ? doc.lineAt(endPos).number : startLine;
+        const startRatio = (startLine - 1) / totalLines;
+        const spanRatio = (endLine - startLine + 1) / totalLines;
+        const topPct = Math.min(100, Math.max(0, startRatio * 100));
+        const heightPct = Math.max(0, spanRatio * 100);
+        mark.style.top = `${topPct}%`;
+        mark.style.height = `max(${heightPct}%, 3px)`;
+      }
+      marks.push(mark);
+    }
+    this.ruler.replaceChildren(...marks);
+  }
+
   mount(): void {
     this.syncAlignment();
-    requestAnimationFrame(() => this.syncAlignment());
+    requestAnimationFrame(() => {
+      this.syncAlignment();
+      this.renderRuler(true);
+    });
     this.searchInput.focus();
     this.searchInput.select();
   }
@@ -398,6 +584,9 @@ export class MarkDewSearchPanel implements Panel {
     if (activeSearchPanel === this) {
       activeSearchPanel = null;
     }
+    if (this.rulerFrame) cancelAnimationFrame(this.rulerFrame);
+    this.observer?.disconnect();
+    this.ruler.remove();
     this.unsubLanguage();
   }
 }
