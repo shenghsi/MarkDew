@@ -80,15 +80,29 @@ function blockSpanForPos(blocks: readonly BlockInfo[], pos: number): BlockInfo |
 
 class ChangeIndicatorsPlugin implements PluginValue {
   readonly dom: HTMLElement;
+  readonly ruler: HTMLElement;
   private frame = 0;
   private destroyed = false;
+  private observer: ResizeObserver | undefined;
 
   constructor(private readonly view: EditorView) {
     this.dom = document.createElement('div');
     this.dom.className = 'cm-change-indicators';
     this.dom.setAttribute('aria-hidden', 'true');
     this.view.scrollDOM.appendChild(this.dom);
+
+    this.ruler = document.createElement('div');
+    this.ruler.className = 'cm-change-ruler';
+    this.ruler.setAttribute('aria-hidden', 'true');
+    this.view.dom.appendChild(this.ruler);
+
+    if (typeof ResizeObserver !== 'undefined') {
+      this.observer = new ResizeObserver(() => this.scheduleRuler());
+      this.observer.observe(this.view.scrollDOM);
+    }
+
     this.render();
+    this.renderRuler();
   }
 
   update(update: ViewUpdate) {
@@ -102,6 +116,23 @@ class ChangeIndicatorsPlugin implements PluginValue {
       prev !== next
     ) {
       this.render();
+    }
+    if (
+      update.docChanged ||
+      update.geometryChanged ||
+      update.heightChanged ||
+      prev !== next
+    ) {
+      this.renderRuler();
+    }
+  }
+
+  private scheduleRuler() {
+    if (!this.frame && !this.destroyed) {
+      this.frame = requestAnimationFrame(() => {
+        this.frame = 0;
+        this.renderRuler();
+      });
     }
   }
 
@@ -173,10 +204,57 @@ class ChangeIndicatorsPlugin implements PluginValue {
     this.dom.replaceChildren(...children);
   }
 
+  renderRuler() {
+    if (this.destroyed) return;
+    const state = this.view.state.field(changeIndicatorField, false);
+    if (!state || !state.base || state.chunks.length === 0) {
+      if (this.ruler.childElementCount > 0) this.ruler.replaceChildren();
+      return;
+    }
+
+    const scroller = this.view.scrollDOM;
+    const doc = this.view.state.doc;
+    const padTop = this.view.documentPadding.top;
+    const padBottom = this.view.documentPadding.bottom;
+    const total = Math.max(scroller.scrollHeight, this.view.contentHeight + padTop + padBottom, 1);
+    const trackHeight = this.ruler.clientHeight || scroller.clientHeight || total;
+    const marks: HTMLElement[] = [];
+
+    for (const chunk of state.chunks) {
+      const kind = chunkKind(chunk);
+      const startPos = Math.min(chunk.fromB, doc.length);
+      const endPos = chunk.toB > chunk.fromB ? Math.min(chunk.endB, doc.length) : startPos;
+      const startBlock = this.view.lineBlockAt(startPos);
+      const endBlock = chunk.toB > chunk.fromB ? this.view.lineBlockAt(endPos) : startBlock;
+      const atEnd = kind === 'deleted' && chunk.fromB >= doc.length && doc.length > 0;
+      const top = atEnd ? startBlock.bottom : startBlock.top;
+      const bottom = chunk.toB > chunk.fromB ? Math.max(top, endBlock.bottom) : top;
+
+      const mark = document.createElement('span');
+      mark.className = `cm-change-ruler-mark cm-change-ruler-${kind}`;
+      mark.dataset.changeKind = kind;
+      if (trackHeight > 0 && scroller.scrollHeight > 0) {
+        const topPx = Math.min(trackHeight - 3, Math.max(0, ((top + padTop) / total) * trackHeight));
+        const heightPx = Math.max(((bottom - top) / total) * trackHeight, 3);
+        mark.style.top = `${topPx}px`;
+        mark.style.height = `${heightPx}px`;
+      } else {
+        const topPct = Math.min(100, Math.max(0, ((top + padTop) / total) * 100));
+        const heightPct = Math.max(0, ((bottom - top) / total) * 100);
+        mark.style.top = `${topPct}%`;
+        mark.style.height = `max(${heightPct}%, 3px)`;
+      }
+      marks.push(mark);
+    }
+    this.ruler.replaceChildren(...marks);
+  }
+
   destroy() {
     this.destroyed = true;
     if (this.frame) cancelAnimationFrame(this.frame);
+    this.observer?.disconnect();
     this.dom.remove();
+    this.ruler.remove();
   }
 }
 

@@ -43,14 +43,19 @@ function getIndicators(root: ParentNode = document) {
   return Array.from(root.querySelectorAll<HTMLElement>('.cm-change-indicator')).map(el => el.dataset.changeKind);
 }
 
+function getRulerMarks(root: ParentNode = document) {
+  return Array.from(root.querySelectorAll<HTMLElement>('.cm-change-ruler-mark')).map(el => el.dataset.changeKind);
+}
+
 describe('changeIndicators extension', () => {
   it('shows no indicators when the document matches its baseline', () => {
     const { view } = createEditor('# Heading\n\nParagraph one.\nParagraph two.\n');
     expect(view.state.field(changeIndicatorField).chunks).toHaveLength(0);
     expect(getIndicators()).toEqual([]);
+    expect(getRulerMarks()).toEqual([]);
   });
 
-  it('tracks added, modified, and deleted lines incrementally and clears on undo', () => {
+  it('tracks added, modified, and deleted lines incrementally in both margin and scrollbar ruler and clears on undo', () => {
     const original = 'Line 1\nLine 2\nLine 3\nLine 4\n';
     const { view } = createEditor(original);
 
@@ -59,15 +64,18 @@ describe('changeIndicators extension', () => {
     view.dispatch({ changes: { from: line2.from, to: line2.to, insert: 'Line 2 modified' } });
     expect(view.state.field(changeIndicatorField).chunks.map(chunkKind)).toEqual(['modified']);
     expect(getIndicators()).toEqual(['modified']);
+    expect(getRulerMarks()).toEqual(['modified']);
 
     // Undo restores clean state
     expect(undo(view)).toBe(true);
     expect(view.state.field(changeIndicatorField).chunks).toHaveLength(0);
     expect(getIndicators()).toEqual([]);
+    expect(getRulerMarks()).toEqual([]);
 
     // Redo restores modified state
     expect(redo(view)).toBe(true);
     expect(getIndicators()).toEqual(['modified']);
+    expect(getRulerMarks()).toEqual(['modified']);
     expect(undo(view)).toBe(true);
 
     // Insert a brand-new line after Line 2
@@ -75,6 +83,7 @@ describe('changeIndicators extension', () => {
     view.dispatch({ changes: { from: afterLine2, to: afterLine2, insert: '\nInserted line' } });
     expect(view.state.field(changeIndicatorField).chunks.map(chunkKind)).toEqual(['added']);
     expect(getIndicators()).toEqual(['added']);
+    expect(getRulerMarks()).toEqual(['added']);
     expect(undo(view)).toBe(true);
 
     // Delete Line 3 completely
@@ -82,6 +91,7 @@ describe('changeIndicators extension', () => {
     view.dispatch({ changes: { from: line3.from, to: line3.to + 1, insert: '' } });
     expect(view.state.field(changeIndicatorField).chunks.map(chunkKind)).toEqual(['deleted']);
     expect(getIndicators()).toEqual(['deleted']);
+    expect(getRulerMarks()).toEqual(['deleted']);
   });
 
   it('handles BOM and CRLF baselines without false-positive change markers', () => {

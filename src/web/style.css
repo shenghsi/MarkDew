@@ -1578,6 +1578,7 @@ body.no-document #word-count, body.no-document #document-title { display: none; 
 .compare-body .cm-changeGutter { width: 4px; }
 
 /* Editor Changed-Line Indicators (Live Preview & Source Mode; hidden in Read Mode) */
+.cm-editor { position: relative; }
 .cm-scroller { position: relative; }
 .cm-change-indicators {
   position: absolute;
@@ -1589,9 +1590,39 @@ body.no-document #word-count, body.no-document #document-title { display: none; 
   user-select: none;
   z-index: 3;
 }
+.cm-change-ruler {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 10px;
+  pointer-events: none;
+  user-select: none;
+  z-index: 5;
+}
 #editor.read-mode .cm-change-indicators,
-.read-mode .cm-change-indicators {
+.read-mode .cm-change-indicators,
+#editor.read-mode .cm-change-ruler,
+.read-mode .cm-change-ruler {
   display: none !important;
+}
+.cm-change-ruler-mark {
+  position: absolute;
+  left: 2px;
+  right: 1px;
+  min-height: 3px;
+  border-radius: 1.5px;
+  opacity: 0.85;
+  pointer-events: none;
+}
+.cm-change-ruler-added {
+  background-color: #2ea043;
+}
+.cm-change-ruler-modified {
+  background-color: #0969da;
+}
+.cm-change-ruler-deleted {
+  background-color: #f85149;
 }
 .cm-change-indicator {
   position: absolute;
@@ -1623,12 +1654,17 @@ body.no-document #word-count, body.no-document #document-title { display: none; 
 .cm-change-deleted.cm-change-deleted-end {
   transform: translateY(-6px);
 }
-:root[data-theme="dark"] .cm-change-added {
+:root[data-theme="dark"] .cm-change-added,
+:root[data-theme="dark"] .cm-change-ruler-added {
   background-color: #3fb950;
 }
-:root[data-theme="dark"] .cm-change-modified {
+:root[data-theme="dark"] .cm-change-modified,
+:root[data-theme="dark"] .cm-change-ruler-modified {
   background-color: #2f81f7;
 }
 :root[data-theme="dark"] .cm-change-deleted {
   border-left-color: #ff7b72;
+}
+:root[data-theme="dark"] .cm-change-ruler-deleted {
+  background-color: #ff7b72;
 }
