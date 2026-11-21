@@ -1,7 +1,8 @@
-# MarkDew v1.7.17
+# MarkDew v1.7.18
 
 ## What is new
 
+- Fixed: changed-line overview marks in the editor scrollbar track now align with the exact vertical positions of the changed lines in the scrollable document (accounting for top padding, bottom overscroll padding, wrapped paragraphs, and Live preview widgets) while staying free of scroll jitter.
 - Fixed: changed-line overview marks in the editor scrollbar track now stay at stable positions while scrolling across virtualized blocks and Live preview widgets.
 - New: changed-line overview marks in the editor scrollbar track show where added, modified, and deleted lines are across the entire document at a glance (in both Live preview and Source Code Mode, hidden in Read Mode).
 - New: changed-line indicators in the left margin of the editor for both Live preview and Source Code Mode (hidden in Read Mode): green bars for added lines, blue bars for modified lines, and red triangles for deleted lines. Git-tracked files compare against `HEAD`, and non-Git files compare against the last saved file on disk.

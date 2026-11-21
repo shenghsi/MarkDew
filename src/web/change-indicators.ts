@@ -84,6 +84,9 @@ class ChangeIndicatorsPlugin implements PluginValue {
   private frame = 0;
   private destroyed = false;
   private observer: ResizeObserver | undefined;
+  private lastRulerScrollHeight = 0;
+  private lastRulerTrackHeight = 0;
+  private lastRulerGap = 0;
 
   constructor(private readonly view: EditorView) {
     this.dom = document.createElement('div');
@@ -118,15 +121,18 @@ class ChangeIndicatorsPlugin implements PluginValue {
       this.render();
     }
     if (update.docChanged || prev !== next) {
-      this.renderRuler();
+      this.renderRuler(true);
+      this.scheduleRuler(true);
+    } else if (update.heightChanged || update.geometryChanged) {
+      this.scheduleRuler();
     }
   }
 
-  private scheduleRuler() {
+  private scheduleRuler(force = false) {
     if (!this.frame && !this.destroyed) {
       this.frame = requestAnimationFrame(() => {
         this.frame = 0;
-        this.renderRuler();
+        this.renderRuler(force);
       });
     }
   }
@@ -199,39 +205,67 @@ class ChangeIndicatorsPlugin implements PluginValue {
     this.dom.replaceChildren(...children);
   }
 
-  renderRuler() {
+  renderRuler(force = false) {
     if (this.destroyed) return;
     const state = this.view.state.field(changeIndicatorField, false);
     if (!state || !state.base || state.chunks.length === 0) {
       if (this.ruler.childElementCount > 0) this.ruler.replaceChildren();
+      this.lastRulerScrollHeight = 0;
+      this.lastRulerTrackHeight = 0;
+      this.lastRulerGap = 0;
       return;
     }
 
     const scroller = this.view.scrollDOM;
     const doc = this.view.state.doc;
-    const totalLines = Math.max(doc.lines, 1);
+    const scrollerRect = scroller.getBoundingClientRect();
+    const gap =
+      scrollerRect.height > 0
+        ? Math.max(0, this.view.documentTop - scrollerRect.top + scroller.scrollTop)
+        : this.view.documentPadding.top;
+    const total = Math.max(scroller.scrollHeight, this.view.contentHeight + gap + this.view.documentPadding.bottom, 1);
     const trackHeight = this.ruler.clientHeight || scroller.clientHeight;
+
+    // Avoid sub-pixel jitter during ordinary scrolling if the overall scrollHeight and trackHeight have not changed significantly.
+    if (
+      !force &&
+      this.ruler.childElementCount === state.chunks.length &&
+      Math.abs(total - this.lastRulerScrollHeight) <= 2 &&
+      Math.abs(trackHeight - this.lastRulerTrackHeight) <= 1 &&
+      Math.abs(gap - this.lastRulerGap) <= 2
+    ) {
+      return;
+    }
+    this.lastRulerScrollHeight = total;
+    this.lastRulerTrackHeight = trackHeight;
+    this.lastRulerGap = gap;
+
     const marks: HTMLElement[] = [];
 
     for (const chunk of state.chunks) {
       const kind = chunkKind(chunk);
       const startPos = Math.min(chunk.fromB, doc.length);
       const endPos = chunk.toB > chunk.fromB ? Math.min(chunk.endB, doc.length) : startPos;
-      const startLine = doc.lineAt(startPos).number;
-      const endLine = chunk.toB > chunk.fromB ? doc.lineAt(endPos).number : startLine;
+      const startBlock = this.view.lineBlockAt(startPos);
+      const endBlock = chunk.toB > chunk.fromB ? this.view.lineBlockAt(endPos) : startBlock;
       const atEnd = kind === 'deleted' && chunk.fromB >= doc.length && doc.length > 0;
-      const startRatio = atEnd ? 1 : (startLine - 1) / totalLines;
-      const spanRatio = chunk.toB > chunk.fromB ? (endLine - startLine + 1) / totalLines : 0;
+      const top = atEnd ? startBlock.bottom : startBlock.top;
+      const bottom = chunk.toB > chunk.fromB ? Math.max(top, endBlock.bottom) : top;
 
       const mark = document.createElement('span');
       mark.className = `cm-change-ruler-mark cm-change-ruler-${kind}`;
       mark.dataset.changeKind = kind;
-      if (trackHeight > 0) {
-        const topPx = Math.min(trackHeight - 3, Math.max(0, startRatio * trackHeight));
-        const heightPx = Math.max(spanRatio * trackHeight, 3);
-        mark.style.top = `${topPx}px`;
-        mark.style.height = `${heightPx}px`;
+      if (trackHeight > 0 && total > 1) {
+        const topPx = Math.min(trackHeight - 3, Math.max(0, ((top + gap) / total) * trackHeight));
+        const heightPx = Math.max(((bottom - top) / total) * trackHeight, 3);
+        mark.style.top = `${Math.round(topPx * 2) / 2}px`;
+        mark.style.height = `${Math.round(heightPx * 2) / 2}px`;
       } else {
+        const totalLines = Math.max(doc.lines, 1);
+        const startLine = doc.lineAt(startPos).number;
+        const endLine = chunk.toB > chunk.fromB ? doc.lineAt(endPos).number : startLine;
+        const startRatio = atEnd ? 1 : (startLine - 1) / totalLines;
+        const spanRatio = chunk.toB > chunk.fromB ? (endLine - startLine + 1) / totalLines : 0;
         const topPct = Math.min(100, Math.max(0, startRatio * 100));
         const heightPct = Math.max(0, spanRatio * 100);
         mark.style.top = `${topPct}%`;

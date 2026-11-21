@@ -142,6 +142,32 @@ describe('changeIndicators extension', () => {
     view.dispatch({ selection: { anchor: view.state.doc.line(80).from } });
     expect(readPositions()).toEqual(initial);
   });
+
+  it('aligns scrollbar ruler marks with actual vertical geometry in scrollHeight (including top padding and bottom overscroll padding)', () => {
+    const baseText = 'Line 1\nLine 2\nLine 3\n';
+    const modText = 'Line 1\nLine 2\nLine 3 changed\n';
+    const { view, host } = createEditor(modText, baseText);
+
+    // Simulate a short document where scrollHeight (1000px, including 42px top pad and 35vh+60px bottom pad)
+    // is much taller than the 3 lines of text (~150px). Line 3 starts at top=50..75 inside the content.
+    Object.defineProperty(view.scrollDOM, 'scrollHeight', { configurable: true, value: 1000 });
+    Object.defineProperty(view.scrollDOM, 'clientHeight', { configurable: true, value: 500 });
+    vi.spyOn(view.scrollDOM, 'getBoundingClientRect').mockReturnValue({
+      top: 100, bottom: 600, left: 0, right: 800, width: 800, height: 500, x: 0, y: 100, toJSON() {},
+    });
+    vi.spyOn(view, 'documentTop', 'get').mockReturnValue(142); // 42px top padding
+    vi.spyOn(view, 'lineBlockAt').mockImplementation((pos: number) => ({
+      from: pos, to: pos, top: 50, bottom: 75, height: 25, type: 0, length: 0, widget: null, widgetLineBreaks: 0,
+    } as any));
+
+    // Trigger ruler re-render with updated geometry
+    view.dispatch({ changes: { from: view.state.doc.length - 1, to: view.state.doc.length - 1, insert: '!' } });
+    const mark = host.querySelector<HTMLElement>('.cm-change-ruler-mark')!;
+    expect(mark).not.toBeNull();
+    // (top 50 + gap 42) / total 1000 * trackHeight 500 = 46px (near top of scrollbar, matching editor indicator)
+    expect(mark.style.top).toBe('46px');
+    expect(mark.style.height).toBe('12.5px');
+  });
 });
 
 describe('app integration for change indicators', () => {
