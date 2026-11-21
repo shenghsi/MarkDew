@@ -117,12 +117,7 @@ class ChangeIndicatorsPlugin implements PluginValue {
     ) {
       this.render();
     }
-    if (
-      update.docChanged ||
-      update.geometryChanged ||
-      update.heightChanged ||
-      prev !== next
-    ) {
+    if (update.docChanged || prev !== next) {
       this.renderRuler();
     }
   }
@@ -214,33 +209,31 @@ class ChangeIndicatorsPlugin implements PluginValue {
 
     const scroller = this.view.scrollDOM;
     const doc = this.view.state.doc;
-    const padTop = this.view.documentPadding.top;
-    const padBottom = this.view.documentPadding.bottom;
-    const total = Math.max(scroller.scrollHeight, this.view.contentHeight + padTop + padBottom, 1);
-    const trackHeight = this.ruler.clientHeight || scroller.clientHeight || total;
+    const totalLines = Math.max(doc.lines, 1);
+    const trackHeight = this.ruler.clientHeight || scroller.clientHeight;
     const marks: HTMLElement[] = [];
 
     for (const chunk of state.chunks) {
       const kind = chunkKind(chunk);
       const startPos = Math.min(chunk.fromB, doc.length);
       const endPos = chunk.toB > chunk.fromB ? Math.min(chunk.endB, doc.length) : startPos;
-      const startBlock = this.view.lineBlockAt(startPos);
-      const endBlock = chunk.toB > chunk.fromB ? this.view.lineBlockAt(endPos) : startBlock;
+      const startLine = doc.lineAt(startPos).number;
+      const endLine = chunk.toB > chunk.fromB ? doc.lineAt(endPos).number : startLine;
       const atEnd = kind === 'deleted' && chunk.fromB >= doc.length && doc.length > 0;
-      const top = atEnd ? startBlock.bottom : startBlock.top;
-      const bottom = chunk.toB > chunk.fromB ? Math.max(top, endBlock.bottom) : top;
+      const startRatio = atEnd ? 1 : (startLine - 1) / totalLines;
+      const spanRatio = chunk.toB > chunk.fromB ? (endLine - startLine + 1) / totalLines : 0;
 
       const mark = document.createElement('span');
       mark.className = `cm-change-ruler-mark cm-change-ruler-${kind}`;
       mark.dataset.changeKind = kind;
-      if (trackHeight > 0 && scroller.scrollHeight > 0) {
-        const topPx = Math.min(trackHeight - 3, Math.max(0, ((top + padTop) / total) * trackHeight));
-        const heightPx = Math.max(((bottom - top) / total) * trackHeight, 3);
+      if (trackHeight > 0) {
+        const topPx = Math.min(trackHeight - 3, Math.max(0, startRatio * trackHeight));
+        const heightPx = Math.max(spanRatio * trackHeight, 3);
         mark.style.top = `${topPx}px`;
         mark.style.height = `${heightPx}px`;
       } else {
-        const topPct = Math.min(100, Math.max(0, ((top + padTop) / total) * 100));
-        const heightPct = Math.max(0, ((bottom - top) / total) * 100);
+        const topPct = Math.min(100, Math.max(0, startRatio * 100));
+        const heightPct = Math.max(0, spanRatio * 100);
         mark.style.top = `${topPct}%`;
         mark.style.height = `max(${heightPct}%, 3px)`;
       }

@@ -121,6 +121,27 @@ describe('changeIndicators extension', () => {
     view.dispatch({ effects: display.reconfigure(livePreview) });
     expect(getIndicators(host)).toEqual(['modified']);
   });
+
+  it('keeps scrollbar overview ruler mark positions completely invariant during scrolling and height-map updates', () => {
+    const lines = Array.from({ length: 100 }, (_, i) => `Line ${i + 1}`).join('\n');
+    const modified = lines.replace('Line 25', 'Line 25 changed').replace('Line 75', 'Line 75 changed');
+    const { view, host } = createEditor(modified, lines);
+
+    const readPositions = () =>
+      Array.from(host.querySelectorAll<HTMLElement>('.cm-change-ruler-mark')).map(el => ({
+        kind: el.dataset.changeKind,
+        top: el.style.top,
+        height: el.style.height,
+      }));
+
+    const initial = readPositions();
+    expect(initial).toHaveLength(2);
+
+    // Simulate scrolling and viewport/height changes without document edits
+    view.scrollDOM.scrollTop = 450;
+    view.dispatch({ selection: { anchor: view.state.doc.line(80).from } });
+    expect(readPositions()).toEqual(initial);
+  });
 });
 
 describe('app integration for change indicators', () => {
