@@ -21,6 +21,7 @@ import { insertTable } from './table-insert';
 import { codeBlock } from './code-block-command';
 import { editorMenu } from './editor-menu';
 import { openCompare, type CompareHandle } from './diff-view';
+import { changeIndicators, setChangeBaseline } from './change-indicators';
 import { openConflict, type DiskSnapshot } from './conflict-view';
 import { listTab } from './list-indent';
 import { collapseDataUris } from './data-uri-collapse';
@@ -302,7 +303,31 @@ const composing = () => view.compositionStarted || tableComposing(view) || [...f
 let initialization: Promise<void> = Promise.resolve();
 let recoveryError: (reason: unknown) => void = reason => { status.textContent = String(reason); };
 let fileVersion = 0, watcher: FileWatcher | undefined, showFileWarning: ((status?: FileStatus) => void) | undefined;
-function fileTransition() { fileVersion++; watcher?.invalidate(); showFileWarning?.(); view.dispatch({ effects: setImagePath.of(active().path) }); }
+const gitBaselineGenerations = new Map<number, number>();
+function syncChangeBaseline(tab: DocumentTab = active()) {
+  const fallback = tab.path || !tab.placeholder ? tab.baseline : null;
+  if (tab === active()) {
+    view.dispatch({ effects: setChangeBaseline.of(fallback) });
+  } else {
+    tab.state = tab.state.update({ effects: setChangeBaseline.of(fallback) }).state;
+  }
+  if (!isTauri() || !tab.path) return;
+  const path = tab.path;
+  const gen = (gitBaselineGenerations.get(tab.id) ?? 0) + 1;
+  gitBaselineGenerations.set(tab.id, gen);
+  void invoke<string>('git_file_at', { path, rev: 'head' })
+    .then(head => {
+      if (!pageActive || gitBaselineGenerations.get(tab.id) !== gen || tab.path !== path || !tabs.get(tab.id)) return;
+      const baseline = typeof head === 'string' ? head : tab.baseline;
+      if (tab === active()) {
+        view.dispatch({ effects: setChangeBaseline.of(baseline) });
+      } else {
+        tab.state = tab.state.update({ effects: setChangeBaseline.of(baseline) }).state;
+      }
+    })
+    .catch(() => {});
+}
+function fileTransition() { fileVersion++; watcher?.invalidate(); showFileWarning?.(); view.dispatch({ effects: setImagePath.of(active().path) }); syncChangeBaseline(active()); }
 const recoveryCapture = (tab: DocumentTab = active()): RecoveryCapture => ({ source: tab === active() ? text() : tabSource(tab), dirty: tabDirty(tab), label: Array.from(tabName(tab)).slice(0, 256).join('') });
 function checkpoint(tab: DocumentTab = active()) {
   if (!isTauri()) return;
@@ -359,8 +384,8 @@ const formattingKeys = [
   { key: 'Mod-Shift-c', run: () => applyFormat('code') },
   ...Array.from({ length: 6 }, (_, index) => ({ key: `Mod-Alt-${index + 1}`, run: () => applyFormat(`h${index + 1}` as Format) })),
 ];
-const state = (source: string, tab?: Pick<DocumentTab, 'id' | 'path' | 'sourceMode'>): EditorState => EditorState.create({ doc: normalize(fromSource(source).raw), extensions: [
-  sourceExtensions(fromSource(source)), history(), textDirection, linkVersion, footnoteField, imageBasePath.of(tab?.path || ''), imageDocument.of(tab?.id ?? 0), imagePath, highlightActiveLine(), inputLock.of([]),
+const state = (source: string, tab?: Pick<DocumentTab, 'id' | 'path' | 'sourceMode'> & Partial<Pick<DocumentTab, 'baseline' | 'placeholder'>>): EditorState => EditorState.create({ doc: normalize(fromSource(source).raw), extensions: [
+  sourceExtensions(fromSource(source)), changeIndicators(tab ? (tab.path || !tab.placeholder ? (tab.baseline ?? source) : null) : source), history(), textDirection, linkVersion, footnoteField, imageBasePath.of(tab?.path || ''), imageDocument.of(tab?.id ?? 0), imagePath, highlightActiveLine(), inputLock.of([]),
   documentLanguage(), syntaxHighlighting(classHighlighter), EditorView.lineWrapping,
   EditorView.contentAttributes.of({ 'aria-label': 'Markdown document', 'aria-describedby': 'document-title' }),
   EditorView.editorAttributes.of(v => ({ class: v.state.field(editorActiveField, false) ? 'editor-active' : '' })),
@@ -472,7 +497,10 @@ const tabBar = documentTabBar(tabContainer, id => { if (id < 0) showCompare(id);
 });
 function renderTabs() {
   // An edit or a path ends the placeholder for good, so Undo back to empty keeps the editor.
-  if (tabs.active.placeholder && (tabs.active.path || tabDirty(tabs.active))) tabs.active.placeholder = false;
+  if (tabs.active.placeholder && (tabs.active.path || tabDirty(tabs.active))) {
+    tabs.active.placeholder = false;
+    syncChangeBaseline(tabs.active);
+  }
   tabBar.render(tabs, compareTabs.map(entry => ({
     id: entry.id, label: t(entry.conflict ? 'conflict.title' : 'compare.title', { name: entry.name }), title: entry.path, selected: entry === shownCompare,
   })));
@@ -864,6 +892,7 @@ async function addDocument(source = '', file?: string, preview = false) {
   if (blank && !source) {
     blank.placeholder = false;
     if (file) return loadIntoTab(blank, file, preview);
+    syncChangeBaseline(blank);
     renderTabs(); view.focus(); return blank;
   }
   checkpoint(); await flushRecovery();
@@ -1542,7 +1571,7 @@ if (isTauri()) {
   const checkFile = document.createElement('button'); checkFile.textContent = 'Check File'; checkFile.id = 'check-file';
   checkFile.addEventListener('click', () => void watcher?.check()); document.querySelector('header')!.append(checkFile);
   const timer = setInterval(() => { if (document.visibilityState === 'visible') void watcher?.check(); }, 2000);
-  window.addEventListener('focus', () => void watcher?.check());
+  window.addEventListener('focus', () => { void watcher?.check(); syncChangeBaseline(active()); });
   window.addEventListener('pagehide', () => { clearInterval(timer); watcher?.dispose(); }, { once: true });
 }
 if (isTauri()) {

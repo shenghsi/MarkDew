@@ -1,7 +1,8 @@
-# MarkDew v1.7.14
+# MarkDew v1.7.15
 
 ## What is new
 
+- New: changed-line indicators in the left margin of the editor for both Live preview and Source Code Mode (hidden in Read Mode): green bars for added lines, blue bars for modified lines, and red triangles for deleted lines. Git-tracked files compare against `HEAD`, and non-Git files compare against the last saved file on disk.
 - Fixed: file version Compare and disk-editor Diff tabs now highlight exact word-level differences instead of marking whole paragraphs, including across long documents with large edits elsewhere. Inline mode shows small paragraph edits in place.
 - New: Check for Updates and Update and Restart now work while multiple MarkDew windows are open.
 

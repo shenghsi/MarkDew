@@ -1576,3 +1576,59 @@ body.no-document #word-count, body.no-document #document-title { display: none; 
 .compare-body .cm-editor.cm-merge-b .cm-deletedText { background: rgba(248, 81, 73, .36); text-decoration: line-through; border-radius: 2px; }
 .compare-body .cm-editor.cm-merge-b .cm-changedText { background: rgba(46, 160, 67, .36); border-radius: 2px; }
 .compare-body .cm-changeGutter { width: 4px; }
+
+/* Editor Changed-Line Indicators (Live Preview & Source Mode; hidden in Read Mode) */
+.cm-scroller { position: relative; }
+.cm-change-indicators {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  user-select: none;
+  z-index: 3;
+}
+#editor.read-mode .cm-change-indicators,
+.read-mode .cm-change-indicators {
+  display: none !important;
+}
+.cm-change-indicator {
+  position: absolute;
+  left: 4px;
+  width: 3px;
+  border-radius: 1.5px;
+  pointer-events: none;
+}
+#editor.source-mode .cm-change-indicator,
+.source-mode .cm-change-indicator {
+  left: 1px;
+}
+.cm-change-added {
+  background-color: #2ea043;
+}
+.cm-change-modified {
+  background-color: #0969da;
+}
+.cm-change-deleted {
+  width: 0;
+  height: 0;
+  border-radius: 0;
+  background: transparent;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-left: 6px solid #f85149;
+  transform: translateY(-4px);
+}
+.cm-change-deleted.cm-change-deleted-end {
+  transform: translateY(-6px);
+}
+:root[data-theme="dark"] .cm-change-added {
+  background-color: #3fb950;
+}
+:root[data-theme="dark"] .cm-change-modified {
+  background-color: #2f81f7;
+}
+:root[data-theme="dark"] .cm-change-deleted {
+  border-left-color: #ff7b72;
+}
