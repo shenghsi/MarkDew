@@ -6,7 +6,7 @@ import { EditorView, keymap, lineNumbers, highlightActiveLine } from '@codemirro
 import { defaultKeymap, history, historyKeymap, undo, redo } from '@codemirror/commands';
 import { markdownKeymap } from '@codemirror/lang-markdown';
 import { documentLanguage } from './document-language';
-import { syntaxHighlighting } from '@codemirror/language';
+import { ensureSyntaxTree, syntaxHighlighting } from '@codemirror/language';
 import { classHighlighter } from '@lezer/highlight';
 import { invoke, isTauri } from '@tauri-apps/api/core';
 import { open, save, ask } from '@tauri-apps/plugin-dialog';
@@ -395,7 +395,7 @@ const formattingKeys = [
   ...Array.from({ length: 6 }, (_, index) => ({ key: `Mod-Alt-${index + 1}`, run: () => applyFormat(`h${index + 1}` as Format) })),
 ];
 const state = (source: string, tab?: Pick<DocumentTab, 'id' | 'path' | 'sourceMode'> & Partial<Pick<DocumentTab, 'baseline' | 'placeholder'>>): EditorState => EditorState.create({ doc: normalize(fromSource(source).raw), extensions: [
-  sourceExtensions(fromSource(source)), changeIndicators(tab ? (tab.path || !tab.placeholder ? (tab.baseline ?? source) : null) : source), history(), textDirection, linkVersion, footnoteField, imageBasePath.of(tab?.path || ''), imageDocument.of(tab?.id ?? 0), imagePath, highlightActiveLine(), inputLock.of([]),
+  sourceExtensions(fromSource(source)), changeIndicators(tab ? (tab.path || !tab.placeholder ? (tab.baseline ?? source) : null) : source), history(), textDirection, linkVersion, footnoteField, imageBasePath.of(tab?.path || ''), imageDocument.of(tab?.id ?? 0), imagePath, highlightActiveLine(), inputLock.of(lockActive || readMode ? [EditorState.readOnly.of(true), EditorView.editable.of(false)] : []),
   documentLanguage(), syntaxHighlighting(classHighlighter), EditorView.lineWrapping,
   EditorView.contentAttributes.of({ 'aria-label': 'Markdown document', 'aria-describedby': 'document-title' }),
   EditorView.editorAttributes.of(v => ({ class: v.state.field(editorActiveField, false) ? 'editor-active' : '' })),
@@ -716,7 +716,9 @@ async function operation(action: () => Promise<unknown>, lock = false, focusAfte
 function applyLock() {
   const locked = lockActive || readMode;
   document.querySelectorAll<HTMLElement>('.conflict-view').forEach(panel => { panel.inert = lockActive; });
-  view.dispatch({ effects: inputLock.reconfigure(locked ? [EditorState.readOnly.of(true), EditorView.editable.of(false)] : []) });
+  if (view.state.readOnly !== locked) {
+    view.dispatch({ effects: inputLock.reconfigure(locked ? [EditorState.readOnly.of(true), EditorView.editable.of(false)] : []) });
+  }
   document.querySelectorAll<HTMLElement>('.link-controls').forEach(form => { form.inert = locked; });
 }
 function refreshEditorPrefs() {
@@ -1095,66 +1097,49 @@ function syncNavButtons() {
 function captureHistoryPosition(): HistoryPosition {
   const scrollTop = view.scrollDOM.scrollTop;
   const anchor = view.state.selection.main.head;
-  let topPos: number | undefined;
-  let topOffset: number | undefined;
+  let snapshot: HistoryPosition['snapshot'];
   try {
     if (view.scrollDOM.clientHeight > 0 && view.contentHeight > 0) {
-      const topBlock = view.lineBlockAtHeight(scrollTop + 8);
-      topPos = topBlock.from;
-      topOffset = scrollTop - topBlock.top;
+      snapshot = view.scrollSnapshot();
     }
   } catch {
-    // Fallback to raw scrollTop when viewport is unmeasured.
+    // Fallback to raw scrollTop in unmeasured environments.
   }
-  return { scrollTop, anchor, topPos, topOffset };
+  return { scrollTop, anchor, snapshot };
 }
-function restoreHistoryPosition(entry: Pick<TabHistoryEntry, 'anchor' | 'scrollTop' | 'topPos' | 'topOffset'>) {
+function restoreHistoryPosition(entry: Pick<TabHistoryEntry, 'anchor' | 'scrollTop' | 'snapshot'>) {
   const capturedTab = active();
   const capturedDoc = view.state.doc;
+  // Ensure Markdown syntax and live-preview decorations are ready before scrolling.
+  ensureSyntaxTree(view.state, capturedDoc.length, 50);
   const clampedAnchor = Math.max(0, Math.min(capturedDoc.length, entry.anchor));
-  const clampedTopPos = entry.topPos !== undefined ? Math.max(0, Math.min(capturedDoc.length, entry.topPos)) : undefined;
-  // Scroll the target block into view first so CodeMirror mounts and measures that viewport region.
-  view.dispatch({
-    selection: { anchor: clampedAnchor },
-    ...(clampedTopPos !== undefined ? { effects: EditorView.scrollIntoView(clampedTopPos, { y: 'start' }) } : {}),
-  });
-  const applyScroll = () => {
-    if (!pageActive || active() !== capturedTab || view.state.doc !== capturedDoc) return;
-    if (clampedTopPos !== undefined && entry.topOffset !== undefined && view.scrollDOM.clientHeight > 0 && view.contentHeight > 0) {
-      try {
-        const block = view.lineBlockAt(clampedTopPos);
-        view.scrollDOM.scrollTop = Math.max(0, block.top + entry.topOffset);
-        return;
-      } catch { /* Fall through to raw scrollTop. */ }
-    }
-    view.scrollDOM.scrollTop = entry.scrollTop;
-  };
-  applyScroll();
-  view.requestMeasure({
-    read: () => {
-      if (clampedTopPos === undefined || entry.topOffset === undefined || view.scrollDOM.clientHeight <= 0 || view.contentHeight <= 0) {
-        return null;
-      }
-      try { return view.lineBlockAt(clampedTopPos).top; } catch { return null; }
-    },
-    write: top => {
+  if (entry.snapshot && view.scrollDOM.clientHeight > 0) {
+    view.dispatch({ selection: { anchor: clampedAnchor }, effects: entry.snapshot });
+    // Re-apply once on the next frame if async layout reset scrollTop to 0.
+    requestAnimationFrame(() => {
       if (!pageActive || active() !== capturedTab || view.state.doc !== capturedDoc) return;
-      if (top !== null && entry.topOffset !== undefined) {
-        view.scrollDOM.scrollTop = Math.max(0, top + entry.topOffset);
-      } else {
-        view.scrollDOM.scrollTop = entry.scrollTop;
+      if (entry.scrollTop > 0 && view.scrollDOM.scrollTop === 0) {
+        view.dispatch({ effects: entry.snapshot! });
       }
-    },
+    });
+    return;
+  }
+  view.dispatch({ selection: { anchor: clampedAnchor } });
+  view.scrollDOM.scrollTop = entry.scrollTop;
+  requestAnimationFrame(() => {
+    if (!pageActive || active() !== capturedTab || view.state.doc !== capturedDoc) return;
+    if (entry.scrollTop > 0 && view.scrollDOM.scrollTop === 0) {
+      view.scrollDOM.scrollTop = entry.scrollTop;
+    }
   });
-  requestAnimationFrame(applyScroll);
 }
-function recordHeadingJump(position: number, origin: { anchor: number; scrollTop: number }) {
+function recordHeadingJump(position: number, origin: { anchor: number; scrollTop: number; snapshot?: HistoryPosition['snapshot'] }) {
   if (!readMode || !tabsReady) return;
   const tab = active();
   if (!tab.path) return;
   const dest = captureHistoryPosition();
   tabHistory(tab).push(
-    { path: tab.path, scrollTop: origin.scrollTop, anchor: origin.anchor },
+    { path: tab.path, scrollTop: origin.scrollTop, anchor: origin.anchor, snapshot: origin.snapshot },
     { path: tab.path, ...dest, anchor: position },
   );
   syncNavButtons();
@@ -1286,8 +1271,8 @@ async function navigateHistory(direction: 'back' | 'forward') {
   const history = tabHistory(tab);
   const fromPos = captureHistoryPosition(), fromPath = tab.path;
   const target = direction === 'back'
-    ? history.back(fromPos.scrollTop, fromPos.anchor, fromPos.topPos, fromPos.topOffset)
-    : history.forward(fromPos.scrollTop, fromPos.anchor, fromPos.topPos, fromPos.topOffset);
+    ? history.back(fromPos.scrollTop, fromPos.anchor, fromPos.snapshot)
+    : history.forward(fromPos.scrollTop, fromPos.anchor, fromPos.snapshot);
   if (!target) { syncNavButtons(); return; }
   try {
     if (target.returnTabId !== undefined && target.returnTabId !== tab.id) {

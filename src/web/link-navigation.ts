@@ -10,9 +10,10 @@ import { localLink } from './local-links';
 export type LinkTarget = { kind: 'heading'; position: number } | { kind: 'web'; url: string } |
   { kind: 'file'; destination: string; fragment?: string };
 export type LinkOpenMode = 'new-tab' | 'same-tab';
+export type HeadingOrigin = { anchor: number; scrollTop: number; snapshot?: ReturnType<EditorView['scrollSnapshot']> };
 export interface LinkNavigationOptions {
   isReadMode?: () => boolean;
-  onHeading?: (position: number, origin: { anchor: number; scrollTop: number }) => void;
+  onHeading?: (position: number, origin: HeadingOrigin) => void;
 }
 
 function resolveLinkNode(tree: ReturnType<typeof ensureSyntaxTree>, position: number) {
@@ -92,7 +93,7 @@ export function followLink(view: EditorView, position: number, report: (message:
   blocked: () => string | null = () => null, openWeb?: (url: string) => void,
   openFile?: (destination: string, fragment?: string, mode?: LinkOpenMode) => void,
   mode: LinkOpenMode = 'new-tab', checkSelection = true,
-  onHeading?: (position: number, origin: { anchor: number; scrollTop: number }) => void) {
+  onHeading?: (position: number, origin: HeadingOrigin) => void) {
   const reason = blocked() || (view.compositionStarted || tableComposing(view) ? 'Finish text input, then follow the heading link.' :
     view.state.field(tableCellField, false) ? 'End the table cell edit, then follow the heading link.' : null);
   if (reason) { report(reason); return true; }
@@ -104,7 +105,7 @@ export function followDestination(view: EditorView, destination: string, report:
   blocked: () => string | null = () => null, openWeb?: (url: string) => void,
   openFile?: (destination: string, fragment?: string, mode?: LinkOpenMode) => void,
   mode: LinkOpenMode = 'new-tab',
-  onHeading?: (position: number, origin: { anchor: number; scrollTop: number }) => void) {
+  onHeading?: (position: number, origin: HeadingOrigin) => void) {
   const reason = blocked() || (view.compositionStarted || tableComposing(view) ? 'Finish text input, then follow the link.' : null);
   if (reason) { report(reason); return true; }
   // A Ctrl/Cmd-click on a rendered link ends any open cell edit first.
@@ -115,7 +116,7 @@ export function followDestination(view: EditorView, destination: string, report:
 export function followTarget(view: EditorView, target: LinkTarget | string | undefined, report: (message: string) => void,
   openWeb?: (url: string) => void, openFile?: (destination: string, fragment?: string, mode?: LinkOpenMode) => void,
   mode: LinkOpenMode = 'new-tab',
-  onHeading?: (position: number, origin: { anchor: number; scrollTop: number }) => void) {
+  onHeading?: (position: number, origin: HeadingOrigin) => void) {
   if (target === undefined) return false;
   if (typeof target === 'string') { report(target); return true; }
   if (target.kind === 'web') {
@@ -126,7 +127,9 @@ export function followTarget(view: EditorView, target: LinkTarget | string | und
     if (openFile) openFile(target.destination, target.fragment, mode); else report('Open file links in the desktop app.');
     return true;
   }
-  const origin = { anchor: view.state.selection.main.head, scrollTop: view.scrollDOM.scrollTop };
+  let snapshot: HeadingOrigin['snapshot'];
+  try { if (view.scrollDOM.clientHeight > 0 && view.contentHeight > 0) snapshot = view.scrollSnapshot(); } catch {}
+  const origin: HeadingOrigin = { anchor: view.state.selection.main.head, scrollTop: view.scrollDOM.scrollTop, snapshot };
   view.dispatch({ selection: { anchor: target.position }, effects: EditorView.scrollIntoView(target.position, { y: 'start' }) });
   onHeading?.(target.position, origin);
   view.focus(); report('Moved to the heading link target.'); return true;

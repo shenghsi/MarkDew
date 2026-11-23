@@ -1,7 +1,8 @@
-# MarkDew v1.7.24
+# MarkDew v1.7.25
 
 ## What is new
 
+- Fixed: Back and Forward navigation in Read Mode now reliably restores each file's exact previous scroll location using native CodeMirror scroll snapshots and without post-load decoration resets.
 - New: added **Editor** preferences (Line numbers in Source mode, Spell check, Continue lists on Enter, and Tab indents list items) and reorganized **Markdown** settings (Tables, Code Blocks, and Mermaid Diagrams) and **Appearance** settings (Theme, Line Width, Writing Size, Body text size, and Text font) cleanly across all categories.
 - Fixed: Read Mode and Source Code Mode menu checkmarks now stay accurately synced with the active window state.
 - Fixed: text inside tables and preview widgets can now be selected normally in Read Mode.
