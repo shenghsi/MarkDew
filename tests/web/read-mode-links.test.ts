@@ -99,11 +99,15 @@ it('supports Live Mode default-app/new-tab links and Read Mode browser-like navi
     expect(backBtn.disabled).toBe(true);
     expect(forwardBtn.disabled).toBe(false);
 
-    // Alt+ArrowRight shortcut goes forward to b.md
-    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', altKey: true, bubbles: true, cancelable: true }));
+    // Ctrl/Cmd+] shortcut goes forward to b.md, and Ctrl/Cmd+[ goes back
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: ']', ctrlKey: !isMac, metaKey: isMac, bubbles: true, cancelable: true }));
     await vi.waitFor(() => expect(tabs.active.path).toBe('/root/b.md'));
     expect(backBtn.disabled).toBe(false);
     expect(forwardBtn.disabled).toBe(true);
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: '[', ctrlKey: !isMac, metaKey: isMac, bubbles: true, cancelable: true }));
+    await vi.waitFor(() => expect(tabs.active.path).toBe('/root/a.md'));
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', altKey: true, bubbles: true, cancelable: true }));
+    await vi.waitFor(() => expect(tabs.active.path).toBe('/root/b.md'));
 
     // Read Mode: right-click on [go-c] shows "Open in New Tab" and opens c.md in a new tab
     ensureSyntaxTree(view.state, view.state.doc.length, 1000);
@@ -115,6 +119,12 @@ it('supports Live Mode default-app/new-tab links and Read Mode browser-like navi
     openNewTabItem!.click();
     await vi.waitFor(() => expect(tabs.all).toHaveLength(2));
     expect(tabs.active.path).toBe('/root/c.md');
+
+    // In Read Mode, selecting/clicking a heading must NOT reveal its raw '#' syntax
+    view.dispatch({ selection: { anchor: 2 } });
+    expect(document.querySelector('#editor')!.classList.contains('editor-active')).toBe(false);
+    expect(view.contentDOM.textContent).not.toContain('#');
+    expect(view.contentDOM.textContent?.trim()).toBe('Page C');
 
     // Unsaved changes prompt when navigating in-place in Read Mode
     document.querySelector<HTMLButtonElement>('#document-tab-0')!.click();

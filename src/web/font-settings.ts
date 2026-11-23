@@ -19,6 +19,30 @@ export function readBodySize(storage: Pick<Storage, 'getItem'>): number {
   return BODY_SIZE_DEFAULT;
 }
 
+export const TABLE_SIZE_KEY = 'markdew.table-font-size';
+export const TABLE_SIZE_DEFAULT = 16;
+export const TABLE_SIZES = [11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 24] as const;
+export function readTableSize(storage: Pick<Storage, 'getItem'>): number {
+  try {
+    const value = Number(storage.getItem(TABLE_SIZE_KEY));
+    if (TABLE_SIZES.some(size => size === value)) return value;
+  } catch { /* Use the default size. */ }
+  return TABLE_SIZE_DEFAULT;
+}
+
+export const CODE_SIZE_KEY = 'markdew.code-font-size';
+export const CODE_SIZE_DEFAULT = '';
+export const CODE_SIZES = [11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 24] as const;
+export function readCodeSize(storage: Pick<Storage, 'getItem'>): number | null {
+  try {
+    const raw = storage.getItem(CODE_SIZE_KEY);
+    if (!raw) return null;
+    const value = Number(raw);
+    if (CODE_SIZES.some(size => size === value)) return value;
+  } catch { /* Use the default size. */ }
+  return null;
+}
+
 const quote = (family: string) => `"${family.replace(/["\\\u0000-\u001f]/g, '')}"`;
 const valid = (family: string | null): family is string => !!family && family.length <= 200 && !/[\u0000-\u001f]/.test(family);
 
@@ -37,6 +61,18 @@ export function applyBodySize(storage: Pick<Storage, 'getItem'>, root: HTMLEleme
   const size = readBodySize(storage);
   if (size === BODY_SIZE_DEFAULT) root.style.removeProperty('--body-font-size');
   else root.style.setProperty('--body-font-size', `${size}px`);
+}
+
+export function applyTableSize(storage: Pick<Storage, 'getItem'>, root: HTMLElement = document.documentElement) {
+  const size = readTableSize(storage);
+  if (size === TABLE_SIZE_DEFAULT) root.style.removeProperty('--table-font-size');
+  else root.style.setProperty('--table-font-size', `${size}px`);
+}
+
+export function applyCodeSize(storage: Pick<Storage, 'getItem'>, root: HTMLElement = document.documentElement) {
+  const size = readCodeSize(storage);
+  if (size === null) root.style.removeProperty('--code-font-size');
+  else root.style.setProperty('--code-font-size', `calc(${size}px * var(--writing-scale, 1))`);
 }
 
 let cached: Promise<string[]> | undefined;

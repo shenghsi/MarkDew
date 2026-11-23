@@ -304,11 +304,11 @@ button[aria-pressed="true"] { background: #dcecf3; border-color: #246b86; }
 .md-h1 { font-size: 2em; } .md-h2 { font-size: 1.55em; } .md-h3 { font-size: 1.25em; }
 .md-strong { font-weight: bold; } .md-emphasis { font-style: italic; } .md-strike { text-decoration: line-through; }
 .md-code { background: #f1f3f5; border-radius: 3px; font-size: .9em; }
-.md-code-block { background: #f6f8fa; font-size: .9em; }
+.md-code-block { background: #f6f8fa; font-size: var(--code-font-size, 0.9em); }
 .cm-line.md-code-line {
   background: var(--surface) !important;
   font-family: var(--code-font, ui-monospace, Menlo, Consolas, monospace) !important;
-  font-size: 0.9em !important;
+  font-size: var(--code-font-size, 0.9em) !important;
   line-height: 1.6 !important;
   padding-left: 14px !important;
   padding-right: 14px !important;
@@ -449,9 +449,9 @@ div.preview-widget.preview-html:focus { outline: none !important; }
 .preview-block-html-body h1, .preview-block-html-body h2 { border-bottom: 1px solid var(--border); }
 .preview-block-html-body h1, .preview-block-html-body h2, .preview-block-html-body h3,
 .preview-block-html-body h4, .preview-block-html-body h5, .preview-block-html-body h6 { line-height: 1.4; font-family: system-ui, sans-serif; }
-.preview-block-html-body pre { overflow: auto; white-space: pre; background: var(--surface); padding: .7em; }
+.preview-block-html-body pre { overflow: auto; white-space: pre; background: var(--surface); padding: .7em; font-size: var(--code-font-size, 0.9em); }
 .preview-block-html-body code { font-family: var(--code-font, ui-monospace, Menlo, Consolas, monospace); }
-.preview-block-html-body table { border-collapse: collapse; font-family: var(--table-font, inherit); }
+.preview-block-html-body table { border-collapse: collapse; font-family: var(--table-font, inherit); font-size: calc(var(--table-font-size, 16px) * var(--writing-scale, 1)); }
 .preview-block-html-body th, .preview-block-html-body td { border: 1px solid var(--border); padding: .4em .7em; }
 .preview-block-html-body blockquote { margin-inline: 0; border-left: 3px solid var(--border); padding-left: 1em; }
 .preview-block-html-body details { margin: 0; padding: 6px 10px; border: 1px solid var(--border); border-radius: 4px; background: var(--surface); }
@@ -484,7 +484,7 @@ div.preview-widget.preview-table { position: relative; padding: 12px; overflow: 
   padding: 6px 12px;
   box-sizing: border-box;
   font-family: inherit;
-  font-size: 16px;
+  font-size: calc(var(--table-font-size, 16px) * var(--writing-scale, 1));
   line-height: 1.5;
   vertical-align: top;
 }
@@ -507,7 +507,7 @@ div.preview-widget.preview-table { position: relative; padding: 12px; overflow: 
   max-height: 100%;
   min-width: 0;
   font-family: inherit !important;
-  font-size: 16px !important;
+  font-size: calc(var(--table-font-size, 16px) * var(--writing-scale, 1)) !important;
   line-height: 1.5 !important;
   font-weight: normal;
   box-sizing: border-box;
@@ -535,7 +535,7 @@ div.preview-widget.preview-table { position: relative; padding: 12px; overflow: 
 #app #editor .editing-cell .cm-content {
   padding: 6px 12px !important;
   font-family: inherit !important;
-  font-size: 16px !important;
+  font-size: calc(var(--table-font-size, 16px) * var(--writing-scale, 1)) !important;
   line-height: 1.5 !important;
   box-sizing: border-box;
   background: transparent !important;

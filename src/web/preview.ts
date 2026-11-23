@@ -45,6 +45,7 @@ export const editorActiveField = StateField.define<boolean>({
     return false;
   },
   update(value, tr) {
+    if (tr.state.readOnly) return false;
     for (const effect of tr.effects) {
       if (effect.is(setEditorActive)) return effect.value;
       if (effect.is(tableCellEffect)) return true;
@@ -59,7 +60,7 @@ export const editorActiveField = StateField.define<boolean>({
 });
 
 export function selected(state: EditorState, from: number, to: number) {
-  if (state.field(editorActiveField, false) === false) return false;
+  if (state.readOnly || state.field(editorActiveField, false) === false) return false;
   return state.selection.ranges.some(range => range.from <= to && range.to >= from);
 }
 // True while the last selection came from a pointer click or drag. Then a caret that only
@@ -69,6 +70,7 @@ export const pointerSelection = StateField.define<boolean>({
   update: (value, tr) => tr.selection || tr.docChanged ? tr.isUserEvent('select.pointer') : value,
 });
 function itemSelected(state: EditorState, item: Item, from: number, to: number) {
+  if (state.readOnly) return false;
   if (item.kind !== 'math' || item.block || state.field(pointerSelection, false) !== true) return selected(state, from, to);
   if (state.field(editorActiveField, false) === false) return false;
   return state.selection.ranges.some(range => range.from < to && range.to > from);
@@ -820,7 +822,7 @@ function previewGroups(state: EditorState, items: Item[]): Group[] {
 }
 
 function selectionDecorations(plan: Pick<FullPlan, 'items' | 'decorations'>, before: EditorState, after: EditorState, groups: Group[]): DecorationSet {
-  if (before.selection.eq(after.selection) && before.field(editorActiveField, false) === after.field(editorActiveField, false)) return plan.decorations;
+  if (before.selection.eq(after.selection) && before.field(editorActiveField, false) === after.field(editorActiveField, false) && before.readOnly === after.readOnly) return plan.decorations;
   const candidates = new Set<Group>();
   for (const range of [...before.selection.ranges, ...after.selection.ranges]) {
     let low = 0, high = groups.length;

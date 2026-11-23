@@ -1,7 +1,10 @@
-# MarkDew v1.7.21
+# MarkDew v1.7.22
 
 ## What is new
 
+- Fixed: clicking headings or formatted Markdown elements in Read Mode no longer reveals raw Markdown syntax (`#`, `**`, etc.) or activates the editor caret.
+- New: `Ctrl+[` / `Ctrl+]` (and `⌘[` / `⌘]` on macOS) navigate Back / Forward in Read Mode alongside `Alt+←` / `Alt+→` and mouse side buttons.
+- New: customizable **Table text size** and **Code block text size** in Settings > Appearance > Editor (scaled with Writing Size).
 - Fixed: opening local file links and web links now works in secondary folder windows, opens non-Markdown local files in their system default app, and resolves link clicks reliably even with an existing selection elsewhere.
 - New: browser-like link navigation in Read Mode — left-click opens local Markdown links in the same tab (prompting to Save/Discard if unsaved, or switching to an already-open tab with cross-tab return), Ctrl/Cmd+click or right-click **Open in New Tab** opens links in a new tab, and **Back / Forward** buttons in the top bar (with `Alt+←`/`Alt+→`, macOS `⌘[`/`⌘]`, and mouse side buttons) navigate per-tab history.
 - Fixed: reloading or auto-loading changes from disk now keeps the editor's scroll position and mapped selection stable instead of jumping to the end of the file.

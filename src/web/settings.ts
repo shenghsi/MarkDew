@@ -8,7 +8,13 @@ import {
   DIAGRAM_MAX_HEIGHTS, DEFAULT_DIAGRAM_SETTINGS, getDiagramSettings, applyDiagramStyle,
 } from './diagram-settings';
 import { layoutPreferences, SidebarChoice } from './layout-preferences';
-import { applyBodySize, applyFonts, BODY_SIZE_KEY, BODY_SIZE_DEFAULT, BODY_SIZES, FONT_KEYS, installedFonts } from './font-settings';
+import {
+  applyBodySize, applyCodeSize, applyFonts, applyTableSize,
+  BODY_SIZE_KEY, BODY_SIZE_DEFAULT, BODY_SIZES,
+  CODE_SIZE_KEY, CODE_SIZE_DEFAULT, CODE_SIZES,
+  TABLE_SIZE_KEY, TABLE_SIZE_DEFAULT, TABLE_SIZES,
+  FONT_KEYS, installedFonts,
+} from './font-settings';
 import { PANDOC_PATH_KEY } from './pandoc-exchange';
 import {
   t,
@@ -119,6 +125,8 @@ export function initSettings(options?: {
   applyLineWidth(current);
   applyFonts(storage);
   applyBodySize(storage);
+  applyTableSize(storage);
+  applyCodeSize(storage);
   applyDiagramStyle(getDiagramSettings(storage));
 
   const onStorage = (event: StorageEvent) => {
@@ -787,13 +795,52 @@ export function showSettingsDialog(options?: {
     );
     bodySizeSec.append(bsHeading, bsDesc, bsSelect);
 
+    // Section: table text size in pixels
+    const tableSizeSec = document.createElement('section');
+    tableSizeSec.className = 'settings-section';
+    const tsHeading = document.createElement('h3');
+    tsHeading.className = 'settings-section-title';
+    tsHeading.textContent = t('appearance.table_size', storage);
+    const tsDesc = document.createElement('p');
+    tsDesc.className = 'settings-desc';
+    tsDesc.textContent = t('appearance.table_size_desc', storage);
+    const tsSelect = createSelectControl(
+      storage,
+      TABLE_SIZE_KEY,
+      TABLE_SIZES.map(size => ({ label: `${size} px`, value: String(size) })),
+      String(TABLE_SIZE_DEFAULT),
+      () => { applyTableSize(storage); options?.onMeasure?.(); },
+    );
+    tableSizeSec.append(tsHeading, tsDesc, tsSelect);
+
+    // Section: code block text size in pixels (or follow body text)
+    const codeSizeSec = document.createElement('section');
+    codeSizeSec.className = 'settings-section';
+    const csHeading = document.createElement('h3');
+    csHeading.className = 'settings-section-title';
+    csHeading.textContent = t('appearance.code_size', storage);
+    const csDesc = document.createElement('p');
+    csDesc.className = 'settings-desc';
+    csDesc.textContent = t('appearance.code_size_desc', storage);
+    const csSelect = createSelectControl(
+      storage,
+      CODE_SIZE_KEY,
+      [
+        { label: t('appearance.code_size_default', storage), value: CODE_SIZE_DEFAULT },
+        ...CODE_SIZES.map(size => ({ label: `${size} px`, value: String(size) })),
+      ],
+      CODE_SIZE_DEFAULT,
+      () => { applyCodeSize(storage); options?.onMeasure?.(); },
+    );
+    codeSizeSec.append(csHeading, csDesc, csSelect);
+
     // Group: Editor (line width, writing size)
     const editorGroup = document.createElement('div');
     editorGroup.className = 'settings-group';
     const editorGroupTitle = document.createElement('h2');
     editorGroupTitle.className = 'settings-group-title';
     editorGroupTitle.textContent = t('appearance.group_editor', storage);
-    editorGroup.append(editorGroupTitle, lineWidthSection, writingSizeSec, bodySizeSec,
+    editorGroup.append(editorGroupTitle, lineWidthSection, writingSizeSec, bodySizeSec, tableSizeSec, codeSizeSec,
       fontSection(t('appearance.font_text', storage), FONT_KEYS.TEXT),
       fontSection(t('appearance.font_table', storage), FONT_KEYS.TABLE),
       fontSection(t('appearance.font_code', storage), FONT_KEYS.CODE));

@@ -422,7 +422,7 @@ export const view: EditorView = new EditorView({
 });
 if (typeof window !== 'undefined') (window as any).view = view;
 document.querySelector('#editor')?.addEventListener('click', event => {
-  if (event.defaultPrevented) return;
+  if (event.defaultPrevented || readMode) return;
   const target = event.target as HTMLElement | null;
   if (target?.closest('.cm-panels, .markdew-search-panel')) return;
   if (!target?.closest('.cm-scroller')) {
@@ -662,9 +662,9 @@ function updateUILanguage() {
   outlineMenuButton.setAttribute('aria-label', t('toolbar.outline'));
   readButton.title = t('toolbar.read_mode'); readButton.setAttribute('aria-label', t('toolbar.read_mode')); readButton.textContent = t('toolbar.read');
   const isMacNav = /Mac|iPhone|iPad|iPod/.test(navigator.platform);
-  backButton.title = `${t('toolbar.nav_back')} (${isMacNav ? '⌘[' : 'Alt+←'})`;
+  backButton.title = `${t('toolbar.nav_back')} (${isMacNav ? '⌘[' : 'Ctrl+['})`;
   backButton.setAttribute('aria-label', t('toolbar.nav_back'));
-  forwardButton.title = `${t('toolbar.nav_forward')} (${isMacNav ? '⌘]' : 'Alt+→'})`;
+  forwardButton.title = `${t('toolbar.nav_forward')} (${isMacNav ? '⌘]' : 'Ctrl+]'})`;
   forwardButton.setAttribute('aria-label', t('toolbar.nav_forward'));
   sourceButton.title = t('toolbar.source_mode');
   sourceButton.setAttribute('aria-label', t('toolbar.source_mode'));
@@ -1667,10 +1667,10 @@ const onNavKeyDown = (event: KeyboardEvent) => {
     editorEl.classList.add('link-mod-active');
   }
   if (!readMode || !pageActive || busy || composing() || isModalOpen() || event.defaultPrevented || event.isComposing) return;
-  const isBack = (event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey && event.key === 'ArrowLeft') ||
-    (isMacPlatform && event.metaKey && !event.ctrlKey && !event.altKey && !event.shiftKey && event.key === '[');
-  const isForward = (event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey && event.key === 'ArrowRight') ||
-    (isMacPlatform && event.metaKey && !event.ctrlKey && !event.altKey && !event.shiftKey && event.key === ']');
+  const modOnly = (isMacPlatform ? event.metaKey && !event.ctrlKey : event.ctrlKey && !event.metaKey) && !event.altKey && !event.shiftKey;
+  const altOnly = event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey;
+  const isBack = (modOnly && event.key === '[') || (altOnly && event.key === 'ArrowLeft');
+  const isForward = (modOnly && event.key === ']') || (altOnly && event.key === 'ArrowRight');
   if (isBack) { event.preventDefault(); void operation(() => navigateHistory('back'), true); }
   else if (isForward) { event.preventDefault(); void operation(() => navigateHistory('forward'), true); }
 };
