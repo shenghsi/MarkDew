@@ -3,6 +3,7 @@ import { SIDEBAR_ALL_FILES_KEY, setSidebarShowsAllFiles, sidebarShowsAllFiles } 
 import { invoke, isTauri } from '@tauri-apps/api/core';
 import { setTheme, ThemeChoice } from './theme';
 import { checkAppUpdates, installAppUpdate, UpdateInfo } from './updater';
+import { EDITOR_PREFS, readEditorPref, writeEditorPref, type EditorPref } from './editor-settings';
 import {
   DIAGRAM_KEYS, DIAGRAM_PALETTES, DIAGRAM_BOX_COLORS, DIAGRAM_FONTS, DIAGRAM_FONT_SIZES, DIAGRAM_RADII, DIAGRAM_PADDINGS,
   DIAGRAM_MAX_HEIGHTS, DEFAULT_DIAGRAM_SETTINGS, getDiagramSettings, applyDiagramStyle,
@@ -448,11 +449,36 @@ export function showSettingsDialog(options?: {
     filesPanel.append(allSec);
   }
 
-  // Populate Panel: Editor (Notice)
-  renderEmptyNotice(panels.get('editor')!);
-
-  // Populate Panel: Markdown (Notice)
-  renderEmptyNotice(panels.get('markdown')!);
+  // Populate Panel: Editor (editing behavior & display aids)
+  {
+    const toggleSection = (panel: HTMLElement, key: EditorPref, titleKey: Parameters<typeof t>[0], descKey: Parameters<typeof t>[0]) => {
+      const section = document.createElement('section');
+      section.className = 'settings-section';
+      const heading = document.createElement('h3');
+      heading.className = 'settings-section-title';
+      heading.textContent = t(titleKey, storage);
+      const desc = document.createElement('p');
+      desc.className = 'settings-desc';
+      desc.textContent = t(descKey, storage);
+      const label = document.createElement('label');
+      label.className = 'settings-checkbox';
+      const check = document.createElement('input');
+      check.type = 'checkbox';
+      check.dataset.key = key;
+      check.checked = readEditorPref(key, storage);
+      check.addEventListener('change', () => { writeEditorPref(key, check.checked, storage); options?.onMeasure?.(); });
+      const text = document.createElement('span');
+      text.textContent = t(titleKey, storage);
+      label.append(check, text);
+      section.append(heading, desc, label);
+      panel.append(section);
+    };
+    const editorPanel = panels.get('editor')!;
+    toggleSection(editorPanel, EDITOR_PREFS.LINE_NUMBERS, 'editor.line_numbers', 'editor.line_numbers_desc');
+    toggleSection(editorPanel, EDITOR_PREFS.SPELLCHECK, 'editor.spellcheck', 'editor.spellcheck_desc');
+    toggleSection(editorPanel, EDITOR_PREFS.CONTINUE_LISTS, 'markdown.continue_lists', 'markdown.continue_lists_desc');
+    toggleSection(editorPanel, EDITOR_PREFS.TAB_INDENT_LISTS, 'markdown.tab_indent_lists', 'markdown.tab_indent_lists_desc');
+  }
 
   // Populate Panel: Export (Notice)
   {
@@ -834,16 +860,33 @@ export function showSettingsDialog(options?: {
     );
     codeSizeSec.append(csHeading, csDesc, csSelect);
 
-    // Group: Editor (line width, writing size)
+    // Group: Editor (line width, writing size, body text size, text font)
     const editorGroup = document.createElement('div');
     editorGroup.className = 'settings-group';
     const editorGroupTitle = document.createElement('h2');
     editorGroupTitle.className = 'settings-group-title';
     editorGroupTitle.textContent = t('appearance.group_editor', storage);
-    editorGroup.append(editorGroupTitle, lineWidthSection, writingSizeSec, bodySizeSec, tableSizeSec, codeSizeSec,
-      fontSection(t('appearance.font_text', storage), FONT_KEYS.TEXT),
-      fontSection(t('appearance.font_table', storage), FONT_KEYS.TABLE),
-      fontSection(t('appearance.font_code', storage), FONT_KEYS.CODE));
+    editorGroup.append(editorGroupTitle, lineWidthSection, writingSizeSec, bodySizeSec,
+      fontSection(t('appearance.font_text', storage), FONT_KEYS.TEXT));
+
+    appearancePanel.append(themeSection, editorGroup);
+
+    // Populate Panel: Markdown (Tables, Code Blocks, Mermaid Diagrams)
+    const markdownPanel = panels.get('markdown')!;
+
+    const tableGroup = document.createElement('div');
+    tableGroup.className = 'settings-group';
+    const tableGroupTitle = document.createElement('h2');
+    tableGroupTitle.className = 'settings-group-title';
+    tableGroupTitle.textContent = t('markdown.group_tables', storage);
+    tableGroup.append(tableGroupTitle, tableSizeSec, fontSection(t('appearance.font_table', storage), FONT_KEYS.TABLE));
+
+    const codeGroup = document.createElement('div');
+    codeGroup.className = 'settings-group';
+    const codeGroupTitle = document.createElement('h2');
+    codeGroupTitle.className = 'settings-group-title';
+    codeGroupTitle.textContent = t('markdown.group_code', storage);
+    codeGroup.append(codeGroupTitle, codeSizeSec, fontSection(t('appearance.font_code', storage), FONT_KEYS.CODE));
 
     // Group: Mermaid Diagram, in three sections
     const diagramGroup = document.createElement('div');
@@ -903,7 +946,7 @@ export function showSettingsDialog(options?: {
       diagramGroup.append(section);
     }
 
-    appearancePanel.append(themeSection, editorGroup, diagramGroup);
+    markdownPanel.append(tableGroup, codeGroup, diagramGroup);
   }
 
   // Populate Panel: General (Language, Update, License, Reset)
@@ -1067,6 +1110,19 @@ export function showSettingsDialog(options?: {
     resetBtn.addEventListener('click', () => {
       applyLineWidth(DEFAULT_LINE_WIDTH);
       saveLineWidth(DEFAULT_LINE_WIDTH, storage);
+      for (const key of [BODY_SIZE_KEY, TABLE_SIZE_KEY, CODE_SIZE_KEY, FONT_KEYS.TEXT, FONT_KEYS.TABLE, FONT_KEYS.CODE,
+        ...Object.values(EDITOR_PREFS), ...Object.values(DIAGRAM_KEYS)]) {
+        try { storage.removeItem(key); } catch {}
+      }
+      applyFonts(storage);
+      applyBodySize(storage);
+      applyTableSize(storage);
+      applyCodeSize(storage);
+      applyDiagramStyle(getDiagramSettings(storage));
+      window.dispatchEvent(new CustomEvent('markdew:diagram-settings'));
+      for (const key of Object.values(EDITOR_PREFS)) {
+        writeEditorPref(key, readEditorPref(key, storage), storage);
+      }
       setTheme('system');
       setLanguagePreference('system', storage);
       options?.onMeasure?.();
@@ -1088,7 +1144,7 @@ export function showSettingsDialog(options?: {
         btn.style.display = '';
       }
       for (const [, panel] of panels) {
-        for (const sec of Array.from(panel.querySelectorAll<HTMLElement>('.settings-section, .settings-empty-card'))) {
+        for (const sec of Array.from(panel.querySelectorAll<HTMLElement>('.settings-section, .settings-group, .settings-empty-card'))) {
           sec.style.display = '';
         }
       }
@@ -1107,6 +1163,10 @@ export function showSettingsDialog(options?: {
         const matches = catMatches || secText.includes(query);
         sec.style.display = matches ? '' : 'none';
         if (matches) hasVisibleSection = true;
+      }
+      for (const group of Array.from(panel.querySelectorAll<HTMLElement>('.settings-group'))) {
+        const groupHasVisible = Array.from(group.querySelectorAll<HTMLElement>('.settings-section')).some(s => s.style.display !== 'none');
+        group.style.display = catMatches || groupHasVisible ? '' : 'none';
       }
 
       const tabBtn = tabButtons.get(id);

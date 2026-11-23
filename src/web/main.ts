@@ -25,6 +25,7 @@ import { openCompare, type CompareHandle } from './diff-view';
 import { changeIndicators, setChangeBaseline } from './change-indicators';
 import { openConflict, type DiskSnapshot } from './conflict-view';
 import { listTab } from './list-indent';
+import { EDITOR_PREFS, EDITOR_PREFS_EVENT, readEditorPref } from './editor-settings';
 import { collapseDataUris } from './data-uri-collapse';
 import { pandocExchange } from './pandoc-exchange';
 import { quickFiles, quickOpen } from './quick-open';
@@ -350,6 +351,7 @@ async function flushRecovery(tab: DocumentTab = active()) {
 }
 const inputLock = new Compartment();
 const display = new Compartment();
+const sourceDisplay = () => readEditorPref(EDITOR_PREFS.LINE_NUMBERS) ? [lineNumbers()] : [];
 const text = () => savedSource(view.state.field(sourceField));
 const dirty = () => text() !== active().baseline;
 let sidebar: ReturnType<typeof fileSidebar> | undefined;
@@ -399,7 +401,8 @@ const state = (source: string, tab?: Pick<DocumentTab, 'id' | 'path' | 'sourceMo
   EditorView.editorAttributes.of(v => ({ class: v.state.field(editorActiveField, false) ? 'editor-active' : '' })),
   imagePaste(notify, () => busy ? 'Wait for the file command, then paste the image.' : composing() ? 'Finish text input, then paste the image.' : null, pastedImages.capture,
     isTauri() && /Linux/.test(navigator.platform) ? () => invoke<ArrayBuffer>('read_clipboard_image').then(bytes => new Uint8Array(bytes)) : undefined),
-  display.of(tab?.sourceMode ? [lineNumbers()] : livePreview),
+  display.of(tab?.sourceMode ? sourceDisplay() : livePreview),
+  EditorView.contentAttributes.of(() => ({ spellcheck: readEditorPref(EDITOR_PREFS.SPELLCHECK) ? 'true' : 'false' })),
   collapseDataUris,
   tableSaveCommand.of(() => { void operation(saveFile); }),
   tableFindCommand.of(() => { find(view); }), searchSupport(() => view), outline(outlineContent),
@@ -407,7 +410,7 @@ const state = (source: string, tab?: Pick<DocumentTab, 'id' | 'path' | 'sourceMo
     composing() ? 'Finish text input, then follow the link.' : null,
     url => webLinks.open(url), (destination, fragment, mode) => { void operation(() => openDocumentLink(destination, fragment, mode), true); },
     { isReadMode: () => readMode, onHeading: recordHeadingJump }),
-  keymap.of([{ key: 'Mod-/', run: () => { sourceButton.click(); return true; } }, { mac: 'Ctrl-/', run: () => { sourceButton.click(); return true; } }, ...guardedSearchKeymap, ...formattingKeys, { key: 'Mod-k', run: () => openLinkControls() }, { key: 'Mod-Shift-i', run: () => openImageControls() }, { key: 'Enter', run: markdownReturn }, { key: 'Backspace', run: markdownBackspace }, { key: 'Tab', run: target => listTab(target, 1) }, { key: 'Shift-Tab', run: target => listTab(target, -1) }, { key: 'ArrowDown', run: exitBlockDown }, { key: 'Mod-s', run: () => { void operation(saveFile); return true; } }, ...markdownKeymap.filter(binding => binding.key !== 'Enter'), ...defaultKeymap, ...historyKeymap]),
+  keymap.of([{ key: 'Mod-/', run: () => { sourceButton.click(); return true; } }, { mac: 'Ctrl-/', run: () => { sourceButton.click(); return true; } }, ...guardedSearchKeymap, ...formattingKeys, { key: 'Mod-k', run: () => openLinkControls() }, { key: 'Mod-Shift-i', run: () => openImageControls() }, { key: 'Enter', run: target => readEditorPref(EDITOR_PREFS.CONTINUE_LISTS) ? markdownReturn(target) : false }, { key: 'Backspace', run: markdownBackspace }, { key: 'Tab', run: target => readEditorPref(EDITOR_PREFS.TAB_INDENT_LISTS) ? listTab(target, 1) : false }, { key: 'Shift-Tab', run: target => readEditorPref(EDITOR_PREFS.TAB_INDENT_LISTS) ? listTab(target, -1) : false }, { key: 'ArrowDown', run: exitBlockDown }, { key: 'Mod-s', run: () => { void operation(saveFile); return true; } }, ...markdownKeymap.filter(binding => binding.key !== 'Enter'), ...defaultKeymap, ...historyKeymap]),
   EditorView.updateListener.of(update => {
     if (update.docChanged || update.startState.field(sourceField) !== update.state.field(sourceField)) { if (active().preview) active().preview = false; report(); checkpoint(); }
     if (update.startState.field(editorActiveField, false) !== update.state.field(editorActiveField, false)) {
@@ -716,6 +719,13 @@ function applyLock() {
   view.dispatch({ effects: inputLock.reconfigure(locked ? [EditorState.readOnly.of(true), EditorView.editable.of(false)] : []) });
   document.querySelectorAll<HTMLElement>('.link-controls').forEach(form => { form.inert = locked; });
 }
+function refreshEditorPrefs() {
+  if (!pageActive) return;
+  view.dispatch(active().sourceMode ? { effects: display.reconfigure(sourceDisplay()) } : {});
+  active().state = view.state;
+}
+window.addEventListener(EDITOR_PREFS_EVENT, refreshEditorPrefs);
+window.addEventListener('pagehide', () => window.removeEventListener(EDITOR_PREFS_EVENT, refreshEditorPrefs), { once: true });
 function switchTab(id: number, internal = false) {
   if (!tabs.activate(view, id, () => (!busy || internal) && !composing(), () => {
     document.querySelectorAll<HTMLFormElement>('.link-controls').forEach(form => form.querySelector<HTMLButtonElement>('[data-cancel]')!.click());
@@ -726,6 +736,7 @@ function switchTab(id: number, internal = false) {
   document.querySelector('#editor')!.classList.toggle('source-mode', active().sourceMode);
   document.querySelector('#editor')!.setAttribute('role', 'tabpanel');
   document.querySelector('#editor')!.setAttribute('aria-labelledby', `document-tab-${id}`);
+  if (active().sourceMode) view.dispatch({ effects: display.reconfigure(sourceDisplay()) });
   applyLock(); report(); syncNavButtons();
   if (view.state.field(editorActiveField, false)) {
     view.dispatch({ effects: setEditorActive.of(false) });
@@ -1777,7 +1788,7 @@ document.querySelector('#source')!.addEventListener('click', () => {
   active().sourceMode = !active().sourceMode;
   document.querySelector('#source')!.setAttribute('aria-pressed', String(active().sourceMode));
   document.querySelector('#editor')!.classList.toggle('source-mode', active().sourceMode);
-  view.dispatch({ effects: display.reconfigure(active().sourceMode ? [lineNumbers()] : livePreview) }); active().state = view.state; view.focus();
+  view.dispatch({ effects: display.reconfigure(active().sourceMode ? sourceDisplay() : livePreview) }); active().state = view.state; view.focus();
   syncMenuChecks();
 });
 document.querySelector('#check')!.addEventListener('click', () => void operation(async () => { const tab = active(); await invoke('check_save', { document: tab.id }); tab.uncertain = false; fileTransition(); report(); checkpoint(tab); await flushRecovery(tab); }));

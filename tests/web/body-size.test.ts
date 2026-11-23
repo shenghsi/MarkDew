@@ -67,3 +67,15 @@ describe('Code block text size', () => {
     expect(root.style.getPropertyValue('--code-font-size')).toBe('');
   });
 });
+
+import { EDITOR_PREFS, readEditorPref } from '../../src/web/editor-settings';
+describe('Editor and Markdown preferences', () => {
+  const prefs = (value?: string) => ({ getItem: () => value ?? null });
+  it('uses defaults and honours saved on/off values', () => {
+    expect(readEditorPref(EDITOR_PREFS.LINE_NUMBERS, prefs())).toBe(true);
+    expect(readEditorPref(EDITOR_PREFS.SPELLCHECK, prefs())).toBe(false);
+    expect(readEditorPref(EDITOR_PREFS.CONTINUE_LISTS, prefs('off'))).toBe(false);
+    expect(readEditorPref(EDITOR_PREFS.SPELLCHECK, prefs('on'))).toBe(true);
+    expect(readEditorPref(EDITOR_PREFS.TAB_INDENT_LISTS, prefs('junk'))).toBe(true);
+  });
+});

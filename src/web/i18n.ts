@@ -156,6 +156,16 @@ export const translations = {
 
     // Empty state
     'empty.notice': 'No configuration options are available for this category yet.',
+    'editor.line_numbers': 'Line numbers in Source mode',
+    'editor.line_numbers_desc': 'Show line numbers beside the text when Source Code Mode is on.',
+    'editor.spellcheck': 'Spell check',
+    'editor.spellcheck_desc': 'Underline misspelled words while you write.',
+    'markdown.continue_lists': 'Continue lists on Enter',
+    'markdown.continue_lists_desc': 'Press Enter in a list, task list, or quote to start the next item automatically.',
+    'markdown.tab_indent_lists': 'Tab indents list items',
+    'markdown.tab_indent_lists_desc': 'Press Tab or Shift+Tab in a list item to indent or outdent it.',
+    'markdown.group_tables': 'Tables',
+    'markdown.group_code': 'Code Blocks',
     'empty.sub': 'More options will be added in upcoming releases.',
 
     // Sidebar Context Menu
@@ -587,6 +597,16 @@ export const translations = {
 
     // Empty state
     'empty.notice': '该分类暂无可配置选项。',
+    'editor.line_numbers': '源码模式显示行号',
+    'editor.line_numbers_desc': '开启源代码模式时，在文本旁显示行号。',
+    'editor.spellcheck': '拼写检查',
+    'editor.spellcheck_desc': '书写时标出拼写错误的单词。',
+    'markdown.continue_lists': '回车自动延续列表',
+    'markdown.continue_lists_desc': '在列表、任务列表或引用中按回车，自动开始下一项。',
+    'markdown.tab_indent_lists': 'Tab 缩进列表项',
+    'markdown.tab_indent_lists_desc': '在列表项中按 Tab 或 Shift+Tab 进行缩进或取消缩进。',
+    'markdown.group_tables': '表格',
+    'markdown.group_code': '代码块',
     'empty.sub': '更多选项将在后续版本中提供。',
 
     // Common

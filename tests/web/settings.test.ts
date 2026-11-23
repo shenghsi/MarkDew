@@ -140,8 +140,8 @@ describe('Settings and Line Width', () => {
     storage.setItem(FONT_KEYS.TEXT, 'Body Family');
     applyFonts(storage);
     const measure = vi.fn();
-    const modal = showSettingsDialog({ storage, onMeasure: measure, category: 'appearance' });
-    const select = modal.querySelector<HTMLSelectElement>(`select[data-key="${FONT_KEYS.TABLE}"]`)!;
+    const modal = showSettingsDialog({ storage, onMeasure: measure, category: 'markdown' });
+    const select = modal.querySelector<HTMLSelectElement>(`#panel-markdown select[data-key="${FONT_KEYS.TABLE}"]`)!;
     expect(select.options[0].text).toBe('Use Text font');
     expect(select.value).toBe('');
     select.add(new Option('Table Family', 'Table Family'));
@@ -383,4 +383,29 @@ it('saves the Files sidebar all-file-types choice and tells the sidebar to refre
   expect(data['markdew.sidebar-all-files']).toBe('off'); expect(changed).toHaveBeenCalledTimes(2);
   window.removeEventListener('markdew:sidebar-files-changed', changed);
   document.querySelector<HTMLElement>('.modal-backdrop')?.remove();
+});
+
+it('categorizes Editor, Markdown, and Appearance controls cleanly with no empty categories', () => {
+  const data: Record<string, string> = {};
+  const storage = { getItem: (k: string) => data[k] ?? null, setItem: (k: string, v: string) => { data[k] = v; },
+    removeItem: (k: string) => { delete data[k]; }, clear: () => {}, key: () => null, length: 0 } as Storage;
+  const modal = showSettingsDialog({ storage });
+  expect(modal.querySelectorAll('.settings-empty-card').length).toBe(0);
+  // Editor: editing behavior options
+  expect(modal.querySelector('#panel-editor input[data-key="markdew.line-numbers"]')).not.toBeNull();
+  expect(modal.querySelector('#panel-editor input[data-key="markdew.spellcheck"]')).not.toBeNull();
+  expect(modal.querySelector('#panel-editor input[data-key="markdew.continue-lists"]')).not.toBeNull();
+  expect(modal.querySelector('#panel-editor input[data-key="markdew.tab-indent-lists"]')).not.toBeNull();
+  // Markdown: tables, code blocks, diagrams
+  expect(modal.querySelector('#panel-markdown select[data-key="markdew.table-font-size"]')).not.toBeNull();
+  expect(modal.querySelector(`#panel-markdown select[data-key="${FONT_KEYS.TABLE}"]`)).not.toBeNull();
+  expect(modal.querySelector('#panel-markdown select[data-key="markdew.code-font-size"]')).not.toBeNull();
+  expect(modal.querySelector(`#panel-markdown select[data-key="${FONT_KEYS.CODE}"]`)).not.toBeNull();
+  expect(modal.querySelector('#panel-markdown select[data-key="markdew.diagram-palette"]')).not.toBeNull();
+  // Appearance: theme, layout, body typography (no diagram/table/code controls)
+  expect(modal.querySelector('#panel-appearance select[data-key="markdew.body-font-size"]')).not.toBeNull();
+  expect(modal.querySelector(`#panel-appearance select[data-key="${FONT_KEYS.TEXT}"]`)).not.toBeNull();
+  expect(modal.querySelector('#panel-appearance select[data-key="markdew.table-font-size"]')).toBeNull();
+  expect(modal.querySelector('#panel-appearance select[data-key="markdew.diagram-palette"]')).toBeNull();
+  modal.querySelector<HTMLButtonElement>('.modal-footer button')!.click();
 });
