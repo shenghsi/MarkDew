@@ -1,6 +1,6 @@
 [package]
 name = "markdew-desktop"
-version = "1.7.20"
+version = "1.7.21"
 edition = "2021"
 license = "AGPL-3.0-or-later"
 

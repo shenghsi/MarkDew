@@ -260,6 +260,11 @@ export const translations = {
     'menu.paragraph_before': 'Paragraph (before)',
     'menu.paragraph_after': 'Paragraph (after)',
     'menu.label': 'Editor menu',
+    'menu.open_link': 'Open Link',
+    'menu.open_in_new_tab': 'Open in New Tab',
+    'menu.open_default_app': 'Open in Default App',
+    'menu.go_to_heading': 'Go to Heading',
+    'menu.copy_link': 'Copy Link',
 
     // Table Context Menu
     'table.row_above': 'Add Row Above',
@@ -281,6 +286,8 @@ export const translations = {
     'toolbar.read_mode': 'Read Mode',
     'toolbar.read': 'Read',
     'toolbar.read_mode_on': 'Read mode: editing is off.',
+    'toolbar.nav_back': 'Back',
+    'toolbar.nav_forward': 'Forward',
     'toolbar.print': 'Print…',
     'toolbar.close_document': 'Close document',
     'toolbar.code_block': 'Code Block',
@@ -524,6 +531,11 @@ export const translations = {
     'menu.paragraph_before': '在上方插入段落',
     'menu.paragraph_after': '在下方插入段落',
     'menu.label': '编辑器菜单',
+    'menu.open_link': '打开链接',
+    'menu.open_in_new_tab': '在新标签页中打开',
+    'menu.open_default_app': '使用默认应用打开',
+    'menu.go_to_heading': '跳转到标题',
+    'menu.copy_link': '复制链接',
 
     // Table Context Menu
     'table.row_above': '在上方插入行',
@@ -545,6 +557,8 @@ export const translations = {
     'toolbar.read_mode': '阅读模式',
     'toolbar.read': '阅读',
     'toolbar.read_mode_on': '阅读模式：已禁用编辑。',
+    'toolbar.nav_back': '后退',
+    'toolbar.nav_forward': '前进',
     'toolbar.print': '打印…',
     'toolbar.close_document': '关闭文档',
     'toolbar.code_block': '代码块',

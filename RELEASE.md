@@ -1,7 +1,9 @@
-# MarkDew v1.7.20
+# MarkDew v1.7.21
 
 ## What is new
 
+- Fixed: opening local file links and web links now works in secondary folder windows, opens non-Markdown local files in their system default app, and resolves link clicks reliably even with an existing selection elsewhere.
+- New: browser-like link navigation in Read Mode — left-click opens local Markdown links in the same tab (prompting to Save/Discard if unsaved, or switching to an already-open tab with cross-tab return), Ctrl/Cmd+click or right-click **Open in New Tab** opens links in a new tab, and **Back / Forward** buttons in the top bar (with `Alt+←`/`Alt+→`, macOS `⌘[`/`⌘]`, and mouse side buttons) navigate per-tab history.
 - Fixed: reloading or auto-loading changes from disk now keeps the editor's scroll position and mapped selection stable instead of jumping to the end of the file.
 - New: Find and Replace now shows the current match index and total occurrences (`1/5`, `2/6`, `0/0`) inside the search input box and displays an overview ruler in the editor scrollbar track marking where all search matches are across the document.
 - Fixed: changed-line overview marks in the editor scrollbar track now align with the exact vertical positions of the changed lines in the scrollable document (accounting for top padding, bottom overscroll padding, wrapped paragraphs, and Live preview widgets) while staying free of scroll jitter.

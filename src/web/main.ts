@@ -30,7 +30,8 @@ import { pandocExchange } from './pandoc-exchange';
 import { quickFiles, quickOpen } from './quick-open';
 import { linkControls } from './link-controls';
 import { linkVersion } from './links';
-import { headingTarget, linkNavigation } from './link-navigation';
+import { followTarget, headingTarget, linkNavigation, type LinkOpenMode, type LinkTarget } from './link-navigation';
+import { TabHistory } from './tab-history';
 import { textDirection } from './text-direction';
 import { webLinkOpener } from './web-links';
 import { themeControls, setTheme, ThemeChoice } from './theme';
@@ -99,6 +100,12 @@ const toolsButton = document.createElement('button'); toolsButton.id = 'tools-to
 const tools = document.createElement('section'); tools.id = 'tools-panel'; tools.setAttribute('aria-label', 'Document tools'); tools.hidden = true;
 const header = document.querySelector('header')!; header.before(documentBar, tools); tools.append(header);
 const paneControls = document.createElement('div'); paneControls.className = 'document-pane-controls';
+const navControls = document.createElement('div'); navControls.className = 'document-nav-controls'; navControls.hidden = true;
+const backButton = document.createElement('button'); backButton.type = 'button'; backButton.id = 'nav-back'; backButton.disabled = true;
+backButton.title = 'Back'; backButton.setAttribute('aria-label', 'Back');
+const forwardButton = document.createElement('button'); forwardButton.type = 'button'; forwardButton.id = 'nav-forward'; forwardButton.disabled = true;
+forwardButton.title = 'Forward'; forwardButton.setAttribute('aria-label', 'Forward');
+navControls.append(backButton, forwardButton);
 const viewControls = document.createElement('div'); viewControls.className = 'document-view-controls';
 const tabContainer = document.createElement('div'); tabContainer.className = 'document-tabs-host';
 // The + button opens a new Untitled.md tab. It follows the last tab.
@@ -116,7 +123,7 @@ sourceButton.title = 'Source Code Mode'; sourceButton.setAttribute('aria-label',
 viewControls.append(countLabel, outlineMenuButton, filesButton, toolsButton);
 // The tab bar shows each open document, also when only one is open. The title stays hidden.
 title.hidden = true;
-documentBar.append(paneControls, title, tabContainer, viewControls);
+documentBar.append(paneControls, navControls, title, tabContainer, viewControls);
 if (isTauri()) {
   void Promise.resolve(invoke('update_menu_state', { language: getCurrentLanguage() })).catch(() => {});
   let lastToggle = 0;
@@ -398,7 +405,8 @@ const state = (source: string, tab?: Pick<DocumentTab, 'id' | 'path' | 'sourceMo
   tableFindCommand.of(() => { find(view); }), searchSupport(() => view), outline(outlineContent),
   linkNavigation(message => { status.textContent = message; }, () => busy ? 'Wait for the file command, then follow the link.' :
     composing() ? 'Finish text input, then follow the link.' : null,
-    url => webLinks.open(url), (destination, fragment) => { void operation(() => openDocumentLink(destination, fragment), true); }),
+    url => webLinks.open(url), (destination, fragment, mode) => { void operation(() => openDocumentLink(destination, fragment, mode), true); },
+    { isReadMode: () => readMode, onHeading: recordHeadingJump }),
   keymap.of([{ key: 'Mod-/', run: () => { sourceButton.click(); return true; } }, { mac: 'Ctrl-/', run: () => { sourceButton.click(); return true; } }, ...guardedSearchKeymap, ...formattingKeys, { key: 'Mod-k', run: () => openLinkControls() }, { key: 'Mod-Shift-i', run: () => openImageControls() }, { key: 'Enter', run: markdownReturn }, { key: 'Backspace', run: markdownBackspace }, { key: 'Tab', run: target => listTab(target, 1) }, { key: 'Shift-Tab', run: target => listTab(target, -1) }, { key: 'ArrowDown', run: exitBlockDown }, { key: 'Mod-s', run: () => { void operation(saveFile); return true; } }, ...markdownKeymap.filter(binding => binding.key !== 'Enter'), ...defaultKeymap, ...historyKeymap]),
   EditorView.updateListener.of(update => {
     if (update.docChanged || update.startState.field(sourceField) !== update.state.field(sourceField)) { if (active().preview) active().preview = false; report(); checkpoint(); }
@@ -606,7 +614,17 @@ imageButton.addEventListener('mousedown', event => event.preventDefault());
 imageButton.addEventListener('click', openImageControls);
 const disposeEditorMenu = editorMenu(view, { allowed: () => pageActive && !busy && !composing() && !document.querySelector('.print-dialog'),
   report: message => { status.textContent = message; }, openLink: () => { openLinkControls(); }, openImage: () => { openImageControls(); },
-  compare: isTauri() ? () => { void compareActive(); } : undefined });
+  compare: isTauri() ? () => { void compareActive(); } : undefined,
+  isReadMode: () => readMode,
+  followLinkTarget: (target: LinkTarget, mode: LinkOpenMode) => {
+    followTarget(view, target, message => { status.textContent = message; },
+      url => webLinks.open(url),
+      (destination, fragment, openMode) => { void operation(() => openDocumentLink(destination, fragment, openMode), true); },
+      mode, recordHeadingJump);
+  },
+  copyText: text => {
+    void navigator.clipboard?.writeText(text).then(() => { status.textContent = 'Copied.'; }).catch(() => {});
+  } });
 window.addEventListener('pagehide', disposeEditorMenu, { once: true });
 linkButton.addEventListener('mousedown', event => event.preventDefault());
 linkButton.addEventListener('click', openLinkControls);
@@ -643,6 +661,11 @@ function updateUILanguage() {
   outlineMenuButton.title = t('toolbar.outline');
   outlineMenuButton.setAttribute('aria-label', t('toolbar.outline'));
   readButton.title = t('toolbar.read_mode'); readButton.setAttribute('aria-label', t('toolbar.read_mode')); readButton.textContent = t('toolbar.read');
+  const isMacNav = /Mac|iPhone|iPad|iPod/.test(navigator.platform);
+  backButton.title = `${t('toolbar.nav_back')} (${isMacNav ? '⌘[' : 'Alt+←'})`;
+  backButton.setAttribute('aria-label', t('toolbar.nav_back'));
+  forwardButton.title = `${t('toolbar.nav_forward')} (${isMacNav ? '⌘]' : 'Alt+→'})`;
+  forwardButton.setAttribute('aria-label', t('toolbar.nav_forward'));
   sourceButton.title = t('toolbar.source_mode');
   sourceButton.setAttribute('aria-label', t('toolbar.source_mode'));
 
@@ -703,7 +726,7 @@ function switchTab(id: number, internal = false) {
   document.querySelector('#editor')!.classList.toggle('source-mode', active().sourceMode);
   document.querySelector('#editor')!.setAttribute('role', 'tabpanel');
   document.querySelector('#editor')!.setAttribute('aria-labelledby', `document-tab-${id}`);
-  applyLock(); report();
+  applyLock(); report(); syncNavButtons();
   if (view.state.field(editorActiveField, false)) {
     view.dispatch({ effects: setEditorActive.of(false) });
   }
@@ -1043,14 +1066,141 @@ const nativeOpen = isTauri() ? openRequests(
   }, message => { status.textContent = message; }, () => busy || composing(),
   message => { openNoticeText.textContent = message; openNotice.hidden = false; }) : undefined;
 window.addEventListener('pagehide', () => nativeOpen?.dispose(), { once: true });
-async function openDocumentLink(destination: string, fragment?: string) {
+function tabHistory(tab: DocumentTab): TabHistory {
+  if (!tab.history) tab.history = new TabHistory();
+  return tab.history;
+}
+function syncNavButtons() {
+  navControls.hidden = !readMode;
+  if (!tabsReady) {
+    backButton.disabled = true;
+    forwardButton.disabled = true;
+    return;
+  }
+  const history = tabHistory(active());
+  backButton.disabled = !history.canBack();
+  forwardButton.disabled = !history.canForward();
+}
+function recordHeadingJump(position: number, origin: { anchor: number; scrollTop: number }) {
+  if (!readMode || !tabsReady) return;
+  const tab = active();
+  if (!tab.path) return;
+  tabHistory(tab).push(
+    { path: tab.path, scrollTop: origin.scrollTop, anchor: origin.anchor },
+    { path: tab.path, scrollTop: view.scrollDOM.scrollTop, anchor: position },
+  );
+  syncNavButtons();
+}
+async function confirmLeaveUnsaved(tab: DocumentTab = active()): Promise<boolean> {
+  if (tab.uncertain) throw new Error('Check the last save before you leave this file.');
+  if (tab === active()) tab.state = view.state;
+  if (!tabDirty(tab)) return true;
+  const choice = await new Promise<'save' | 'discard' | 'cancel'>(resolve => {
+    const backdrop = document.createElement('div');
+    backdrop.className = 'unsaved-nav-backdrop';
+    const dialog = document.createElement('div');
+    dialog.className = 'unsaved-nav-dialog';
+    dialog.setAttribute('role', 'alertdialog');
+    dialog.setAttribute('aria-modal', 'true');
+    const message = document.createElement('p');
+    message.textContent = `Save changes to ${tabName(tab)} before navigating?`;
+    const actions = document.createElement('div');
+    actions.className = 'unsaved-nav-actions';
+    const cancelBtn = document.createElement('button');
+    cancelBtn.type = 'button'; cancelBtn.dataset.action = 'cancel'; cancelBtn.textContent = 'Cancel';
+    const discardBtn = document.createElement('button');
+    discardBtn.type = 'button'; discardBtn.dataset.action = 'discard'; discardBtn.textContent = 'Discard';
+    const saveBtn = document.createElement('button');
+    saveBtn.type = 'button'; saveBtn.dataset.action = 'save'; saveBtn.textContent = t('toolbar.save');
+    actions.append(cancelBtn, discardBtn, saveBtn);
+    dialog.append(message, actions);
+    backdrop.append(dialog);
+    const finish = (result: 'save' | 'discard' | 'cancel') => {
+      window.removeEventListener('keydown', onKey, true);
+      backdrop.remove();
+      resolve(result);
+    };
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); finish('cancel'); }
+    };
+    cancelBtn.addEventListener('click', () => finish('cancel'));
+    discardBtn.addEventListener('click', () => finish('discard'));
+    saveBtn.addEventListener('click', () => finish('save'));
+    backdrop.addEventListener('click', event => { if (event.target === backdrop) finish('cancel'); });
+    window.addEventListener('keydown', onKey, true);
+    document.body.append(backdrop);
+    saveBtn.focus();
+  });
+  if (choice === 'cancel') return false;
+  if (choice === 'discard') return true;
+  await saveFile();
+  return !tabDirty(tab);
+}
+async function openDocumentLink(destination: string, fragment?: string, mode: LinkOpenMode = 'new-tab') {
   if (!isTauri()) throw new Error('Open file links in the desktop app.');
   const origin = active(), path = origin.path, doc = view.state.doc, record = view.state.field(sourceField), selection = view.state.selection;
-  const resolved = await invoke<{ path: string; origin: string | null }>('resolve_document_link', {
+  const originScroll = view.scrollDOM.scrollTop, originAnchor = view.state.selection.main.head;
+  const resolved = await invoke<{ path: string; origin: string | null; kind?: 'document' | 'external' }>('resolve_document_link', {
     document: origin.id, documentPath: path, destination,
   });
   if (!pageActive || active() !== origin || origin.path !== path || view.state.doc !== doc ||
     view.state.field(sourceField) !== record || view.state.selection !== selection || composing()) return;
+  if (resolved.kind === 'external') {
+    const outcome = await invoke<string>('open_with_default_app', { path: resolved.path });
+    status.textContent = outcome === 'revealed' ? 'File revealed in file manager.' : 'Opened in default app.';
+    return;
+  }
+  const jumpToFragment = () => {
+    if (fragment === undefined) return true;
+    const target = headingTarget(view.state, fragment);
+    if (typeof target === 'string') { status.textContent = target; return false; }
+    view.dispatch({ selection: { anchor: target.position }, effects: EditorView.scrollIntoView(target.position, { y: 'start' }) });
+    return true;
+  };
+  if (mode === 'same-tab') {
+    const originPath = resolved.origin || origin.path;
+    if (resolved.path === resolved.origin) {
+      if (!jumpToFragment()) return;
+      tabHistory(origin).push(
+        { path: originPath, scrollTop: originScroll, anchor: originAnchor },
+        { path: origin.path, fragment, scrollTop: view.scrollDOM.scrollTop, anchor: view.state.selection.main.head },
+      );
+      syncNavButtons();
+      status.textContent = 'File link opened.';
+      return;
+    }
+    const existing = await tabFor(resolved.path);
+    if (existing) {
+      if (!switchTab(existing.id, true)) return;
+      if (!pageActive || composing()) return;
+      if (!jumpToFragment()) return;
+      tabHistory(existing).pushCrossTabReturn(
+        { path: originPath, scrollTop: originScroll, anchor: originAnchor, returnTabId: origin.id },
+        { path: existing.path, fragment, scrollTop: view.scrollDOM.scrollTop, anchor: view.state.selection.main.head },
+      );
+      syncNavButtons();
+      sidebar?.select(existing.path);
+      status.textContent = 'File link opened.';
+      return;
+    }
+    if (!await confirmLeaveUnsaved(origin)) return;
+    if (!pageActive || active() !== origin || composing()) return;
+    await loadIntoTab(origin, resolved.path, false);
+    if (!pageActive || composing()) return;
+    if (fragment !== undefined) {
+      if (!jumpToFragment()) return;
+    } else {
+      view.scrollDOM.scrollTop = 0;
+    }
+    tabHistory(origin).push(
+      { path: originPath, scrollTop: originScroll, anchor: originAnchor },
+      { path: origin.path, fragment, scrollTop: view.scrollDOM.scrollTop, anchor: view.state.selection.main.head },
+    );
+    syncNavButtons();
+    sidebar?.select(origin.path);
+    status.textContent = 'File link opened.';
+    return;
+  }
   const existing = resolved.path === resolved.origin ? origin : await tabFor(resolved.path);
   if (existing) { if (!switchTab(existing.id, true)) return; }
   else {
@@ -1058,12 +1208,64 @@ async function openDocumentLink(destination: string, fragment?: string) {
     if (!loaded || active() !== loaded) return;
   }
   if (!pageActive || composing()) return;
-  if (fragment !== undefined) {
-    const target = headingTarget(view.state, fragment);
-    if (typeof target === 'string') { status.textContent = target; return; }
-    view.dispatch({ selection: { anchor: target.position }, effects: EditorView.scrollIntoView(target.position, { y: 'start' }) });
-  }
+  if (!jumpToFragment()) return;
+  syncNavButtons();
   status.textContent = 'File link opened.';
+}
+async function navigateHistory(direction: 'back' | 'forward') {
+  if (!readMode || !pageActive || composing()) return;
+  const tab = active();
+  const history = tabHistory(tab);
+  const fromScroll = view.scrollDOM.scrollTop, fromAnchor = view.state.selection.main.head, fromPath = tab.path;
+  const target = direction === 'back' ? history.back(fromScroll, fromAnchor) : history.forward(fromScroll, fromAnchor);
+  if (!target) { syncNavButtons(); return; }
+  const restoreViewPosition = (anchor: number, scrollTop: number) => {
+    const clamped = Math.max(0, Math.min(view.state.doc.length, anchor));
+    view.dispatch({ selection: { anchor: clamped } });
+    view.scrollDOM.scrollTop = scrollTop;
+  };
+  try {
+    if (target.returnTabId !== undefined && target.returnTabId !== tab.id) {
+      const destTab = tabs.get(target.returnTabId);
+      if (destTab) {
+        if (!switchTab(destTab.id, true)) { history.rollback(direction); syncNavButtons(); return; }
+        if (direction === 'back') {
+          tabHistory(destTab).ensureForwardTo(
+            { path: destTab.path, scrollTop: view.scrollDOM.scrollTop, anchor: view.state.selection.main.head },
+            { path: fromPath, scrollTop: fromScroll, anchor: fromAnchor, returnTabId: tab.id },
+          );
+        }
+        if (destTab.path === target.path) restoreViewPosition(target.anchor, target.scrollTop);
+        sidebar?.select(destTab.path);
+        syncNavButtons();
+        return;
+      }
+    }
+    if (target.path === tab.path) {
+      restoreViewPosition(target.anchor, target.scrollTop);
+      syncNavButtons();
+      return;
+    }
+    const existing = await tabFor(target.path);
+    if (existing && existing !== tab) {
+      if (!switchTab(existing.id, true)) { history.rollback(direction); syncNavButtons(); return; }
+      restoreViewPosition(target.anchor, target.scrollTop);
+      sidebar?.select(existing.path);
+      syncNavButtons();
+      return;
+    }
+    if (!await confirmLeaveUnsaved(tab)) { history.rollback(direction); syncNavButtons(); return; }
+    if (!pageActive || active() !== tab || composing()) { history.rollback(direction); syncNavButtons(); return; }
+    await loadIntoTab(tab, target.path, false);
+    if (!pageActive || composing()) return;
+    restoreViewPosition(target.anchor, target.scrollTop);
+    sidebar?.select(tab.path);
+    syncNavButtons();
+  } catch (error) {
+    history.rollback(direction);
+    syncNavButtons();
+    throw error;
+  }
 }
 // Compare: the active tab against Git history, in its own tab. The newer side is editable and goes back into the editor.
 async function compareActive() {
@@ -1456,12 +1658,54 @@ document.querySelector('#outline-toggle')!.addEventListener('click', () => {
     hideSidebar();
   }
 });
+backButton.addEventListener('click', () => { void operation(() => navigateHistory('back'), true); });
+forwardButton.addEventListener('click', () => { void operation(() => navigateHistory('forward'), true); });
+const isMacPlatform = /Mac|iPhone|iPad|iPod/.test(navigator.platform);
+const editorEl = document.querySelector<HTMLElement>('#editor')!;
+const onNavKeyDown = (event: KeyboardEvent) => {
+  if (isMacPlatform ? event.key === 'Meta' : event.key === 'Control') {
+    editorEl.classList.add('link-mod-active');
+  }
+  if (!readMode || !pageActive || busy || composing() || isModalOpen() || event.defaultPrevented || event.isComposing) return;
+  const isBack = (event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey && event.key === 'ArrowLeft') ||
+    (isMacPlatform && event.metaKey && !event.ctrlKey && !event.altKey && !event.shiftKey && event.key === '[');
+  const isForward = (event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey && event.key === 'ArrowRight') ||
+    (isMacPlatform && event.metaKey && !event.ctrlKey && !event.altKey && !event.shiftKey && event.key === ']');
+  if (isBack) { event.preventDefault(); void operation(() => navigateHistory('back'), true); }
+  else if (isForward) { event.preventDefault(); void operation(() => navigateHistory('forward'), true); }
+};
+const onNavKeyUp = (event: KeyboardEvent) => {
+  if (isMacPlatform ? event.key === 'Meta' : event.key === 'Control') {
+    editorEl.classList.remove('link-mod-active');
+  }
+};
+const onNavBlur = () => { editorEl.classList.remove('link-mod-active'); };
+const onNavMouseDown = (event: MouseEvent) => {
+  if (readMode && (event.button === 3 || event.button === 4)) event.preventDefault();
+};
+const onNavMouseUp = (event: MouseEvent) => {
+  if (!readMode || !pageActive || busy || composing() || isModalOpen()) return;
+  if (event.button === 3) { event.preventDefault(); void operation(() => navigateHistory('back'), true); }
+  else if (event.button === 4) { event.preventDefault(); void operation(() => navigateHistory('forward'), true); }
+};
+window.addEventListener('keydown', onNavKeyDown);
+window.addEventListener('keyup', onNavKeyUp);
+window.addEventListener('blur', onNavBlur);
+window.addEventListener('mousedown', onNavMouseDown);
+window.addEventListener('mouseup', onNavMouseUp);
+window.addEventListener('pagehide', () => {
+  window.removeEventListener('keydown', onNavKeyDown);
+  window.removeEventListener('keyup', onNavKeyUp);
+  window.removeEventListener('blur', onNavBlur);
+  window.removeEventListener('mousedown', onNavMouseDown);
+  window.removeEventListener('mouseup', onNavMouseUp);
+}, { once: true });
 readButton.addEventListener('click', () => {
   if (composing()) { status.textContent = 'Finish text input, then change read mode.'; return; }
   readMode = !readMode;
   readButton.setAttribute('aria-pressed', String(readMode));
   document.querySelector('#editor')!.classList.toggle('read-mode', readMode);
-  applyLock(); syncMenuChecks();
+  applyLock(); syncMenuChecks(); syncNavButtons();
   status.textContent = readMode ? t('toolbar.read_mode_on') : '';
 });
 document.querySelector('#source')!.addEventListener('click', () => {

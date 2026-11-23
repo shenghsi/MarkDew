@@ -9,27 +9,54 @@ import { localLink } from './local-links';
 
 export type LinkTarget = { kind: 'heading'; position: number } | { kind: 'web'; url: string } |
   { kind: 'file'; destination: string; fragment?: string };
+export type LinkOpenMode = 'new-tab' | 'same-tab';
+export interface LinkNavigationOptions {
+  isReadMode?: () => boolean;
+  onHeading?: (position: number, origin: { anchor: number; scrollTop: number }) => void;
+}
 
-// Return a source target, an explicit failure, or undefined outside a link.
-export function linkTarget(state: EditorState, position: number): LinkTarget | string | undefined {
+function resolveLinkNode(tree: ReturnType<typeof ensureSyntaxTree>, position: number) {
+  if (!tree) return null;
+  for (const side of [1, -1] as const) {
+    let node = tree.resolveInner(position, side);
+    while (!['Link', 'Autolink'].includes(node.name) && node.parent) node = node.parent;
+    if (['Link', 'Autolink'].includes(node.name)) return node;
+  }
+  return null;
+}
+
+function linkInfoAt(state: EditorState, position: number, checkSelection: boolean): { target: LinkTarget; rawDestination: string } | string | undefined {
   const selection = state.selection;
-  if (selection.ranges.length !== 1) return 'Use one selection to follow a heading link.';
+  if (checkSelection && selection.ranges.length !== 1) return 'Use one selection to follow a heading link.';
   const tree = ensureSyntaxTree(state, state.doc.length, 50);
   if (!tree) return 'Wait for Markdown parsing, then follow the heading link.';
-  let node = tree.resolveInner(position, 1);
-  while (!['Link', 'Autolink'].includes(node.name) && node.parent) node = node.parent;
-  if (!['Link', 'Autolink'].includes(node.name)) return;
+  const node = resolveLinkNode(tree, position);
+  if (!node) return;
   const range = { from: node.from, to: node.to };
   for (let parent = node.parent; parent; parent = parent.parent)
     if (['FencedCode', 'CodeBlock', 'HTMLBlock', 'Table', 'Frontmatter', 'Image'].includes(parent.name)) return;
   if (footnotes(state).definitions.some(note => overlaps(note, range))) return;
-  if (!selection.main.empty && (selection.main.from < node.from || selection.main.to > node.to))
+  if (checkSelection && !selection.main.empty && (selection.main.from < node.from || selection.main.to > node.to))
     return 'Keep the selection inside one heading link.';
   const bodyFrom = tree.topNode.getChild('Frontmatter')?.to || 0;
   const environment = documentImageEnvironment(state.doc, bodyFrom);
   const destination = environment.links?.get(`${node.from - bodyFrom}:${node.to - bodyFrom}`);
   if (destination === undefined) return 'This link has no accepted Markdown destination.';
-  return destinationTarget(state, destination);
+  const target = destinationTarget(state, destination);
+  if (typeof target === 'string') return target;
+  return { target, rawDestination: destination };
+}
+
+// Return a source target, an explicit failure, or undefined outside a link.
+export function linkTarget(state: EditorState, position: number, checkSelection = true): LinkTarget | string | undefined {
+  const info = linkInfoAt(state, position, checkSelection);
+  if (!info || typeof info === 'string') return info;
+  return info.target;
+}
+
+export function linkDestinationAt(state: EditorState, position: number): { target: LinkTarget; rawDestination: string } | undefined {
+  const info = linkInfoAt(state, position, false);
+  return info && typeof info !== 'string' ? info : undefined;
 }
 
 // Resolve one accepted Markdown destination to a heading, web, or file target.
@@ -63,26 +90,32 @@ export function headingTarget(state: EditorState, fragment: string): { kind: 'he
 
 export function followLink(view: EditorView, position: number, report: (message: string) => void,
   blocked: () => string | null = () => null, openWeb?: (url: string) => void,
-  openFile?: (destination: string, fragment?: string) => void) {
+  openFile?: (destination: string, fragment?: string, mode?: LinkOpenMode) => void,
+  mode: LinkOpenMode = 'new-tab', checkSelection = true,
+  onHeading?: (position: number, origin: { anchor: number; scrollTop: number }) => void) {
   const reason = blocked() || (view.compositionStarted || tableComposing(view) ? 'Finish text input, then follow the heading link.' :
     view.state.field(tableCellField, false) ? 'End the table cell edit, then follow the heading link.' : null);
   if (reason) { report(reason); return true; }
-  return followTarget(view, linkTarget(view.state, position), report, openWeb, openFile);
+  return followTarget(view, linkTarget(view.state, position, checkSelection), report, openWeb, openFile, mode, onHeading);
 }
 
 // Follow a destination read from a rendered table cell link.
 export function followDestination(view: EditorView, destination: string, report: (message: string) => void,
   blocked: () => string | null = () => null, openWeb?: (url: string) => void,
-  openFile?: (destination: string, fragment?: string) => void) {
+  openFile?: (destination: string, fragment?: string, mode?: LinkOpenMode) => void,
+  mode: LinkOpenMode = 'new-tab',
+  onHeading?: (position: number, origin: { anchor: number; scrollTop: number }) => void) {
   const reason = blocked() || (view.compositionStarted || tableComposing(view) ? 'Finish text input, then follow the link.' : null);
   if (reason) { report(reason); return true; }
   // A Ctrl/Cmd-click on a rendered link ends any open cell edit first.
   if (view.state.field(tableCellField, false)) endTableEdit(view);
-  return followTarget(view, destinationTarget(view.state, destination), report, openWeb, openFile);
+  return followTarget(view, destinationTarget(view.state, destination), report, openWeb, openFile, mode, onHeading);
 }
 
-function followTarget(view: EditorView, target: LinkTarget | string | undefined, report: (message: string) => void,
-  openWeb?: (url: string) => void, openFile?: (destination: string, fragment?: string) => void) {
+export function followTarget(view: EditorView, target: LinkTarget | string | undefined, report: (message: string) => void,
+  openWeb?: (url: string) => void, openFile?: (destination: string, fragment?: string, mode?: LinkOpenMode) => void,
+  mode: LinkOpenMode = 'new-tab',
+  onHeading?: (position: number, origin: { anchor: number; scrollTop: number }) => void) {
   if (target === undefined) return false;
   if (typeof target === 'string') { report(target); return true; }
   if (target.kind === 'web') {
@@ -90,30 +123,52 @@ function followTarget(view: EditorView, target: LinkTarget | string | undefined,
     return true;
   }
   if (target.kind === 'file') {
-    if (openFile) openFile(target.destination, target.fragment); else report('Open file links in the desktop app.');
+    if (openFile) openFile(target.destination, target.fragment, mode); else report('Open file links in the desktop app.');
     return true;
   }
+  const origin = { anchor: view.state.selection.main.head, scrollTop: view.scrollDOM.scrollTop };
   view.dispatch({ selection: { anchor: target.position }, effects: EditorView.scrollIntoView(target.position, { y: 'start' }) });
+  onHeading?.(target.position, origin);
   view.focus(); report('Moved to the heading link target.'); return true;
 }
 
 export function linkNavigation(report: (message: string) => void, blocked: () => string | null = () => null,
-  openWeb?: (url: string) => void, openFile?: (destination: string, fragment?: string) => void) {
+  openWeb?: (url: string) => void, openFile?: (destination: string, fragment?: string, mode?: LinkOpenMode) => void,
+  options: LinkNavigationOptions = {}) {
   const mod = (event: MouseEvent | KeyboardEvent) => /Mac|iPhone|iPad|iPod/.test(navigator.platform) ? event.metaKey && !event.ctrlKey : event.ctrlKey && !event.metaKey;
+  const posForEvent = (event: MouseEvent, view: EditorView) => {
+    if (!(event.target instanceof Element) || !view.contentDOM.contains(event.target)) return null;
+    if (event.target.closest('.preview-widget')) return null;
+    return view.posAtCoords({ x: event.clientX, y: event.clientY });
+  };
   const handlers = EditorView.domEventHandlers({ keydown(event, view) {
       if (event.defaultPrevented || event.key !== 'Enter' || !mod(event) || event.altKey || event.shiftKey || event.isComposing) return false;
       if (event.repeat) { event.preventDefault(); return true; }
-      const result = followLink(view, view.state.selection.main.head, report, blocked, openWeb, openFile);
+      const mode: LinkOpenMode = options.isReadMode?.() ? 'same-tab' : 'new-tab';
+      const result = followLink(view, view.state.selection.main.head, report, blocked, openWeb, openFile, mode, true, options.onHeading);
       if (result) event.preventDefault(); return result;
     }, mousedown(event, view) {
-      if (event.defaultPrevented || event.button !== 0 || !mod(event) || event.altKey || event.shiftKey ||
-        !(event.target instanceof Element) || !view.contentDOM.contains(event.target)) return false;
-      if (event.target.closest('.preview-widget')) return false;
-      const position = view.posAtCoords({ x: event.clientX, y: event.clientY });
+      if (event.defaultPrevented || event.button !== 0 || !mod(event) || event.altKey || event.shiftKey) return false;
+      const position = posForEvent(event, view);
       if (position === null) return false;
-      const result = followLink(view, position, report, blocked, openWeb, openFile);
+      const result = followLink(view, position, report, blocked, openWeb, openFile, 'new-tab', false, options.onHeading);
+      if (result) event.preventDefault(); return result;
+    }, click(event, view) {
+      if (event.defaultPrevented || !options.isReadMode?.() || event.button !== 0 || mod(event) || event.altKey || event.shiftKey) return false;
+      const selection = window.getSelection();
+      if (selection && !selection.isCollapsed && selection.toString().length > 0) return false;
+      const position = posForEvent(event, view);
+      if (position === null) return false;
+      const result = followLink(view, position, report, blocked, openWeb, openFile, 'same-tab', false, options.onHeading);
+      if (result) event.preventDefault(); return result;
+    }, auxclick(event, view) {
+      if (event.defaultPrevented || !options.isReadMode?.() || event.button !== 1) return false;
+      const position = posForEvent(event, view);
+      if (position === null) return false;
+      const result = followLink(view, position, report, blocked, openWeb, openFile, 'new-tab', false, options.onHeading);
       if (result) event.preventDefault(); return result;
     } });
   // Preview widgets ignore editor events, so table cells call this through the facet.
-  return [handlers, tableLinkFollower.of((view, destination) => followDestination(view, destination, report, blocked, openWeb, openFile))];
+  return [handlers, tableLinkFollower.of((view, destination, mode) =>
+    followDestination(view, destination, report, blocked, openWeb, openFile, mode ?? 'new-tab', options.onHeading))];
 }

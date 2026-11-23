@@ -6,6 +6,11 @@ use std::{path::PathBuf, sync::Mutex};
 pub struct Target {
     pub path: String,
     pub origin: Option<String>,
+    pub kind: &'static str,
+}
+
+fn allowed_window(window: &str) -> bool {
+    window == "main" || window.starts_with("window-")
 }
 
 fn markdown(path: &std::path::Path) -> bool {
@@ -52,9 +57,6 @@ fn path(destination: &str, origin: Option<&PathBuf>) -> Result<PathBuf, String> 
         }
     }
     let path = PathBuf::from(decoded.as_ref());
-    if !markdown(&path) {
-        return Err("Use a Markdown or text file link.".into());
-    }
     if path.is_absolute() {
         return Ok(path);
     }
@@ -75,7 +77,7 @@ pub fn resolve(
     expected: &str,
     destination: &str,
 ) -> Result<Target, String> {
-    if window != "main" {
+    if !allowed_window(window) {
         return Err("Open file links from the document window.".into());
     }
     let (origin, generation) = with_document(host, Some(id), |doc| {
@@ -93,15 +95,21 @@ pub fn resolve(
     let path = path(destination, origin.as_ref())?
         .canonicalize()
         .map_err(|error| error.to_string())?;
-    if !markdown(&path) || !path.is_file() {
-        return Err("Use a regular Markdown or text file.".into());
+    if !path.is_file() {
+        return Err("Use a regular file link.".into());
     }
+    let kind = if markdown(&path) {
+        "document"
+    } else {
+        "external"
+    };
     let target = Target {
         path: path.to_str().ok_or("Use a UTF-8 file path.")?.into(),
         origin: origin
             .as_ref()
             .and_then(|path| path.canonicalize().ok())
             .and_then(|path| path.to_str().map(String::from)),
+        kind,
     };
     confirm(host, id, origin, generation, target)
 }
@@ -136,6 +144,7 @@ mod tests {
         let target = || Target {
             path: "target.md".into(),
             origin: None,
+            kind: "document",
         };
         assert!(confirm(&host, 0, origin.clone(), 0, target()).is_ok());
         with_document(&host, Some(0), |doc| {
@@ -178,8 +187,11 @@ mod tests {
         );
         let other = folder.path().join("image.png");
         std::fs::write(&other, "text").unwrap();
-        std::os::unix::fs::symlink(&other, folder.path().join("invalid.md")).unwrap();
-        assert!(resolve(&host, "main", 0, origin.to_str().unwrap(), "invalid.md").is_err());
+        std::os::unix::fs::symlink(&other, folder.path().join("alias-img.md")).unwrap();
+        let resolved_other =
+            resolve(&host, "main", 0, origin.to_str().unwrap(), "alias-img.md").unwrap();
+        assert_eq!(PathBuf::from(resolved_other.path), other.canonicalize().unwrap());
+        assert_eq!(resolved_other.kind, "external");
     }
     #[test]
     fn decoding_and_native_path_rules() {
@@ -188,6 +200,10 @@ mod tests {
         assert_eq!(
             path("%E6%97%A5%20%2520%23.md", Some(&origin)).unwrap(),
             folder.path().join("日 %20#.md")
+        );
+        assert_eq!(
+            path("x.png", Some(&origin)).unwrap(),
+            folder.path().join("x.png")
         );
         for bad in [
             "",
@@ -200,7 +216,6 @@ mod tests {
             "file:///x.md",
             "https://example.com/x.md",
             "//server/x.md",
-            "x.png",
         ] {
             assert!(path(bad, Some(&origin)).is_err(), "{bad}");
         }
@@ -236,10 +251,12 @@ mod tests {
         let expected = origin.to_str().unwrap();
         let result = resolve(&host, "main", 0, expected, "%E6%97%A5%20%2520%23.md").unwrap();
         assert_eq!(PathBuf::from(result.path), target.canonicalize().unwrap());
+        assert_eq!(result.kind, "document");
         assert_eq!(
             PathBuf::from(result.origin.unwrap()),
             origin.canonicalize().unwrap()
         );
+        assert!(resolve(&host, "window-12345-1", 0, expected, "origin.md").is_ok());
         assert!(resolve(&host, "other", 0, expected, "origin.md").is_err());
         assert!(resolve(&host, "main", 99, expected, "origin.md").is_err());
         assert!(resolve(&host, "main", 0, "wrong", "origin.md").is_err());

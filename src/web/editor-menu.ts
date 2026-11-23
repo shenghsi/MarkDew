@@ -7,6 +7,8 @@ import { insertFootnote } from './footnote-commands';
 import { copySelection, cutSelection, deleteSelection, pasteText } from './copy-as';
 import { currentFormat, insertFrontMatter, insertHorizontalLine, insertLinkReference, insertParagraph,
   insertTableOfContents, toggleLines, type LineKind } from './insert-commands';
+import { destinationTarget, linkDestinationAt, type LinkOpenMode, type LinkTarget } from './link-navigation';
+import { isMarkdownDestination } from './local-links';
 import { t } from './i18n';
 
 export interface EditorMenuHost {
@@ -15,6 +17,9 @@ export interface EditorMenuHost {
   openLink: () => void;
   openImage: () => void;
   compare?: () => void;
+  isReadMode?: () => boolean;
+  followLinkTarget?: (target: LinkTarget, mode: LinkOpenMode) => void;
+  copyText?: (text: string) => void;
 }
 
 const svg = (body: string) => `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${body}</svg>`;
@@ -98,9 +103,61 @@ export function editorMenu(view: EditorView, host: EditorMenuHost): () => void {
       ] },
     ];
   };
+  const buildReadMenu = (event: MouseEvent): MenuEntry[] => {
+    const entries: MenuEntry[] = [];
+    const targetEl = event.target instanceof Element ? event.target : null;
+    const tableLink = targetEl?.closest<HTMLElement>('[data-link-destination]');
+    let linkInfo: { target: LinkTarget; rawDestination: string } | undefined;
+    if (tableLink?.dataset.linkDestination) {
+      const parsed = destinationTarget(view.state, tableLink.dataset.linkDestination);
+      if (typeof parsed !== 'string') linkInfo = { target: parsed, rawDestination: tableLink.dataset.linkDestination };
+    } else {
+      const position = view.posAtCoords({ x: event.clientX, y: event.clientY });
+      if (position !== null) linkInfo = linkDestinationAt(view.state, position);
+    }
+    const copyLink = (text: string) => () => {
+      if (host.copyText) { host.copyText(text); return; }
+      void navigator.clipboard?.writeText(text).catch(() => {});
+    };
+    if (linkInfo && host.followLinkTarget) {
+      const { target, rawDestination } = linkInfo;
+      if (target.kind === 'file') {
+        if (isMarkdownDestination(target.destination)) {
+          entries.push(
+            { type: 'item', label: t('menu.open_link'), run: () => host.followLinkTarget!(target, 'same-tab') },
+            { type: 'item', label: t('menu.open_in_new_tab'), run: () => host.followLinkTarget!(target, 'new-tab') },
+          );
+        } else {
+          entries.push({ type: 'item', label: t('menu.open_default_app'), run: () => host.followLinkTarget!(target, 'new-tab') });
+        }
+      } else if (target.kind === 'web') {
+        entries.push({ type: 'item', label: t('menu.open_link'), run: () => host.followLinkTarget!(target, 'new-tab') });
+      } else {
+        entries.push({ type: 'item', label: t('menu.go_to_heading'), run: () => host.followLinkTarget!(target, 'same-tab') });
+      }
+      entries.push({ type: 'item', label: t('menu.copy_link'), run: copyLink(target.kind === 'web' ? target.url : rawDestination) });
+    }
+    const domSelection = window.getSelection()?.toString() || '';
+    const hasSelection = !view.state.selection.main.empty || domSelection.length > 0;
+    if (entries.length > 0) entries.push({ type: 'separator' });
+    entries.push({
+      type: 'item',
+      label: t('menu.copy'),
+      disabled: !hasSelection,
+      run: () => {
+        if (!view.state.selection.main.empty) reportReason(copySelection(view, 'raw'));
+        else if (domSelection) copyLink(domSelection)();
+      },
+    });
+    return entries;
+  };
   const open = (event: MouseEvent) => {
     if (event.defaultPrevented || !host.allowed()) return;
     event.preventDefault(); close?.();
+    if (host.isReadMode?.()) {
+      close = showMenu(buildReadMenu(event), event.clientX, event.clientY, () => { close = undefined; }, t('menu.label'));
+      return;
+    }
     // A right click outside the selection moves the caret there, as Typora does.
     const position = view.posAtCoords({ x: event.clientX, y: event.clientY });
     const { from, to } = view.state.selection.main;

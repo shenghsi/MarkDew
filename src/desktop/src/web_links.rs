@@ -3,7 +3,7 @@ use tauri::Url;
 const LIMIT: usize = 8192;
 
 pub fn validate(window: &str, source: &str) -> Result<String, String> {
-    if window != "main" {
+    if window != "main" && !window.starts_with("window-") {
         return Err("Only the document window can open a web link.".into());
     }
     let scheme = source.split_once("://").map(|(scheme, _)| scheme);
@@ -42,6 +42,7 @@ mod tests {
 
     #[test]
     fn rejects_other_windows() {
+        assert!(validate("window-12345-1", "https://example.com").is_ok());
         assert!(validate("other", "https://example.com").is_err());
     }
 

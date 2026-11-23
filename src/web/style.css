@@ -738,6 +738,13 @@ button[aria-pressed="true"], #outline .outline-content button:hover, #outline:no
 #app { overflow: hidden; }
 #app .document-bar { display: flex; align-items: stretch; min-height: 38px; height: 38px; padding: 0; border-bottom: 1px solid var(--border); flex-shrink: 0; -webkit-app-region: drag; background: var(--surface); position: relative; }
 .document-pane-controls { display: flex; align-items: center; flex-shrink: 0; width: 0; min-width: 0; height: 100%; box-sizing: border-box; -webkit-app-region: drag; }
+.document-nav-controls { display: flex; align-items: center; gap: 2px; flex-shrink: 0; padding: 0 4px 0 6px; -webkit-app-region: no-drag; }
+.document-nav-controls[hidden] { display: none; }
+#app .document-bar #nav-back, #app .document-bar #nav-forward { font-size: 0; width: 26px; height: 26px; padding: 0; line-height: 0; border: 1px solid transparent; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; -webkit-app-region: no-drag; }
+#app .document-bar #nav-back::before, #app .document-bar #nav-forward::before { content: ''; display: block; width: 14px; height: 14px; background-color: currentColor; -webkit-mask-size: contain; mask-size: contain; }
+#app .document-bar #nav-back::before { -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M10.5 3.5L6 8l4.5 4.5' fill='none' stroke='black' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat center; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M10.5 3.5L6 8l4.5 4.5' fill='none' stroke='black' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat center; }
+#app .document-bar #nav-forward::before { -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M5.5 3.5L10 8l-4.5 4.5' fill='none' stroke='black' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat center; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M5.5 3.5L10 8l-4.5 4.5' fill='none' stroke='black' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat center; }
+#app .document-bar #nav-back:disabled, #app .document-bar #nav-forward:disabled { opacity: 0.35; cursor: default; background: transparent; color: var(--muted); }
 :root[data-platform="macos"] #app .document-pane-controls { width: 80px; min-width: 80px; }
 #app[data-sidebar="open"] .document-pane-controls,
 #app:has(#files:not([hidden])) .document-pane-controls,
@@ -1657,6 +1664,61 @@ body.no-document #word-count, body.no-document #document-title { display: none; 
 #editor.read-mode .cm-change-ruler,
 .read-mode .cm-change-ruler {
   display: none !important;
+}
+#editor.read-mode .md-link,
+#editor.read-mode [data-link-destination],
+#editor.link-mod-active .md-link,
+#editor.link-mod-active [data-link-destination] {
+  cursor: pointer;
+}
+#editor.read-mode .md-link:hover,
+#editor.read-mode [data-link-destination]:hover,
+#editor.link-mod-active .md-link:hover,
+#editor.link-mod-active [data-link-destination]:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+}
+.unsaved-nav-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1200;
+}
+.unsaved-nav-dialog {
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 20px;
+  width: min(380px, calc(100vw - 32px));
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.22);
+}
+.unsaved-nav-dialog p {
+  margin: 0 0 16px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.unsaved-nav-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.unsaved-nav-actions button {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 13px;
+  cursor: pointer;
+}
+.unsaved-nav-actions button[data-action="save"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
 }
 .cm-change-ruler-mark {
   position: absolute;

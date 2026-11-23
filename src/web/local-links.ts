@@ -1,3 +1,12 @@
+export function isMarkdownDestination(destination: string): boolean {
+  try {
+    const decoded = decodeURIComponent(destination);
+    return /\.(md|markdown|txt)$/i.test(decoded);
+  } catch {
+    return false;
+  }
+}
+
 // Markdown destinations are decoded here for validation only. The host receives
 // the original spelling and decodes it once using native path rules.
 export function localLink(destination: string): { destination: string; fragment?: string } {
@@ -11,6 +20,5 @@ export function localLink(destination: string): { destination: string; fragment?
   if (/\p{Cc}/u.test(decoded) || (fragment !== undefined && /\p{Cc}/u.test(fragment)) || decoded.startsWith('//') ||
     (/^[^/\\]*:/.test(decoded) && !/^[a-z]:[/\\]/i.test(decoded)))
     throw new Error('Use a local file path, not a URL.');
-  if (!/\.(md|markdown|txt)$/i.test(decoded)) throw new Error('Use a Markdown or text file link.');
   return { destination: path, ...(fragment === undefined ? {} : { fragment }) };
 }

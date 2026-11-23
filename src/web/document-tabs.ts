@@ -3,6 +3,7 @@ import { EditorView } from '@codemirror/view';
 import { endTableEdit } from './table';
 import { savedSource, sourceField } from './source';
 import { RecoveryQueue } from './recovery';
+import { TabHistory } from './tab-history';
 
 export interface DocumentTab {
   id: number;
@@ -17,6 +18,7 @@ export interface DocumentTab {
   scroll?: ReturnType<EditorView['scrollSnapshot']>;
   recovery?: RecoveryQueue;
   recoverySession?: string;
+  history?: TabHistory;
 }
 
 export const tabSource = (tab: DocumentTab) => savedSource(tab.state.field(sourceField));

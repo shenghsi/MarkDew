@@ -42,7 +42,7 @@ function mapCell(active: ActiveCell, changes: ChangeDesc): ActiveCell {
 }
 export const tableCellEffect = StateEffect.define<ActiveCell | null>({ map: (active, changes) => active ? mapCell(active, changes) : null });
 export const tableSaveCommand = Facet.define<() => void, (() => void) | undefined>({ combine: values => values[0] });
-export const tableLinkFollower = Facet.define<(view: EditorView, destination: string) => boolean, ((view: EditorView, destination: string) => boolean) | undefined>({ combine: values => values[0] });
+export const tableLinkFollower = Facet.define<(view: EditorView, destination: string, mode?: 'new-tab' | 'same-tab') => boolean, ((view: EditorView, destination: string, mode?: 'new-tab' | 'same-tab') => boolean) | undefined>({ combine: values => values[0] });
 export const tableFindCommand = Facet.define<() => void, (() => void) | undefined>({ combine: values => values[0] });
 export const tableCellField: StateField<ActiveCell | null> = StateField.define<ActiveCell | null>({
   create: () => null,
@@ -530,12 +530,21 @@ export class TableEditor {
     dom.addEventListener('mousedown', event => {
       const cell = (event.target as HTMLElement).closest('th, td');
       if (!cell) return;
-      // Ctrl/Cmd-click on a rendered link follows it.
+      // Ctrl/Cmd-click on a rendered link follows it in a new tab; in Read Mode, plain click opens in same tab.
       const mod = /Mac|iPhone|iPad|iPod/.test(navigator.platform) ? event.metaKey && !event.ctrlKey : event.ctrlKey && !event.metaKey;
       const link = (event.target as HTMLElement).closest<HTMLElement>('[data-link-destination]');
-      if (mod && event.button === 0 && link && !cell.classList.contains('editing-cell') && !event.altKey && !event.shiftKey) {
+      if (link && !cell.classList.contains('editing-cell') && !event.altKey && !event.shiftKey) {
+        const readOnly = this.outer.state.readOnly;
         const follow = this.outer.state.facet(tableLinkFollower);
-        if (follow) { event.stopPropagation(); event.preventDefault(); follow(this.outer, link.dataset.linkDestination!); return; }
+        if (follow && mod && event.button === 0) {
+          event.stopPropagation(); event.preventDefault(); follow(this.outer, link.dataset.linkDestination!, 'new-tab'); return;
+        }
+        if (follow && readOnly && event.button === 1) {
+          event.stopPropagation(); event.preventDefault(); follow(this.outer, link.dataset.linkDestination!, 'new-tab'); return;
+        }
+        if (follow && readOnly && !mod && event.button === 0) {
+          event.stopPropagation(); event.preventDefault(); follow(this.outer, link.dataset.linkDestination!, 'same-tab'); return;
+        }
       }
       event.stopPropagation();
       if (this.child && this.child.dom.contains(event.target as Node)) return;
@@ -551,6 +560,7 @@ export class TableEditor {
       }
     });
     dom.addEventListener('contextmenu', event => {
+      if (this.outer.state.readOnly) return;
       const cell = (event.target as HTMLElement).closest('th, td');
       if (!cell) return;
       event.preventDefault();
