@@ -1,7 +1,11 @@
-# MarkDew v1.7.22
+# MarkDew v1.7.23
 
 ## What is new
 
+- Fixed: Read Mode and Source Code Mode menu checkmarks now stay accurately synced with the active window state.
+- Fixed: text inside tables and preview widgets can now be selected normally in Read Mode.
+- Fixed: Back and Forward navigation in Read Mode now accurately remembers and restores each file's previous scroll position.
+- New: shortcut keys are now displayed on native dropdown menu items (`File`, `Edit`, `Paragraph`, `Format`, and `View`).
 - Fixed: clicking headings or formatted Markdown elements in Read Mode no longer reveals raw Markdown syntax (`#`, `**`, etc.) or activates the editor caret.
 - New: `Ctrl+[` / `Ctrl+]` (and `⌘[` / `⌘]` on macOS) navigate Back / Forward in Read Mode alongside `Alt+←` / `Alt+→` and mouse side buttons.
 - New: customizable **Table text size** and **Code block text size** in Settings > Appearance > Editor (scaled with Writing Size).

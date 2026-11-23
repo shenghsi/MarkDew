@@ -546,6 +546,8 @@ export class TableEditor {
           event.stopPropagation(); event.preventDefault(); follow(this.outer, link.dataset.linkDestination!, 'same-tab'); return;
         }
       }
+      // In Read Mode, allow native browser text selection inside table cells.
+      if (this.outer.state.readOnly) return;
       event.stopPropagation();
       if (this.child && this.child.dom.contains(event.target as Node)) return;
       event.preventDefault();

@@ -31,7 +31,7 @@ import { quickFiles, quickOpen } from './quick-open';
 import { linkControls } from './link-controls';
 import { linkVersion } from './links';
 import { followTarget, headingTarget, linkNavigation, type LinkOpenMode, type LinkTarget } from './link-navigation';
-import { TabHistory } from './tab-history';
+import { TabHistory, type HistoryPosition, type TabHistoryEntry } from './tab-history';
 import { textDirection } from './text-direction';
 import { webLinkOpener } from './web-links';
 import { themeControls, setTheme, ThemeChoice } from './theme';
@@ -208,8 +208,8 @@ let tabsReady = false;
 function syncMenuChecks() {
   if (!isTauri() || !tabsReady) return;
   void Promise.resolve(invoke('update_menu_state', {
-    source_mode: active()?.sourceMode ?? false,
-    read_mode: readMode,
+    sourceMode: active()?.sourceMode ?? false,
+    readMode,
     outline: !outlinePane.hidden,
     language: getCurrentLanguage(),
   })).catch(() => {});
@@ -1081,13 +1081,70 @@ function syncNavButtons() {
   backButton.disabled = !history.canBack();
   forwardButton.disabled = !history.canForward();
 }
+function captureHistoryPosition(): HistoryPosition {
+  const scrollTop = view.scrollDOM.scrollTop;
+  const anchor = view.state.selection.main.head;
+  let topPos: number | undefined;
+  let topOffset: number | undefined;
+  try {
+    if (view.scrollDOM.clientHeight > 0 && view.contentHeight > 0) {
+      const topBlock = view.lineBlockAtHeight(scrollTop + 8);
+      topPos = topBlock.from;
+      topOffset = scrollTop - topBlock.top;
+    }
+  } catch {
+    // Fallback to raw scrollTop when viewport is unmeasured.
+  }
+  return { scrollTop, anchor, topPos, topOffset };
+}
+function restoreHistoryPosition(entry: Pick<TabHistoryEntry, 'anchor' | 'scrollTop' | 'topPos' | 'topOffset'>) {
+  const capturedTab = active();
+  const capturedDoc = view.state.doc;
+  const clampedAnchor = Math.max(0, Math.min(capturedDoc.length, entry.anchor));
+  const clampedTopPos = entry.topPos !== undefined ? Math.max(0, Math.min(capturedDoc.length, entry.topPos)) : undefined;
+  // Scroll the target block into view first so CodeMirror mounts and measures that viewport region.
+  view.dispatch({
+    selection: { anchor: clampedAnchor },
+    ...(clampedTopPos !== undefined ? { effects: EditorView.scrollIntoView(clampedTopPos, { y: 'start' }) } : {}),
+  });
+  const applyScroll = () => {
+    if (!pageActive || active() !== capturedTab || view.state.doc !== capturedDoc) return;
+    if (clampedTopPos !== undefined && entry.topOffset !== undefined && view.scrollDOM.clientHeight > 0 && view.contentHeight > 0) {
+      try {
+        const block = view.lineBlockAt(clampedTopPos);
+        view.scrollDOM.scrollTop = Math.max(0, block.top + entry.topOffset);
+        return;
+      } catch { /* Fall through to raw scrollTop. */ }
+    }
+    view.scrollDOM.scrollTop = entry.scrollTop;
+  };
+  applyScroll();
+  view.requestMeasure({
+    read: () => {
+      if (clampedTopPos === undefined || entry.topOffset === undefined || view.scrollDOM.clientHeight <= 0 || view.contentHeight <= 0) {
+        return null;
+      }
+      try { return view.lineBlockAt(clampedTopPos).top; } catch { return null; }
+    },
+    write: top => {
+      if (!pageActive || active() !== capturedTab || view.state.doc !== capturedDoc) return;
+      if (top !== null && entry.topOffset !== undefined) {
+        view.scrollDOM.scrollTop = Math.max(0, top + entry.topOffset);
+      } else {
+        view.scrollDOM.scrollTop = entry.scrollTop;
+      }
+    },
+  });
+  requestAnimationFrame(applyScroll);
+}
 function recordHeadingJump(position: number, origin: { anchor: number; scrollTop: number }) {
   if (!readMode || !tabsReady) return;
   const tab = active();
   if (!tab.path) return;
+  const dest = captureHistoryPosition();
   tabHistory(tab).push(
     { path: tab.path, scrollTop: origin.scrollTop, anchor: origin.anchor },
-    { path: tab.path, scrollTop: view.scrollDOM.scrollTop, anchor: position },
+    { path: tab.path, ...dest, anchor: position },
   );
   syncNavButtons();
 }
@@ -1139,7 +1196,7 @@ async function confirmLeaveUnsaved(tab: DocumentTab = active()): Promise<boolean
 async function openDocumentLink(destination: string, fragment?: string, mode: LinkOpenMode = 'new-tab') {
   if (!isTauri()) throw new Error('Open file links in the desktop app.');
   const origin = active(), path = origin.path, doc = view.state.doc, record = view.state.field(sourceField), selection = view.state.selection;
-  const originScroll = view.scrollDOM.scrollTop, originAnchor = view.state.selection.main.head;
+  const originPos = captureHistoryPosition();
   const resolved = await invoke<{ path: string; origin: string | null; kind?: 'document' | 'external' }>('resolve_document_link', {
     document: origin.id, documentPath: path, destination,
   });
@@ -1162,8 +1219,8 @@ async function openDocumentLink(destination: string, fragment?: string, mode: Li
     if (resolved.path === resolved.origin) {
       if (!jumpToFragment()) return;
       tabHistory(origin).push(
-        { path: originPath, scrollTop: originScroll, anchor: originAnchor },
-        { path: origin.path, fragment, scrollTop: view.scrollDOM.scrollTop, anchor: view.state.selection.main.head },
+        { path: originPath, ...originPos },
+        { path: origin.path, fragment, ...captureHistoryPosition() },
       );
       syncNavButtons();
       status.textContent = 'File link opened.';
@@ -1175,8 +1232,8 @@ async function openDocumentLink(destination: string, fragment?: string, mode: Li
       if (!pageActive || composing()) return;
       if (!jumpToFragment()) return;
       tabHistory(existing).pushCrossTabReturn(
-        { path: originPath, scrollTop: originScroll, anchor: originAnchor, returnTabId: origin.id },
-        { path: existing.path, fragment, scrollTop: view.scrollDOM.scrollTop, anchor: view.state.selection.main.head },
+        { path: originPath, ...originPos, returnTabId: origin.id },
+        { path: existing.path, fragment, ...captureHistoryPosition() },
       );
       syncNavButtons();
       sidebar?.select(existing.path);
@@ -1193,8 +1250,8 @@ async function openDocumentLink(destination: string, fragment?: string, mode: Li
       view.scrollDOM.scrollTop = 0;
     }
     tabHistory(origin).push(
-      { path: originPath, scrollTop: originScroll, anchor: originAnchor },
-      { path: origin.path, fragment, scrollTop: view.scrollDOM.scrollTop, anchor: view.state.selection.main.head },
+      { path: originPath, ...originPos },
+      { path: origin.path, fragment, ...captureHistoryPosition() },
     );
     syncNavButtons();
     sidebar?.select(origin.path);
@@ -1216,14 +1273,11 @@ async function navigateHistory(direction: 'back' | 'forward') {
   if (!readMode || !pageActive || composing()) return;
   const tab = active();
   const history = tabHistory(tab);
-  const fromScroll = view.scrollDOM.scrollTop, fromAnchor = view.state.selection.main.head, fromPath = tab.path;
-  const target = direction === 'back' ? history.back(fromScroll, fromAnchor) : history.forward(fromScroll, fromAnchor);
+  const fromPos = captureHistoryPosition(), fromPath = tab.path;
+  const target = direction === 'back'
+    ? history.back(fromPos.scrollTop, fromPos.anchor, fromPos.topPos, fromPos.topOffset)
+    : history.forward(fromPos.scrollTop, fromPos.anchor, fromPos.topPos, fromPos.topOffset);
   if (!target) { syncNavButtons(); return; }
-  const restoreViewPosition = (anchor: number, scrollTop: number) => {
-    const clamped = Math.max(0, Math.min(view.state.doc.length, anchor));
-    view.dispatch({ selection: { anchor: clamped } });
-    view.scrollDOM.scrollTop = scrollTop;
-  };
   try {
     if (target.returnTabId !== undefined && target.returnTabId !== tab.id) {
       const destTab = tabs.get(target.returnTabId);
@@ -1231,25 +1285,25 @@ async function navigateHistory(direction: 'back' | 'forward') {
         if (!switchTab(destTab.id, true)) { history.rollback(direction); syncNavButtons(); return; }
         if (direction === 'back') {
           tabHistory(destTab).ensureForwardTo(
-            { path: destTab.path, scrollTop: view.scrollDOM.scrollTop, anchor: view.state.selection.main.head },
-            { path: fromPath, scrollTop: fromScroll, anchor: fromAnchor, returnTabId: tab.id },
+            { path: destTab.path, ...captureHistoryPosition() },
+            { path: fromPath, ...fromPos, returnTabId: tab.id },
           );
         }
-        if (destTab.path === target.path) restoreViewPosition(target.anchor, target.scrollTop);
+        if (destTab.path === target.path) restoreHistoryPosition(target);
         sidebar?.select(destTab.path);
         syncNavButtons();
         return;
       }
     }
     if (target.path === tab.path) {
-      restoreViewPosition(target.anchor, target.scrollTop);
+      restoreHistoryPosition(target);
       syncNavButtons();
       return;
     }
     const existing = await tabFor(target.path);
     if (existing && existing !== tab) {
       if (!switchTab(existing.id, true)) { history.rollback(direction); syncNavButtons(); return; }
-      restoreViewPosition(target.anchor, target.scrollTop);
+      restoreHistoryPosition(target);
       sidebar?.select(existing.path);
       syncNavButtons();
       return;
@@ -1258,7 +1312,7 @@ async function navigateHistory(direction: 'back' | 'forward') {
     if (!pageActive || active() !== tab || composing()) { history.rollback(direction); syncNavButtons(); return; }
     await loadIntoTab(tab, target.path, false);
     if (!pageActive || composing()) return;
-    restoreViewPosition(target.anchor, target.scrollTop);
+    restoreHistoryPosition(target);
     sidebar?.select(tab.path);
     syncNavButtons();
   } catch (error) {
@@ -1582,6 +1636,14 @@ if (isTauri()) {
       return true;
     }
     if (command === 'find') {
+      if (isModalOpen()) {
+        const settingsSearch = document.querySelector<HTMLInputElement>('.settings-search-input');
+        if (settingsSearch && settingsSearch.isConnected && !settingsSearch.disabled) {
+          settingsSearch.focus();
+          settingsSearch.select();
+        }
+        return true;
+      }
       find(view);
       return true;
     }
@@ -1633,12 +1695,14 @@ if (isTauri()) {
   };
   const dispose = nativeMenu(document, callback => getCurrentWindow().listen('markdew-document-command', callback),
     command => pageActive && !busy && !composing() && !document.querySelector('.print-dialog') &&
-      (!isModalOpen() || command === 'settings' || command === 'about') &&
+      (!isModalOpen() || command === 'settings' || command === 'about' || command === 'find') &&
       (!noDocument() || ['new', 'open', 'open-folder', 'toggle-sidebar', 'toggle-outline', 'settings', 'about', 'import', 'export-settings', 'open-quickly'].includes(command) || command.startsWith('theme-')) &&
       (!['undo', 'redo'].includes(command) ||
       !(document.activeElement instanceof HTMLInputElement || document.activeElement instanceof HTMLTextAreaElement)),
     message => { status.textContent = message; }, menuDispatch);
   window.addEventListener('pagehide', dispose, { once: true });
+  window.addEventListener('focus', syncMenuChecks);
+  window.addEventListener('pagehide', () => window.removeEventListener('focus', syncMenuChecks), { once: true });
 }
 document.querySelector('#settings')?.addEventListener('click', () => {
   showSettingsDialog({ onMeasure: () => view.requestMeasure() });
@@ -1701,7 +1765,7 @@ window.addEventListener('pagehide', () => {
   window.removeEventListener('mouseup', onNavMouseUp);
 }, { once: true });
 readButton.addEventListener('click', () => {
-  if (composing()) { status.textContent = 'Finish text input, then change read mode.'; return; }
+  if (composing()) { status.textContent = 'Finish text input, then change read mode.'; syncMenuChecks(); return; }
   readMode = !readMode;
   readButton.setAttribute('aria-pressed', String(readMode));
   document.querySelector('#editor')!.classList.toggle('read-mode', readMode);
@@ -1709,7 +1773,7 @@ readButton.addEventListener('click', () => {
   status.textContent = readMode ? t('toolbar.read_mode_on') : '';
 });
 document.querySelector('#source')!.addEventListener('click', () => {
-  if (composing()) { status.textContent = 'Finish text input, then change the display.'; return; }
+  if (composing()) { status.textContent = 'Finish text input, then change the display.'; syncMenuChecks(); return; }
   active().sourceMode = !active().sourceMode;
   document.querySelector('#source')!.setAttribute('aria-pressed', String(active().sourceMode));
   document.querySelector('#editor')!.classList.toggle('source-mode', active().sourceMode);

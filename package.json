@@ -1,7 +1,7 @@
 {
   "name": "markdew-desktop",
   "private": true,
-  "version": "1.7.22",
+  "version": "1.7.23",
   "license": "AGPL-3.0-or-later",
   "type": "module",
   "scripts": {

@@ -75,13 +75,15 @@ it('supports Live Mode default-app/new-tab links and Read Mode browser-like navi
     await vi.waitFor(() => expect(mocks.invoke).toHaveBeenCalledWith('open_with_default_app', { path: '/root/report.pdf' }));
     expect(tabs.all).toHaveLength(1);
 
-    // Switch to Read Mode: Back/Forward controls become visible
+    // Switch to Read Mode: Back/Forward controls become visible and native menu receives camelCase readMode
     document.querySelector<HTMLButtonElement>('#read-mode')!.click();
     expect(navControls.hidden).toBe(false);
     expect(backBtn.disabled).toBe(true);
     expect(forwardBtn.disabled).toBe(true);
+    expect(mocks.invoke).toHaveBeenCalledWith('update_menu_state', expect.objectContaining({ readMode: true, sourceMode: false }));
 
-    // Read Mode: plain left-click opens b.md in the SAME tab
+    // Read Mode: plain left-click opens b.md in the SAME tab and remembers a.md's scroll position
+    view.scrollDOM.scrollTop = 320;
     const linkBPos = files['/root/a.md'].indexOf('[go-b]') + 1;
     vi.spyOn(view, 'posAtCoords').mockReturnValue(linkBPos);
     ensureSyntaxTree(view.state, view.state.doc.length, 1000);
@@ -93,15 +95,18 @@ it('supports Live Mode default-app/new-tab links and Read Mode browser-like navi
     expect(backBtn.disabled).toBe(false);
     expect(forwardBtn.disabled).toBe(true);
 
-    // Back button returns to a.md in the same tab
+    // Back button returns to a.md in the same tab and restores its scrollTop
+    view.scrollDOM.scrollTop = 180;
     backBtn.click();
     await vi.waitFor(() => expect(tabs.active.path).toBe('/root/a.md'));
+    expect(view.scrollDOM.scrollTop).toBe(320);
     expect(backBtn.disabled).toBe(true);
     expect(forwardBtn.disabled).toBe(false);
 
-    // Ctrl/Cmd+] shortcut goes forward to b.md, and Ctrl/Cmd+[ goes back
+    // Ctrl/Cmd+] shortcut goes forward to b.md and restores b.md's scrollTop, and Ctrl/Cmd+[ goes back
     window.dispatchEvent(new KeyboardEvent('keydown', { key: ']', ctrlKey: !isMac, metaKey: isMac, bubbles: true, cancelable: true }));
     await vi.waitFor(() => expect(tabs.active.path).toBe('/root/b.md'));
+    expect(view.scrollDOM.scrollTop).toBe(180);
     expect(backBtn.disabled).toBe(false);
     expect(forwardBtn.disabled).toBe(true);
     window.dispatchEvent(new KeyboardEvent('keydown', { key: '[', ctrlKey: !isMac, metaKey: isMac, bubbles: true, cancelable: true }));

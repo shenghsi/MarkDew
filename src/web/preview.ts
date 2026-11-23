@@ -262,6 +262,7 @@ class PreviewWidget extends WidgetType {
       }
     };
     dom.addEventListener('mousedown', event => {
+      if (view.state.readOnly) return;
       if (item.kind === 'html' && (event.target as HTMLElement).closest('[data-html-editable]')) return;
       if (item.listMarkers && (event.target as HTMLElement).closest('.md-list-marker, .md-task-toggle')) return;
       if (item.kind === 'table' && (event.target as HTMLElement).closest('th, td, .table-actions, .table-tools')) return;
@@ -270,6 +271,7 @@ class PreviewWidget extends WidgetType {
       reveal({ x: mouse.clientX, y: mouse.clientY });
     });
     dom.addEventListener('click', event => {
+      if (view.state.readOnly) return;
       if (item.kind === 'html' && (event.target as HTMLElement).closest('[data-html-editable]')) return;
       if (item.listMarkers && (event.target as HTMLElement).closest('.md-list-marker, .md-task-toggle')) return;
       event.preventDefault();

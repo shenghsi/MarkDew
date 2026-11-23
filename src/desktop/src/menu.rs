@@ -228,10 +228,38 @@ pub fn command(id: &str, main_exists: bool) -> Option<&'static str> {
         .map(|entry| entry.2)
 }
 
+pub fn shortcut(cmd: &str) -> Option<&'static str> {
+    match cmd {
+        "new" => Some("CmdOrCtrl+N"),
+        "open" => Some("CmdOrCtrl+O"),
+        "open-quickly" => Some("CmdOrCtrl+P"),
+        "save" => Some("CmdOrCtrl+S"),
+        "save-as" => Some("CmdOrCtrl+Shift+S"),
+        "print" => Some("Alt+Shift+P"),
+        "settings" => Some("CmdOrCtrl+,"),
+        "undo" => Some("CmdOrCtrl+Z"),
+        "redo" => Some("CmdOrCtrl+Shift+Z"),
+        "find" => Some("CmdOrCtrl+F"),
+        "h1" => Some("CmdOrCtrl+Alt+1"),
+        "h2" => Some("CmdOrCtrl+Alt+2"),
+        "h3" => Some("CmdOrCtrl+Alt+3"),
+        "h4" => Some("CmdOrCtrl+Alt+4"),
+        "h5" => Some("CmdOrCtrl+Alt+5"),
+        "h6" => Some("CmdOrCtrl+Alt+6"),
+        "table" => Some("CmdOrCtrl+T"),
+        "code-block" => Some("CmdOrCtrl+Shift+K"),
+        "bold" => Some("CmdOrCtrl+B"),
+        "italic" => Some("CmdOrCtrl+I"),
+        "code" => Some("CmdOrCtrl+Shift+C"),
+        "link" => Some("CmdOrCtrl+K"),
+        "source-mode" => Some("CmdOrCtrl+/"),
+        _ => None,
+    }
+}
+
 fn item<R: Runtime>(app: &AppHandle<R>, index: usize) -> tauri::Result<MenuItem<R>> {
-    let (id, label, _) = COMMANDS[index];
-    // WebView shortcuts remain the sole accelerator owner.
-    MenuItem::with_id(app, id, label, true, None::<&str>)
+    let (id, label, cmd) = COMMANDS[index];
+    MenuItem::with_id(app, id, label, true, shortcut(cmd))
 }
 
 fn item_by_id<R: Runtime>(app: &AppHandle<R>, id: &str) -> tauri::Result<MenuItem<R>> {
@@ -250,8 +278,8 @@ fn check_item_by_cmd<R: Runtime>(
     checked: bool,
 ) -> tauri::Result<CheckMenuItem<R>> {
     let index = COMMANDS.iter().position(|entry| entry.2 == cmd).unwrap();
-    let (id, label, _) = COMMANDS[index];
-    CheckMenuItem::with_id(app, id, label, true, checked, None::<&str>)
+    let (id, label, cmd) = COMMANDS[index];
+    CheckMenuItem::with_id(app, id, label, true, checked, shortcut(cmd))
 }
 
 pub fn set_check_item_state<R: Runtime>(
@@ -848,6 +876,17 @@ mod tests {
             );
             assert!(command(id, true).is_some());
         }
+    }
+    #[test]
+    fn shortcuts_match_expected_accelerators() {
+        assert_eq!(shortcut("new"), Some("CmdOrCtrl+N"));
+        assert_eq!(shortcut("open"), Some("CmdOrCtrl+O"));
+        assert_eq!(shortcut("save"), Some("CmdOrCtrl+S"));
+        assert_eq!(shortcut("find"), Some("CmdOrCtrl+F"));
+        assert_eq!(shortcut("bold"), Some("CmdOrCtrl+B"));
+        assert_eq!(shortcut("source-mode"), Some("CmdOrCtrl+/"));
+        assert_eq!(shortcut("h1"), Some("CmdOrCtrl+Alt+1"));
+        assert_eq!(shortcut("read-mode"), None);
     }
     #[test]
     fn translates_all_submenus_commands_and_recent_items() {
