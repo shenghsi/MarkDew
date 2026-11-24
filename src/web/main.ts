@@ -402,7 +402,6 @@ const state = (source: string, tab?: Pick<DocumentTab, 'id' | 'path' | 'sourceMo
   imagePaste(notify, () => busy ? 'Wait for the file command, then paste the image.' : composing() ? 'Finish text input, then paste the image.' : null, pastedImages.capture,
     isTauri() && /Linux/.test(navigator.platform) ? () => invoke<ArrayBuffer>('read_clipboard_image').then(bytes => new Uint8Array(bytes)) : undefined),
   display.of(tab?.sourceMode ? sourceDisplay() : livePreview),
-  EditorView.contentAttributes.of(() => ({ spellcheck: readEditorPref(EDITOR_PREFS.SPELLCHECK) ? 'true' : 'false' })),
   collapseDataUris,
   tableSaveCommand.of(() => { void operation(saveFile); }),
   tableFindCommand.of(() => { find(view); }), searchSupport(() => view), outline(outlineContent),

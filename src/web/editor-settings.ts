@@ -1,8 +1,7 @@
-// Editor and Markdown preferences. Each value is stored as 'on' or 'off' and defaults to 'on'
-// (spell check defaults to 'off'), so a fresh install behaves as it did before these options existed.
+// Editor and Markdown preferences. Each value is stored as 'on' or 'off' and defaults to 'on',
+// so a fresh install behaves as it did before these options existed.
 export const EDITOR_PREFS = {
   LINE_NUMBERS: 'markdew.line-numbers',
-  SPELLCHECK: 'markdew.spellcheck',
   CONTINUE_LISTS: 'markdew.continue-lists',
   TAB_INDENT_LISTS: 'markdew.tab-indent-lists',
 } as const;
@@ -10,7 +9,6 @@ export const EDITOR_PREFS = {
 export type EditorPref = typeof EDITOR_PREFS[keyof typeof EDITOR_PREFS];
 export const EDITOR_PREF_DEFAULTS: Record<EditorPref, boolean> = {
   [EDITOR_PREFS.LINE_NUMBERS]: true,
-  [EDITOR_PREFS.SPELLCHECK]: false,
   [EDITOR_PREFS.CONTINUE_LISTS]: true,
   [EDITOR_PREFS.TAB_INDENT_LISTS]: true,
 };

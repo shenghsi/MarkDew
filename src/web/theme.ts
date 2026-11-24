@@ -1,8 +1,17 @@
 import { invoke, isTauri } from '@tauri-apps/api/core';
 
 export type ThemeChoice = 'system' | 'light' | 'dark';
-const key = 'markdew.theme';
+export const THEME_STORAGE_KEY = 'markdew.theme';
+const key = THEME_STORAGE_KEY;
 const valid = (value: unknown): value is ThemeChoice => value === 'system' || value === 'light' || value === 'dark';
+
+export function getSavedTheme(storage: Pick<Storage, 'getItem'> = localStorage): ThemeChoice {
+  try {
+    const saved = storage.getItem(key);
+    if (valid(saved)) return saved;
+  } catch { /* Storage can be unavailable. */ }
+  return 'system';
+}
 
 let activeThemeHandler: ((choice: ThemeChoice) => void) | undefined;
 

@@ -300,6 +300,9 @@ describe('Settings and Line Width', () => {
     const appearanceTab = modal.querySelector<HTMLButtonElement>('#tab-appearance')!;
     expect(appearanceTab.textContent?.trim()).toBe('外观');
 
+    // Non-General panels are translated in place too
+    expect(modal.querySelector('#panel-editor .settings-section-title')?.textContent).toBe('源码模式显示行号');
+
     const doneBtn = modal.querySelector<HTMLButtonElement>('.modal-footer button')!;
     expect(doneBtn.textContent).toBe('完成');
 
@@ -308,6 +311,7 @@ describe('Settings and Line Width', () => {
     langSelect.dispatchEvent(new Event('change'));
     expect(mockStorage['markdew.language']).toBe('en');
     expect(generalTab.textContent?.trim()).toBe('General');
+    expect(modal.querySelector('#panel-editor .settings-section-title')?.textContent).toBe('Line numbers in Source mode');
     expect(doneBtn.textContent).toBe('Done');
 
     // Dismiss
@@ -391,9 +395,9 @@ it('categorizes Editor, Markdown, and Appearance controls cleanly with no empty 
     removeItem: (k: string) => { delete data[k]; }, clear: () => {}, key: () => null, length: 0 } as Storage;
   const modal = showSettingsDialog({ storage });
   expect(modal.querySelectorAll('.settings-empty-card').length).toBe(0);
-  // Editor: editing behavior options
+  // Editor: editing behavior options (no unimplemented spellcheck)
   expect(modal.querySelector('#panel-editor input[data-key="markdew.line-numbers"]')).not.toBeNull();
-  expect(modal.querySelector('#panel-editor input[data-key="markdew.spellcheck"]')).not.toBeNull();
+  expect(modal.querySelector('#panel-editor input[data-key="markdew.spellcheck"]')).toBeNull();
   expect(modal.querySelector('#panel-editor input[data-key="markdew.continue-lists"]')).not.toBeNull();
   expect(modal.querySelector('#panel-editor input[data-key="markdew.tab-indent-lists"]')).not.toBeNull();
   // Markdown: tables, code blocks, diagrams
@@ -408,4 +412,69 @@ it('categorizes Editor, Markdown, and Appearance controls cleanly with no empty 
   expect(modal.querySelector('#panel-appearance select[data-key="markdew.table-font-size"]')).toBeNull();
   expect(modal.querySelector('#panel-appearance select[data-key="markdew.diagram-palette"]')).toBeNull();
   modal.querySelector<HTMLButtonElement>('.modal-footer button')!.click();
+});
+
+it('highlights the System theme button even when dataset.theme resolves to light or dark', () => {
+  document.documentElement.dataset.theme = 'light';
+  const data: Record<string, string> = { 'markdew.theme': 'system' };
+  const storage = { getItem: (k: string) => data[k] ?? null, setItem: (k: string, v: string) => { data[k] = v; },
+    removeItem: (k: string) => { delete data[k]; }, clear: () => {}, key: () => null, length: 0 } as Storage;
+  const modal = showSettingsDialog({ storage, category: 'appearance' });
+  const sysBtn = modal.querySelector<HTMLButtonElement>('.theme-preset-button[data-theme="system"]')!;
+  const lightBtn = modal.querySelector<HTMLButtonElement>('.theme-preset-button[data-theme="light"]')!;
+  expect(sysBtn.classList.contains('active')).toBe(true);
+  expect(lightBtn.classList.contains('active')).toBe(false);
+  lightBtn.click();
+  expect(data['markdew.theme']).toBe('light');
+  expect(lightBtn.classList.contains('active')).toBe(true);
+  expect(sysBtn.classList.contains('active')).toBe(false);
+  modal.querySelector<HTMLButtonElement>('.modal-footer button')!.click();
+});
+
+it('restores all settings to defaults when Restore Defaults is clicked', () => {
+  const data: Record<string, string> = {
+    'markdew.max-line-width': '1200px',
+    'markdew.writing-size': '150',
+    'markdew.layout': JSON.stringify({ version: 1, folder: '/docs', sidebar: 'files', width: 300 }),
+    'markdew.sidebar-all-files': 'on',
+    'markdew-pasted-images': 'copy',
+    'markdew-dropped-images': 'copy',
+    'markdew.pandoc-path': '/usr/local/bin/pandoc',
+    'markdew.auto-update-check': 'off',
+    'markdew.theme': 'dark',
+    'markdew.line-numbers': 'off',
+  };
+  const storage = { getItem: (k: string) => data[k] ?? null, setItem: (k: string, v: string) => { data[k] = v; },
+    removeItem: (k: string) => { delete data[k]; }, clear: () => {}, key: () => null, length: 0 } as Storage;
+  const sidebarChanged = vi.fn();
+  window.addEventListener('markdew:sidebar-files-changed', sidebarChanged);
+  const modal = showSettingsDialog({ storage, category: 'general' });
+  const buttons = Array.from(modal.querySelectorAll<HTMLButtonElement>('#panel-general .settings-button'));
+  const resetBtn = buttons.find(b => b.textContent === 'Restore Default Settings')!;
+  resetBtn.click();
+  window.removeEventListener('markdew:sidebar-files-changed', sidebarChanged);
+  expect(data['markdew.max-line-width']).toBe(DEFAULT_LINE_WIDTH);
+  expect(data['markdew.writing-size']).toBeUndefined();
+  expect(data['markdew.layout']).toBeUndefined();
+  expect(data['markdew.sidebar-all-files']).toBeUndefined();
+  expect(data['markdew-pasted-images']).toBeUndefined();
+  expect(data['markdew-dropped-images']).toBeUndefined();
+  expect(data['markdew.pandoc-path']).toBeUndefined();
+  expect(data['markdew.auto-update-check']).toBeUndefined();
+  expect(data['markdew.theme']).toBeUndefined();
+  expect(data['markdew.line-numbers']).toBeUndefined();
+  expect(data['markdew.language']).toBe('system');
+  expect(sidebarChanged).toHaveBeenCalledTimes(1);
+});
+
+it('preserves startup sidebar preference when another layoutPreferences instance updates width or folder', async () => {
+  const { layoutPreferences } = await import('../../src/web/layout-preferences');
+  const data: Record<string, string> = {};
+  const storage = { getItem: (k: string) => data[k] ?? null, setItem: (k: string, v: string) => { data[k] = v; } };
+  const mainLayout = layoutPreferences(() => storage);
+  const settingsLayout = layoutPreferences(() => storage);
+  settingsLayout.sidebarChanged('outline');
+  mainLayout.widthChanged(320);
+  expect(layoutPreferences(() => storage).sidebar).toBe('outline');
+  expect(layoutPreferences(() => storage).width).toBe(320);
 });

@@ -1,14 +1,14 @@
-import { isAutoUpdateEnabled, setAutoUpdateEnabled } from './auto-update';
+import { AUTO_UPDATE_ENABLED_KEY, isAutoUpdateEnabled, setAutoUpdateEnabled } from './auto-update';
 import { SIDEBAR_ALL_FILES_KEY, setSidebarShowsAllFiles, sidebarShowsAllFiles } from './file-sidebar';
 import { invoke, isTauri } from '@tauri-apps/api/core';
-import { setTheme, ThemeChoice } from './theme';
+import { getSavedTheme, setTheme, THEME_STORAGE_KEY, ThemeChoice } from './theme';
 import { checkAppUpdates, installAppUpdate, UpdateInfo } from './updater';
-import { EDITOR_PREFS, readEditorPref, writeEditorPref, type EditorPref } from './editor-settings';
+import { EDITOR_PREFS, EDITOR_PREFS_EVENT, readEditorPref, writeEditorPref, type EditorPref } from './editor-settings';
 import {
   DIAGRAM_KEYS, DIAGRAM_PALETTES, DIAGRAM_BOX_COLORS, DIAGRAM_FONTS, DIAGRAM_FONT_SIZES, DIAGRAM_RADII, DIAGRAM_PADDINGS,
   DIAGRAM_MAX_HEIGHTS, DEFAULT_DIAGRAM_SETTINGS, getDiagramSettings, applyDiagramStyle,
 } from './diagram-settings';
-import { layoutPreferences, SidebarChoice } from './layout-preferences';
+import { LAYOUT_STORAGE_KEY, layoutPreferences, SidebarChoice } from './layout-preferences';
 import {
   applyBodySize, applyCodeSize, applyFonts, applyTableSize,
   BODY_SIZE_KEY, BODY_SIZE_DEFAULT, BODY_SIZES,
@@ -22,7 +22,6 @@ import {
   getCurrentLanguage,
   getLanguagePreference,
   setLanguagePreference,
-  subscribeLanguageChange,
   LanguageChoice,
   LANGUAGE_STORAGE_KEY,
 } from './i18n';
@@ -149,33 +148,6 @@ let activeAboutModal: HTMLElement | null = null;
 export function isModalOpen(): boolean {
   return activeSettingsModal !== null || activeAboutModal !== null;
 }
-
-export const SETTINGS_KEYS = {
-  QUIT_ON_CLOSE: 'markdew.quit-on-close',
-  LANGUAGE: 'markdew.language',
-  AUTO_UPDATE: 'markdew.auto-update',
-  UPDATE_DEV: 'markdew.update-dev',
-  LINE_WIDTH: LINE_WIDTH_STORAGE_KEY,
-  THEME: 'markdew.theme',
-  WRITING_SIZE: 'markdew.writing-size',
-  AUTO_CLOSE_BRACKETS: 'markdew.auto-close-brackets',
-  AUTO_CLOSE_FENCES: 'markdew.auto-close-fences',
-  LINE_NUMBERS: 'markdew.line-numbers',
-  SCROLL_STABILIZATION: 'markdew.scroll-stabilization',
-  THEME_CURSOR: 'markdew.theme-cursor',
-  TABLE_TOOLS: 'markdew.table-tools',
-  RESTORE_TABS: 'markdew.restore-tabs',
-  DISCARD_RECOVERY: 'markdew.discard-recovery',
-  DEFAULT_FORMAT: 'markdew.default-format',
-  SHOW_SIDEBAR: 'markdew.show-sidebar',
-  MATH_ENABLED: 'markdew.math-enabled',
-  FOOTNOTES_ENABLED: 'markdew.footnotes-enabled',
-  HTML_BLOCKS: 'markdew.html-blocks',
-  IMAGE_ASSETS_MODE: 'markdew.image-assets-mode',
-  IMAGE_AUTO_COPY: 'markdew.image-auto-copy',
-  EXPORT_DEFAULT: 'markdew.export-default',
-  EXPORT_INCLUDE_TITLE: 'markdew.export-include-title',
-} as const;
 
 interface CategoryDef {
   id: string;
@@ -381,19 +353,10 @@ export function showSettingsDialog(options?: {
     content.append(panel);
   }
 
-  // Helper for empty categories
-  const renderEmptyNotice = (panel: HTMLElement) => {
-    const card = document.createElement('div');
-    card.className = 'settings-empty-card';
-    const title = document.createElement('div');
-    title.className = 'settings-empty-title';
-    title.textContent = t('empty.notice', storage);
-    const sub = document.createElement('div');
-    sub.className = 'settings-empty-desc';
-    sub.textContent = t('empty.sub', storage);
-    card.append(title, sub);
-    panel.append(card);
-  };
+  const populateOtherPanels = () => {
+    for (const id of ['files', 'editor', 'export', 'image', 'appearance', 'markdown']) {
+      panels.get(id)!.replaceChildren();
+    }
 
   // Populate Panel: Files (Startup Sidebar preference)
   const filesPanel = panels.get('files')!;
@@ -475,7 +438,6 @@ export function showSettingsDialog(options?: {
     };
     const editorPanel = panels.get('editor')!;
     toggleSection(editorPanel, EDITOR_PREFS.LINE_NUMBERS, 'editor.line_numbers', 'editor.line_numbers_desc');
-    toggleSection(editorPanel, EDITOR_PREFS.SPELLCHECK, 'editor.spellcheck', 'editor.spellcheck_desc');
     toggleSection(editorPanel, EDITOR_PREFS.CONTINUE_LISTS, 'markdown.continue_lists', 'markdown.continue_lists_desc');
     toggleSection(editorPanel, EDITOR_PREFS.TAB_INDENT_LISTS, 'markdown.tab_indent_lists', 'markdown.tab_indent_lists_desc');
   }
@@ -589,7 +551,7 @@ export function showSettingsDialog(options?: {
     ];
 
     const updateThemeButtons = () => {
-      const currentTheme = (document.documentElement.dataset.theme as ThemeChoice) || 'system';
+      const currentTheme = getSavedTheme(storage);
       for (const btn of Array.from(themeGroup.querySelectorAll<HTMLButtonElement>('button'))) {
         const mode = btn.dataset.theme;
         const active = mode === currentTheme;
@@ -605,6 +567,7 @@ export function showSettingsDialog(options?: {
       btn.dataset.theme = item.mode;
       btn.textContent = t(item.labelKey, storage);
       btn.addEventListener('click', () => {
+        try { storage.setItem(THEME_STORAGE_KEY, item.mode); } catch {}
         setTheme(item.mode);
         const select = document.querySelector<HTMLSelectElement>('#theme, select[aria-label="Theme"], .theme-control select');
         if (select && select.value !== item.mode) {
@@ -948,6 +911,8 @@ export function showSettingsDialog(options?: {
 
     markdownPanel.append(tableGroup, codeGroup, diagramGroup);
   }
+  };
+  populateOtherPanels();
 
   // Populate Panel: General (Language, Update, License, Reset)
   const generalPanel = panels.get('general')!;
@@ -1000,6 +965,7 @@ export function showSettingsDialog(options?: {
       detailBtn.textContent = t('general.detail', storage);
       dialogsTitle.textContent = t('general.dialogs', storage);
       resetBtn.textContent = t('general.restore_defaults', storage);
+      populateOtherPanels();
     });
     langSec.append(langTitle, langSelect);
 
@@ -1110,9 +1076,22 @@ export function showSettingsDialog(options?: {
     resetBtn.addEventListener('click', () => {
       applyLineWidth(DEFAULT_LINE_WIDTH);
       saveLineWidth(DEFAULT_LINE_WIDTH, storage);
-      for (const key of [BODY_SIZE_KEY, TABLE_SIZE_KEY, CODE_SIZE_KEY, FONT_KEYS.TEXT, FONT_KEYS.TABLE, FONT_KEYS.CODE,
-        ...Object.values(EDITOR_PREFS), ...Object.values(DIAGRAM_KEYS)]) {
+      for (const key of [
+        BODY_SIZE_KEY, TABLE_SIZE_KEY, CODE_SIZE_KEY,
+        FONT_KEYS.TEXT, FONT_KEYS.TABLE, FONT_KEYS.CODE,
+        'markdew.writing-size', LAYOUT_STORAGE_KEY, SIDEBAR_ALL_FILES_KEY,
+        'markdew-pasted-images', 'markdew-dropped-images',
+        PANDOC_PATH_KEY, AUTO_UPDATE_ENABLED_KEY, THEME_STORAGE_KEY,
+        ...Object.values(EDITOR_PREFS), ...Object.values(DIAGRAM_KEYS),
+      ]) {
         try { storage.removeItem(key); } catch {}
+      }
+      const wsControl = document.querySelector<HTMLSelectElement>('.writing-size-control select');
+      if (wsControl) {
+        wsControl.value = '100';
+        wsControl.dispatchEvent(new Event('change'));
+      } else {
+        document.documentElement.style.removeProperty('--writing-scale');
       }
       applyFonts(storage);
       applyBodySize(storage);
@@ -1120,11 +1099,13 @@ export function showSettingsDialog(options?: {
       applyCodeSize(storage);
       applyDiagramStyle(getDiagramSettings(storage));
       window.dispatchEvent(new CustomEvent('markdew:diagram-settings'));
+      window.dispatchEvent(new CustomEvent('markdew:sidebar-files-changed'));
       for (const key of Object.values(EDITOR_PREFS)) {
-        writeEditorPref(key, readEditorPref(key, storage), storage);
+        window.dispatchEvent(new CustomEvent(EDITOR_PREFS_EVENT, { detail: { key, value: readEditorPref(key, storage) } }));
       }
       setTheme('system');
       setLanguagePreference('system', storage);
+      document.documentElement.lang = getCurrentLanguage(storage);
       options?.onMeasure?.();
       close();
     });
